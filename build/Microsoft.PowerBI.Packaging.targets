@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <PropertyGroup>
+    <Authors>Microsoft Corporation</Authors>
+    <!--<PackageLicenseUrl></PackageLicenseUrl>-->
+    <!--<PackageReleaseNotes></PackageReleaseNotes>-->
+    <!--<RepositoryUrl></RepositoryUrl>-->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <IncludeContentInPack>true</IncludeContentInPack>
+  </PropertyGroup>
+
+  <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles">
+    
+    <ItemGroup>
+      <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\**\*.*">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)\WindowsAuthenticator</PackagePath>
+      </_PackageFiles>
+      <_PackageFiles Include="$(OutputPath)\settings.json">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </_PackageFiles>
+      <_PackageFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </_PackageFiles>
+    </ItemGroup>
+    
+  </Target>
+  
+</Project>

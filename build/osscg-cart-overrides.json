@@ -1,0 +1,317 @@
+{
+    "components": [
+        {
+            "component": {
+              "nuget.org": {
+                "name": "GitVersionTask",
+                "version": "4.0.0-beta0012"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for determing version for packages and stamping metadata on assemblies"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Caching.Abstractions",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "In-Memory Cache for PowerShell module data"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Caching.Memory",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "In-Memory Cache for PowerShell module data"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Configuration",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Used for reading JSON and other configurations for settings in the PowerShell modules"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Configuration.Abstractions",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Used for reading JSON and other configurations for settings in the PowerShell modules"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Configuration.FileExtensions",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Used for reading JSON and other configurations for settings in the PowerShell modules"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Configuration.Json",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Used for reading JSON and other configurations for settings in the PowerShell modules"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.DependencyInjection",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Dependency injection for loading the PowerShell cmdlet dependencies, makes it easier to test as well"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Dependency injection for loading the PowerShell cmdlet dependencies, makes it easier to test as well"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.FileProviders.Abstractions",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Dependency injection for loading the PowerShell cmdlet dependencies, makes it easier to test as well"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.FileProviders.Physical",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Dependency injection for loading the PowerShell cmdlet dependencies, makes it easier to test as well"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.FileSystemGlobbing",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Dependency injection for loading the PowerShell cmdlet dependencies, makes it easier to test as well"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Options",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "Dependency injection for loading the PowerShell cmdlet dependencies, makes it easier to test as well"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.Primitives",
+                    "version": "2.0.0"
+                }
+            },
+            "ms.license": "Apache-2.0",
+            "ms.usageDetails": "In-Memory Cache for PowerShell module data and Dependency injection"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "PowerShellStandard.Library",
+                    "version": "3.0.0-preview-01"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.usageDetails": "Shim for .NET Core 2.0 to develop PowerShell cmdlets to work in both Windows PowerShell and PowerShell Core"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.DotNet.PlatformAbstractions",
+                    "version": "1.0.3"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests in MSTest v2"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Extensions.DependencyModel",
+                    "version": "1.0.3"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests in MSTest v2"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.Management.Infrastructure",
+                    "version": "1.0.0-alpha08"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerShell.Commands.Diagnostics",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerShell.Commands.Management",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerShell.Commands.Utility",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerShell.ConsoleHost",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerShell.CoreCLR.Eventing",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerShell.SDK",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerShell.Security",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.WSMan.Management",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.WSMan.Runtime",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "PowerShell.Core.Instrumentation",
+                    "version": "6.0.0-beta.10"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "System.Management.Automation",
+                    "version": "6.0.1"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for Unit Tests to execute PowerShell Core cmdlets"
+        },
+        {
+            "component":{
+                "nuget.org":{
+                    "name": "Microsoft.PowerBI.Api",
+                    "version": "2.0.10"
+                }
+            },
+            "ms.license": "MIT",
+            "ms.usageDetails": "Used for calling PowerBI public REST API in PowerShell cmdlets"
+        }
+    ]
+}
