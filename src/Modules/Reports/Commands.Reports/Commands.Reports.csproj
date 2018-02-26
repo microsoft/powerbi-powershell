@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Microsoft.PowerBI.Commands.Reports</AssemblyName>
+    <RootNamespace>Microsoft.PowerBI.Commands.Reports</RootNamespace>
+    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
+  </PropertyGroup>
+
+  <!-- NuGet Package Properties -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>MicrosoftPowerBIMgmt.Reports</PackageId>
+    <Description>Microsoft PowerBI PowerShell - Report cmdlets for Microsoft PowerBI</Description>
+    <PackageTags>PowerBI;Reports</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="MicrosoftPowerBIMgmt.Reports.psd1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MicrosoftPowerBIMgmt.Reports.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PowerBI.Api" Version="2.0.10">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Commands.Common\Commands.Common.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
+  </ItemGroup>
+
+</Project>
