@@ -1,0 +1,24 @@
+﻿{
+  "Environments": [
+    {
+      "name": "PPE",
+      "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.windows-int.net/powerbi/api",
+      "override": "https://onebox-redirect.analysis.windows-int.net",
+      "globalService": "https://api.powerbi.com"
+    },
+    {
+      "name": "Public",
+      "authority": "https://login.windows.net/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.windows.net/powerbi/api",
+      "globalService": "https://api.powerbi.com"
+    }
+  ],
+  "Settings": {
+    "ForceDeviceCodeAuthentication": false
+  }
+}
