@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Microsoft.PowerBI.Commands.Workspaces</AssemblyName>
+    <RootNamespace>Microsoft.PowerBI.Commands.Workspaces</RootNamespace>
+    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
+  </PropertyGroup>
+
+  <!-- NuGet Package Properties -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>MicrosoftPowerBIMgmt.Workspaces</PackageId>
+    <Description>Microsoft PowerBI PowerShell - Workspace cmdlets for Microsoft PowerBI</Description>
+    <PackageTags>PowerBI;Workspaces;Groups</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Remove="MicrosoftPowerBIMgmt.Workspaces.psd1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MicrosoftPowerBIMgmt.Workspaces.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PowerBI.Api" Version="2.0.10">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Commands.Common\Commands.Common.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
+  </ItemGroup>
+
+</Project>
