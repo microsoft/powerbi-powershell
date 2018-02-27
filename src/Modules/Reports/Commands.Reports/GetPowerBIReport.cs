@@ -10,7 +10,7 @@ using Microsoft.Rest;
 namespace Microsoft.PowerBI.Commands.Reports
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(ODataResponseListReport))]
+    [OutputType(typeof(IEnumerable<Report>))]
     public class GetPowerBIReport : PowerBICmdlet
     {
         public const string CmdletVerb = VerbsCommon.Get;
@@ -18,11 +18,11 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         protected override void ExecuteCmdlet()
         {
-            var token = this.Authenticator.Authenticate(this.Profile.Environment, this.Logger, this.Settings);
+            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
             var client = new PowerBIClient(new TokenCredentials(token.AccessToken));
 
             var reports = client.Reports.GetReports();
-            this.Logger.WriteObject(reports);
+            this.Logger.WriteObject(reports.Value, true);
         }
     }
 }

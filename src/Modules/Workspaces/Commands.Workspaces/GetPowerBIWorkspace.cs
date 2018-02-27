@@ -1,4 +1,5 @@
-﻿using System.Management.Automation;
+﻿using System.Collections.Generic;
+using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common;
@@ -7,7 +8,7 @@ using Microsoft.Rest;
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(ODataResponseListGroup))]
+    [OutputType(typeof(IEnumerable<Group>))]
     public class GetPowerBIWorkspace : PowerBICmdlet
     {
         public const string CmdletName = "PowerBIWorkspace";
@@ -15,11 +16,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         protected override void ExecuteCmdlet()
         {
-            var token = this.Authenticator.Authenticate(this.Profile.Environment, this.Logger, this.Settings);
+            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
             var client = new PowerBIClient(new TokenCredentials(token.AccessToken));
 
             var workspaces = client.Groups.GetGroups();
-            this.Logger.WriteObject(workspaces);
+            this.Logger.WriteObject(workspaces.Value, true);
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
@@ -16,6 +19,20 @@ namespace Microsoft.PowerBI.Common.Authentication
             }
 
             return queryParamString;
+        }
+
+        public static string SecureStringToString(this SecureString secureString)
+        {
+            var ptr = IntPtr.Zero;
+            try
+            {
+                ptr = Marshal.SecureStringToGlobalAllocUnicode(secureString);
+                return Marshal.PtrToStringUni(ptr);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(ptr);
+            }
         }
 
         public static IAccessToken ToIAccessToken(this AuthenticationResult result)

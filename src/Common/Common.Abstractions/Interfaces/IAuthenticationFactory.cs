@@ -1,30 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Security;
 
 namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
 {
     /// <summary>
     /// Factory for providing authentication to callers.
     /// </summary>
-    public interface IAuthenticationFactory
+    public interface IAuthenticationFactory : IAuthenticationUserFactory, IAuthenticationServicePrincipalFactory
     {
         /// <summary>
-        /// Indicates the factory has been used once to authenticate; otherwise it is the first use of the factory.
+        /// Authenticates based on configuration stored in profile.
         /// </summary>
-        bool AuthenticatedOnce { get; }
-
-        /// <summary>
-        /// Authenticate given the set of parameters.
-        /// </summary>
-        /// <param name="environment">The IPowerBIEnvironment containing the connection information.</param>
+        /// <param name="profile">The IPowerBIProfile to determine how to authenticate.</param>
         /// <param name="logger">The IPowerBILogger to log any messages for the user or telemetry.</param>
         /// <param name="settings">The IPowerBISettings to contain the settings to instruct the authentication to change its default behavior.</param>
         /// <param name="queryParameters">Query parameters to include with the request. This is optional.</param>
-        /// <returns></returns>
-        IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null);
-
-        /// <summary>
-        /// Revokes any previous authentication session.
-        /// </summary>
-        void Challenge();
+        /// <returns>An IAccessToken of an authenticated user.</returns>
+        IAccessToken Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null);
     }
 }

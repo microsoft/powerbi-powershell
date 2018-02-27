@@ -53,24 +53,31 @@ namespace Microsoft.PowerBI.Commands.Profile
             var environment = this.Settings.Environments[this.Environment];
 
             this.Authenticator.Challenge(); // revoke any previous login
-            var profileType = PowerBIProfileType.User;
             IAccessToken token = null;
+            PowerBIProfile profile = null;
             switch (this.ParameterSetName)
             {
                 case UserParameterSet:
-                    profileType = PowerBIProfileType.User;
                     token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, new Dictionary<string, string>()
                         {
                             { "prompt", "select_account" },
                             { "msafed", "0" }
                         }
                     );
+                    profile = new PowerBIProfile(environment, token);
+                    break;
+                case ServicePrincipalCertificateParameterSet:
+                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings);
+                    profile = new PowerBIProfile(environment, this.ApplicationId, this.CertificateThumbprint, token);
+                    break;
+                case ServicePrincipalParameterSet:
+                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings);
+                    profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 default:
                     throw new NotImplementedException($"Parameter set {this.ParameterSetName} was not implemented");
             }
 
-            var profile = new PowerBIProfile(environment, token, profileType);
             this.Storage.SetItem("profile", profile);
             this.Logger.WriteObject(profile);
         }

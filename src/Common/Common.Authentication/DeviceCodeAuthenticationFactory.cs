@@ -5,7 +5,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
-    public class DeviceCodeAuthenticationFactory : IAuthenticationFactory
+    public class DeviceCodeAuthenticationFactory : IAuthenticationUserFactory
     {
         private static bool authenticatedOnce = false;
         public bool AuthenticatedOnce { get => authenticatedOnce; }
@@ -16,6 +16,10 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
+#if !DEBUG
+            LoggerCallbackHandler.UseDefaultLogging = false;
+#endif
+
             if (Cache == null)
             {
                 lock (tokenCacheLock)

@@ -10,7 +10,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
-    public class WindowsAuthenticationFactory : IAuthenticationFactory
+    public class WindowsAuthenticationFactory : IAuthenticationUserFactory
     {
         private static bool authenticatedOnce = false;
         private static object tokenCacheLock = new object();

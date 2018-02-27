@@ -1,4 +1,5 @@
-﻿using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+﻿using System.Security;
+using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Abstractions
 {
@@ -12,7 +13,17 @@ namespace Microsoft.PowerBI.Common.Abstractions
 
         public PowerBIProfileType LoginType { get; }
 
-        public PowerBIProfile(IPowerBIEnvironment environment, IAccessToken token, PowerBIProfileType profileType) => 
-            (this.Environment, this.TenantId, this.UserName, this.LoginType) = (environment, token.TenantId, token.UserName, profileType);
+        public SecureString Password { get; }
+
+        public string Thumbprint { get; }
+
+        public PowerBIProfile(IPowerBIEnvironment environment, IAccessToken token) =>
+            (this.Environment, this.TenantId, this.UserName, this.LoginType) = (environment, token.TenantId, token.UserName, PowerBIProfileType.User);
+
+        public PowerBIProfile(IPowerBIEnvironment environment, string userName, SecureString password, IAccessToken token) => 
+            (this.Environment, this.TenantId, this.UserName, this.Password, this.LoginType) = (environment, token.TenantId, userName, password, PowerBIProfileType.ServicePrincipal);
+
+        public PowerBIProfile(IPowerBIEnvironment environment, string clientId, string thumbprint, IAccessToken token) =>
+            (this.Environment, this.TenantId, this.UserName, this.Thumbprint, this.LoginType) = (environment, token.TenantId, clientId, thumbprint, PowerBIProfileType.Certificate);
     }
 }
