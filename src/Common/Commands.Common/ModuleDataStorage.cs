@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Commands.Common

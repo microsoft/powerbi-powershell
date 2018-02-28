@@ -1,4 +1,9 @@
-﻿namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
 {
     /// <summary>
     /// Initialize a PowerBI Cmdlet internal property composition.

@@ -1,4 +1,9 @@
-﻿using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Abstractions
 {

@@ -1,4 +1,9 @@
-﻿namespace Microsoft.PowerBI.Common.Abstractions
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+namespace Microsoft.PowerBI.Common.Abstractions
 {
     /// <summary>
     /// Types of PowerBI profiles.
