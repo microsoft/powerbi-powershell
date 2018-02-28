@@ -58,6 +58,13 @@ If you find any bugs or would like to see certain functionality implemented for 
 
 If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [PowerBI Community](http://community.powerbi.com/) or the official [PowerBI Support](https://powerbi.microsoft.com/en-us/support/) site.
 
+### Reporting Security Issues
+
+Security issues and bugs should be reported privately, via email, to the Microsoft Security Response Center (MSRC) at [secure@microsoft.com](mailto:secure@microsoft.com).
+
+You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message.
+Further information, including the [MSRC PGP](https://technet.microsoft.com/en-us/security/dn606155) key, can be found in the [Security TechCenter](https://technet.microsoft.com/en-us/security/default).
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
