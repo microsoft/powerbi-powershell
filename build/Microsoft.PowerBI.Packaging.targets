@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+***********************************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the MIT License.
+***********************************************************************************************
+-->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <PropertyGroup>
     <Authors>Microsoft Corporation</Authors>
-    <!--<PackageLicenseUrl></PackageLicenseUrl>-->
-    <!--<PackageReleaseNotes></PackageReleaseNotes>-->
-    <!--<RepositoryUrl></RepositoryUrl>-->
+    <PackageLicenseUrl>https://github.com/Microsoft/powerbi-powershell/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IncludeContentInPack>true</IncludeContentInPack>
