@@ -11,6 +11,96 @@
             "ms.usageDetails": "Used for determing version for packages and stamping metadata on assemblies"
         },
         {
+            "component": {
+              "nuget.org": {
+                "name": "Microsoft.NET.Test.Sdk",
+                "version": "15.5.0"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for unit testing"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "Microsoft.TestPlatform.ObjectModel",
+                "version": "15.5.0"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for unit testing"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "Microsoft.TestPlatform.TestHost",
+                "version": "15.5.0"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for unit testing"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "MSTest.TestAdapter",
+                "version": "1.2.0"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for unit testing"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "MSTest.TestFramework",
+                "version": "1.2.0"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for unit testing"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "Microsoft.CodeCoverage",
+                "version": "1.0.3"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for unit testing"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "Microsoft.CodeAnalysis.Analyzers",
+                "version": "1.1.0"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for analyzing code during development and build"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "Microsoft.CodeAnalysis.Common",
+                "version": "2.6.1"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for analyzing code during development and build"
+        },
+        {
+            "component": {
+              "nuget.org": {
+                "name": "Microsoft.CodeAnalysis.CSharp",
+                "version": "2.6.1"
+              }
+            },
+            "ms.transmitted": false,
+            "ms.usageDetails": "Used for analyzing code during development and build"
+        },
+        {
             "component":{
                 "nuget.org":{
                     "name": "Microsoft.Extensions.Caching.Abstractions",
