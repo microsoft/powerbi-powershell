@@ -10,6 +10,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Authentication;
+using System.Text;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
@@ -21,6 +22,8 @@ namespace Microsoft.PowerBI.Common.Authentication
         private static object tokenCacheLock = new object();
 
         private static TokenCache Cache { get; set;}
+
+        private static StringBuilder WindowsAuthProcessErrors = new StringBuilder();
 
         public bool AuthenticatedOnce { get => authenticatedOnce; }
 
@@ -83,20 +86,32 @@ namespace Microsoft.PowerBI.Common.Authentication
                 windowAuthProcess.StartInfo.UseShellExecute = false;
                 windowAuthProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 windowAuthProcess.StartInfo.RedirectStandardOutput = true;
+                windowAuthProcess.StartInfo.RedirectStandardError = true;
+
+                windowAuthProcess.ErrorDataReceived += WindowAuthProcess_ErrorDataReceived;
 
                 windowAuthProcess.Start();
+                windowAuthProcess.BeginErrorReadLine();
+
                 var result = windowAuthProcess.StandardOutput.ReadToEnd();
                 windowAuthProcess.WaitForExit();
 
                 if (windowAuthProcess.ExitCode != 0)
                 {
-                    throw new AdalException("0", "Failed to get ADAL token"); // TODO beter message and read from output of console Error stream
+                    string errorMessage = WindowsAuthProcessErrors.ToString();
+                    WindowsAuthProcessErrors.Clear();
+                    throw new AdalException("0", $"Failed to get ADAL token: {errorMessage}");
                 }
 
                 authenticatedOnce = true;
                 var tokeCacheBytes = Convert.FromBase64String(result);
                 return new TokenCache(tokeCacheBytes);
             }
+        }
+
+        private static void WindowAuthProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            WindowsAuthProcessErrors.Append(e.Data);
         }
 
         private static string GetExecutingDirectory()
