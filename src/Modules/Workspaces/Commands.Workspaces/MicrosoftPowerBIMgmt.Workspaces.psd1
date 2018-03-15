@@ -7,7 +7,7 @@
 
 @{
     # Script module or binary module file associated with this manifest.
-    RootModule = '.\lib\netstandard2.0\Microsoft.PowerBI.Commands.Workspaces.dll'
+    RootModule = 'Microsoft.PowerBI.Commands.Workspaces.dll'
 
     # Version number of this module.
     ModuleVersion = '1.0.0'
@@ -49,7 +49,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    RequiredModules = @('MicrosoftPowerBIMgmt.Profile')
+    # RequiredModules = @()
 
     # Assemblies that must be loaded prior to importing this module
     RequiredAssemblies = @()

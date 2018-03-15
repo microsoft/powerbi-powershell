@@ -88,11 +88,10 @@ New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
     -Author 'Microsoft Corporation' `
     -CompanyName 'Microsoft Corporation' `
     -Copyright 'Microsoft Corporation. All rights reserved.' `
-    -RootModule ".\lib\netstandard2.0\Microsoft.PowerBI.Commands.$moduleName.dll" `
+    -RootModule "Microsoft.PowerBI.Commands.$moduleName.dll" `
     -ModuleVersion '1.0.0' `
     -Description "Microsoft PowerBI PowerShell - $moduleName cmdlets for Microsoft PowerBI" `
     -PowerShellVersion '3.0' `
-    -RequiredModules 'MicrosoftPowerBIMgmt.Profile' `
     -PrivateData @{
          PSData=@{
              Prerelease='-beta1'
@@ -162,3 +161,10 @@ ii .\PowerBIPowerShell.sln
     <Pack>true</Pack>
     <PackagePath></PackagePath>
 ```
+
+## Develolper Resources
+
+### MSBuild and NuGet
+
+* https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets
+* https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files
