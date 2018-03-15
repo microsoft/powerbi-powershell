@@ -21,14 +21,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Microsoft.PowerBI.Commands.Profile.types.ps1xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MicrosoftPowerBIMgmt.Profile.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath></PackagePath>
     </Content>
   </ItemGroup>
 

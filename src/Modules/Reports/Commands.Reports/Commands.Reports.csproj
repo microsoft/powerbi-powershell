@@ -20,8 +20,6 @@
   <ItemGroup>
     <Content Include="MicrosoftPowerBIMgmt.Reports.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath></PackagePath>
     </Content>
   </ItemGroup>
 

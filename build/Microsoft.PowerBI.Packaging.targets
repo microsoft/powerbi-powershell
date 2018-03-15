@@ -14,7 +14,7 @@ Licensed under the MIT License.
     <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>true</IncludeBuildOutput>
-    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeContentInPack>false</IncludeContentInPack>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
@@ -25,6 +25,7 @@ Licensed under the MIT License.
 
   <PropertyGroup>
     <BeforePack>$(BeforePack);GeneratePSHelp</BeforePack>
+    <CleanDependsOn>$(CleanDependsOn);RemovePackageFromRoot</CleanDependsOn>
   </PropertyGroup>
 
   
@@ -45,6 +46,21 @@ Licensed under the MIT License.
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </_PackageFiles>
+      <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>$(LangName)</PackagePath>
+      </_PackageFiles>
+      <_PackageFiles Include="$(OutputPath)\$(PackageId).psd1">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath></PackagePath>
+      </_PackageFiles>
+      <_PackageFiles Include="$(OutputPath)\$(AssemblyName).types.ps1xml" Condition="Exists('$(OutputPath)\$(AssemblyName).types.ps1xml')">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath></PackagePath>
       </_PackageFiles>
     </ItemGroup>
     

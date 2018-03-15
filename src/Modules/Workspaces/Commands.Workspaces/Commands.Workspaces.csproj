@@ -21,8 +21,6 @@
   <ItemGroup>
     <Content Include="MicrosoftPowerBIMgmt.Workspaces.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath></PackagePath>
     </Content>
   </ItemGroup>
 
