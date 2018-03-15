@@ -12,6 +12,8 @@ Licensed under the MIT License.
     <RepoRoot>$(MSBuildThisFileDirectory)..\</RepoRoot>
     <RepoTargets>$(RepoRoot)build\</RepoTargets>
     <SourceRoot>$(RepoRoot)src\</SourceRoot>
+    <ScriptsRoot>$(RepoRoot)scripts\</ScriptsRoot>
+    <PowerShellExe Condition="'$(PowerShellExe)'==''">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
   </PropertyGroup>
 
   <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true'"/>

@@ -17,7 +17,18 @@ Licensed under the MIT License.
     <IncludeContentInPack>true</IncludeContentInPack>
   </PropertyGroup>
 
-  <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles">
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <PackageReference Include="platyPS" Version="0.9.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <BeforePack>$(BeforePack);GeneratePSHelp</BeforePack>
+  </PropertyGroup>
+
+  
+  <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles" Condition="'$(IsPackable)' == 'true'">
     
     <ItemGroup>
       <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\**\*.*">
@@ -37,6 +48,37 @@ Licensed under the MIT License.
       </_PackageFiles>
     </ItemGroup>
     
+  </Target>
+
+  <Target Name="GenerateMarkdownHelp" AfterTargets="Build" DependsOnTargets="RunResolvePackageDependencies" Condition="'$(IsPackable)' == 'true'">
+
+    <ItemGroup>
+      <PlatyPSPkg Include="@(PackageDefinitions)" Condition="'%(PackageDefinitions.Name)' == 'platyPS'" KeepMetadata="ResolvedPath" />
+      <PSDFile Include="$(OutputPath)\$(PackageId).psd1" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <PlatyPSPath>%(PlatyPSPkg.ResolvedPath)</PlatyPSPath>
+    </PropertyGroup>
+
+    <!--<Message Text="PlatyPS Path = $(PlatyPSPath)" Importance="high" />-->
+
+    <Exec Command="$(PowerShellExe) -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos;  -ModulePath &apos;%(PSDFile.FullPath)&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -Language &apos;$(LangName)&apos; -GenerateMarkdown -TargetFramework &apos;$(TargetFramework)&apos; -DependentAssemblies &apos;@(_ResolveAssemblyReferenceResolvedFiles)&apos;} &quot;" />
+
+  </Target>
+  
+  
+  <Target Name="GeneratePSHelp" DependsOnTargets="GenerateMarkdownHelp" Condition="'$(IsPackable)' == 'true'">
+    
+    <Exec Command="$(PowerShellExe) -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
+    
+  </Target>
+
+  
+  <Target Name="CopyPackageToRoot" AfterTargets="Pack" Condition="'$(IsPackable)' == 'true'">
+
+    <Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(RepoRoot)\PkgOut" />
+
   </Target>
   
 </Project>
