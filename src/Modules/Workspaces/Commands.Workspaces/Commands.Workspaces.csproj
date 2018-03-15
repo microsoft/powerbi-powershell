@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MicrosoftPowerBIMgmt.Workspaces.psd1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath></PackagePath>
     </Content>

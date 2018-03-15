@@ -26,7 +26,7 @@
       <PackagePath></PackagePath>
     </Content>
     <Content Include="MicrosoftPowerBIMgmt.Profile.psd1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Pack>true</Pack>
       <PackagePath></PackagePath>
     </Content>
