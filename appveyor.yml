@@ -23,8 +23,6 @@ dotnet_csproj:
 configuration:
   - Release
 
-publish_nuget: true
-
 # Test
 test:
   assemblies:
