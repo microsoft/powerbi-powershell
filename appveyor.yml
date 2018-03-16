@@ -28,7 +28,7 @@ build:
   publish_nuget: true
 
 before_build:
-  ps: 'build\RestorePackages.ps1'
+  ps: 'scripts\RestorePackages.ps1'
 
 # Test
 test:
