@@ -9,6 +9,7 @@ param
 
     [switch] $NoBuild,
 
+    [ValidateNotNullOrEmpty()]
     [string] $Solution = "$PSScriptRoot\..\src\PowerBIPowerShell.sln",
 
     [ValidateNotNull()]

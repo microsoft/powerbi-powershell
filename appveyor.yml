@@ -23,6 +23,13 @@ dotnet_csproj:
 configuration:
   - Release
 
+build:
+  project: 'src\PowerBIPowerShell.sln'
+  publish_nuget: true
+
+before_build:
+  ps: 'build\RestorePackages.ps1'
+
 # Test
 test:
   assemblies:
