@@ -49,7 +49,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5EE43116
 		..\build\Microsoft.PowerBI.Build.targets = ..\build\Microsoft.PowerBI.Build.targets
 		..\build\Microsoft.PowerBI.CodeSign.targets = ..\build\Microsoft.PowerBI.CodeSign.targets
 		..\build\Microsoft.PowerBI.Packaging.targets = ..\build\Microsoft.PowerBI.Packaging.targets
-		..\build\Microsoft.PowerBI.Versioning.targets = ..\build\Microsoft.PowerBI.Versioning.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{622F394E-ABFD-4ADE-B12F-D1CD751857A4}"

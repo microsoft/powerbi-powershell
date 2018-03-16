@@ -8,13 +8,10 @@ Licensed under the MIT License.
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <PropertyGroup>
-    <Authors>Microsoft Corporation</Authors>
-    <PackageLicenseUrl>https://github.com/Microsoft/powerbi-powershell/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IncludeContentInPack>false</IncludeContentInPack>
+    <PackageOutputPath>$(RepoRoot)\PkgOut</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
@@ -88,13 +85,6 @@ Licensed under the MIT License.
     
     <Exec Command="$(PowerShellExe) -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
     
-  </Target>
-
-  
-  <Target Name="CopyPackageToRoot" AfterTargets="Pack" Condition="'$(IsPackable)' == 'true'">
-
-    <Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(RepoRoot)\PkgOut" />
-
   </Target>
   
 </Project>
