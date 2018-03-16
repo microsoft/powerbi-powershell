@@ -36,13 +36,8 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         string AzureADRedirectAddress { get; set; }
 
         /// <summary>
-        /// Default endpoint to communicate with the PowerBI global service.
+        /// Endpoint to communicate with the PowerBI global service.
         /// </summary>
         string GlobalServiceEndpoint { get; set; }
-
-        /// <summary>
-        /// Override to communicate with the PowerBI service.
-        /// </summary>
-        string BackendUriOverride { get; set; }
     }
 }

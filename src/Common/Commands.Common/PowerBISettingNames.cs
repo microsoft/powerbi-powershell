@@ -25,7 +25,6 @@ namespace Microsoft.PowerBI.Commands.Common
             public const string ClientId = "clientId";
             public const string Redirect = "redirect";
             public const string Resource = "resource";
-            public const string Override = "override";
             public const string GlobalService = "globalService";
         }
     }

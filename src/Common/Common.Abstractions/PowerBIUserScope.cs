@@ -7,6 +7,6 @@ namespace Microsoft.PowerBI.Common.Abstractions
     public enum PowerBIUserScope
     {
         Individual,
-        Company
+        Organization
     }
 }

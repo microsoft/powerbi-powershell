@@ -17,15 +17,21 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(IEnumerable<Group>))]
-    public class GetPowerBIWorkspace : PowerBICmdlet, IUserScope
+    public class AddPowerBIWorkspaceMember : PowerBICmdlet, IUserScope
     {
-        public const string CmdletName = "PowerBIWorkspace";
-        public const string CmdletVerb = VerbsCommon.Get;
+        public const string CmdletName = "PowerBIWorkspaceMember";
+        public const string CmdletVerb = VerbsCommon.Add;
 
         #region Parameters
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
+
+        [Parameter(Mandatory = true)]
+        public Guid GroupId { get; set; }
+
+        [Parameter(Mandatory = true)]
+        public GroupUserAccessRight UserDetails { get; set; }
 
         #endregion
 
@@ -42,8 +48,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 client = new PowerBIClient(new TokenCredentials(token.AccessToken));
             }
 
-            var workspaces = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.GetGroups() : client.Groups.GetGroupsAsAdmin();
-            this.Logger.WriteObject(workspaces.Value, true);
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(GroupId.ToString(), UserDetails) : client.Groups.AddGroupUser(GroupId.ToString(), UserDetails);
+            this.Logger.WriteObject(result, true);
         }
     }
 }

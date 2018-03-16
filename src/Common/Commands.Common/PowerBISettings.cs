@@ -43,7 +43,6 @@ namespace Microsoft.PowerBI.Commands.Common
                     AzureADClientId = e[PowerBISettingNames.Environments.ClientId],
                     AzureADRedirectAddress = e[PowerBISettingNames.Environments.Redirect],
                     AzureADResource = e[PowerBISettingNames.Environments.Resource],
-                    BackendUriOverride = e[PowerBISettingNames.Environments.Override],
                     GlobalServiceEndpoint = e[PowerBISettingNames.Environments.GlobalService]
                 };
             }).Cast<IPowerBIEnvironment>().ToDictionary(e => e.Name, e => e);
