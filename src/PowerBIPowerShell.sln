@@ -32,11 +32,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{128A3120-95D4-4D1D-8E1C-8AD15CB31831}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		Directory.Build.props = Directory.Build.props
-		..\build\Microsoft.PowerBI.Build.targets = ..\build\Microsoft.PowerBI.Build.targets
-		..\build\Microsoft.PowerBI.CodeSign.targets = ..\build\Microsoft.PowerBI.CodeSign.targets
-		..\build\Microsoft.PowerBI.Packaging.targets = ..\build\Microsoft.PowerBI.Packaging.targets
-		..\build\Microsoft.PowerBI.Versioning.targets = ..\build\Microsoft.PowerBI.Versioning.targets
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
@@ -47,6 +42,22 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.Reports", "Modules\Reports\Commands.Reports\Commands.Reports.csproj", "{DFC6CC0A-6C44-4F5C-BE91-21A99C6C44FE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.Reports.Test", "Modules\Reports\Commands.Reports.Test\Commands.Reports.Test.csproj", "{A729399F-1840-4A28-B54D-2887138F622F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5EE43116-B3AC-412E-A5E1-8A709C59EDAA}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		..\build\Microsoft.PowerBI.Build.targets = ..\build\Microsoft.PowerBI.Build.targets
+		..\build\Microsoft.PowerBI.CodeSign.targets = ..\build\Microsoft.PowerBI.CodeSign.targets
+		..\build\Microsoft.PowerBI.Packaging.targets = ..\build\Microsoft.PowerBI.Packaging.targets
+		..\build\Microsoft.PowerBI.Versioning.targets = ..\build\Microsoft.PowerBI.Versioning.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{622F394E-ABFD-4ADE-B12F-D1CD751857A4}"
+	ProjectSection(SolutionItems) = preProject
+		..\scripts\Build.ps1 = ..\scripts\Build.ps1
+		..\scripts\GenerateHelp.ps1 = ..\scripts\GenerateHelp.ps1
+		..\scripts\PrepManualTesting.ps1 = ..\scripts\PrepManualTesting.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +220,8 @@ Global
 		{F99F1A0A-F502-4D52-A9EF-54E700CFA3F0} = {6E7F95B7-62EF-4D9F-A9CA-5A3F975AD509}
 		{DFC6CC0A-6C44-4F5C-BE91-21A99C6C44FE} = {F99F1A0A-F502-4D52-A9EF-54E700CFA3F0}
 		{A729399F-1840-4A28-B54D-2887138F622F} = {F99F1A0A-F502-4D52-A9EF-54E700CFA3F0}
+		{5EE43116-B3AC-412E-A5E1-8A709C59EDAA} = {128A3120-95D4-4D1D-8E1C-8AD15CB31831}
+		{622F394E-ABFD-4ADE-B12F-D1CD751857A4} = {128A3120-95D4-4D1D-8E1C-8AD15CB31831}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1236038E-0111-422D-93F2-3AB891876F53}

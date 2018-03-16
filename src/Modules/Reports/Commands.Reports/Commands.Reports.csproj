@@ -19,9 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MicrosoftPowerBIMgmt.Reports.psd1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

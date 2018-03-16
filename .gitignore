@@ -289,3 +289,6 @@ __pycache__/
 
 # MSBuild Binary and Structured Log
 *.binlog
+
+# Package Build Output
+PkgOut/

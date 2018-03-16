@@ -88,11 +88,10 @@ New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
     -Author 'Microsoft Corporation' `
     -CompanyName 'Microsoft Corporation' `
     -Copyright 'Microsoft Corporation. All rights reserved.' `
-    -RootModule ".\lib\netstandard2.0\Microsoft.PowerBI.Commands.$moduleName.dll" `
+    -RootModule "Microsoft.PowerBI.Commands.$moduleName.dll" `
     -ModuleVersion '1.0.0' `
     -Description "Microsoft PowerBI PowerShell - $moduleName cmdlets for Microsoft PowerBI" `
     -PowerShellVersion '3.0' `
-    -RequiredModules 'MicrosoftPowerBIMgmt.Profile' `
     -PrivateData @{
          PSData=@{
              Prerelease='-beta1'
@@ -158,7 +157,20 @@ ii .\PowerBIPowerShell.sln
 13. Optionally add `[OutputType(typeof(type))]` to your class if you cmdlet returns a certain output.
 14. Click on psd1 file in the module project, change Build Action to `Content`, edit csproj and add the following to the psd1 file `<Content>` element:
 ```xml
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+```
+
+If the content extension is not `.psd1` or `.types.ps1xml` then add the following to the `Content` element too:
+```xml
     <Pack>true</Pack>
     <PackagePath></PackagePath>
 ```
+15. Save the project file and build the solution.
+16. A `help` folder should appear under your project after you build, the files contain the documenation for your module and cmdlets which you can fill out.
+
+## Develolper Resources
+
+### MSBuild and NuGet
+
+* https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets
+* https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files

@@ -7,7 +7,7 @@
 
 @{
     # Script module or binary module file associated with this manifest.
-    RootModule = '.\lib\netstandard2.0\Microsoft.PowerBI.Commands.Profile.dll'
+    RootModule = 'Microsoft.PowerBI.Commands.Profile.dll'
 
     # Version number of this module.
     ModuleVersion = '1.0.0'
