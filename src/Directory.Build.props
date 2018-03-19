@@ -14,6 +14,7 @@ Licensed under the MIT License.
     <SourceRoot>$(RepoRoot)src\</SourceRoot>
     <ScriptsRoot>$(RepoRoot)scripts\</ScriptsRoot>
     <PowerShellExe Condition="'$(PowerShellExe)' == ''">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+    <PowerShellCommonArgs>-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted</PowerShellCommonArgs>
     <LangName Condition="'$(LangName)' == ''">en-US</LangName>
   </PropertyGroup>
 

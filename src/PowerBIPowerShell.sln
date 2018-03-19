@@ -54,8 +54,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{622F394E-ABFD-4ADE-B12F-D1CD751857A4}"
 	ProjectSection(SolutionItems) = preProject
 		..\scripts\Build.ps1 = ..\scripts\Build.ps1
+		..\scripts\DisableStrongName.ps1 = ..\scripts\DisableStrongName.ps1
 		..\scripts\GenerateHelp.ps1 = ..\scripts\GenerateHelp.ps1
 		..\scripts\PrepManualTesting.ps1 = ..\scripts\PrepManualTesting.ps1
+		..\scripts\RestorePackages.ps1 = ..\scripts\RestorePackages.ps1
+		..\scripts\UpdatePSModuleManifest.ps1 = ..\scripts\UpdatePSModuleManifest.ps1
 	EndProjectSection
 EndProject
 Global
