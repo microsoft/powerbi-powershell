@@ -63,7 +63,7 @@ Licensed under the MIT License.
     
   </Target>
 
-  <Target Name="GenerateMarkdownHelp" AfterTargets="Build" DependsOnTargets="RunResolvePackageDependencies" Condition="'$(IsPackable)' == 'true'">
+  <Target Name="GenerateMarkdownHelp" AfterTargets="Build" BeforeTargets="$(BeforePack)" DependsOnTargets="RunResolvePackageDependencies" Condition="'$(IsPackable)' == 'true'">
 
     <ItemGroup>
       <PlatyPSPkg Include="@(PackageDefinitions)" Condition="'%(PackageDefinitions.Name)' == 'platyPS'" KeepMetadata="ResolvedPath" />
@@ -81,7 +81,7 @@ Licensed under the MIT License.
   </Target>
   
   
-  <Target Name="GeneratePSHelp" DependsOnTargets="GenerateMarkdownHelp" Condition="'$(IsPackable)' == 'true'">
+  <Target Name="GeneratePSHelp" Condition="'$(IsPackable)' == 'true'">
     
     <Exec Command="$(PowerShellExe) -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
     
