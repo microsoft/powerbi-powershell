@@ -19,6 +19,10 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 
+# Install
+install:
+  - ps: 'scripts\DisableStrongName.ps1'
+
 # Build
 configuration:
   - Release
@@ -28,7 +32,7 @@ build:
   publish_nuget: true
 
 before_build:
-  ps: 'scripts\RestorePackages.ps1'
+  - ps: 'scripts\RestorePackages.ps1'
 
 # Test
 test:
