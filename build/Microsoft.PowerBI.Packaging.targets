@@ -22,7 +22,6 @@ Licensed under the MIT License.
 
   <PropertyGroup>
     <BeforePack>$(BeforePack);UpdatePSManifest;GeneratePSHelp</BeforePack>
-    <CleanDependsOn>$(CleanDependsOn);RemovePackageFromRoot</CleanDependsOn>
   </PropertyGroup>
 
   
@@ -79,7 +78,7 @@ Licensed under the MIT License.
   </Target>
 
   
-  <Target Name="GenerateMarkdownHelp" AfterTargets="Build" BeforeTargets="$(BeforePack)" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
+  <Target Name="GenerateMarkdownHelp" AfterTargets="AfterBuild" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
 
     <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -Language &apos;$(LangName)&apos; -GenerateMarkdown -DependentAssemblies &apos;@(_ResolveAssemblyReferenceResolvedFiles)&apos;} &quot;" />
 
