@@ -49,7 +49,7 @@ else {
     Write-Output "Module '$ModulePath' already contains ModuleVersion $($Matches['ModVersion'])"
 }
 
-# Remove Prelease tag
+# Remove Prerelease tag
 if($RemovePrereleaseTag) {
     Write-Output "Removing Prerelease tag"
     $psdFileContent = $psdFileContent -replace "Prerelease = '.*'", ''

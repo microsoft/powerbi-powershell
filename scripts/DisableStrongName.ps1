@@ -9,6 +9,11 @@ param
     [switch] $EnableStrongName
 )
 
+<#
+# Purpose: This script is meant for disabling strong name validation.
+# When building with Configuration=Release, the binaries are built with DelaySigned=true which causes strong name validation to take effect when loading.
+#>
+
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
 if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator))
 {
