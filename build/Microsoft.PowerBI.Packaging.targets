@@ -8,13 +8,10 @@ Licensed under the MIT License.
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <PropertyGroup>
-    <Authors>Microsoft Corporation</Authors>
-    <PackageLicenseUrl>https://github.com/Microsoft/powerbi-powershell/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IncludeContentInPack>false</IncludeContentInPack>
+    <PackageOutputPath>$(RepoRoot)\PkgOut</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
@@ -24,8 +21,7 @@ Licensed under the MIT License.
   </ItemGroup>
 
   <PropertyGroup>
-    <BeforePack>$(BeforePack);GeneratePSHelp</BeforePack>
-    <CleanDependsOn>$(CleanDependsOn);RemovePackageFromRoot</CleanDependsOn>
+    <BeforePack>$(BeforePack);UpdatePSManifest;GeneratePSHelp</BeforePack>
   </PropertyGroup>
 
   
@@ -66,8 +62,9 @@ Licensed under the MIT License.
     
   </Target>
 
-  <Target Name="GenerateMarkdownHelp" AfterTargets="Build" DependsOnTargets="RunResolvePackageDependencies" Condition="'$(IsPackable)' == 'true'">
-
+  
+  <Target Name="GetPSModuleSettings" DependsOnTargets="RunResolvePackageDependencies" Condition="'$(IsPackable)' == 'true'">
+    
     <ItemGroup>
       <PlatyPSPkg Include="@(PackageDefinitions)" Condition="'%(PackageDefinitions.Name)' == 'platyPS'" KeepMetadata="ResolvedPath" />
       <PSDFile Include="$(OutputPath)\$(PackageId).psd1" />
@@ -78,23 +75,27 @@ Licensed under the MIT License.
     </PropertyGroup>
 
     <!--<Message Text="PlatyPS Path = $(PlatyPSPath)" Importance="high" />-->
+  </Target>
 
-    <Exec Command="$(PowerShellExe) -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos;  -ModulePath &apos;%(PSDFile.FullPath)&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -Language &apos;$(LangName)&apos; -GenerateMarkdown -TargetFramework &apos;$(TargetFramework)&apos; -DependentAssemblies &apos;@(_ResolveAssemblyReferenceResolvedFiles)&apos;} &quot;" />
+  
+  <Target Name="GenerateMarkdownHelp" AfterTargets="AfterBuild" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
+
+    <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -Language &apos;$(LangName)&apos; -GenerateMarkdown -DependentAssemblies &apos;@(_ResolveAssemblyReferenceResolvedFiles)&apos;} &quot;" />
+
+  </Target>
+
+  
+  <Target Name="UpdatePSManifest" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
+
+    <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)UpdatePSModuleManifest.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -TargetFramework &apos;$(TargetFramework)&apos; -Version &apos;$(PackageVersion)&apos; -ReleaseNotes &apos;$(PackageReleaseNotes)&apos;} &quot;" />
 
   </Target>
   
   
-  <Target Name="GeneratePSHelp" DependsOnTargets="GenerateMarkdownHelp" Condition="'$(IsPackable)' == 'true'">
+  <Target Name="GeneratePSHelp" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
     
-    <Exec Command="$(PowerShellExe) -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
+    <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
     
-  </Target>
-
-  
-  <Target Name="CopyPackageToRoot" AfterTargets="Pack" Condition="'$(IsPackable)' == 'true'">
-
-    <Copy SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(RepoRoot)\PkgOut" />
-
   </Target>
   
 </Project>
