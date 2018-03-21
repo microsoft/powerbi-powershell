@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-PowerBIWorkspace
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Updates the Power BI workspace.
 
 ## SYNTAX
 
@@ -24,21 +24,32 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Group> [<CommonPara
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+This cmdlet will update the name or description of a Power BI workspace by using Power BI .NET SDK which calls the Power BI REST API.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
 ```
 
-{{ Add example description here }}
+If the current user is an admin, this will update the workspace matching the given ID with the given name and description values.
+
+### Example 2
+```powershell
+PS C:\> $workspaces = Get-PowerBIWorkspace -Scope Organization
+PS C:\> $workspace = $workspaces[0]
+PS C:\> $workspace.Name = "Test Name"
+PS C:\> $workspace.Description = "Test Description"
+PS C:\> Set-PowerBIWorkspace -Scope Organization -Workspace $workspace
+```
+
+If the current user is an admin, this will update the given workspace object with the given name and description values.
 
 ## PARAMETERS
 
 ### -Description
-{{Fill Description Description}}
+The new description to give to the workspace to update.
 
 ```yaml
 Type: String
@@ -53,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-{{Fill Id Description}}
+The object ID of the workspace to update.
 
 ```yaml
 Type: Guid
@@ -68,7 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{Fill Name Description}}
+The new name to give to the workspace to update. If the name matches another workspace in the organization, the update operation will fail.
 
 ```yaml
 Type: String
@@ -83,7 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+The level of access requested for workspace entities. Individual is currently not supported.
 
 ```yaml
 Type: PowerBIUserScope
@@ -99,7 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-{{Fill Workspace Description}}
+The workspace entity to update. The workspace will be updated with the name and description on the object.
 
 ```yaml
 Type: Group

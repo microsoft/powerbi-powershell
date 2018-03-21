@@ -15,5 +15,5 @@ Locale: en-US
 {{Fill in the Synopsis}}
 
 ### [Set-PowerBIWorkspace](Set-PowerBIWorkspace.md)
-{{Fill in the Synopsis}}
+Updates the Power BI workspace.
 
