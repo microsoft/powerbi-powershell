@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
@@ -16,10 +15,9 @@ using Microsoft.Rest;
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(IEnumerable<Group>))]
-    public class AddPowerBIWorkspaceMember : PowerBICmdlet, IUserScope
+    public class AddPowerBIWorkspaceUser : PowerBICmdlet, IUserScope
     {
-        public const string CmdletName = "PowerBIWorkspaceMember";
+        public const string CmdletName = "PowerBIWorkspaceUser";
         public const string CmdletVerb = VerbsCommon.Add;
 
         #region Parameters
@@ -28,10 +26,14 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = true)]
-        public Guid GroupId { get; set; }
+        [Alias("GroupId", "WorkspaceId")]
+        public Guid Id { get; set; }
 
         [Parameter(Mandatory = true)]
-        public GroupUserAccessRight UserDetails { get; set; }
+        public string UserEmailAddress { get; set; }
+
+        [Parameter(Mandatory = true)]
+        public string UserAccessRight { get; set; }
 
         #endregion
 
@@ -48,7 +50,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 client = new PowerBIClient(new TokenCredentials(token.AccessToken));
             }
 
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(GroupId.ToString(), UserDetails) : client.Groups.AddGroupUser(GroupId.ToString(), UserDetails);
+            var userDetails = new GroupUserAccessRight(UserAccessRight, UserEmailAddress);
+
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(Id.ToString(), userDetails) : client.Groups.AddUserAsAdmin(Id.ToString(), userDetails);
             this.Logger.WriteObject(result, true);
         }
     }
