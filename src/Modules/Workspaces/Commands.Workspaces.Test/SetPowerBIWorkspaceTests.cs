@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation;
 using Commands.Common.Test;
+using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -137,11 +138,31 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(ParameterBindingException))]
-        public void CallSetWorkspaceWithoutRequiredParameterIdOrGroup()
+        public void CallSetWorkspaceWithoutRequiredParameterIdOrWorkspace()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ps.AddCommand(Cmdlet);
+
+                var result = ps.Invoke();
+
+                Assert.Fail("Should not have reached this point");
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ParameterBindingException))]
+        public void CallSetWorkspaceWithBothParameterSets()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                var parameters = new Dictionary<string, object>
+                {
+                    { "Scope", PowerBIUserScope.Organization },
+                    { "Id", new Guid() },
+                    { "Workspace", new Group() }
+                };
+                ps.AddCommand(Cmdlet).AddParameters(parameters);
 
                 var result = ps.Invoke();
 
