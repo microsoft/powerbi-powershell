@@ -14,3 +14,6 @@ Locale: en-US
 ### [Get-PowerBIWorkspace](Get-PowerBIWorkspace.md)
 {{Fill in the Synopsis}}
 
+### [Set-PowerBIWorkspace](Set-PowerBIWorkspace.md)
+{{Fill in the Synopsis}}
+

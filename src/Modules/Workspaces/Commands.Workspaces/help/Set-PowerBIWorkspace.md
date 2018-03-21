@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-PowerBIWorkspace
+# Set-PowerBIWorkspace
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -13,7 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-Name <String>] [-Description <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,6 +30,51 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -Description
+{{Fill Description Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+{{Fill Id Description}}
+
+```yaml
+Type: Guid
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+{{Fill Name Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Scope
 {{Fill Scope Description}}
@@ -55,7 +101,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Api.V2.Models.Group, Microsoft.PowerBI.Api, Version=2.0.10.18022, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]
+### System.Object
 
 ## NOTES
 
