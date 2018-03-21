@@ -4,7 +4,7 @@ param
     [switch] $Build,
 
     [ValidateNotNull()]
-    [string[]] $BuildScriptArgs = @('-Pack', '-Clean', '-Verbose'),
+    [hashtable] $BuildScriptArgs = @{'Pack'=$true; 'Clean'=$true; 'Verbose'=$true},
 
     [string] $PackageDir = "$PSScriptRoot\..\PkgOut",
 
@@ -12,7 +12,7 @@ param
 )
 
 if($Build) {
-    & "$PSScriptRoot\Build.ps1" $BuildScriptArgs
+    & "$PSScriptRoot\Build.ps1" @BuildScriptArgs
     if($LASTEXITCODE -ne 0) {
         throw "MSBuild failed with exit code $LASTEXITCODE"
     }

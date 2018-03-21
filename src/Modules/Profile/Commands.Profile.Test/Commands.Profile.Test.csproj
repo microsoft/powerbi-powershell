@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Commands.Common.Test\Commands.Common.Test.csproj" />
     <ProjectReference Include="..\..\..\Common\Commands.Common\Commands.Common.csproj" />
     <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj" />
     <ProjectReference Include="..\Commands.Profile\Commands.Profile.csproj" />

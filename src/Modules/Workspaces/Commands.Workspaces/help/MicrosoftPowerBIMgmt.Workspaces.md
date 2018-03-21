@@ -20,3 +20,6 @@ Gives permissions to a given user to a Power BI workspace
 ### [Remove-PowerBIWorkspaceUser](Remove-PowerBIWorkspaceUser.md)
 Removes permissions for a given user to PowerBI Workspace
 
+### [Set-PowerBIWorkspace](Set-PowerBIWorkspace.md)
+Updates the Power BI workspace.
+

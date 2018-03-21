@@ -1,14 +1,7 @@
 [CmdletBinding()]
 param
 (
-    [switch] $VSPreview,
-
-    [switch] $Pack,
-
-    [switch] $Clean,
-
-    [switch] $NoBuild,
-
+    [ValidateNotNullOrEmpty()]
     [string] $Solution = "$PSScriptRoot\..\src\PowerBIPowerShell.sln",
 
     [ValidateNotNull()]
@@ -17,8 +10,19 @@ param
     [ValidateNotNull()]
     [Hashtable] $MSBuildProperties = @{},
 
+    [ValidateSet($null, 'Debug', 'Release')]
+    [string[]] $Configuration = @(),
+
     [Alias('BL')]
-    [switch] $BinaryLogger
+    [switch] $BinaryLogger,
+
+    [switch] $VSPreview,
+
+    [switch] $Pack,
+
+    [switch] $Clean,
+
+    [switch] $NoBuild
 )
 
 function Get-VSBuildFolder
@@ -79,13 +83,17 @@ if($MSBuildTargets.Count -gt 0) {
     $msBuildArgs += ('/t:' + ($MSBuildTargets -join ','))
 }
 
+if($Configuration.Count -gt 0) {
+    $MSBuildProperties['Configuration'] = $Configuration
+}
+
 if($MSBuildProperties.Count -gt 0) {
     $properties = @()
     foreach($property in $MSBuildProperties.GetEnumerator()) {
-        $properties += "$($property.Key)=$($property.Value)"
+        $properties += "$($property.Key)=$(($property.Value -join ','))"
     }
 
-    $msBuildArgs += ('/t:' + ($properties -join ';'))
+    $msBuildArgs += ('/p:' + ($properties -join ';'))
 }
 
 if($BinaryLogger) {

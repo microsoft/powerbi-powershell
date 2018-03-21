@@ -8,12 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Common.Authentication;
 
 namespace Microsoft.PowerBI.Commands.Common
 {
@@ -162,7 +160,7 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        protected virtual bool IsTerminatingError(Exception ex) => ex is PipelineStoppedException pipelineStoppedEx && pipelineStoppedEx.InnerException == null;
+        protected virtual bool IsTerminatingError(Exception ex) => ex is PipelineStoppedException pipelineStoppedEx && pipelineStoppedEx.InnerException == null || ex is NotImplementedException;
 
         protected virtual string CurrentPath => this.SessionState != null ? SessionState.Path.CurrentLocation.Path : Directory.GetCurrentDirectory();
 

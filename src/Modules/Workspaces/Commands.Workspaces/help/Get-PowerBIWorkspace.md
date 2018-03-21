@@ -37,6 +37,7 @@ PS C:\> {{ Add example code here }}
 Type: PowerBIUserScope
 Parameter Sets: (All)
 Aliases:
+Accepted values: Individual, Organization
 
 Required: False
 Position: Named

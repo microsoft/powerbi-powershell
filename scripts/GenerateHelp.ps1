@@ -16,8 +16,6 @@ param
     [ValidateNotNullOrEmpty()]
     [string] $Language = 'en-US',
 
-    [string] $TargetFramework,
-
     [Parameter(Mandatory, ParameterSetName="GenerateMarkdown")]
     [switch] $GenerateMarkdown,
 
@@ -128,22 +126,4 @@ if($GenerateExternalHelp) {
                          -ErrorAction Stop)
 
     Write-Output "Finished generating external help"
-}
-
-if($TargetFramework) {
-    $matchRegex = "(?<Front>RootModule = ')(?<DllName>.+)(?<Back>')"
-    $addTargetFramework = ".\lib\$TargetFramework\"
-    $replaceMatch = '${Front}' + $addTargetFramework + '${DllName}${Back}'
-
-    $psdFileContent = Get-Content -Path $ModulePath -Raw
-    if(($psdFileContent -match $matchRegex) -and (!($Matches['DllName'].StartsWith($addTargetFramework)))) {
-        Write-Output "Adding '$addTargetFramework' to RootModule: $ModulePath"
-        $psdFileContent = $psdFileContent -replace $matchRegex, $replaceMatch
-
-        $utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($false)
-        [System.IO.File]::WriteAllText($ModulePath, $psdFileContent, $utf8NoBomEncoding)
-    }
-    else {
-        Write-Output "Module '$ModulePath' already contains target framework"
-    }
 }

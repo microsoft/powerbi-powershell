@@ -30,23 +30,35 @@ We haven't published to PowerShell Gallery which is TBD, but will once we build 
 
 ## Usage
 
-### Login to PowerBI
+>Two scopes are supported by cmdlets that interact with Power BI entities:
+> * Individual is used to access entities that belong to the current user.
+> * Organization is used to access entities across the entire company. Only Power BI tenant admins are allowed to use.
+
+### Login to Power BI
 
 ```powershell
 Connect-PowerBIServiceAccount   # or Login-PowerBIServiceAccount
 ```
 
-### Getting Workspaces
+### Get Workspaces
 
-Fetching all user's workspaces:
+Get all workspaces for the user:
 
 ```powershell
 Get-PowerBIWorkspace
 ```
 
-### Getting Reports
+### Update Workspace
 
-Fetching all user's reports:
+Update the name or description of a user's workspace:
+
+```powershell
+Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
+```
+
+### Get Reports
+
+Get all reports for the user:
 
 ```powershell
 Get-PowerBIReport
