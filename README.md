@@ -30,6 +30,10 @@ We haven't published to PowerShell Gallery which is TBD, but will once we build 
 
 ## Usage
 
+>Two scopes are supported by cmdlets that interact with Power BI entities:
+> * Individual is used to access entities that belong to the current user.
+> * Organization is used to access entities across the entire company. Only Power BI tenant admins are allowed to use.
+
 ### Login to PowerBI
 
 ```powershell

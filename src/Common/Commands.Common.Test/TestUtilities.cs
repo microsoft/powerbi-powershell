@@ -3,22 +3,18 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.IO;
-using System.Management.Automation;
-using Microsoft.PowerBI.Commands.Profile;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Commands.Common.Test
 {
     public static class TestUtilities
     {
-        public static void ConnectToPowerBI(PowerShell ps)
+        public static void AssertNoCmdletErrors(System.Management.Automation.PowerShell ps)
         {
-            ps.AddCommand(new CmdletInfo($"{ConnectPowerBIServiceAccount.CmdletVerb}-{ConnectPowerBIServiceAccount.CmdletName}", typeof(ConnectPowerBIServiceAccount))).AddParameter("Environment", "PPE");
-            var result = ps.Invoke();
-            Assert.IsFalse(ps.HadErrors);
-            Assert.IsNotNull(result);
-            ps.Commands.Clear();
+            Assert.IsFalse(ps.HadErrors, $"Error messages: {string.Join(Environment.NewLine, ps.Streams.Error?.Select(e => e.ToString()))}");
         }
 
         public static string GetRandomString()

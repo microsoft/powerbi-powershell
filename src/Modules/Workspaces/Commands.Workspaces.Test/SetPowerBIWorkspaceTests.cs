@@ -5,10 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
 using Commands.Common.Test;
-using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,16 +21,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndSetWorkspaceOrganizationScope()
+        public void EndToEndSetWorkspaceOrganizationScopePropertiesParameterSet()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                TestUtilities.ConnectToPowerBI(ps);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = GetWorkspace(ps);
+                var workspace = WorkspacesTestUtilities.GetWorkspace(ps);
                 if (workspace == null)
                 {
-                    return;
+                    Assert.Inconclusive("No workspaces found to perform end to end test");
                 }
 
                 var updatedName = TestUtilities.GetRandomString();
@@ -49,7 +48,43 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 ps.Commands.Clear();
 
                 Assert.IsNotNull(result);
-                var updatedWorkspace = GetWorkspace(ps, workspace.Id);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id);
+                Assert.AreEqual(updatedName, updatedWorkspace.Name);
+                Assert.AreEqual(updatedDescription, updatedWorkspace.Description);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndSetWorkspaceOrganizationScopeWorkspaceParameterSet()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+
+                var workspace = WorkspacesTestUtilities.GetWorkspace(ps);
+                if (workspace == null)
+                {
+                    Assert.Inconclusive("No workspaces found to perform end to end test");
+                }
+
+                var updatedName = TestUtilities.GetRandomString();
+                var updatedDescription = TestUtilities.GetRandomString();
+                workspace.Name = updatedName;
+                workspace.Description = updatedDescription;
+                var parameters = new Dictionary<string, object>
+                {
+                    { "Scope", PowerBIUserScope.Organization },
+                    { "Workspace", workspace },
+                };
+                ps.AddCommand(Cmdlet).AddParameters(parameters);
+
+                var result = ps.Invoke();
+                ps.Commands.Clear();
+
+                Assert.IsNotNull(result);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.AreEqual(updatedDescription, updatedWorkspace.Description);
             }
@@ -62,7 +97,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                TestUtilities.ConnectToPowerBI(ps);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
                 var parameters = new Dictionary<string, object>
                 {
                     { "Scope", PowerBIUserScope.Individual },
@@ -75,6 +110,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 try
                 {
                     ps.Invoke();
+
+                    Assert.Fail("Should not have reached this point");
                 }
                 catch (CmdletInvocationException ex)
                 {
@@ -100,7 +137,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(ParameterBindingException))]
-        public void CallSetWorkspaceWithoutRequiredParameterId()
+        public void CallSetWorkspaceWithoutRequiredParameterIdOrGroup()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -110,22 +147,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 Assert.Fail("Should not have reached this point");
             }
-        }
-
-        private static Group GetWorkspace(System.Management.Automation.PowerShell ps, string id = null)
-        {
-            ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace))).AddParameter("Scope", "Organization");
-            var results = ps.Invoke();
-            ps.Commands.Clear();
-
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
-
-                return id == null ? workspaces.First() : workspaces.First(x => x.Id == id);
-            }
-
-            return null;
         }
     }
 }

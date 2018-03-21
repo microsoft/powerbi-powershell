@@ -12,9 +12,15 @@ schema: 2.0.0
 
 ## SYNTAX
 
+### Properties (Default)
 ```
 Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-Name <String>] [-Description <String>]
  [<CommonParameters>]
+```
+
+### Workspace
+```
+Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Group> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,7 +42,7 @@ PS C:\> {{ Add example code here }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Properties
 Aliases:
 
 Required: False
@@ -51,7 +57,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: Properties
 Aliases:
 
 Required: True
@@ -66,7 +72,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Properties
 Aliases:
 
 Required: False
@@ -86,6 +92,21 @@ Aliases:
 Accepted values: Individual, Organization
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Workspace
+{{Fill Workspace Description}}
+
+```yaml
+Type: Group
+Parameter Sets: Workspace
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
