@@ -44,6 +44,14 @@ Fetching all user's workspaces:
 Get-PowerBIWorkspace
 ```
 
+### Update Workspace
+
+Update the name or description of a user's workspace:
+
+```powershell
+Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
+```
+
 ### Getting Reports
 
 Fetching all user's reports:
