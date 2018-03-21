@@ -20,9 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Commands.Common.Test\Commands.Common.Test.csproj" />
     <ProjectReference Include="..\..\..\Common\Commands.Common\Commands.Common.csproj" />
     <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\Common\Common.Authentication\Common.Authentication.csproj" />
+    <ProjectReference Include="..\..\Profile\Commands.Profile.Test\Commands.Profile.Test.csproj" />
     <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
     <ProjectReference Include="..\Commands.Workspaces\Commands.Workspaces.csproj" />
   </ItemGroup>
