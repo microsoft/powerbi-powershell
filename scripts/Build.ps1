@@ -1,14 +1,6 @@
 [CmdletBinding()]
 param
 (
-    [switch] $VSPreview,
-
-    [switch] $Pack,
-
-    [switch] $Clean,
-
-    [switch] $NoBuild,
-
     [ValidateNotNullOrEmpty()]
     [string] $Solution = "$PSScriptRoot\..\src\PowerBIPowerShell.sln",
 
@@ -22,7 +14,15 @@ param
     [string[]] $Configuration = @(),
 
     [Alias('BL')]
-    [switch] $BinaryLogger
+    [switch] $BinaryLogger,
+
+    [switch] $VSPreview,
+
+    [switch] $Pack,
+
+    [switch] $Clean,
+
+    [switch] $NoBuild
 )
 
 function Get-VSBuildFolder
