@@ -56,6 +56,22 @@ Update the name or description of a user's workspace:
 Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
 ```
 
+### Add new user to workspace
+
+Add a user to a given workspace:
+
+```powershell
+Add-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com -UserAccessRight Admin
+```
+
+### Remove a user from a given workspace
+
+Remove user's permissions from a given workspace:
+
+```powershell
+Remove-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com
+```
+
 ### Get Reports
 
 Get all reports for the user:
