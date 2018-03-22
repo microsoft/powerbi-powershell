@@ -30,7 +30,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = true)]
-        public string UserEmailAddress { get; set; }
+        [Alias("UserEmailAddress")]
+        public string UserPrincipalName { get; set; }
 
         [Parameter(Mandatory = true)]
         public string UserAccessRight { get; set; }
@@ -50,9 +51,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 client = new PowerBIClient(new TokenCredentials(token.AccessToken));
             }
 
-            var userDetails = new GroupUserAccessRight(UserAccessRight, UserEmailAddress);
+            var userDetails = new GroupUserAccessRight(this.UserAccessRight, this.UserPrincipalName);
 
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(Id.ToString(), userDetails) : client.Groups.AddUserAsAdmin(Id.ToString(), userDetails);
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(this.Id.ToString(), userDetails) : client.Groups.AddUserAsAdmin(this.Id.ToString(), userDetails);
             this.Logger.WriteObject(result, true);
         }
     }

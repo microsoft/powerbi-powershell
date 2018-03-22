@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps);
+                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization);
                 if (workspace == null)
                 {
                     Assert.Inconclusive("No workspaces found to perform end to end test");
@@ -49,7 +49,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 ps.Commands.Clear();
 
                 Assert.IsNotNull(result);
-                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization,  workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.AreEqual(updatedDescription, updatedWorkspace.Description);
             }
@@ -64,7 +64,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps);
+                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization);
                 if (workspace == null)
                 {
                     Assert.Inconclusive("No workspaces found to perform end to end test");
@@ -85,7 +85,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 ps.Commands.Clear();
 
                 Assert.IsNotNull(result);
-                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.AreEqual(updatedDescription, updatedWorkspace.Description);
             }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Profile.Test;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
@@ -14,16 +15,18 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
     [TestClass]
     public class AddPowerBIWorkspaceUserTest
     {
+        private static CmdletInfo Cmdlet => new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser));
+
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndAddPowerBIWorkspaceUserAsAdmin()
+        public void EndToEndAddPowerBIWorkspaceUserOrganizationScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps);
+                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization );
 
                 if (workspace == null)
                 {
@@ -34,11 +37,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     { "Scope", "Organization"},
                     { "Id", workspace.Id},
-                    { "UserEmailAddress", "user1@granularcontrols1.ccsctp.net"}, //update parameters for all tests to use a test account, this user email will only work on Onebox
+                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"}, //update parameters for all tests to use a test account, this user email will only work on Onebox
                     { "UserAccessRight", "Admin" }
                 };
 
-                ps.AddCommand(new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser))).AddParameters(parameters);
+                ps.AddCommand(Cmdlet).AddParameters(parameters);
                 var result = ps.Invoke();
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
@@ -48,13 +51,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndAddPowerBIWorkspaceUserAsIndividual()
+        public void EndToEndAddPowerBIWorkspaceUserIndividualScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var group = WorkspacesTestUtilities.GetGroup(ps);
+                var group = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Individual);
 
                 if (group == null)
                 {
@@ -65,11 +68,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     { "Scope", "Individual"},
                     { "Id", group.Id }, 
-                    { "UserEmailAddress", "user1@granularcontrols1.ccsctp.net"},
+                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"},
                     { "UserAccessRight", "Admin" }
                 };
 
-                ps.AddCommand(new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser))).AddParameters(parameters);
+                ps.AddCommand(Cmdlet).AddParameters(parameters);
                 var result = ps.Invoke();
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
@@ -87,11 +90,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     { "Scope", "Organization"},
                     { "Id", new Guid()},
-                    { "UserEmailAddress", "user1@granularcontrols1.ccsctp.net"},
+                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"},
                     { "UserAccessRight", "Member" }
                 };
 
-                ps.AddCommand(new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser))).AddParameters(parameters);
+                ps.AddCommand(Cmdlet).AddParameters(parameters);
                 var result = ps.Invoke();
                 Assert.Fail("Should not have reached this point");
             }

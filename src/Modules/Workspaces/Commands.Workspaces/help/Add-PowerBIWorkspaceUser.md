@@ -8,23 +8,23 @@ schema: 2.0.0
 # Add-PowerBIWorkspaceUser
 
 ## SYNOPSIS
-Gives permissions to a given user to a Power BI workspace 
+Gives permissions to a given user to access the specified PowerBI workspac
 
 ## SYNTAX
 
 ```
-Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserEmailAddress <String>
+Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
  -UserAccessRight <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+This cmdlet will give permissions to a given user to access the specified PowerBI workspace by using Power BI .NET SDK which calls the Power BI REST API.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Add-PowerBIWorkspaceUser -Scope Organization -GroupId 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com
- -UserAccessRight Admin
+PS C:\> Add-PowerBIWorkspaceUser -Scope Organization -GroupId 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com -UserAccessRight Admin
 ```
 
 ## PARAMETERS
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Individual or Organization
+The level of access requested for workspace entities. Individual is currently the default value
 
 ```yaml
 Type: PowerBIUserScope
@@ -75,13 +75,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UserEmailAddress
-User Principal name of the user who is to be given permissions to the Group/Workspace
+### -UserPrincipalName
+UserPrincipalName (or UPN, which is mostly same as the email address) for the user whose permissions need to be removed
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: UserEmailAddress
 
 Required: True
 Position: Named

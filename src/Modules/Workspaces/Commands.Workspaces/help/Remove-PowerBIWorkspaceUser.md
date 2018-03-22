@@ -8,16 +8,17 @@ schema: 2.0.0
 # Remove-PowerBIWorkspaceUser
 
 ## SYNOPSIS
-Removes permissions for a given user to PowerBI Workspace
+Removes permissions for a given user to the specified PowerBI Workspace
 
 ## SYNTAX
 
 ```
-Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserEmailAddress <String>
+Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+This cmdlet will remove the permissions for a given user to the specified PowerBI workspace by using Power BI .NET SDK which calls the Power BI REST API.
 
 ## EXAMPLES
 
@@ -49,7 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Individual or Organization
+The level of access requested for workspace entities. Individual is currently the default value
 
 ```yaml
 Type: PowerBIUserScope
@@ -64,13 +65,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UserEmailAddress
-User Principal name for the user whose permissions are to be removed
+### -UserPrincipalName
+UserPrincipalName (or UPN, which is mostly same as the email address) for the user whose permissions need to be removed
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: UserEmailAddress
 
 Required: True
 Position: Named

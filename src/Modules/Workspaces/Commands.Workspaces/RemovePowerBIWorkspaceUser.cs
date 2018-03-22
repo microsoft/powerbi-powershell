@@ -29,7 +29,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = true)]
-        public string UserEmailAddress { get; set; }
+        [Alias("UserEmailAddress")]
+        public string UserPrincipalName { get; set; }
 
         #endregion
 
@@ -46,7 +47,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 client = new PowerBIClient(new TokenCredentials(token.AccessToken));
             }
 
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.DeleteUserInGroup(Id.ToString(), UserEmailAddress) : client.Groups.DeleteUserAsAdmin(Id.ToString(), UserEmailAddress);
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.DeleteUserInGroup(this.Id.ToString(), this.UserPrincipalName) : client.Groups.DeleteUserAsAdmin(this.Id.ToString(), this.UserPrincipalName);
             this.Logger.WriteObject(result, true);
         }
     }
