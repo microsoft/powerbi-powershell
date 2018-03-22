@@ -28,5 +28,22 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
             return null;
         }
+
+        //Gets all the groups for a given individual
+        public static Group GetGroup(System.Management.Automation.PowerShell ps, string id = null)
+        {
+            ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace))).AddParameter("Scope", "Individual");
+            var results = ps.Invoke();
+            ps.Commands.Clear();
+
+            if (results.Any())
+            {
+                var workspaces = results.Select(x => (Group)x.BaseObject);
+
+                return id == null ? workspaces.First() : workspaces.First(x => x.Id == id);
+            }
+
+            return null;
+        }
     }
 }

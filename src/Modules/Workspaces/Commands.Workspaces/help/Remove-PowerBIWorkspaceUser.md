@@ -18,7 +18,6 @@ Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserEmailAdd
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
 
 ## EXAMPLES
 
@@ -27,14 +26,10 @@ Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserEmailAdd
 PS C:\> Remove-PowerBIWorkspaceUser -Scope Organization -Id 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com
 ```
 
-{{ Add example description here }}
-
 ### Example 2
 ```powershell
 PS C:\> Remove-PowerBIWorkspaceUser -Scope Individual -Id 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com
 ```
-
-{{ Add example description here }}
 
 ## PARAMETERS
 

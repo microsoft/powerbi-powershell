@@ -5,10 +5,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.PowerBI.Commands.Profile;
+using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
@@ -23,14 +21,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ps.AddCommand(new CmdletInfo($"{ConnectPowerBIServiceAccount.CmdletVerb}-{ConnectPowerBIServiceAccount.CmdletName}", typeof(ConnectPowerBIServiceAccount))).AddParameter("Environment", "PPE");
-                var result = ps.Invoke();
-                //ps.Streams.Error
-                Assert.IsFalse(ps.HadErrors);
-                Assert.IsNotNull(result);
-                ps.Commands.Clear();
+                ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = GetWorkspace(ps);
+                var workspace = WorkspacesTestUtilities.GetWorkspace(ps);
+
                 if (workspace == null)
                 {
                     Assert.Inconclusive("No workspaces found to perform end to end test");
@@ -45,7 +39,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 };
 
                 ps.AddCommand(new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser))).AddParameters(parameters);
-                result = ps.Invoke();
+                var result = ps.Invoke();
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
             }
@@ -58,14 +52,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ps.AddCommand(new CmdletInfo($"{ConnectPowerBIServiceAccount.CmdletVerb}-{ConnectPowerBIServiceAccount.CmdletName}", typeof(ConnectPowerBIServiceAccount))).AddParameter("Environment", "PPE");
-                var result = ps.Invoke();
-                //ps.Streams.Error
-                Assert.IsFalse(ps.HadErrors);
-                Assert.IsNotNull(result);
-                ps.Commands.Clear();
+                ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var group = GetGroup(ps);
+                var group = WorkspacesTestUtilities.GetGroup(ps);
+
                 if (group == null)
                 {
                     Assert.Inconclusive("No groups found to perform end to end test");
@@ -80,7 +70,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 };
 
                 ps.AddCommand(new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser))).AddParameters(parameters);
-                result = ps.Invoke();
+                var result = ps.Invoke();
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
             }
@@ -105,39 +95,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var result = ps.Invoke();
                 Assert.Fail("Should not have reached this point");
             }
-        }
-
-        //Move this method to a common test utilities file
-        private static Group GetWorkspace(System.Management.Automation.PowerShell ps, string id = null)
-        {
-            ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace))).AddParameter("Scope", "Organization");
-            var results = ps.Invoke();
-            ps.Commands.Clear();
-
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
-
-                return id == null ? workspaces.First() : workspaces.First(x => x.Id == id);
-            }
-
-            return null;
-        }
-
-        private static Group GetGroup(System.Management.Automation.PowerShell ps, string id = null)
-        {
-            ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace))).AddParameter("Scope", "Individual");
-            var results = ps.Invoke();
-            ps.Commands.Clear();
-
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
-
-                return id == null ? workspaces.First() : workspaces.First(x => x.Id == id);
-            }
-
-            return null;
         }
     }
 }

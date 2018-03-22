@@ -18,7 +18,6 @@ Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserEmailAddres
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
 
 ## EXAMPLES
 
@@ -27,8 +26,6 @@ Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserEmailAddres
 PS C:\> Add-PowerBIWorkspaceUser -Scope Organization -GroupId 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com
  -UserAccessRight Admin
 ```
-
-{{ Add example description here }}
 
 ## PARAMETERS
 
