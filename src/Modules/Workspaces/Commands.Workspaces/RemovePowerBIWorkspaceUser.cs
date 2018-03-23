@@ -4,10 +4,8 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -16,11 +14,10 @@ using Microsoft.Rest;
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(IEnumerable<Group>))]
-    public class AddPowerBIWorkspaceMember : PowerBICmdlet, IUserScope
+    public class RemovePowerBIWorkspaceUser : PowerBICmdlet, IUserScope
     {
-        public const string CmdletName = "PowerBIWorkspaceMember";
-        public const string CmdletVerb = VerbsCommon.Add;
+        public const string CmdletName = "PowerBIWorkspaceUser";
+        public const string CmdletVerb = VerbsCommon.Remove;
 
         #region Parameters
 
@@ -28,10 +25,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = true)]
-        public Guid GroupId { get; set; }
+        [Alias("GroupId", "WorkspaceId")]
+        public Guid Id { get; set; }
 
         [Parameter(Mandatory = true)]
-        public GroupUserAccessRight UserDetails { get; set; }
+        [Alias("UserEmailAddress")]
+        public string UserPrincipalName { get; set; }
 
         #endregion
 
@@ -48,7 +47,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 client = new PowerBIClient(new TokenCredentials(token.AccessToken));
             }
 
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(GroupId.ToString(), UserDetails) : client.Groups.AddGroupUser(GroupId.ToString(), UserDetails);
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.DeleteUserInGroup(this.Id.ToString(), this.UserPrincipalName) : client.Groups.DeleteUserAsAdmin(this.Id.ToString(), this.UserPrincipalName);
             this.Logger.WriteObject(result, true);
         }
     }

@@ -30,6 +30,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName)]
+        [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = PropertiesParameterSetName)]

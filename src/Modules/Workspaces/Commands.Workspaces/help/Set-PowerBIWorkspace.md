@@ -69,7 +69,7 @@ The object ID of the workspace to update.
 ```yaml
 Type: Guid
 Parameter Sets: Properties
-Aliases:
+Aliases: GroupId, WorkspaceId
 
 Required: True
 Position: Named

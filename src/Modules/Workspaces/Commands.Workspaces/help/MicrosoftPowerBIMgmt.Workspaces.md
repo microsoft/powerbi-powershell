@@ -11,8 +11,14 @@ Locale: en-US
 {{Manually Enter Description Here}}
 
 ## MicrosoftPowerBIMgmt.Workspaces Cmdlets
+### [Add-PowerBIWorkspaceUser](Add-PowerBIWorkspaceUser.md)
+Gives permissions to a given user to access the specified PowerBI workspac
+
 ### [Get-PowerBIWorkspace](Get-PowerBIWorkspace.md)
 {{Fill in the Synopsis}}
+
+### [Remove-PowerBIWorkspaceUser](Remove-PowerBIWorkspaceUser.md)
+Removes permissions for a given user to the specified PowerBI Workspace
 
 ### [Set-PowerBIWorkspace](Set-PowerBIWorkspace.md)
 Updates the Power BI workspace.
