@@ -47,6 +47,34 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         void WriteError(ErrorRecord record);
 
         /// <summary>
+        /// Throws a terminating to the PowerBI logger.
+        /// </summary>
+        /// <param name="obj">Value of the error to write to the error stream.</param>
+        /// <param name="category">Category to log the error against; default is WriteError.</param>
+        void ThrowTerminatingError(object obj, ErrorCategory category = ErrorCategory.WriteError);
+
+        /// <summary>
+        /// Throws a terminating to the PowerBI logger.
+        /// </summary>
+        /// <param name="ex">Exception to write to the error stream.</param>
+        /// <param name="category">Category to log the error against; default is WriteError.</param>
+        void ThrowTerminatingError(Exception ex, ErrorCategory category = ErrorCategory.WriteError);
+
+        /// <summary>
+        /// Throws a terminating to the PowerBI logger.
+        /// </summary>
+        /// <param name="obj">Value of the error to the error stream.</param>
+        /// <param name="ex">Exception to log with the provided value to the error stream.</param>
+        /// <param name="category">Category to log the error against; default is WriteError.</param>
+        void ThrowTerminatingError(object obj, Exception ex, ErrorCategory category = ErrorCategory.WriteError);
+
+        /// <summary>
+        /// Throws a terminating error to the PowerBI logger in the form of a ErrorRecord.
+        /// </summary>
+        /// <param name="record">Error record to write to the error stream.</param>
+        void ThrowTerminatingError(ErrorRecord record);
+
+        /// <summary>
         /// Write a warning message to the PowerBI logger.
         /// </summary>
         /// <param name="obj">Value to write to the warning stream.</param>

@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,6 +29,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -Filter
+{{Fill Filter Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Scope
 {{Fill Scope Description}}

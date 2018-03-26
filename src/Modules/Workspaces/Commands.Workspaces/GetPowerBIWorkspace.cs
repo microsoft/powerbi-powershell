@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(IEnumerable<Group>))]
-    public class GetPowerBIWorkspace : PowerBICmdlet, IUserScope
+    public class GetPowerBIWorkspace : PowerBICmdlet, IUserScope, IUserFilter
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Get;
@@ -27,7 +27,26 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
+        [Parameter(Mandatory = false)]
+        public string Filter { get; set; }
+
+        public SwitchParameter Orphaned { get; set; }
+
         #endregion
+
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+            if(this.Orphaned.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
+            {
+                this.Logger.ThrowTerminatingError($"Orphaned is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+            }
+
+            if(!string.IsNullOrEmpty(this.Filter) && this.Scope.Equals(PowerBIUserScope.Individual))
+            {
+                this.Logger.ThrowTerminatingError($"Filter is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+            }
+        }
 
         protected override void ExecuteCmdlet()
         {
@@ -42,7 +61,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 client = new PowerBIClient(new TokenCredentials(token.AccessToken));
             }
 
-            var workspaces = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.GetGroups() : client.Groups.GetGroupsAsAdmin();
+            if(this.Orphaned.IsPresent)
+            {
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? string.Empty : (this.Filter + " and ");
+                this.Filter += "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
+            }
+
+            var workspaces = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.GetGroups() : client.Groups.GetGroupsAsAdmin(expand: "users", filter: this.Filter);
             this.Logger.WriteObject(workspaces.Value, true);
         }
     }

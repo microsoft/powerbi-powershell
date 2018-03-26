@@ -161,6 +161,31 @@ namespace Microsoft.PowerBI.Commands.Common
             Trace.TraceError(record.ToString());
         }
 
+        public void ThrowTerminatingError(object obj, ErrorCategory category = ErrorCategory.WriteError)
+        {
+            var errorRecord = new ErrorRecord(new Exception(obj.ToString()), obj.ToString(), category, this.Cmdlet);
+            this.ThrowTerminatingError(errorRecord);
+        }
+
+        public void ThrowTerminatingError(Exception ex, ErrorCategory category = ErrorCategory.WriteError)
+        {
+            var errorRecord = new ErrorRecord(ex, ex.Message, category, this.Cmdlet);
+            this.ThrowTerminatingError(errorRecord);
+        }
+
+        public void ThrowTerminatingError(object obj, Exception ex, ErrorCategory category = ErrorCategory.WriteError)
+        {
+            var errorRecord = new ErrorRecord(ex, obj.ToString(), category, this.Cmdlet);
+            this.ThrowTerminatingError(errorRecord);
+        }
+
+        public void ThrowTerminatingError(ErrorRecord record)
+        {
+            Trace.TraceError(record.ToString());
+            this.ErrorListener?.Invoke(record);
+            this.Cmdlet.ThrowTerminatingError(record);
+        }
+
         public void WriteHost(object obj, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null)
         {
             if (this.OnDifferentThread)

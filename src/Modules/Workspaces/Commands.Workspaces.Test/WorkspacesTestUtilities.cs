@@ -13,9 +13,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
     public static class WorkspacesTestUtilities
     {
-        public static Group GetWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope, string id = null)
+        public static CmdletInfo GetPowerBIWorkspaceCmdletInfo { get; } = new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace));
+
+        public static Group GetWorkspace(System.Management.Automation.PowerShell ps, string id = null, PowerBIUserScope scope = PowerBIUserScope.Individual)
         {
-            ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace))).AddParameter("Scope", scope);
+            ps.AddCommand(GetPowerBIWorkspaceCmdletInfo).AddParameter(nameof(GetPowerBIWorkspace.Scope), scope.ToString());
             var results = ps.Invoke();
             TestUtilities.AssertNoCmdletErrors(ps);
             ps.Commands.Clear();
