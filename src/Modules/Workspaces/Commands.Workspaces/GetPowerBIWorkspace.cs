@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
@@ -22,7 +23,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Get;
 
+        private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
+
         #region Parameters
+
+        [Parameter(Mandatory = false)]
+        public Guid Id { get; set; }
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
@@ -30,7 +36,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = false)]
         public string Filter { get; set; }
 
+        [Parameter(Mandatory = false)]
         public SwitchParameter Orphaned { get; set; }
+
+        [Parameter(Mandatory = false)]
+        [Alias("Top")]
+        public int? First { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public int? Skip { get; set; }
 
         #endregion
 
@@ -63,12 +77,39 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             if(this.Orphaned.IsPresent)
             {
-                this.Filter = string.IsNullOrEmpty(this.Filter) ? string.Empty : (this.Filter + " and ");
-                this.Filter += "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? OrphanedFilterString : $"({this.Filter}) and ({OrphanedFilterString})";
             }
 
-            var workspaces = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.GetGroups() : client.Groups.GetGroupsAsAdmin(expand: "users", filter: this.Filter);
-            this.Logger.WriteObject(workspaces.Value, true);
+            if(this.Id != default && this.Scope == PowerBIUserScope.Organization)
+            {
+                var idFilter = $"id eq '{this.Id}'";
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? idFilter : $"({idFilter}) and ({this.Filter})";
+            }
+
+            var workspacesResult = this.Scope == PowerBIUserScope.Individual ? 
+                client.Groups.GetGroups() : 
+                client.Groups.GetGroupsAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
+            var workspaces = workspacesResult.Value;
+            if (this.Scope == PowerBIUserScope.Individual)
+            {
+                // non-Admin API doesn't support filter, top, skip; processing after getting result
+                if (this.Id != default)
+                {
+                    workspaces = workspaces.Where(w => this.Id == new Guid(w.Id)).ToList();
+                }
+
+                if (this.Skip.GetValueOrDefault() > 0)
+                {
+                    workspaces = workspaces.Skip(this.Skip.Value).ToList();
+                }
+
+                if (this.First.GetValueOrDefault() > 0)
+                {
+                    workspaces = workspaces.Take(this.First.Value).ToList();
+                }
+            }
+
+            this.Logger.WriteObject(workspaces, true);
         }
     }
 }
