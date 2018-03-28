@@ -18,7 +18,7 @@ Planned\upcoming cmdlets.
 | Cmdlet Name | Purpose | Alias | Notes |
 | ----------- | ------- | ----- | ----- |
 | New-PowerBIWorkspace | Creates a new workspace | Create-PowerBIWorkspace |
-| Remove-PowerBIWorkspace | Deletes a workspace | | 
+| Remove-PowerBIWorkspace | Deletes a workspace | Delete-PowerBIWorkspace | 
 | Set-PowerBICapacityOnWorkspace | Allocates capcity to a Workspace | Assign-PowerBICapacityToWorkspace |
 
 ## Reports
@@ -26,7 +26,7 @@ Planned\upcoming cmdlets.
 | Cmdlet Name | Purpose | Alias | Notes |
 | ----------- | ------- | ----- | ----- |
 | Copy-PowerBIReport | Clone a report | 
-| Remove-PowerBIReport | Delete a report |
+| Remove-PowerBIReport | Delete a report | Delete-PowerBIReport |
 | Export-PowerBIReport  | Export a report
 | New-PowerBIReportEmbedToken | Generate an embed token |
 | Add-PowerBIDatasetToReport | Rebind dataset to report | Mount-PowerBIDatasetToReport
@@ -50,8 +50,8 @@ Planned\upcoming cmdlets.
 | Get-PowerBIDatasource | Get datasources |
 | Get-PowerBIDatasetParameter | Get parameters for dataset |
 | Add-PowerBIGatewayToDatasource | Bind to a gateway | Mount-PowerBIGatewayToDatasource
-| Remove-PowerBIDataSource | Delete dataset |
-| Remove-PowerBIDatasetRow | Delete dataset rows |
+| Remove-PowerBIDatasource | Delete dataset | Delete-PowerBIDatasource |
+| Remove-PowerBIDatasetRow | Delete dataset rows | Delete-PowerBIDatasetRow |
 | Get-PowerBIGatewayForDataset | Discover gateways | 
 | New-PowerBIDatasetEmbedToken | Generate an embed token |
 | Get-PowerBIDatasetRefreshHistory | Get refresh history |
