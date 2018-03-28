@@ -1,4 +1,4 @@
-# Contribute Code to PowerShell Cmdlets for PowerBI
+# Contribute Code to PowerShell Cmdlets for Power BI
 
 ## Developer Environment Requirements
 
@@ -133,7 +133,7 @@ New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
     -Copyright 'Microsoft Corporation. All rights reserved.' `
     -RootModule "Microsoft.PowerBI.Commands.$moduleName.dll" `
     -ModuleVersion '1.0.0' `
-    -Description "Microsoft PowerBI PowerShell - $moduleName cmdlets for Microsoft PowerBI" `
+    -Description "Microsoft Power BI PowerShell - $moduleName cmdlets for Microsoft Power BI" `
     -PowerShellVersion '3.0' `
     -PrivateData @{
          PSData=@{
