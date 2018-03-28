@@ -2,47 +2,34 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <AssemblyName>Microsoft.PowerBI.Commands.All</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.All</RootNamespace>
-    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
+    <ReferenceWindowsAuthenticator>false</ReferenceWindowsAuthenticator>
+    <NoHelpGen>true</NoHelpGen>
+    <NoDependentAssemblies>true</NoDependentAssemblies>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-	<PackageId>MicrosoftPowerBIMgmt</PackageId>
-	<Description>Microsoft PowerBI PowerShell - All cmdlets for Microsoft PowerBI</Description>
-	<PackageTags>PowerBI</PackageTags>
+	  <PackageId>MicrosoftPowerBIMgmt</PackageId>
+	  <Description>Microsoft Power BI PowerShell - Cmdlets for Microsoft Power BI</Description>
+	  <PackageTags>PowerBI</PackageTags>
   </PropertyGroup>
+  
   <ItemGroup>
     <None Remove="MicrosoftPowerBIMgmt.psd1" />
   </ItemGroup>
+  
   <ItemGroup>
     <Content Include="MicrosoftPowerBIMgmt.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.PowerBI.Api" Version="2.0.10">
-	  <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
-	  <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\Commands.Common\Commands.Common.csproj">
-	      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj">
-	      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
+    <ProjectReference Include="..\..\**\*.csproj" Exclude="..\..\**\$(MSBuildThisFile);..\..\**\*.Test.csproj" />
   </ItemGroup>
 
 </Project>
