@@ -9,12 +9,24 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
     public static class Extensions
     {
+        public static bool ShowADALDebugMessages(this IPowerBISettings settings)
+        {
+            if (settings.Settings.TryGetValue(PowerBISettingNames.SettingsSection.ShowADALDebugMessages, out string showAdalMessages)
+                            && bool.TryParse(showAdalMessages, out bool showAdalMessagesParsed))
+            {
+                return showAdalMessagesParsed;
+            }
+
+            return false;
+        }
+
         public static string ToQueryParameterString(this IDictionary<string, string> queryParameters)
         {
             string queryParamString = null;

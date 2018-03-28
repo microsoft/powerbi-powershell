@@ -18,6 +18,7 @@
     }
   ],
   "Settings": {
-    "ForceDeviceCodeAuthentication": false
+    "ForceDeviceCodeAuthentication": false,
+    "ShowADALDebugMessages":  false
   }
 }
