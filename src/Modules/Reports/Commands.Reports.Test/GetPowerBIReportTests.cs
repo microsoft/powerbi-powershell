@@ -39,11 +39,7 @@ namespace Commands.Reports.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                try
-                {
-                    ProfileTestUtilities.DisconnectToPowerBI(ps);
-                }
-                catch (Exception) { } // ignore, not part of the test
+                ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
 
                 ps.AddCommand(new CmdletInfo($"{GetPowerBIReport.CmdletVerb}-{GetPowerBIReport.CmdletName}", typeof(GetPowerBIReport)));
                 var result = ps.Invoke();

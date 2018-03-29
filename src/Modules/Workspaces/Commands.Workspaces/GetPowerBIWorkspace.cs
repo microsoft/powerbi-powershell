@@ -18,6 +18,7 @@ using Microsoft.Rest;
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
+    [Alias("Get-PowerBIGroup")]
     [OutputType(typeof(IEnumerable<Group>))]
     public class GetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserId
     {
@@ -29,6 +30,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         #region Parameters
 
         [Parameter(Mandatory = false)]
+        [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = false)]

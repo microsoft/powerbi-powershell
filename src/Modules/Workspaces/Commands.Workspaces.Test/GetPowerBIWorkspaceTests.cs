@@ -93,11 +93,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                try
-                {
-                    ProfileTestUtilities.DisconnectToPowerBI(ps);
-                }
-                catch (Exception) { } // ignore, not part of the test
+                ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
 
                 ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace)));
                 var result = ps.Invoke();

@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-PowerBIWorkspace
 
 ## SYNOPSIS
-Updates the Power BI workspace.
+Updates a Power BI workspace.
 
 ## SYNTAX
 
@@ -24,7 +24,9 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Group> [<CommonPara
 ```
 
 ## DESCRIPTION
-This cmdlet will update the name or description of a Power BI workspace by using Power BI .NET SDK which calls the Power BI REST API.
+Updates the name or description of a Power BI workspace.
+Currently only -Scope Organization is supported.
+You must have logged in previously before using, Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -33,7 +35,7 @@ This cmdlet will update the name or description of a Power BI workspace by using
 PS C:\> Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
 ```
 
-If the current user is an admin, this will update the workspace matching the given ID with the given name and description values.
+If the current user is an administrator, this will update the workspace matching the given ID with the given name and description values for a workspace in the caller's organization.
 
 ### Example 2
 ```powershell
@@ -44,7 +46,7 @@ PS C:\> $workspace.Description = "Test Description"
 PS C:\> Set-PowerBIWorkspace -Scope Organization -Workspace $workspace
 ```
 
-If the current user is an admin, this will update the given workspace object with the given name and description values.
+If the current user is an administrator, this will update the given workspace object with the given name and description values for a workspace in teh caller's organization.
 
 ## PARAMETERS
 
@@ -64,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-The object ID of the workspace to update.
+The ID of the workspace to update.
 
 ```yaml
 Type: Guid
@@ -74,7 +76,7 @@ Aliases: GroupId, WorkspaceId
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -94,7 +96,8 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-The level of access requested for workspace entities. Individual is currently not supported.
+Indicates scope of the call. Only Organization is supported with this cmdlet.
+Individual only operates against workspaces assigned to them; Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope

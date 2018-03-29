@@ -14,18 +14,22 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
-    [Cmdlet(CmdletVerb, CmdletName)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = IdParameterSetName)]
+    [Alias("Add-PowerBIGroupUser")]
     public class AddPowerBIWorkspaceUser : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "PowerBIWorkspaceUser";
         public const string CmdletVerb = VerbsCommon.Add;
+
+        private const string IdParameterSetName = "Id";
+        private const string WorkspaceParameterSetName = "Workspace";
 
         #region Parameters
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName, ValueFromPipelineByPropertyName = true)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
@@ -36,15 +40,25 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = true)]
         public GroupUserAccessCmdletEnum UserAccessRight { get; set; }
 
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
+        [Alias("Group")]
+        public Group Workspace { get; set; }
+
         #endregion
 
         protected override void ExecuteCmdlet()
         {
+            if (this.Scope == PowerBIUserScope.Organization)
+            {
+                this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
+            }
+
             IPowerBIClient client = this.CreateClient();
 
             var userDetails = new GroupUserAccessRight(this.UserAccessRight.ToString(), this.UserPrincipalName);
 
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(this.Id.ToString(), userDetails) : client.Groups.AddUserAsAdmin(this.Id.ToString(), userDetails);
+            string workspaceId = this.ParameterSetName == IdParameterSetName ? this.Id.ToString() : this.Workspace.Id.ToString();
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(workspaceId, userDetails) : client.Groups.AddUserAsAdmin(workspaceId, userDetails);
             this.Logger.WriteObject(result, true);
         }
     }

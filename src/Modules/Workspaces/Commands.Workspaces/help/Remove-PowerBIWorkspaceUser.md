@@ -8,17 +8,25 @@ schema: 2.0.0
 # Remove-PowerBIWorkspaceUser
 
 ## SYNOPSIS
-Removes permissions for a given user to the specified PowerBI Workspace
+Removes permissions for a specified user to the a Power BI workspace.
 
 ## SYNTAX
 
+### Id (Default)
 ```
 Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
  [<CommonParameters>]
 ```
 
+### Workspace
+```
+Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String> -Workspace <Group>
+ [<CommonParameters>]
+```
+
 ## DESCRIPTION
-This cmdlet will remove the permissions for a given user to the specified PowerBI workspace by using Power BI .NET SDK which calls the Power BI REST API.
+Removes permissions for a given user to a Power BI workspace using the provided inputs and scope specified.
+You must have logged in previously before using, Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -27,30 +35,34 @@ This cmdlet will remove the permissions for a given user to the specified PowerB
 PS C:\> Remove-PowerBIWorkspaceUser -Scope Organization -Id 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com
 ```
 
+Removes permissions for user john@contoso.com on workspace with ID 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 within the caller's organization.
+
 ### Example 2
 ```powershell
 PS C:\> Remove-PowerBIWorkspaceUser -Scope Individual -Id 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com
 ```
 
+Removes permissions for john@contoso.com on workspace with ID 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50, which is a workpace the caller owns.
+
 ## PARAMETERS
 
 ### -Id
-Group or Workspace Id for which user has to be removed
+Workspace or Group Id for which user has to be removed.
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: Id
 Aliases: GroupId, WorkspaceId
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Scope
-The level of access requested for workspace entities. Individual is currently the default value
+Indicates scope of the call. Individual returns only workspaces assigned to them; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -66,12 +78,27 @@ Accept wildcard characters: False
 ```
 
 ### -UserPrincipalName
-UserPrincipalName (or UPN, which is mostly same as the email address) for the user whose permissions need to be removed
+User Principal Name (or UPN, commonly their email address) for the user whose permissions need to be removed.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases: UserEmailAddress
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Workspace
+The workspace entity to remove user from.
+
+```yaml
+Type: Group
+Parameter Sets: Workspace
+Aliases: Group
 
 Required: True
 Position: Named

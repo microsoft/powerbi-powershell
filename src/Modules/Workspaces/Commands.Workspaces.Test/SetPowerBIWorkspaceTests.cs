@@ -127,11 +127,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                try
-                {
-                    ProfileTestUtilities.DisconnectToPowerBI(ps);
-                }
-                catch (Exception) { } // ignore, not part of the test
+                ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
 
                 var parameters = new Dictionary<string, object> { { "Id", new Guid() } };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);

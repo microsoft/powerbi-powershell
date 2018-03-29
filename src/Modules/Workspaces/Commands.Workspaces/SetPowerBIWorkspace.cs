@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = false, ParameterSetName = WorkspaceParameterSetName)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName, ValueFromPipelineByPropertyName = true)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
@@ -47,7 +47,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             if (this.Scope.Equals(PowerBIUserScope.Individual))
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException($"{CmdletVerb}-{CmdletName} is only supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
+            }
+
+            if (this.Scope == PowerBIUserScope.Organization)
+            {
+                this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
 
             IPowerBIClient client = this.CreateClient();

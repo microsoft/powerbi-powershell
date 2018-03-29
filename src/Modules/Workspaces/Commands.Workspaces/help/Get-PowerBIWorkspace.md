@@ -75,7 +75,7 @@ Id of the workspace to return.
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases:
+Aliases: GroupId, WorkspaceId
 
 Required: False
 Position: Named

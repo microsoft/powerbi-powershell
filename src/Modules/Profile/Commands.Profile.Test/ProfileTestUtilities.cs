@@ -3,6 +3,8 @@
  * Licensed under the MIT License.
  */
 
+using System;
+using System.Diagnostics;
 using System.Management.Automation;
 using Commands.Common.Test;
 using Microsoft.PowerBI.Common.Abstractions;
@@ -42,6 +44,19 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
             ps.Commands.Clear();
+        }
+
+        public static void SafeDisconnectFromPowerBI(System.Management.Automation.PowerShell ps)
+        {
+            try
+            {
+                DisconnectToPowerBI(ps);
+            }
+            catch (Exception ex)
+            {
+                // ignore, not part of the test
+                Trace.TraceError(ex.ToString());
+            } 
         }
     }
 }
