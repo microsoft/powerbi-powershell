@@ -29,7 +29,7 @@ Planned\upcoming cmdlets.
 | Remove-PowerBIReport | Delete a report | Delete-PowerBIReport |
 | Export-PowerBIReport  | Export a report
 | New-PowerBIReportEmbedToken | Generate an embed token |
-| Add-PowerBIDatasetToReport | Rebind dataset to report | Mount-PowerBIDatasetToReport
+| Add-PowerBIDatasetToReport | Rebind dataset to report | Mount-PowerBIDatasetToReport |
 | Update-PowerBIReport | Update a report |
 
 ## Dashboards
@@ -38,9 +38,9 @@ Planned\upcoming cmdlets.
 | ----------- | ------- | ----- | ----- |
 | Get-PowerBIDashbord | Get dashboards |
 | Add-PowerBIDashbord | Add dashboards |
-| Copy-PowerBITile | Clone tiles |
+| Copy-PowerBIDashboardTile | Clone tiles |
 | New-PowerBIDashboardEmbedToken | Generate an embed token |
-| Get-PowerBITile | Get tiles |
+| Get-PowerBIDashboardTile | Get tiles |
 
 ## Datasets and Datasources
 
@@ -59,10 +59,10 @@ Planned\upcoming cmdlets.
 | New-PowerBIDatasetData | Create data in dataset |
 | New-PowerBIDatasetRow | Create rows in datasource tables |
 | Update-PowerBIDataset | Refresh dataset | Refresh-PowerBIDataset
-| Update-PowerBIDataSourceSchema | Update schema\metadata in datasource table |
+| Update-PowerBITableSchema | Update schema\metadata in datasource table |
 | Protect-PowerBIDataset | Take over a dataset | TakeOver-PowerBIDataset
-| Update-PowerBIDatasource | Update a datasource |
-| Update-PowerBIDatasetParameter | Update parameters for a dataset |
+| Set-PowerBIDatasource | Update a datasource | Update-PowerBIDatasource |
+| Set-PowerBIDatasetParameter | Update parameters for a dataset | Update-PowerBIDatasetParameter |
 
 ## Capacity Management
 
