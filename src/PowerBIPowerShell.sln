@@ -58,6 +58,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{622F
 		..\scripts\GenerateHelp.ps1 = ..\scripts\GenerateHelp.ps1
 		..\scripts\PrepManualTesting.ps1 = ..\scripts\PrepManualTesting.ps1
 		..\scripts\RestorePackages.ps1 = ..\scripts\RestorePackages.ps1
+		..\scripts\UpdateMetaModule.ps1 = ..\scripts\UpdateMetaModule.ps1
 		..\scripts\UpdatePSModuleManifest.ps1 = ..\scripts\UpdatePSModuleManifest.ps1
 	EndProjectSection
 EndProject
