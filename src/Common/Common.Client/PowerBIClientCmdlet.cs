@@ -1,6 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -18,7 +21,7 @@ namespace Microsoft.PowerBI.Common.Client
         {
         }
 
-        protected IPowerBIClient CreateClient()
+        protected virtual IPowerBIClient CreateClient()
         {
             var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
             if (Uri.TryCreate(this.Profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))

@@ -9,12 +9,12 @@ using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.Rest;
+using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    public class RemovePowerBIWorkspaceUser : PowerBICmdlet, IUserScope
+    public class RemovePowerBIWorkspaceUser : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "PowerBIWorkspaceUser";
         public const string CmdletVerb = VerbsCommon.Remove;
@@ -36,16 +36,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         protected override void ExecuteCmdlet()
         {
-            PowerBIClient client = null;
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
-            if (Uri.TryCreate(this.Profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
-            {
-                client = new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
-            }
-            else
-            {
-                client = new PowerBIClient(new TokenCredentials(token.AccessToken));
-            }
+            IPowerBIClient client = this.CreateClient();
 
             var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.DeleteUserInGroup(this.Id.ToString(), this.UserPrincipalName) : client.Groups.DeleteUserAsAdmin(this.Id.ToString(), this.UserPrincipalName);
             this.Logger.WriteObject(result, true);

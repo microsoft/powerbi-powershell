@@ -26,7 +26,6 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
       ""redirect"": ""urn:ietf:wg:oauth:2.0:oob"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
-      ""override"": ""https://onebox-redirect.analysis.windows-int.net"",
       ""globalService"": ""https://api.powerbi.com""
     },
 {
@@ -35,7 +34,6 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
       ""redirect"": ""urn:ietf:wg:oauth:2.0:oob"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
-      ""override"": ""https://onebox-redirect.analysis.windows-int.net"",
       ""globalService"": ""https://api.powerbi.com""
     }
   ],

@@ -21,7 +21,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             if(string.IsNullOrEmpty(environment))
             {
 #if DEBUG
-                environment = nameof(PowerBIEnvironmentType.PPE);
+                environment = nameof(PowerBIEnvironmentType.OneBox);
 #else
                 environment = nameof(PowerBIEnvironmentType.Public);
 #endif

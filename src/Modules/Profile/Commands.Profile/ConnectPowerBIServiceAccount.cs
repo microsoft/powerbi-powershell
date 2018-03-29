@@ -30,7 +30,7 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         #region Parameters
         [Parameter(Mandatory = false)]
-        public PowerBIEnvironmentType Environment { get; set; }
+        public PowerBIEnvironmentType Environment { get; set; } = PowerBIEnvironmentType.Public;
 
         [Parameter(ParameterSetName = UserParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = true)]

@@ -3,11 +3,11 @@
  * Licensed under the MIT License.
  */
 
-namespace Microsoft.PowerBI.Common.Abstractions
+namespace Microsoft.PowerBI.Commands.Workspaces
 {
-    public enum PowerBIUserScope
+    public enum GroupUserAccessCmdletEnum
     {
-        Individual,
-        Organization
+        Member,
+        Admin
     }
 }

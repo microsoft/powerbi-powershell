@@ -14,7 +14,7 @@ Gives permissions to a given user to access the specified PowerBI workspac
 
 ```
 Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
- -UserAccessRight <String> [<CommonParameters>]
+ -UserAccessRight <GroupUserAccessCmdletEnum> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,7 +64,7 @@ Accept wildcard characters: False
 Permissions to assign to the user
 
 ```yaml
-Type: String
+Type: GroupUserAccessCmdletEnum
 Parameter Sets: (All)
 Aliases:
 

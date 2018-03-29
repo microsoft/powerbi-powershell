@@ -12,13 +12,14 @@ using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Client;
 using Microsoft.Rest;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(IEnumerable<Group>))]
-    public class GetPowerBIWorkspace : PowerBICmdlet, IUserScope, IUserFilter
+    public class GetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserId
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Get;
@@ -51,10 +52,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            if(this.Orphaned.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
-            {
-                this.Logger.ThrowTerminatingError($"Orphaned is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
-            }
 
             if(!string.IsNullOrEmpty(this.Filter) && this.Scope.Equals(PowerBIUserScope.Individual))
             {
@@ -64,16 +61,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         protected override void ExecuteCmdlet()
         {
-            PowerBIClient client = null;
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
-            if (Uri.TryCreate(this.Profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
+            if (this.Orphaned.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
             {
-                client = new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
+                // You can't have orphaned workspaces when scope is individual as orphaned workspaces are unassigned
+                return;
             }
-            else
-            {
-                client = new PowerBIClient(new TokenCredentials(token.AccessToken));
-            }
+
+            IPowerBIClient client = this.CreateClient();
 
             if(this.Orphaned.IsPresent)
             {
@@ -107,6 +101,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 {
                     workspaces = workspaces.Take(this.First.Value).ToList();
                 }
+            }
+
+            if(this.Scope == PowerBIUserScope.Organization)
+            {
+                this.Logger.WriteWarning($"Only preview workspaces are returned when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
 
             this.Logger.WriteObject(workspaces, true);

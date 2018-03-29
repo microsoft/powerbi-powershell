@@ -7,15 +7,14 @@ using System;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.Rest;
+using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = PropertiesParameterSetName)]
-    public class SetPowerBIWorkspace : PowerBICmdlet, IUserScope
+    public class SetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Set;
@@ -51,16 +50,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 throw new NotImplementedException();
             }
 
-            PowerBIClient client = null;
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
-            if (Uri.TryCreate(this.Profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
-            {
-                client = new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
-            }
-            else
-            {
-                client = new PowerBIClient(new TokenCredentials(token.AccessToken));
-            }
+            IPowerBIClient client = this.CreateClient();
 
             if (this.ParameterSetName.Equals(PropertiesParameterSetName))
             {
