@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation;
 using System.Text;
+using Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,8 +23,11 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ps.AddCommand(new CmdletInfo($"{DisconnectPowerBIServiceAccount.CmdletVerb}-{DisconnectPowerBIServiceAccount.CmdletName}", typeof(DisconnectPowerBIServiceAccount)));
+                ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
                 var result = ps.Invoke();
+                Assert.IsNotNull(result);
+                Assert.AreEqual(0, result.Count);
+                TestUtilities.AssertNoCmdletErrors(ps);
             }
         }
     }

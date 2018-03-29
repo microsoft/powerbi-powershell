@@ -24,9 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.PowerBI.Api" Version="2.0.10">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -37,6 +34,9 @@
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Common.Client\Common.Client.csproj">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
     <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />

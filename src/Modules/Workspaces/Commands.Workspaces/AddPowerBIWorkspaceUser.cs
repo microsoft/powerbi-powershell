@@ -10,22 +10,26 @@ using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.Rest;
+using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
-    [Cmdlet(CmdletVerb, CmdletName)]
-    public class AddPowerBIWorkspaceUser : PowerBICmdlet, IUserScope
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = IdParameterSetName)]
+    [Alias("Add-PowerBIGroupUser")]
+    public class AddPowerBIWorkspaceUser : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "PowerBIWorkspaceUser";
         public const string CmdletVerb = VerbsCommon.Add;
+
+        private const string IdParameterSetName = "Id";
+        private const string WorkspaceParameterSetName = "Workspace";
 
         #region Parameters
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName, ValueFromPipelineByPropertyName = true)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
@@ -34,26 +38,27 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public string UserPrincipalName { get; set; }
 
         [Parameter(Mandatory = true)]
-        public string UserAccessRight { get; set; }
+        public GroupUserAccessCmdletEnum UserAccessRight { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
+        [Alias("Group")]
+        public Group Workspace { get; set; }
 
         #endregion
 
         protected override void ExecuteCmdlet()
         {
-            PowerBIClient client = null;
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
-            if (Uri.TryCreate(this.Profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
+            if (this.Scope == PowerBIUserScope.Organization)
             {
-                client = new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
-            }
-            else
-            {
-                client = new PowerBIClient(new TokenCredentials(token.AccessToken));
+                this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
 
-            var userDetails = new GroupUserAccessRight(this.UserAccessRight, this.UserPrincipalName);
+            IPowerBIClient client = this.CreateClient();
 
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(this.Id.ToString(), userDetails) : client.Groups.AddUserAsAdmin(this.Id.ToString(), userDetails);
+            var userDetails = new GroupUserAccessRight(this.UserAccessRight.ToString(), this.UserPrincipalName);
+
+            string workspaceId = this.ParameterSetName == IdParameterSetName ? this.Id.ToString() : this.Workspace.Id.ToString();
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(workspaceId, userDetails) : client.Groups.AddUserAsAdmin(workspaceId, userDetails);
             this.Logger.WriteObject(result, true);
         }
     }

@@ -21,6 +21,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         private ConcurrentQueue<object> outputQueue = new ConcurrentQueue<object>();
         private ConcurrentQueue<object> verboseQueue = new ConcurrentQueue<object>();
         private ConcurrentQueue<object> warningQueue = new ConcurrentQueue<object>();
+        private ConcurrentQueue<ErrorRecord> throwingErrorQueue = new ConcurrentQueue<ErrorRecord>();
 
         public int FlushMessageCount { get; private set; }
 
@@ -34,6 +35,8 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         public IEnumerable<string> DebugMessages => this.debugQueue.Select(d => d.ToString());
 
         public IEnumerable<ErrorRecord> ErrorRecords => this.errorQueue.Select(e => e);
+
+        public IEnumerable<ErrorRecord> ThrowingErrorRecords => this.throwingErrorQueue.Select(e => e);
 
         public IEnumerable<string> HostMessages => this.hostQueue.Select(h => h.ToString());
 
@@ -69,6 +72,29 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         public void WriteError(ErrorRecord record)
         {
             this.errorQueue.Enqueue(record);
+        }
+
+        public void ThrowTerminatingError(object obj, ErrorCategory category = ErrorCategory.WriteError)
+        {
+            var errorRecord = new ErrorRecord(new Exception(obj.ToString()), obj.ToString(), category, this.Cmdlet);
+            this.ThrowTerminatingError(errorRecord);
+        }
+
+        public void ThrowTerminatingError(Exception ex, ErrorCategory category = ErrorCategory.WriteError)
+        {
+            var errorRecord = new ErrorRecord(ex, ex.Message, category, this.Cmdlet);
+            this.ThrowTerminatingError(errorRecord);
+        }
+
+        public void ThrowTerminatingError(object obj, Exception ex, ErrorCategory category = ErrorCategory.WriteError)
+        {
+            var errorRecord = new ErrorRecord(ex, obj.ToString(), category, this.Cmdlet);
+            this.ThrowTerminatingError(errorRecord);
+        }
+
+        public void ThrowTerminatingError(ErrorRecord record)
+        {
+            this.throwingErrorQueue.Enqueue(record);
         }
 
         public void WriteHost(object obj, ConsoleColor? foregroundColor = null, ConsoleColor? backgroundColor = null)

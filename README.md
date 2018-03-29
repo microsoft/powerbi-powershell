@@ -1,12 +1,12 @@
-# Microsoft PowerBI Cmdlets for Windows PowerShell and PowerShell Core
+# Microsoft Power BI Cmdlets for Windows PowerShell and PowerShell Core
 
-Welcome to the PowerShell community for Microsoft PowerBI. Here you will find resources and source for PowerShell modules targeting PowerBI.
+Welcome to the PowerShell community for Microsoft Power BI. Here you will find resources and source for PowerShell modules targeting PowerBI.
 
 For questions or issues using the modules, please log an issue and we will respond as quickly as possible.
 
 ## PowerShell Modules
 
-Below is a table of the various PowerBI PowerShell modules found in this repository.
+Below is a table of the various Power BI PowerShell modules found in this repository.
 
 | Description | Module Name | PowerShell Gallery link |
 | ----------- | ----------- | ----------------------- |
@@ -82,9 +82,11 @@ Get-PowerBIReport
 
 ## Issues and Feedback
 
-If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for PowerBI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues).
+If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for Power BI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues).
 
-If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [PowerBI Community](http://community.powerbi.com/) or the official [PowerBI Support](https://powerbi.microsoft.com/en-us/support/) site.
+If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [Power BI Community](http://community.powerbi.com/) or the official [Power BI Support](https://powerbi.microsoft.com/en-us/support/) site.
+
+We track our roadmap of planned features in [ROADMAP.md](ROADMAP.md).
 
 ### Reporting Security Issues
 

@@ -9,6 +9,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Commands.Profile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
+using Commands.Common.Test;
 
 namespace Microsoft.PowerBI.Commands.Profile.Test
 {
@@ -22,8 +23,9 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ps.AddCommand(new CmdletInfo($"{ConnectPowerBIServiceAccount.CmdletVerb}-{ConnectPowerBIServiceAccount.CmdletName}", typeof(ConnectPowerBIServiceAccount)));
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
                 var result = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsTrue(result.Count == 1);
                 Assert.IsTrue(result[0].BaseObject is PowerBIProfile);
                 var profile = result[0].BaseObject as PowerBIProfile;

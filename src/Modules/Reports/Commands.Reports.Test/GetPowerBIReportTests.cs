@@ -6,6 +6,7 @@
 using System;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Profile;
+using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Commands.Reports;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -38,6 +39,8 @@ namespace Commands.Reports.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
+
                 ps.AddCommand(new CmdletInfo($"{GetPowerBIReport.CmdletVerb}-{GetPowerBIReport.CmdletName}", typeof(GetPowerBIReport)));
                 var result = ps.Invoke();
                 Assert.Fail("Should not have reached this point");

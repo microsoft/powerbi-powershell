@@ -20,11 +20,9 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         private static TokenCache Cache { get; set; }
 
-        private AuthenticationContext InitializeContext(IPowerBIEnvironment environment)
+        private AuthenticationContext InitializeContext(IPowerBIEnvironment environment, IPowerBISettings settings)
         {
-#if !DEBUG
-            LoggerCallbackHandler.UseDefaultLogging = false;
-#endif
+            LoggerCallbackHandler.UseDefaultLogging = settings.ShowADALDebugMessages();
 
             if (Cache == null)
             {
@@ -42,7 +40,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            var context = InitializeContext(environment);
+            var context = InitializeContext(environment, settings);
             AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientCredential(userName, password.SecureStringToString())).Result;
             return token.ToIAccessToken();
         }
@@ -50,7 +48,7 @@ namespace Microsoft.PowerBI.Common.Authentication
         public IAccessToken Authenticate(string clientId, string thumbprint , IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             var certificate = FindCertificate(thumbprint);
-            var context = InitializeContext(environment);
+            var context = InitializeContext(environment, settings);
             AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientAssertionCertificate(clientId, certificate)).Result;
             return token.ToIAccessToken();
         }

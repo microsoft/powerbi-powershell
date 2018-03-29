@@ -3,9 +3,14 @@
  * Licensed under the MIT License.
  */
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
+using Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile;
+using Microsoft.PowerBI.Commands.Profile.Test;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
@@ -16,20 +21,69 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetWorkspaces()
+        public void EndToEndGetWorkspacesForOrganization()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ps.AddCommand(new CmdletInfo($"{ConnectPowerBIServiceAccount.CmdletVerb}-{ConnectPowerBIServiceAccount.CmdletName}", typeof(ConnectPowerBIServiceAccount))).AddParameter("Environment", "PPE");
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameter(nameof(GetPowerBIWorkspace.Scope), nameof(PowerBIUserScope.Organization));
                 var result = ps.Invoke();
-                //ps.Streams.Error
-                Assert.IsFalse(ps.HadErrors);
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
-                ps.Commands.Clear();
-                ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace))).AddParameter("Scope", "Organization");
-                result = ps.Invoke();
+                if(result.Count == 0)
+                {
+                    Assert.Inconclusive("No workspaces returned, verify you have workspaces in your organization");
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesForIndividual()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
+                var result = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(result);
+                if (result.Count == 0)
+                {
+                    Assert.Inconclusive("No workspaces returned, verify you are assigned or own any workspaces");
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesForOrganizationAndFilter()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), nameof(PowerBIUserScope.Organization) },
+                        { nameof(GetPowerBIWorkspace.Filter), "name eq 'Better Work'" }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+                var result = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
+                ps.Commands.Clear();
+
+                parameters[nameof(GetPowerBIWorkspace.Filter)] = "name eq 'Not Real'";
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+                result = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(0, result.Count);
             }
         }
 
@@ -39,6 +93,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
+
                 ps.AddCommand(new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace)));
                 var result = ps.Invoke();
                 Assert.Fail("Should not have reached this point");

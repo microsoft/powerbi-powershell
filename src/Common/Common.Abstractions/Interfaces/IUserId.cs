@@ -3,10 +3,12 @@
  * Licensed under the MIT License.
  */
 
+using System;
+
 namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
 {
-    public interface IUserScope
+    public interface IUserId
     {
-        PowerBIUserScope Scope { get; set; }
+        Guid Id { get; set; }
     }
 }

@@ -5,8 +5,8 @@
 
 namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
 {
-    public interface IUserScope
+    public interface IUserFilter
     {
-        PowerBIUserScope Scope { get; set; }
+        string Filter { get; set; }
     }
 }

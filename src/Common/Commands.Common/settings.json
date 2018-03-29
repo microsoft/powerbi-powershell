@@ -1,7 +1,7 @@
 ﻿{
   "Environments": [
     {
-      "name": "PPE",
+      "name": "OneBox",
       "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
@@ -15,9 +15,34 @@
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
       "resource": "https://analysis.windows.net/powerbi/api",
       "globalService": "https://api.powerbi.com"
+    },
+    {
+      "name": "EDog",
+      "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.windows-int.net/powerbi/api",
+      "globalService": "https://biazure-int-edog-redirect.analysis-df.windows.net"
+    },
+    {
+      "name": "DXT",
+      "authority": "https://login.microsoftonline.com/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.windows.net/powerbi/api",
+      "globalService": "https://wabi-staging-us-east-redirect.analysis.windows.net"
+    },
+    {
+      "name": "China",
+      "authority": "https://login.chinacloudapi.cn/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.windows.net/powerbi/api",
+      "globalService": "https://analysis.chinacloudapi.cn/powerbi/api"
     }
   ],
   "Settings": {
-    "ForceDeviceCodeAuthentication": false
+    "ForceDeviceCodeAuthentication": false,
+    "ShowADALDebugMessages":  false
   }
 }

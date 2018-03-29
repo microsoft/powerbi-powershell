@@ -8,33 +8,118 @@ schema: 2.0.0
 # Get-PowerBIWorkspace
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Returns a list of Power BI workspaces.
 
 ## SYNTAX
 
 ```
-Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIWorkspace [-Id <Guid>] [-Scope <PowerBIUserScope>] [-Filter <String>] [-Orphaned] [-First <Int32>]
+ [-Skip <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retrieves a list of Power BI workspaces with the provided search criteria and scope specified.
+You must have logged in previously before using, Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-PowerBIWorkspace
 ```
 
-{{ Add example description here }}
+Returns all Power BI workspaces the calling user is assigned to (-Scope Individual).
+
+### Example 2
+```powershell
+PS C:\> Get-PowerBIWorkspace -Scope Organization -Filter "tolower(name) eq 'contoso sales'"
+```
+
+Returns a workspace named 'Contoso Sales' (case insensitive with tolower) within the user's organization.
 
 ## PARAMETERS
 
+### -Filter
+OData filter, case-sensitive (element names start lowercase). Only supported when -Scope Organization is specified.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -First
+First (top) list of results.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: Top
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+Id of the workspace to return.
+
+```yaml
+Type: Guid
+Parameter Sets: (All)
+Aliases: GroupId, WorkspaceId
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Orphaned
+Indicates to show only orphaned workspaces. Only supported when -Scope Organization is specified.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Scope
-{{Fill Scope Description}}
+Indicates scope of the call. Individual returns only workspaces assigned to them; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
+Parameter Sets: (All)
+Aliases:
+Accepted values: Individual, Organization
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Skip
+Skips the first set of results.
+
+```yaml
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 

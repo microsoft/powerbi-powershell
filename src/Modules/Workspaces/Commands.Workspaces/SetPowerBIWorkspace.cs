@@ -7,15 +7,14 @@ using System;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.Rest;
+using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = PropertiesParameterSetName)]
-    public class SetPowerBIWorkspace : PowerBICmdlet, IUserScope
+    public class SetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Set;
@@ -29,7 +28,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = false, ParameterSetName = WorkspaceParameterSetName)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName, ValueFromPipelineByPropertyName = true)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
@@ -48,19 +47,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             if (this.Scope.Equals(PowerBIUserScope.Individual))
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException($"{CmdletVerb}-{CmdletName} is only supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
 
-            PowerBIClient client = null;
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
-            if (Uri.TryCreate(this.Profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
+            if (this.Scope == PowerBIUserScope.Organization)
             {
-                client = new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
+                this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
-            else
-            {
-                client = new PowerBIClient(new TokenCredentials(token.AccessToken));
-            }
+
+            IPowerBIClient client = this.CreateClient();
 
             if (this.ParameterSetName.Equals(PropertiesParameterSetName))
             {

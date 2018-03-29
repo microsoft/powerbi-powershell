@@ -26,7 +26,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization);
+                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Organization);
 
                 if (workspace == null)
                 {
@@ -56,7 +56,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var group = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Individual);
+                var group = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Individual);
 
                 if (group == null)
                 {
