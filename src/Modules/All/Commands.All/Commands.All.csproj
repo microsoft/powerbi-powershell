@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Microsoft.PowerBI.Commands.All</AssemblyName>
+    <RootNamespace>Microsoft.PowerBI.Commands.All</RootNamespace>
+    <ReferenceWindowsAuthenticator>false</ReferenceWindowsAuthenticator>
+    <NoHelpGen>true</NoHelpGen>
+    <NoDependentAssemblies>true</NoDependentAssemblies>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <!-- NuGet Package Properties -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+	  <PackageId>MicrosoftPowerBIMgmt</PackageId>
+	  <Description>Microsoft Power BI PowerShell - Cmdlets for Microsoft Power BI</Description>
+	  <PackageTags>PowerBI</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Remove="MicrosoftPowerBIMgmt.psd1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="MicrosoftPowerBIMgmt.psd1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\**\*.csproj" Exclude="..\..\**\$(MSBuildThisFile);..\..\**\*.Test.csproj" />
+  </ItemGroup>
+
+</Project>
