@@ -8,7 +8,7 @@ Locale: en-US
 
 # MicrosoftPowerBIMgmt.Workspaces Module
 ## Description
-PowerShell Cmdlets for managing and interacting with Power BI workspaces.
+PowerShell cmdlets for managing and interacting with Power BI workspaces.
 
 ## MicrosoftPowerBIMgmt.Workspaces Cmdlets
 ### [Add-PowerBIWorkspaceUser](Add-PowerBIWorkspaceUser.md)

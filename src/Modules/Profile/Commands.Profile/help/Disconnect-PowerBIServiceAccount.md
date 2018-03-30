@@ -8,7 +8,7 @@ schema: 2.0.0
 # Disconnect-PowerBIServiceAccount
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Logout of the Power BI service.
 
 ## SYNTAX
 
@@ -17,16 +17,17 @@ Disconnect-PowerBIServiceAccount [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Disconnects from any previous PowerBI Service connections.
+If there was no connections, the command completes without error.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Disconnect-PowerBIServiceAccount
 ```
 
-{{ Add example description here }}
+Disconnects any active PowerBI service connections.
 
 ## PARAMETERS
 

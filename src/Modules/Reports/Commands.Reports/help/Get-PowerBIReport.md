@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBIReport
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Returns a list of Power BI reports.
 
 ## SYNTAX
 
@@ -17,16 +17,17 @@ Get-PowerBIReport [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retrieves a list of Power BI reports with the provided search criteria and scope specified.
+You must have logged in previously before using, Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-PowerBIReport
 ```
 
-{{ Add example description here }}
+Returns a list of all PowerBI reports a user has access to.
 
 ## PARAMETERS
 

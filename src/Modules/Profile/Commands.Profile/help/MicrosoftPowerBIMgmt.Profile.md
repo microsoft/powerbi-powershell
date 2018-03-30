@@ -8,12 +8,12 @@ Locale: en-US
 
 # MicrosoftPowerBIMgmt.Profile Module
 ## Description
-{{Manually Enter Description Here}}
+PowerShell cmdlets for managing connections to the Power BI service.
 
 ## MicrosoftPowerBIMgmt.Profile Cmdlets
 ### [Connect-PowerBIServiceAccount](Connect-PowerBIServiceAccount.md)
-{{Fill in the Synopsis}}
+Login to Power BI service.
 
 ### [Disconnect-PowerBIServiceAccount](Disconnect-PowerBIServiceAccount.md)
-{{Fill in the Synopsis}}
+Logout of the Power BI service.
 
