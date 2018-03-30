@@ -12,9 +12,20 @@ Returns a list of Power BI workspaces.
 
 ## SYNTAX
 
+### List (Default)
 ```
-Get-PowerBIWorkspace [-Id <Guid>] [-Scope <PowerBIUserScope>] [-Filter <String>] [-Orphaned] [-First <Int32>]
- [-Skip <Int32>] [<CommonParameters>]
+Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Orphaned]
+ [-First <Int32>] [-Skip <Int32>] [<CommonParameters>]
+```
+
+### Id
+```
+Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
+```
+
+### Name
+```
+Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -44,7 +55,7 @@ OData filter, case-sensitive (element names start lowercase). Only supported whe
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases:
 
 Required: False
@@ -59,7 +70,7 @@ First (top) list of results.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases: Top
 
 Required: False
@@ -74,10 +85,25 @@ Id of the workspace to return.
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: Id
 Aliases: GroupId, WorkspaceId
 
-Required: False
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+Name of the workspace to return if one exists with that name. Case insensitive search.
+
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -89,7 +115,7 @@ Indicates to show only orphaned workspaces. Only supported when -Scope Organizat
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases:
 
 Required: False
@@ -120,7 +146,22 @@ Skips the first set of results.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -User
+Filter groups to show ones with the user is contained within. Only available when -Scope is Organization.
+
+```yaml
+Type: String
+Parameter Sets: List
 Aliases:
 
 Required: False

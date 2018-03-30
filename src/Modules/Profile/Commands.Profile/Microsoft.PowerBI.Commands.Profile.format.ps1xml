@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <Name>Microsoft.PowerBI.Common.Abstractions.PowerBIProfile</Name>
+      <ViewSelectedBy>
+        <TypeName>Microsoft.PowerBI.Common.Abstractions.PowerBIProfile</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>Environment</Label>
+                <ScriptBlock>$_.Environment.ToString()</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>TenantId</Label>
+                <ScriptBlock>$_.TenantId</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Password -eq $null -and $_.Thumbprint -eq $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>UserName</Label>
+                <ScriptBlock>$_.UserName</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Password -ne $null -or $_.Thumbprint -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>ClientId</Label>
+                <ScriptBlock>$_.UserName</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Password -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>Password</Label>
+                <ScriptBlock>"********"</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Thumbprint -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>CertificateThumbprint</Label>
+                <ScriptBlock>$_.Thumbprint</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

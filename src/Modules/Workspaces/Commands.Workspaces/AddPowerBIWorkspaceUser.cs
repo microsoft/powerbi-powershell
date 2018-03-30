@@ -58,7 +58,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             var userDetails = new GroupUserAccessRight(this.UserAccessRight.ToString(), this.UserPrincipalName);
 
             string workspaceId = this.ParameterSetName == IdParameterSetName ? this.Id.ToString() : this.Workspace.Id.ToString();
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.AddGroupUser(workspaceId, userDetails) : client.Groups.AddUserAsAdmin(workspaceId, userDetails);
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
+                client.Groups.AddGroupUser(workspaceId, userDetails) : 
+                client.Groups.AddUserAsAdmin(workspaceId, userDetails);
             this.Logger.WriteObject(result, true);
         }
     }

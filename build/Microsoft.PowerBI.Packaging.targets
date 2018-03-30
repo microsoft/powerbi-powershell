@@ -64,6 +64,12 @@ Licensed under the MIT License.
         <Pack>true</Pack>
         <PackagePath></PackagePath>
       </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\$(AssemblyName).format.ps1xml" Condition="Exists('$(OutputPath)\$(AssemblyName).format.ps1xml')">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath></PackagePath>
+      </_PackageFiles>
       
     </ItemGroup>
     
