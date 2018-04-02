@@ -23,6 +23,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetWorkspacesForOrganization()
         {
+            /*
+             * Test requires a preview Workspace (v2) to exist and login as an administrator
+             */
+
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
@@ -42,6 +46,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetWorkspacesForIndividual()
         {
+            /*
+             * Test requires at least one workspace (group or preview Workspace)
+             */
+
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
@@ -61,13 +69,18 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetWorkspacesForOrganizationAndFilter()
         {
+            /*
+             * Test requires a preview Workspace (v2) to exist and login as an administrator.
+             * The workspace needs to be named "Preview Workspace" and no workspace exists with the name "Nonexistant Workspace".
+             */
+
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), nameof(PowerBIUserScope.Organization) },
-                        { nameof(GetPowerBIWorkspace.Filter), "name eq 'Better Work'" }
+                        { nameof(GetPowerBIWorkspace.Filter), "name eq 'Preview Workspace'" }
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
                     .AddParameters(parameters);
@@ -77,7 +90,43 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Assert.IsTrue(result.Count > 0);
                 ps.Commands.Clear();
 
-                parameters[nameof(GetPowerBIWorkspace.Filter)] = "name eq 'Not Real'";
+                parameters[nameof(GetPowerBIWorkspace.Filter)] = "name eq 'Nonexistant Workspace'";
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+                result = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(0, result.Count);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesForOrganizationAndUser()
+        {
+            /*
+             * Test requires a preview Workspace (v2) to exist and login as an administrator.
+             * The workspace needs to assigned to user User1@granularcontrols1.ccsctp.net and no workspace should be assigned to fakeuser@granularcontrols1.ccsctp.net
+             */
+
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), nameof(PowerBIUserScope.Organization) },
+                        { nameof(GetPowerBIWorkspace.User), "User1@granularcontrols1.ccsctp.net" }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+                var result = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.Count > 0);
+                ps.Commands.Clear();
+
+                parameters[nameof(GetPowerBIWorkspace.User)] = "fakeuser@granularcontrols1.ccsctp.net";
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
                     .AddParameters(parameters);
                 result = ps.Invoke();
