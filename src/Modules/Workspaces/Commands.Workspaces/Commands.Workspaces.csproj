@@ -16,9 +16,13 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <None Remove="Microsoft.PowerBI.Commands.Workspaces.format.ps1xml" />
     <None Remove="MicrosoftPowerBIMgmt.Workspaces.psd1" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Microsoft.PowerBI.Commands.Workspaces.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MicrosoftPowerBIMgmt.Workspaces.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

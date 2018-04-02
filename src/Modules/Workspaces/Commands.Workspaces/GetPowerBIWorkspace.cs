@@ -17,7 +17,7 @@ using Microsoft.Rest;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
-    [Cmdlet(CmdletVerb, CmdletName)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
     [Alias("Get-PowerBIGroup")]
     [OutputType(typeof(IEnumerable<Group>))]
     public class GetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserId
@@ -25,29 +25,40 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Get;
 
+        private const string IdParameterSetName = "Id";
+        private const string NameParameterSetName = "Name";
+        private const string ListParameterSetName = "List";
+
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
 
         #region Parameters
 
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = NameParameterSetName)]
+        public string Name { get; set; }
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public string Filter { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        public string User { get; set; }
+
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public SwitchParameter Orphaned { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]
         public int? First { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public int? Skip { get; set; }
+
 
         #endregion
 
@@ -57,7 +68,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             if(!string.IsNullOrEmpty(this.Filter) && this.Scope.Equals(PowerBIUserScope.Individual))
             {
-                this.Logger.ThrowTerminatingError($"Filter is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+                this.Logger.ThrowTerminatingError($"{nameof(this.Filter)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+            }
+
+            if (!string.IsNullOrEmpty(this.User) && this.Scope.Equals(PowerBIUserScope.Individual))
+            {
+                this.Logger.ThrowTerminatingError($"{nameof(this.User)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
             }
         }
 
@@ -76,10 +92,20 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? OrphanedFilterString : $"({this.Filter}) and ({OrphanedFilterString})";
             }
 
-            if(this.Id != default && this.Scope == PowerBIUserScope.Organization)
+            if(this.ParameterSetName == IdParameterSetName && this.Scope == PowerBIUserScope.Organization)
             {
-                var idFilter = $"id eq '{this.Id}'";
-                this.Filter = string.IsNullOrEmpty(this.Filter) ? idFilter : $"({idFilter}) and ({this.Filter})";
+                this.Filter = $"id eq '{this.Id}'";
+            }
+
+            if (this.ParameterSetName == NameParameterSetName && this.Scope == PowerBIUserScope.Organization)
+            {
+                this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
+            }
+
+            if(!string.IsNullOrEmpty(this.User) && this.Scope == PowerBIUserScope.Organization)
+            {
+                var userFilter = $"users/any(u: tolower(u/emailAddress) eq '{this.User.ToLower()}')";
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? userFilter : $"({this.Filter}) and ({userFilter})";
             }
 
             var workspacesResult = this.Scope == PowerBIUserScope.Individual ? 
@@ -92,6 +118,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 if (this.Id != default)
                 {
                     workspaces = workspaces.Where(w => this.Id == new Guid(w.Id)).ToList();
+                }
+
+                if(!string.IsNullOrEmpty(this.Name))
+                {
+                    workspaces = workspaces.Where(w => this.Name.Equals(w.Name, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
 
                 if (this.Skip.GetValueOrDefault() > 0)

@@ -14,6 +14,7 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = PropertiesParameterSetName)]
+    [Alias("Set-PowerBIGroup")]
     public class SetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "PowerBIWorkspace";
@@ -39,6 +40,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public string Description { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
+        [Alias("Group")]
         public Group Workspace { get; set; }
 
         #endregion

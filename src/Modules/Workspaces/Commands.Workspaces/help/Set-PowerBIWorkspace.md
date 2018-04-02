@@ -118,7 +118,7 @@ The workspace entity to update. The workspace will be updated with the name and 
 ```yaml
 Type: Group
 Parameter Sets: Workspace
-Aliases:
+Aliases: Group
 
 Required: True
 Position: Named

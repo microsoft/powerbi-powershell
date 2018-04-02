@@ -53,7 +53,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             IPowerBIClient client = this.CreateClient();
 
             string workspaceId = this.ParameterSetName == IdParameterSetName ? this.Id.ToString() : this.Workspace.Id.ToString();
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? client.Groups.DeleteUserInGroup(this.Id.ToString(), this.UserPrincipalName) : client.Groups.DeleteUserAsAdmin(this.Id.ToString(), this.UserPrincipalName);
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
+                client.Groups.DeleteUserInGroup(workspaceId, this.UserPrincipalName) : 
+                client.Groups.DeleteUserAsAdmin(workspaceId, this.UserPrincipalName);
             this.Logger.WriteObject(result, true);
         }
     }
