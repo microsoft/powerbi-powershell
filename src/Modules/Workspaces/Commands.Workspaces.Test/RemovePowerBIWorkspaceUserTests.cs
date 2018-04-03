@@ -83,7 +83,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
-
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(RemovePowerBIWorkspaceUser.Id), new Guid() },
