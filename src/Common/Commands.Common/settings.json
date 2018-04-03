@@ -10,11 +10,9 @@
     },
     {
       "name": "Public",
-      "authority": "https://login.windows.net/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
-      "resource": "https://analysis.windows.net/powerbi/api",
-      "globalService": "https://api.powerbi.com"
+      "cloudName": "GlobalCloud"
     },
     {
       "name": "EDog",
@@ -34,11 +32,21 @@
     },
     {
       "name": "China",
-      "authority": "https://login.chinacloudapi.cn/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
-      "resource": "https://analysis.windows.net/powerbi/api",
-      "globalService": "https://analysis.chinacloudapi.cn/powerbi/api"
+      "cloudName": "ChinaCloud"
+    },
+    {
+      "name": "Germany",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "GermanyCloud"
+    },
+    {
+      "name": "USGov",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "USGovCloud"
     }
   ],
   "Settings": {
