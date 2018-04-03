@@ -9,7 +9,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Commands.Profile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
-using Commands.Common.Test;
+using Microsoft.PowerBI.Commands.Common.Test;
 
 namespace Microsoft.PowerBI.Commands.Profile.Test
 {

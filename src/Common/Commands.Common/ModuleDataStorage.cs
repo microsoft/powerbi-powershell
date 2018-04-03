@@ -10,11 +10,21 @@ namespace Microsoft.PowerBI.Commands.Common
 {
     public class ModuleDataStorage : IDataStorage
     {
-        private IMemoryCache Cache { get; }
+        private static IMemoryCache Cache { get; set; }
 
-        public ModuleDataStorage(IMemoryCache cache = null) => (Cache) = (cache ?? new MemoryCache(new MemoryCacheOptions()));
+        public ModuleDataStorage(IMemoryCache cache = null)
+        {
+            if(cache != null)
+            {
+                Cache = cache;
+            }
+            else
+            {
+                Cache = Cache ?? new MemoryCache(new MemoryCacheOptions());
+            }
+        }
 
-        public bool TryGetItem<T>(string key, out T value) => this.Cache.TryGetValue<T>(key, out value);
+        public bool TryGetItem<T>(string key, out T value) => Cache.TryGetValue<T>(key, out value);
 
         public T GetItemOrDefault<T>(string key)
         {
@@ -37,8 +47,8 @@ namespace Microsoft.PowerBI.Commands.Common
             return value;
         }
 
-        public void RemoveItem(string key) => this.Cache.Remove(key);
+        public void RemoveItem(string key) => Cache.Remove(key);
 
-        public void SetItem<T>(string key, T value) => this.Cache.Set<T>(key, value);
+        public void SetItem<T>(string key, T value) => Cache.Set<T>(key, value);
     }
 }

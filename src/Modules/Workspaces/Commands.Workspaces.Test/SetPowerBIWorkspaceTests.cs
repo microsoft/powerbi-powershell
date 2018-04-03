@@ -6,8 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using Commands.Common.Test;
 using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

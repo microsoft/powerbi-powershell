@@ -104,7 +104,17 @@ namespace Microsoft.PowerBI.Commands.Common.Test
 
         public void WriteObject(object obj, bool? enumerateCollection = null)
         {
-            this.outputQueue.Enqueue(obj);
+            if(enumerateCollection.GetValueOrDefault() && obj is IEnumerable<object> subList)
+            {
+                foreach(var subItem in subList)
+                {
+                    this.outputQueue.Enqueue(subItem);
+                }
+            }
+            else
+            {
+                this.outputQueue.Enqueue(obj);
+            }
         }
 
         public void WriteVerbose(object obj)

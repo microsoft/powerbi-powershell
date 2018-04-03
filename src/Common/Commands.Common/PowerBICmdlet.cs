@@ -42,15 +42,19 @@ namespace Microsoft.PowerBI.Commands.Common
         static PowerBICmdlet()
         {
             AppDomain.CurrentDomain.AssemblyResolve += RedirectAssemblyLoad;
+            var serviceCollection = GetServiceCollection();
+            SetProvider(serviceCollection);
+        }
 
+        protected static IServiceCollection GetServiceCollection()
+        {
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IPowerBILoggerFactory, PowerBILoggerFactory>()
                 .AddSingleton<IDataStorage, ModuleDataStorage>()
                 .AddSingleton<IPowerBISettings, PowerBISettings>()
                 .AddSingleton<IPowerBICmdletInitFactory, PowerBICmdletInitFactory>()
                 .AddSingleton<IAuthenticationFactory, AuthenticationFactorySelector>();
-
-            SetProvider(serviceCollection);
+            return serviceCollection;
         }
 
         protected static void SetProvider(IServiceCollection serviceCollection)
@@ -195,10 +199,10 @@ namespace Microsoft.PowerBI.Commands.Common
             base.EndProcessing();
         }
 
-        protected abstract void ExecuteCmdlet();
-        protected virtual string ModuleName => this.MyInvocation?.MyCommand.ModuleName ?? this.GetType().Module.Name;
+        public abstract void ExecuteCmdlet();
+        protected virtual string ModuleName => this.MyInvocation?.MyCommand?.ModuleName ?? this.GetType().Module.Name;
 
-        protected virtual string CommandName => this.MyInvocation?.MyCommand.Name ?? this.GetType().Name;
+        protected virtual string CommandName => this.MyInvocation?.MyCommand?.Name ?? this.GetType().Name;
 
         protected override void ProcessRecord()
         {
