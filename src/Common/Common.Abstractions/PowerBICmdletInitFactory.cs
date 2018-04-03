@@ -9,13 +9,13 @@ namespace Microsoft.PowerBI.Common.Abstractions
 {
     public class PowerBICmdletInitFactory : IPowerBICmdletInitFactory
     {
-        public IPowerBILoggerFactory LoggerFactory { get; }
+        public IPowerBILoggerFactory LoggerFactory { get; set; }
 
-        public IDataStorage Storage { get; }
+        public IDataStorage Storage { get; set; }
 
-        public IAuthenticationFactory Authenticator { get; }
+        public IAuthenticationFactory Authenticator { get; set; }
 
-        public IPowerBISettings Settings { get; }
+        public IPowerBISettings Settings { get; set; }
 
         public PowerBICmdletInitFactory(IPowerBILoggerFactory logger, IDataStorage storage, IAuthenticationFactory authenticator, IPowerBISettings settings)
             => (this.LoggerFactory, this.Storage, this.Authenticator, this.Settings) = (logger, storage, authenticator, settings);
