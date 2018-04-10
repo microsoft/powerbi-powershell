@@ -132,7 +132,6 @@ Indicates scope of the call. Individual returns only workspaces assigned to them
 Type: PowerBIUserScope
 Parameter Sets: (All)
 Aliases:
-Accepted values: Individual, Organization
 
 Required: False
 Position: Named
