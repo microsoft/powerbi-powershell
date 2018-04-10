@@ -37,8 +37,24 @@
       "authority": "https://login.chinacloudapi.cn/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
-      "resource": "https://analysis.windows.net/powerbi/api",
-      "globalService": "https://analysis.chinacloudapi.cn/powerbi/api"
+      "resource": "https://analysis.chinacloudapi.cn/powerbi/api",
+      "globalService": "https://api.powerbi.cn"
+    },
+    {
+      "name": "Germany",
+      "authority": "https://login.microsoftonline.de/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.cloudapi.de/powerbi/api",
+      "globalService": "https://api.powerbi.de"
+    },
+    {
+      "name": "USGov",
+      "authority": "https://login.microsoftonline.com/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.usgovcloudapi.net/powerbi/api",
+      "globalService": "https://api.powerbigov.us"
     }
   ],
   "Settings": {
