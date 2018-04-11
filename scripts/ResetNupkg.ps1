@@ -23,7 +23,7 @@ if(!$nupkgFiles) {
     throw "Found no NUPKG files in: $Path"
 }
 
-Write-Output "Nuget Packages:`n$($nupkgFiles | Select-Object FullName | Out-String)"
+Write-Output "Nuget Packages:`n$($nupkgFiles | ForEach-Object { $_.FullName } | Out-String)"
 
 [void](Remove-item -Path $Destination -Force -Recurse -ErrorAction SilentlyContinue)
 [void](New-Item -Path $Destination -ItemType Directory -Force -ErrorAction SilentlyContinue)
