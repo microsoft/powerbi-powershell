@@ -13,6 +13,8 @@ namespace Microsoft.PowerBI.Common.Abstractions
         DXT = 102,
 #endif
         Public = 0,
+        Germany = 1,
+        USGov = 2,
         China = 3
     }
 }
