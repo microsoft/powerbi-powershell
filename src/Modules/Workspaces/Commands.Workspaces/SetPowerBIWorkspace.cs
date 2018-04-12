@@ -67,6 +67,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             }
             else if (this.ParameterSetName.Equals(WorkspaceParameterSetName))
             {
+                // The API will throw 400 saying that it "Cannot apply PATCH to navigation property users" if we don't null this property out
+                this.Workspace.Users = null;
                 var response = client.Groups.UpdateGroupAsAdmin(this.Workspace.Id.ToString(), this.Workspace);
                 this.Logger.WriteObject(response);
             }

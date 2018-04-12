@@ -3,9 +3,8 @@
  * Licensed under the MIT License.
  */
 
-using System;
+using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Commands.Profile;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Commands.Reports;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,21 +14,26 @@ namespace Commands.Reports.Test
     [TestClass]
     public class GetPowerBIReportTests
     {
+        private static CmdletInfo Cmdlet => new CmdletInfo($"{GetPowerBIReport.CmdletVerb}-{GetPowerBIReport.CmdletName}", typeof(GetPowerBIReport));
+
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetReports()
+        public void EndToEndGetReportsIndividualScope()
         {
-            using (var ps = System.Management.Automation.PowerShell.Create())
+            using (var ps = PowerShell.Create())
             {
-                ps.AddCommand(new CmdletInfo($"{ConnectPowerBIServiceAccount.CmdletVerb}-{ConnectPowerBIServiceAccount.CmdletName}", typeof(ConnectPowerBIServiceAccount)));
-                var result = ps.Invoke();
-                Assert.IsNotNull(result);
-                ps.Commands.Clear();
-                ps.AddCommand(new CmdletInfo($"{GetPowerBIReport.CmdletVerb}-{GetPowerBIReport.CmdletName}", typeof(GetPowerBIReport)));
-                result = ps.Invoke();
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+
+                ps.AddCommand(Cmdlet);
+
+                var results = ps.Invoke();
+
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No reports returned. Verify you are assigned or own any reports.");
+                }
             }
         }
 
@@ -37,12 +41,14 @@ namespace Commands.Reports.Test
         [ExpectedException(typeof(CmdletInvocationException))]
         public void CallGetReportsWithoutLogin()
         {
-            using (var ps = System.Management.Automation.PowerShell.Create())
+            using (var ps = PowerShell.Create())
             {
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
 
-                ps.AddCommand(new CmdletInfo($"{GetPowerBIReport.CmdletVerb}-{GetPowerBIReport.CmdletName}", typeof(GetPowerBIReport)));
-                var result = ps.Invoke();
+                ps.AddCommand(Cmdlet);
+
+                var results = ps.Invoke();
+
                 Assert.Fail("Should not have reached this point");
             }
         }

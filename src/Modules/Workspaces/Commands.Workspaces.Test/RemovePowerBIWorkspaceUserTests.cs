@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
@@ -25,25 +26,21 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Organization);
-
-                if (workspace == null)
-                {
-                    Assert.Inconclusive("No workspaces found to perform end to end test");
-                }
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
 
                 var parameters = new Dictionary<string, object>()
                 {
-                    { "Scope", "Organization"},
-                    { "Id", workspace.Id},
-                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"}, //update parameters for all tests to use a test account, this user email will only work on Onebox
+                    { nameof(RemovePowerBIWorkspaceUser.Scope), PowerBIUserScope.Organization },
+                    { nameof(RemovePowerBIWorkspaceUser.Id), workspace.Id },
+                    { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net"},
                 };
-
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
-                var result = ps.Invoke();
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
+
+                var results = ps.Invoke();
+
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Any());
             }
         }
 
@@ -52,28 +49,27 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndRemovePowerBIWorkspaceUserIndividualScope()
         {
+            // TODO: Note that unlike the admin APIs, this API will throw an error when attempting to remove a user that does not have access to the workspace
+            // This means that this end-to-end test can fail depending on when it is run with the other tests
+            // This can't be elegantly solved until users are available on the non-admin GET endpoint
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
-                var group = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Individual);
-
-                if (group == null)
-                {
-                    Assert.Inconclusive("No groups found to perform end to end test");
-                }
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
+                WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
 
                 var parameters = new Dictionary<string, object>()
                 {
-                    { "Scope", "Individual"},
-                    { "Id", group.Id }, 
-                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"},
+                    { nameof(RemovePowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
+                    { nameof(RemovePowerBIWorkspaceUser.Id), workspace.Id }, 
+                    { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net"},
                 };
-
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
-                var result = ps.Invoke();
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
+
+                var results = ps.Invoke();
+
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Any());
             }
         }
 
@@ -83,15 +79,18 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
+
                 var parameters = new Dictionary<string, object>()
                 {
-                    { "Scope", "Organization"},
-                    { "Id", new Guid()},
-                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"},
+                    { nameof(RemovePowerBIWorkspaceUser.Id), new Guid() },
+                    { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net" },
                 };
 
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
-                var result = ps.Invoke();
+
+                var results = ps.Invoke();
+
                 Assert.Fail("Should not have reached this point");
             }
         }

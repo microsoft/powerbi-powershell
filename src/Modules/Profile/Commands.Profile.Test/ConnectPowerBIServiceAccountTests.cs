@@ -3,12 +3,8 @@
  * Licensed under the MIT License.
  */
 
-using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Commands.Profile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics.CodeAnalysis;
 using Commands.Common.Test;
 
 namespace Microsoft.PowerBI.Commands.Profile.Test
@@ -32,6 +28,13 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 Assert.IsNotNull(profile.Environment);
                 Assert.IsNotNull(profile.UserName);
                 Assert.IsNotNull(profile.TenantId);
+
+                ps.Commands.Clear();
+                ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
+                result = ps.Invoke();
+                Assert.IsNotNull(result);
+                Assert.AreEqual(0, result.Count);
+                TestUtilities.AssertNoCmdletErrors(ps);
             }
         }
     }
