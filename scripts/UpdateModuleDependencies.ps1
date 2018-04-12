@@ -8,82 +8,84 @@ param
 
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
 
-$nugetPackages = Get-Childitem –Path $Path
+if(!(Test-Path -Path $Path)) {
+    throw "-Path not found: $Path"
+}
 
-foreach($nugetPackage in $nugetPackages)
-{
-    $nugetPackagePath = Join-Path $Path $nugetPackage.Name
+$nuspecFiles = Get-Childitem -Path $Path -Recurse -Filter *.nuspec -Depth 3
+if(!$nuspecFiles) {
+    throw "Failed to find *.nuspec files under: $Path"
+}
 
-    $nuspecPath = (Get-Childitem –Path $nugetPackagePath -Filter *.nuspec -Recurse).FullName
-    if(!$nuspecPaths)
-    {
-        throw "Unable to find the nuspec under path: $nugetPackagePath"
+foreach($nuspecFile in $nuspecFiles) {
+    $nuspecPath = $nuspecFile.FullName
+    Write-Output "Processing: $nuspecPath"
+    
+    $moduleDir = $nuspecFile.Directory.FullName
+    $psdFilePath = Get-Childitem -Path $moduleDir -Filter *.psd1 | Select-Object -First 1 | ForEach-Object { $_.FullName }
+    if(!$psdFilePath) {
+        throw "Unable to find the module file under path: $moduleDir"
     }
-    Write-Output "The path to nuspec: $nuspecPath"
+    
+    Write-Verbose "The path to the module file: $psdFilePath"
 
-    $psdFilePath = (Get-Childitem –Path $nugetPackagePath -Filter *.psd1 -Recurse).FullName
-    if(!$psdFilePath)
-    {
-        throw "Unable to find the module file under path: $nugetPackagePath"
-    }
-    Write-Output "The path to the module file: $psdFilePath"
-
-    Write-Output "Getting content for nuspec from $nuspecPath"
-    $nuspecContent = [xml](Get-Content -Path $nuspecPath -Raw)
-    if(!$nuspecContent)
-    {
+    Write-Verbose "Getting content for nuspec from $nuspecPath"
+    $nuspecContent = [xml](Get-Content -Path $nuspecPath -Raw -ErrorAction Stop)
+    if(!$nuspecContent) {
         throw "Nuspec file is empty under path: $nuspecPath"
     }
-    Write-Output "Found content for nuspec file"
 
-    Write-Output "Removing the xmlns attribute from package"
-    $nuspec.package.RemoveAttribute("xmlns")
+    Write-Verbose "Found content for nuspec file"
 
-    Write-Output "Get all dependencies under .NET Standard 2.0 Group"
+    Write-Output "Updating dependencies..."
+    Write-Verbose "Get all dependencies under .NET Standard 2.0 Group"
     $dep = $nuspecContent.package.metadata.dependencies.group.dependency
 
-    Write-Output "Removing the attributes which are not required and appending the dependencies"
-    if ($dep)
-    {
-        $dep | % { $_.RemoveAttribute("exclude"); $nuspecContent.package.metadata.dependencies.AppendChild($_) }
-    }
+    Write-Verbose "Removing the attributes which are not required and appending the dependencies"
+    $dep | ForEach-Object { 
+        if($null -eq $dep) { return }
 
-    Write-Output "Removing the .NET Standard 2.0 Group from dependencies"
+        $_.RemoveAttribute("exclude", $nuspec.package.xmlns); 
+        $nuspecContent.package.metadata.dependencies.AppendChild($_) 
+    } | Out-Null
+
+    Write-Verbose "Removing the .NET Standard 2.0 Group from dependencies"
     $nuspecContent.package.metadata.dependencies.RemoveChild($nuspecContent.package.metadata.dependencies.group)
 
-    Write-Output "Updating the nuspec content with the changes under: $nuspecPath"
+    Write-Output "Saving nuspec..."
+    Write-Verbose "Updating the nuspec content with the changes under: $nuspecPath"
     $nuspecContent.Save($nuspecPath)
 
-    Write-Output "Getting content for module file from $psdFilePath"
+    Write-Output "Processing: $psdFilePath"
     $psdFileContent = Get-Content -Path $psdFilePath -Raw -ErrorAction Stop
-    if(!$psdFileContent)
-    {
+    if(!$psdFileContent) {
         throw "Module file is empty under path: $psdFilePath"
     }
-    Write-Output "Found content for module file"
+
+    Write-Verbose "Found content for module file"
     $updatePsdFile = $false
 
-    Write-Output "Getting list of all dependencies to add to module file Required Modules section"
-    if($dep)
-    {
+    Write-Verbose "Getting list of all dependencies to add to module file Required Modules section"
+    if($dep) {
         $depIds = ($dep).id | Foreach-Object { "'$_'" }
         $dependencies = $depIds -join ', '
-        Write-Output "Join result is $dependencies"
+        Write-Verbose "Dependency Ids: $dependencies"
 
-        Write-Output "Adding the Required Modules section"
+        Write-Output "Updating Required Modules section..."
         $replaceRequiredModules = " RequiredModules = @($dependencies)"
         $psdFileContent = $psdFileContent -replace '# RequiredModules = @[(][)]', $replaceRequiredModules
         $updatePsdFile = $true
     }
 
-    if($updatePsdFile) 
-    {
-        Write-Output "Updating module file: $psdFilePath"
+    if($updatePsdFile) {
+        Write-Output "Updating module file..."
         $utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($false)
         [System.IO.File]::WriteAllText($psdFilePath, $psdFileContent, $utf8NoBomEncoding)
     }
-    else 
+    else
     {
         Write-Warning "No updates made to module file: $psdFilePath"
     }
 }
+
+Write-Output "Completed running $($MyInvocation.MyCommand.Name)"

@@ -1,23 +1,33 @@
 [CmdletBinding()]
 param
 (
+    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string] $OutputDirectoryPath,
+    [string] $OutputDirectory,
 
+    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $SourcePath,
 
+    [Parameter(Mandatory)]
     [ValidateNotnull()]
     [string[]] $PackageName
 )
 
-try {
+Write-Output "Running $($MyInvocation.MyCommand.Name)"
+$nugetExe = Get-Command 'nuget.exe' -ErrorAction Stop
 
-    Write-Output "Installing the nuget package $PackageName from source $SourcePath to output directory $OutputDirectoryPath"
+if(!(Test-Path -Path  $OutputDirectory)) {
+    [void](New-Item -Path $OutputDirectory -ItemType Directory -Force)
+}
 
-    nuget install $PackageName -OutputDirectory $OutputDirectoryPath -Source $SourcePath -DirectDownload  -PackageSaveMode nupkg
+Write-Output "Installing the nuget package(s) '$($PackageName -join ', ')' from source '$SourcePath' to output directory '$OutputDirectory'"
+
+$nugetArgs = @('install', $PackageName, '-OutputDirectory', $OutputDirectory, '-Source', $SourcePath, '-DirectDownload', '-PackageSaveMode', 'nupkg')
+Write-Verbose "Running: & $nugetExe $($nugetArgs -join ' ')"
+& $nugetExe $nugetArgs
+if($LASTEXITCODE -ne 0) {
+    throw "Nuget.exe failed with exit code: $LASTEXITCODE"
 }
-catch {
-    Write-Host ($_ | Out-String) -ForegroundColor Red
-    exit 1
-}
+
+Write-Output "Completed running $($MyInvocation.MyCommand.Name)"
