@@ -1,3 +1,17 @@
+##############################
+#.SYNOPSIS
+# Generates Windows file security catalogs (CAT) for PowerShell modules.
+#
+#.DESCRIPTION
+# Creates Windows file security catalogs (CAT) for PowerShell modules by detecting unpacked NuGet packages containing *.nuspec files. 
+#
+#.EXAMPLE
+# PS:> .\GenerateFileCatalog.ps1 -Path ..\PkgOut\Reset
+# Generates Windows file security catalogs (CAT) for PkgOut\Reset directory
+#
+#.NOTES
+# For more information on File Catalogs relating to PowerShell, see https://docs.microsoft.com/en-us/powershell/wmf/5.1/catalog-cmdlets.
+##############################
 [CmdletBinding()]
 param
 (

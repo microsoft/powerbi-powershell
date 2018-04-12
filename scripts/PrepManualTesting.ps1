@@ -1,3 +1,20 @@
+##############################
+#.SYNOPSIS
+# Prepares PowerShell modules to be loaded in PowerShell prompt\console for end-to-end manual testing.
+#
+#.DESCRIPTION
+# Executes a set of steps to mimic what the product looks like being delivered to customers through the PowerShell Gallery. 
+# After script completes, you can call the cmdlets as they should be delay-loaded\imported when invoked.
+#
+#.EXAMPLE
+# PS:> .\PrepManualTesting.ps1
+# Takes an existing build output in -PackageDir path and loads it so it can be tested manually.
+#
+#.EXAMPLE
+# PS:> .\PrepManualTesting.ps1 -Build
+# Executes a build of the codebase, and uses that output to load into your executing command prompt so it can be tested manually. 
+#
+##############################
 [CmdletBinding(SupportsShouldProcess)]
 param
 (

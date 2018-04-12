@@ -1,3 +1,22 @@
+##############################
+#.SYNOPSIS
+# Disables\enables strong name verification.
+#
+#.DESCRIPTION
+# Disables or enables strong name verification for Delay-Signed build output from this project can load. 
+# Requires to be executed by an elevated\administrator prompt.
+#
+#.EXAMPLE
+# PS:> .\DisableStrongName.ps1
+# Disables strong name verification.
+#
+#.EXAMPLE
+# PS:> .\DisableStrongName.ps1 -EnableStrongName
+# Enable strong name verification.
+#
+#.NOTES
+# Doesn't use sn.exe so this can be run with no pre-reqs as it directly modifies the registry mimicking sn.exe.
+##############################
 [CmdletBinding()]
 param
 (

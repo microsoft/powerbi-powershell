@@ -1,3 +1,18 @@
+##############################
+#.SYNOPSIS
+# Publishes PowerShell modules inside NuGet packages to the PowerShell Gallery. 
+#
+#.DESCRIPTION
+# Takes an existing NuGet package containing PowerShell module and uploads to the PowerShell gallery through nuget.exe.
+#
+#.EXAMPLE
+# PS:> .\PublishModules.ps1 -Path ..\PkgOut\Reset -ApiKey XXXXXXX
+# Takes any *.nupkg files under PkgOut\Reset and publishes them to PowerShell Gallery.
+#
+#.NOTES
+# Optionally, you could use Publish-Module to do this task but that cmdlet doesn't support already packaged modules (as it reflects against a *.psd1 file to package).
+# This script requires nuget.exe to be available in your $env:Path.
+##############################
 [CmdletBinding(SupportsShouldProcess=$true)]
 param
 (

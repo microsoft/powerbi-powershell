@@ -1,3 +1,21 @@
+##############################
+#.SYNOPSIS
+# Executes a command-line (CLI) build of the PowerBIPowerShell solution.
+#
+#.DESCRIPTION
+# Invokes MSBuild by locating it and passing common properties and targets for the PowerBIPowerShell solution
+#
+#.EXAMPLE
+# PS:> .\Build.ps1
+# Executes just build for the solution.
+#
+#.EXAMPLE
+# PS:> .\Build.ps1 -Pack -Clean
+# Executes build, pack and clean for the solution.
+#
+#.NOTES
+# Requires Visual Studio 2015 to be installed (at least 15.2 where vswhere.exe is available).
+##############################
 [CmdletBinding()]
 param
 (

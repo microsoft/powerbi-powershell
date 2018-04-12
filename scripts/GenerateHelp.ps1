@@ -1,3 +1,22 @@
+##############################
+#.SYNOPSIS
+# Generates either Markdown or MAML (PowerShell external) help files for a PowerShell module.
+#
+#.DESCRIPTION
+# Using PlatyPS, generates or updates Markdown files based on module's cmdlet structure or generates PowerShell exernal help files (MAML) based on the Markdown files.
+#
+#.EXAMPLE
+# PS:> .\GenerateHelp.ps1 -GenerateMarkdown -ModulePath ..\src\Modules\Profile\Commands.Profile\bin\Debug\netstandard2.0\MicrosoftPowerBIMgmt.Profile.psd1 -ProjectRoot ..\src\Modules\Profile\Commands.Profile 
+# Creates or updates Markdown help files in ..\src\Modules\Profile\Commands.Profile\help based on module ..\src\Modules\Profile\Commands.Profile\bin\Debug\netstandard2.0\MicrosoftPowerBIMgmt.Profile.psd1
+#
+#.EXAMPLE
+# PS:> .\GenerateHelp.ps1 -GenerateExternalHelp -ProjectRoot ..\src\Modules\Profile\Commands.Profile -OutputPath ..\src\Modules\Profile\Commands.Profile\bin\Debug\netstandard2.0
+# Generates MAML file under ..\src\Modules\Profile\Commands.Profile\bin\Debug\netstandard2.0
+#
+#.NOTES
+# For more information on PlatyPS, see https://github.com/PowerShell/platyPS.
+# For more information on MAML files, see https://msdn.microsoft.com/en-us/library/bb525433(v=vs.85).aspx.
+##############################
 [CmdletBinding()]
 param
 (

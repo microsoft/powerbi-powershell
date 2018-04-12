@@ -1,3 +1,16 @@
+##############################
+#.SYNOPSIS
+# Resets a NuGet package (*.nupkg) so it can be repacked. 
+#
+#.DESCRIPTION
+# Takes an existing NuGet package *.nupkg and unpacks and cleans out any files that prevent it from being unpacked.
+# Also fixes any filename encodings so they can be re-encoded during a future pack.
+#
+#.EXAMPLE
+# PS:> .\ResetNupkg.ps1 -Path ..\PkgOut -Destination .\PkgOut\Reset
+# Takes any *.nupkg files under PkgOut and unpacks and clean\santizie them so they can be repacked from PkgOut\Reset directory.
+#
+##############################
 [CmdletBinding()]
 param
 (
