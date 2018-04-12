@@ -8,7 +8,7 @@ param
     [ValidateNotNullOrEmpty()]
     [string] $NugetSource = "https://ci.appveyor.com/nuget/powerbi-powershell-j0f50attoqd6",
 
-    [string[]] $PackageName = @('MicrosoftPowerBIMgmt', 'MicrosoftPowerBIMgmt.Profile', 'MicrosoftPowerBIMgmt.Workspaces', 'MicrosoftPowerBIMgmt.Reports'),
+    [string[]] $PackageNames = @('MicrosoftPowerBIMgmt', 'MicrosoftPowerBIMgmt.Profile', 'MicrosoftPowerBIMgmt.Workspaces', 'MicrosoftPowerBIMgmt.Reports'),
 
     [string] $PackageVersion,
 
@@ -22,7 +22,7 @@ if(!(Test-Path -Path  $OutputDirectory)) {
     [void](New-Item -Path $OutputDirectory -ItemType Directory -Force)
 }
 
-if(!$PackageName -or $PackageName.Count -lt 1) {
+if(!$PackageNames -or $PackageNames.Count -lt 1) {
     Write-Output "Determining package names..."
     $nugetArgs = @('list', '-Source', $NugetSource, '-ForceEnglishOutput', '-NonInteractive')
     if($PackageVersion) {
@@ -41,24 +41,27 @@ if(!$PackageName -or $PackageName.Count -lt 1) {
 
     $groupedPackgesByVersion = $nugetPackages | ForEach-Object { $t = $_ -split ' '; [pscustomobject]@{Name=$t[0]; Version=$t[1] }} | Group-Object -Property Version -AsHashTable
     if($PackageVersion) {
-        $PackageName = ($groupedPackgesByVersion[$PackageVersion]).Name
+        $PackageNames = ($groupedPackgesByVersion[$PackageVersion]).Name
     }
     else {
-        $PackageName = ($groupedPackgesByVersion.Values).Name
+        $PackageNames = ($groupedPackgesByVersion.Values).Name
     }
 }
 
-Write-Output "Installing the nuget package(s) '$($PackageName -join ', ')' from source '$NugetSource' to output directory '$OutputDirectory'"
+Write-Output "Installing the nuget package(s) '$($PackageNames -join ', ')' from source '$NugetSource' to output directory '$OutputDirectory'"
 
-$nugetArgs = @('install', $PackageName, '-OutputDirectory', $OutputDirectory, '-Source', $NugetSource, '-DirectDownload', '-PackageSaveMode', 'nupkg', '-NonInteractive')
-if($Prerelease) {
-    $nugetArgs += '-Prerelease'
-}
+foreach($packageName in $PackageNames) {
+    Write-Output "Getting package: $packageName"
+    $nugetArgs = @('install', $packageName, '-OutputDirectory', $OutputDirectory, '-Source', $NugetSource, '-DirectDownload', '-PackageSaveMode', 'nupkg', '-NonInteractive')
+    if($Prerelease) {
+        $nugetArgs += '-Prerelease'
+    }
 
-Write-Verbose "Running: & $nugetExe $($nugetArgs -join ' ')"
-& $nugetExe $nugetArgs
-if($LASTEXITCODE -ne 0) {
-    throw "Nuget.exe failed with exit code: $LASTEXITCODE"
+    Write-Verbose "Running: & $nugetExe $($nugetArgs -join ' ')"
+    & $nugetExe $nugetArgs
+    if($LASTEXITCODE -ne 0) {
+        throw "Nuget.exe failed with exit code: $LASTEXITCODE"
+    }
 }
 
 Write-Output "Completed running $($MyInvocation.MyCommand.Name)"
