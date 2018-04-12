@@ -52,7 +52,12 @@ Write-Output "Installing the nuget package(s) '$($PackageNames -join ', ')' from
 
 foreach($packageName in $PackageNames) {
     Write-Output "Getting package: $packageName"
-    $nugetArgs = @('install', $packageName, '-OutputDirectory', $OutputDirectory, '-Source', $NugetSource, '-PackageSaveMode', 'nupkg', '-NonInteractive')
+    $nugetArgs = @('install', $packageName, '-OutputDirectory', $OutputDirectory, '-Source', $NugetSource, '-PackageSaveMode', 'nuspec', '-NonInteractive')
+    
+    if($PackageVersion) {
+        $nugetArgs += @('-Version', $PackageVersion)
+    }
+    
     if($Prerelease) {
         $nugetArgs += '-Prerelease'
     }
@@ -62,6 +67,13 @@ foreach($packageName in $PackageNames) {
     if($LASTEXITCODE -ne 0) {
         throw "Nuget.exe failed with exit code: $LASTEXITCODE"
     }
+
+    # $nugetPackageDirectory = Get-ChildItem -Path $OutputDirectory | Where-Object { $_.Name -match "$([regex]::Escape($packageName)).\d+.*" }
+    # if(!$nugetPackageDirectory) {
+    #     throw "Failed to locate package '$packageName' in directory: $OutputDirectory"
+    # }
+
+    # Get-ChildItem -Path $nugetPackageDirectory.FullName -Exclude *.nupkg | Remove-Item -Recurse -Force
 }
 
 Write-Output "Completed running $($MyInvocation.MyCommand.Name)"

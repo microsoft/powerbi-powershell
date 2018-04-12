@@ -120,13 +120,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void CallSetWorkspaceWithoutLogin()
+        public void CallRestoreWorkspaceWithoutLogin()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
 
-                var parameters = new Dictionary<string, object> { { "Id", new Guid() } };
+                var parameters = new Dictionary<string, object> {
+                    { "Id", new Guid() },
+                    { "EmailAddress", "user1@contoso.com" }
+                };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
                 ps.Invoke();

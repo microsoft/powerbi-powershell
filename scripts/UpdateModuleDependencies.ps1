@@ -50,7 +50,7 @@ foreach($nuspecFile in $nuspecFiles) {
     } | Out-Null
 
     Write-Verbose "Removing the .NET Standard 2.0 Group from dependencies"
-    $nuspecContent.package.metadata.dependencies.RemoveChild($nuspecContent.package.metadata.dependencies.group)
+    [void]($nuspecContent.package.metadata.dependencies.RemoveChild($nuspecContent.package.metadata.dependencies.group))
 
     Write-Output "Saving nuspec..."
     Write-Verbose "Updating the nuspec content with the changes under: $nuspecPath"
