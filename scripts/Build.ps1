@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param
 (
-    # Path to solution file. Defaults to ..\src\PowerBIPowerShell.sln.
+    # Path to solution file. Defaults to <script dir>\src\PowerBIPowerShell.sln.
     [ValidateNotNullOrEmpty()]
     [string] $Solution = "$PSScriptRoot\..\src\PowerBIPowerShell.sln",
 
