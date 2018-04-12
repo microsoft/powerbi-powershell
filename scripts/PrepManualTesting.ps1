@@ -1,13 +1,17 @@
 [CmdletBinding(SupportsShouldProcess)]
 param
 (
+    # Indicates to build packages before prepping packages to load. Required if you haven't previously built packages by calling Pack target.
     [switch] $Build,
 
+    # Default arguments to call MSBuild if -Build is specified.
     [ValidateNotNull()]
     [hashtable] $BuildScriptArgs = @{'Pack'=$true; 'Clean'=$true; 'Verbose'=$true},
 
+    # Package output directory to prep for loading.
     [string] $PackageDir = "$PSScriptRoot\..\PkgOut",
 
+    # Indicates to force cleaning PackageDir of any files not related to the modules (prevents being prompted to clean).
     [switch] $Force
 )
 

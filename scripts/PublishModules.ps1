@@ -1,12 +1,17 @@
 [CmdletBinding(SupportsShouldProcess=$true)]
 param
 (
+    # Parent directory containing *.nupkg files to publish
+    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $Path,
 
+    # API Key to publish to NuGet feed (PowerShell Gallery).
+    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $ApiKey,
 
+    # NuGet feed to publish to. Defaults to https://www.powershellgallery.com/api/v2/.
     [ValidateNotNullOrEmpty()]
     [string] $NuGetSource = 'https://www.powershellgallery.com/api/v2/'
 )

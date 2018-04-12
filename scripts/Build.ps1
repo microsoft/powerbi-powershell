@@ -1,27 +1,36 @@
 [CmdletBinding()]
 param
 (
+    # Path to solution file. Defaults to ..\src\PowerBIPowerShell.sln.
     [ValidateNotNullOrEmpty()]
     [string] $Solution = "$PSScriptRoot\..\src\PowerBIPowerShell.sln",
 
+    # MSBuild targets to execute. Default is the Build target unless -NoBuild is specified.
     [ValidateNotNull()]
     [string[]] $MSBuildTargets = @(),
 
+    # MSBuild properties to execute build with.
     [ValidateNotNull()]
     [Hashtable] $MSBuildProperties = @{},
 
+    # Build Configuration. Default is to use the MSBuild project defaults which is likely Debug.
     [ValidateSet($null, 'Debug', 'Release')]
     [string[]] $Configuration = @(),
 
+    # Indicates to include the binary logger which can be used with the MSBuild Structured Log Viewer.
     [Alias('BL')]
     [switch] $BinaryLogger,
 
+    # Indicates to use Visual Studio Preview instead of released versions. Preview build must be installed in order to use.
     [switch] $VSPreview,
 
+    # Indicates to execute the Pack target (generate NuGet packages).
     [switch] $Pack,
 
+    # Indicates to execute the Clean target.
     [switch] $Clean,
 
+    # Indicates to not add the Build target which is normally defaulted.
     [switch] $NoBuild
 )
 

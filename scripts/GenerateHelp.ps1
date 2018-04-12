@@ -1,27 +1,35 @@
 [CmdletBinding()]
 param
 (
+    # Path to module to generate markdown files to.
     [Parameter(Mandatory, ParameterSetName="GenerateMarkdown")]
     [string] $ModulePath,
 
+    # Path to PlatyPS. Required if PlatyPS is not installed in $env:PSModulePath.
     [string] $PathToPlatyPS,
 
+    # CSProj root directory.
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $ProjectRoot,
 
+    # Output path to generate external help to.
     [Parameter(Mandatory, ParameterSetName="GenerateExternalHelp")]
     [string] $OutputPath,
 
+    # Name of language to generate for. Default is en-US.
     [ValidateNotNullOrEmpty()]
     [string] $Language = 'en-US',
 
+    # Indicates to generate Markdown files.
     [Parameter(Mandatory, ParameterSetName="GenerateMarkdown")]
     [switch] $GenerateMarkdown,
 
+    # Indicates to generate external help (MAML) file.
     [Parameter(Mandatory, ParameterSetName="GenerateExternalHelp")]
     [switch] $GenerateExternalHelp,
 
+    # List of dependent assemblies to load if loading module fails to resolve. Semi-colon seperated.
     [string] $DependentAssemblies
 )
 

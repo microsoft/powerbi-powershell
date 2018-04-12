@@ -1,11 +1,15 @@
 [CmdletBinding()]
 param
 (
+    # Parent directory containing *.nuspec files.
+    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $Path,
 
+    # File hash version for catalog file (default is 2): 1 for SHA1 (Windows 7 & Server 2008 R2), 2 for SHA2 newer versions of Windows.
     [int] $CatalogVersion = 2,
 
+    # Staging\temporary directory (must already exist). Defaults to $env:Temp.
     [ValidateNotNullOrEmpty()]
     [string] $StagingDir = $env:Temp
 )

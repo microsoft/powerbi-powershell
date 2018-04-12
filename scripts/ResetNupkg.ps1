@@ -1,12 +1,15 @@
 [CmdletBinding()]
 param
 (
+    # Path to directory containing *.nupkg files to unzip and sanitize.
     [ValidateNotNullOrEmpty()]
     [string] $Path,
 
+    # Output directory of resetted\sanitized NuGet package files.
     [ValidateNotNullOrEmpty()]
     [string] $Destination,
 
+    # List of items to delete to reset\sanitize the package. Default is: '_rels', 'package', '[Content_Types].xml'.
     [ValidateNotnull()]
     [string[]] $ItemsToDelete = @('_rels', 'package', '[Content_Types].xml')
 )
