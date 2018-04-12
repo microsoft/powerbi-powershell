@@ -24,17 +24,19 @@ install:
   - ps: scripts\DisableStrongName.ps1
 
 # Build
+configuration:
+  - Release
+
 build_script:
-  - ps: scripts\Build.ps1 -Configuration Release -Pack
+  - ps: scripts\Build.ps1 -Configuration $(configuration) -Pack -AppVeyorLogger
 
 before_build:
   - ps: scripts\RestorePackages.ps1
 
-
 # Artifacts
 artifacts:
   - path: 'PkgOut\*.nupkg'
-  
+
 # Test
 test:
   assemblies:

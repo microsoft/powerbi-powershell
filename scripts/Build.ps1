@@ -49,7 +49,10 @@ param
     [switch] $Clean,
 
     # Indicates to not add the Build target which is normally defaulted.
-    [switch] $NoBuild
+    [switch] $NoBuild,
+
+    # Indicates to add the AppVeyor logger
+    [switch] $AppVeyorLogger
 )
 
 function Get-VSBuildFolder
@@ -121,6 +124,11 @@ if($MSBuildProperties.Count -gt 0) {
     }
 
     $msBuildArgs += ('/p:' + ($properties -join ';'))
+}
+
+if($AppVeyorLogger) {
+    # https://www.appveyor.com/docs/build-phase/
+    $msBuildArgs += '/logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"'
 }
 
 if($BinaryLogger) {
