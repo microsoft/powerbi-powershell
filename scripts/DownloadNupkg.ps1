@@ -52,7 +52,7 @@ Write-Output "Installing the nuget package(s) '$($PackageNames -join ', ')' from
 
 foreach($packageName in $PackageNames) {
     Write-Output "Getting package: $packageName"
-    $nugetArgs = @('install', $packageName, '-OutputDirectory', $OutputDirectory, '-Source', $NugetSource, '-DirectDownload', '-PackageSaveMode', 'nupkg', '-NonInteractive')
+    $nugetArgs = @('install', $packageName, '-OutputDirectory', $OutputDirectory, '-Source', $NugetSource, '-PackageSaveMode', 'nupkg', '-NonInteractive')
     if($Prerelease) {
         $nugetArgs += '-Prerelease'
     }
