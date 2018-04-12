@@ -21,19 +21,20 @@ dotnet_csproj:
 
 # Install
 install:
-  - ps: 'scripts\DisableStrongName.ps1'
+  - ps: scripts\DisableStrongName.ps1
 
 # Build
-configuration:
-  - Release
-
-build:
-  project: 'src\PowerBIPowerShell.sln'
-  publish_nuget: true
+build_script:
+  - ps: scripts\Build.ps1 -Configuration Release -Pack
 
 before_build:
-  - ps: 'scripts\RestorePackages.ps1'
+  - ps: scripts\RestorePackages.ps1
 
+
+# Artifacts
+artifacts:
+  - path: 'PkgOut\*.nupkg'
+  
 # Test
 test:
   assemblies:
