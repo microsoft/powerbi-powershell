@@ -5,13 +5,14 @@ param
     [ValidateNotNullOrEmpty()]
     [string] $OutputDirectory,
 
-    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string] $SourcePath,
+    [string] $NugetSource = "https://ci.appveyor.com/nuget/powerbi-powershell-j0f50attoqd6",
 
-    [Parameter(Mandatory)]
-    [ValidateNotnull()]
-    [string[]] $PackageName
+    [string[]] $PackageName = @('MicrosoftPowerBIMgmt', 'MicrosoftPowerBIMgmt.Profile', 'MicrosoftPowerBIMgmt.Workspaces', 'MicrosoftPowerBIMgmt.Reports'),
+
+    [string] $PackageVersion,
+
+    [switch] $Prerelease
 )
 
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
@@ -21,9 +22,39 @@ if(!(Test-Path -Path  $OutputDirectory)) {
     [void](New-Item -Path $OutputDirectory -ItemType Directory -Force)
 }
 
-Write-Output "Installing the nuget package(s) '$($PackageName -join ', ')' from source '$SourcePath' to output directory '$OutputDirectory'"
+if(!$PackageName -or $PackageName.Count -lt 1) {
+    Write-Output "Determining package names..."
+    $nugetArgs = @('list', '-Source', $NugetSource, '-ForceEnglishOutput', '-NonInteractive')
+    if($PackageVersion) {
+        $nugetArgs += '-AllVersions'
+    }
 
-$nugetArgs = @('install', $PackageName, '-OutputDirectory', $OutputDirectory, '-Source', $SourcePath, '-DirectDownload', '-PackageSaveMode', 'nupkg')
+    if($Prerelease) {
+        $nugetArgs += '-Prerelease'
+    }
+
+    Write-Verbose "Running: & $nugetExe $($nugetArgs -join ' ')"
+    $nugetPackages = & $nugetExe $nugetArgs
+    if($LASTEXITCODE -ne 0) {
+        throw "Nuget.exe failed with exit code: $LASTEXITCODE"
+    }
+
+    $groupedPackgesByVersion = $nugetPackages | ForEach-Object { $t = $_ -split ' '; [pscustomobject]@{Name=$t[0]; Version=$t[1] }} | Group-Object -Property Version -AsHashTable
+    if($PackageVersion) {
+        $PackageName = ($groupedPackgesByVersion[$PackageVersion]).Name
+    }
+    else {
+        $PackageName = ($groupedPackgesByVersion.Values).Name
+    }
+}
+
+Write-Output "Installing the nuget package(s) '$($PackageName -join ', ')' from source '$NugetSource' to output directory '$OutputDirectory'"
+
+$nugetArgs = @('install', $PackageName, '-OutputDirectory', $OutputDirectory, '-Source', $NugetSource, '-DirectDownload', '-PackageSaveMode', 'nupkg', '-NonInteractive')
+if($Prerelease) {
+    $nugetArgs += '-Prerelease'
+}
+
 Write-Verbose "Running: & $nugetExe $($nugetArgs -join ' ')"
 & $nugetExe $nugetArgs
 if($LASTEXITCODE -ne 0) {
