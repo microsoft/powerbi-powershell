@@ -27,29 +27,25 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Organization);
-                if (workspace == null)
-                {
-                    Assert.Inconclusive("No workspaces found to perform end to end test");
-                }
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
 
                 var updatedName = TestUtilities.GetRandomString();
                 var updatedDescription = TestUtilities.GetRandomString();
                 var parameters = new Dictionary<string, object>
                 {
-                    { "Scope", PowerBIUserScope.Organization },
-                    { "Id", workspace.Id },
-                    { "Name", updatedName },
-                    { "Description", updatedDescription },
+                    { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                    { nameof(SetPowerBIWorkspace.Id), workspace.Id },
+                    { nameof(SetPowerBIWorkspace.Name), updatedName },
+                    { nameof(SetPowerBIWorkspace.Description), updatedDescription },
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
-                var result = ps.Invoke();
-                ps.Commands.Clear();
+                var results = ps.Invoke();
 
-                Assert.IsNotNull(result);
-                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id, PowerBIUserScope.Organization);
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.AreEqual(updatedDescription, updatedWorkspace.Description);
             }
@@ -63,12 +59,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Organization);
-                if (workspace == null)
-                {
-                    Assert.Inconclusive("No workspaces found to perform end to end test");
-                }
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
 
                 var updatedName = TestUtilities.GetRandomString();
                 var updatedDescription = TestUtilities.GetRandomString();
@@ -76,16 +68,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 workspace.Description = updatedDescription;
                 var parameters = new Dictionary<string, object>
                 {
-                    { "Scope", PowerBIUserScope.Organization },
-                    { "Workspace", workspace },
+                    { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                    { nameof(SetPowerBIWorkspace.Workspace), workspace }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
-                var result = ps.Invoke();
-                ps.Commands.Clear();
+                var results = ps.Invoke();
 
-                Assert.IsNotNull(result);
-                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id, PowerBIUserScope.Organization);
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.AreEqual(updatedDescription, updatedWorkspace.Description);
             }
@@ -99,12 +91,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
+
                 var parameters = new Dictionary<string, object>
                 {
-                    { "Scope", PowerBIUserScope.Individual },
-                    { "Id", new Guid() },
-                    { "Name", "Updated Workspace Name" },
-                    { "Description", "Updated Workspace Description" },
+                    { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Individual },
+                    { nameof(SetPowerBIWorkspace.Workspace), new Group() }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -129,7 +120,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
 
-                var parameters = new Dictionary<string, object> { { "Id", new Guid() } };
+                var parameters = new Dictionary<string, object>
+                {
+                    { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                    { nameof(SetPowerBIWorkspace.Workspace), new Group() }
+                };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
                 ps.Invoke();
@@ -144,9 +139,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ps.AddCommand(Cmdlet);
+                ps.AddCommand(Cmdlet)
+                    .AddParameter(nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization);
 
-                var result = ps.Invoke();
+                var results = ps.Invoke();
 
                 Assert.Fail("Should not have reached this point");
             }
@@ -160,13 +156,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 var parameters = new Dictionary<string, object>
                 {
-                    { "Scope", PowerBIUserScope.Organization },
-                    { "Id", new Guid() },
-                    { "Workspace", new Group() }
+                    { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                    { nameof(SetPowerBIWorkspace.Id), new Guid() },
+                    { nameof(SetPowerBIWorkspace.Workspace), new Group() }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
-                var result = ps.Invoke();
+                var results = ps.Invoke();
 
                 Assert.Fail("Should not have reached this point");
             }

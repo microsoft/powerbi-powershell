@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
 
         public static void ConnectToPowerBI(System.Management.Automation.PowerShell ps, string environment = null)
         {
-            if(string.IsNullOrEmpty(environment))
+            if (string.IsNullOrEmpty(environment))
             {
 #if DEBUG
                 environment = nameof(PowerBIEnvironmentType.OneBox);
@@ -30,7 +30,9 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             }
 
             ps.AddCommand(ConnectPowerBIServiceAccountCmdletInfo).AddParameter(nameof(ConnectPowerBIServiceAccount.Environment), environment);
+
             var result = ps.Invoke();
+
             TestUtilities.AssertNoCmdletErrors(ps);
             Assert.IsNotNull(result);
             ps.Commands.Clear();
@@ -39,7 +41,9 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         public static void DisconnectToPowerBI(System.Management.Automation.PowerShell ps)
         {
             ps.AddCommand(DisconnectPowerBIServiceAccountCmdletInfo);
+
             var result = ps.Invoke();
+
             TestUtilities.AssertNoCmdletErrors(ps);
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
