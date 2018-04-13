@@ -51,7 +51,7 @@ param
     # Indicates to not add the Build target which is normally defaulted.
     [switch] $NoBuild,
 
-    # Indicates to add the AppVeyor logger
+    # Indicates to add the AppVeyor logger.
     [switch] $AppVeyorLogger
 )
 
