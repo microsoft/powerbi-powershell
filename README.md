@@ -56,14 +56,6 @@ Update the name or description of a user's workspace:
 Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
 ```
 
-### Restore Workspace
-
-Restores a deleted workspace:
-
-```powershell
-Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "TestWorkspace" -EmailAddress "john@contoso.com"
-```
-
 ### Add new user to workspace
 
 Add a user to a given workspace:
