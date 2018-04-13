@@ -27,7 +27,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Organization);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
                 if (workspace == null)
                 {
                     Assert.Inconclusive("No workspaces found to perform end to end test");
@@ -48,7 +48,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 ps.Commands.Clear();
 
                 Assert.IsNotNull(result);
-                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id, PowerBIUserScope.Organization);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
             }
         }
@@ -62,7 +62,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
 
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Organization);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
                 if (workspace == null)
                 {
                     Assert.Inconclusive("No workspaces found to perform end to end test");
@@ -83,7 +83,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 ps.Commands.Clear();
 
                 Assert.IsNotNull(result);
-                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, workspace.Id, PowerBIUserScope.Organization);
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
             }
         }
