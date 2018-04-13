@@ -5,7 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
+using Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,26 +27,23 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
-                var workspace = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Organization);
-
-                if (workspace == null)
-                {
-                    Assert.Inconclusive("No workspaces found to perform end to end test");
-                }
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
 
                 var parameters = new Dictionary<string, object>()
                 {
-                    { "Scope", "Organization"},
-                    { "Id", workspace.Id},
-                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"}, //update parameters for all tests to use a test account, this user email will only work on Onebox
-                    { "UserAccessRight", "Admin" }
+                    { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Organization },
+                    { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id},
+                    { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net"}, //update parameters for all tests to use a test account, this user email will only work on OneBox
+                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Admin }
                 };
-
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
-                var result = ps.Invoke();
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
+
+                var results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Any());
             }
         }
 
@@ -53,29 +52,30 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndAddPowerBIWorkspaceUserIndividualScope()
         {
+            // TODO: Note that unlike the admin APIs, this API will throw an error when attempting to add a user that already has access to the workspace
+            // This means that this end-to-end test can fail depending on when it is run with the other tests
+            // This can't be elegantly solved until users are available on the non-admin GET endpoint
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
-                var group = WorkspacesTestUtilities.GetWorkspace(ps, scope: PowerBIUserScope.Individual);
-
-                if (group == null)
-                {
-                    Assert.Inconclusive("No groups found to perform end to end test");
-                }
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
+                WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
 
                 var parameters = new Dictionary<string, object>()
                 {
-                    { "Scope", "Individual"},
-                    { "Id", group.Id }, 
-                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"},
-                    { "UserAccessRight", "Admin" }
+                    { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
+                    { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id }, 
+                    { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net" },
+                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Admin }
                 };
 
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
-                var result = ps.Invoke();
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
+
+                var results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Any());
             }
         }
 
@@ -83,19 +83,20 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [ExpectedException(typeof(CmdletInvocationException))]
         public void CallAddPowerBIWorkspaceUserWithoutLogin()
         {
-
             using (var ps = System.Management.Automation.PowerShell.Create())
-            { 
+            {
+                ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
+
                 var parameters = new Dictionary<string, object>()
                 {
-                    { "Scope", "Organization"},
-                    { "Id", new Guid()},
-                    { "UserPrincipalName", "user1@granularcontrols1.ccsctp.net"},
-                    { "UserAccessRight", "Member" }
+                    { nameof(AddPowerBIWorkspaceUser.Id), new Guid() },
+                    { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net" },
+                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Member }
                 };
-
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
-                var result = ps.Invoke();
+
+                var results = ps.Invoke();
+
                 Assert.Fail("Should not have reached this point");
             }
         }
