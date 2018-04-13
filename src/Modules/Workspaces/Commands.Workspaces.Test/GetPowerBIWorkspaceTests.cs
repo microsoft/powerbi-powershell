@@ -69,6 +69,66 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesOrganizationScopeAndFirst()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.First), 1 }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
+
+                var results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
+                }
+                Assert.AreEqual(1, results.Count);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesIndividualScopeAndFirst()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace)
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Individual },
+                        { nameof(GetPowerBIWorkspace.First), 1 }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
+
+                var results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you are assigned or own any workspaces.");
+                }
+                Assert.AreEqual(1, results.Count);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetWorkspacesOrganizationScopeAndFilter()
         {
             /*
@@ -84,6 +144,46 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.Filter), filterQuery }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
+
+                var results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Any());
+                ps.Commands.Clear();
+
+                parameters[nameof(GetPowerBIWorkspace.Filter)] = string.Format("name eq '{0}'", TestUtilities.GetRandomString());
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
+
+                results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsFalse(results.Any());
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesIndividualScopeAndFilter()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
+                WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
+
+                var filterQuery = string.Format("name eq '{0}'", workspace.Name);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Individual },
                         { nameof(GetPowerBIWorkspace.Filter), filterQuery }
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
