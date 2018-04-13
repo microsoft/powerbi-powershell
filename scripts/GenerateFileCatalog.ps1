@@ -40,7 +40,9 @@ if(!$nuspecFiles) {
 }
 
 foreach($nuspecFile in $nuspecFiles) {
-    $moduleName = $nuspecFile.BaseName
+    # $moduleName = $nuspecFile.BaseName <- makes it be lowercase
+    $nuspecContent = [xml](Get-Content -Path $nuspecFile.FullName -ErrorAction Stop -Raw)
+    $moduleName = $nuspecContent.package.metadata.id
     $nuspecDirectory = $nuspecFile.Directory.FullName
     $nuspecFilePath = $nuspecFile.FullName
     
