@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -39,6 +40,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 var results = ps.Invoke();
 
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Any());
             }
@@ -68,6 +70,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 var results = ps.Invoke();
 
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Any());
             }

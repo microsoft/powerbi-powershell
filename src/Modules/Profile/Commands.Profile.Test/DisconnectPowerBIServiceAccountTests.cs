@@ -19,10 +19,12 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
-                var result = ps.Invoke();
-                Assert.IsNotNull(result);
-                Assert.AreEqual(0, result.Count);
+
+                var results = ps.Invoke();
+
                 TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.AreEqual(0, results.Count);
             }
         }
     }

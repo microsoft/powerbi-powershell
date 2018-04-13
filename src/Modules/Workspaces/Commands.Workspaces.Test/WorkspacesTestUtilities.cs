@@ -87,7 +87,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             ps.Commands.Clear();
             ps.AddCommand(GetPowerBIWorkspaceCmdletInfo).AddParameter(nameof(GetPowerBIWorkspace.Scope), scope.ToString());
+
             var results = ps.Invoke();
+
             TestUtilities.AssertNoCmdletErrors(ps);
             ps.Commands.Clear();
             return results;

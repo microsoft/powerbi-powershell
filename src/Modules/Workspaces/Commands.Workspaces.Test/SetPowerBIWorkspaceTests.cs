@@ -43,6 +43,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 var results = ps.Invoke();
 
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
@@ -74,6 +75,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 var results = ps.Invoke();
 
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);

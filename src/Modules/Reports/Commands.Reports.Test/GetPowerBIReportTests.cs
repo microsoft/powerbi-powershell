@@ -5,6 +5,7 @@
 
 using System.Linq;
 using System.Management.Automation;
+using Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Commands.Reports;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,6 +30,7 @@ namespace Commands.Reports.Test
 
                 var results = ps.Invoke();
 
+                TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 if (!results.Any())
                 {
