@@ -8,7 +8,7 @@ param
     [ValidateNotNullOrEmpty()]
     [string] $NugetSource = "https://ci.appveyor.com/nuget/powerbi-powershell-j0f50attoqd6",
 
-    [string[]] $PackageNames = @('MicrosoftPowerBIMgmt', 'MicrosoftPowerBIMgmt.Profile', 'MicrosoftPowerBIMgmt.Workspaces', 'MicrosoftPowerBIMgmt.Reports'),
+    [string[]] $PackageNames = @('MicrosoftPowerBIMgmt'),
 
     [string] $PackageVersion,
 
