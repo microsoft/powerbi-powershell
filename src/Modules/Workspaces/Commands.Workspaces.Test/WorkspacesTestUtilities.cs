@@ -83,6 +83,18 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             return null;
         }
 
+        public static Group GetFirstDeletedWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
+        {
+            var results = InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization);
+            if (results.Any())
+            {
+                var workspaces = results.Select(x => (Group)x.BaseObject);
+                return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.State == WorkspaceState.Deleted);
+            }
+
+            return null;
+        }
+
         private static ICollection<PSObject> InvokeGetPowerBIWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope)
         {
             ps.Commands.Clear();
