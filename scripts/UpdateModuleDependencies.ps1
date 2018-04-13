@@ -1,6 +1,20 @@
+##############################
+#.SYNOPSIS
+# Updates module dependencies in *.nupsec and *.psd1 files.
+#
+#.DESCRIPTION
+# Updates .NET Standard 2.0 dependencies to be generic and writes to *.nuspec.
+# Uses *.nuspec to write RequiresModules into *.psd1 (module manifest).
+#
+#.EXAMPLE
+# PS:> .\UpdateModuleDependencies.ps1 -Path ..\PkgOut\Reset
+# Updates any *.nuspec and *.psd1 files under directory ..\PkgOut\Reset
+#
+##############################
 [CmdletBinding()]
 param
 (
+    # Path to locate *.nuspec and *.psd1 files under to update.
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $Path

@@ -1,21 +1,46 @@
+##############################
+#.SYNOPSIS
+# Executes .NET Core test execution (dotnet test) for test projects.
+#
+#.DESCRIPTION
+# Invokes dotnet test for any *.Test.csproj under ..\src.
+# By default results will exist in ..\TestResult directory as TRX (mstest) files.
+# Interactive tests are excluded by default, use -Filter to change.
+#
+#.EXAMPLE
+# PS:> .\Test.ps1
+# Executes tests under ..\src.
+#
+#.NOTES
+# Requires .NET Core SDK with CLI discoverable in $env:Path.
+# For information about dotnet test, see https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test?tabs=netcore2x.
+# For information about mstest v2, see https://github.com/Microsoft/testfx.
+##############################
 [CmdletBinding()]
 param
 (
+    # Path to search for *.Test.csproj files under to execute tests.
     [ValidateNotNullOrEmpty()]
     [string] $Path = "$PSScriptRoot\..\src",
 
+    # Build configuration to use for discovering tests.
     [ValidateSet('Debug', 'Release')]
     [string] $Configuration = 'Debug',
 
+    # Test case filter. Default is to exclude interactive tests 'TestCategory!=Interactive'.
     [string] $Filter = 'TestCategory!=Interactive',
 
+    # Directory to output results to. Set to $null to not output results. Default is ..\TestResult
     [string] $ResultsDirectory = "$PSScriptRoot\..\TestResult",
 
+    # Type of logger to use. Set to $null to not output results. Default is 'trx'.
     [string] $Logger = 'trx',
 
+    # Indicates verbosity for test runner.
     [ValidateSet('', 'quiet', 'minimal', 'normal', 'detailed', 'diagnostic')]
     [string] $Verbosity,
 
+    # Indicates to upload test results to AppVeyor.
     [switch] $UploadResultsToAppVeyor
 )
 

@@ -1,17 +1,36 @@
+##############################
+#.SYNOPSIS
+# Downloads *.nupkg files from AppVeyor.
+#
+#.DESCRIPTION
+# Downloads and unpacks *.nupkg files on AppVeyor from powerbi-powershell builds.
+#
+#.EXAMPLE
+# PS:> .\DownloadNupkg.ps1 -OutputDirectory ..\Out
+# Downloads the latest package on AppVeyor to ..\Out directory.
+#
+#.NOTES
+# Uses the nuget.exe, must be discoverable in $env:Path.
+##############################
 [CmdletBinding()]
 param
 (
+    # Output directory of modules.
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $OutputDirectory,
 
+    # NuGet feed source. Default is 'https://ci.appveyor.com/nuget/powerbi-powershell-j0f50attoqd6'.
     [ValidateNotNullOrEmpty()]
     [string] $NugetSource = "https://ci.appveyor.com/nuget/powerbi-powershell-j0f50attoqd6",
 
+    # Nuget packages to pull. Package dependencies will also get pulled if using a newer version of NuGet.exe. If null, it will be discovered from NugetSource. Default is 'MicrosoftPowerBIMgmt'.
     [string[]] $PackageNames = @('MicrosoftPowerBIMgmt'),
 
+    # Package version to use. If null, latest version is used.
     [string] $PackageVersion,
 
+    # Indicates to use Prerelease package version.
     [switch] $Prerelease
 )
 
