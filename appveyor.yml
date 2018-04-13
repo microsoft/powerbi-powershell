@@ -28,7 +28,7 @@ configuration:
   - Release
 
 build_script:
-  - ps: scripts\Build.ps1 -Configuration $(configuration) -Pack -AppVeyorLogger
+  - ps: scripts\Build.ps1 -Configuration Release -Pack -AppVeyorLogger
 
 before_build:
   - ps: scripts\RestorePackages.ps1
