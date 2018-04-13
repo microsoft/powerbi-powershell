@@ -8,6 +8,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
     public enum GroupUserAccessCmdletEnum
     {
         Member,
-        Admin
+        Admin,
+        Contributor
     }
 }

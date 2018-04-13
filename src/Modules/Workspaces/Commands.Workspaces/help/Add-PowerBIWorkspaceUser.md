@@ -75,7 +75,7 @@ Permissions to assign to the user.
 Type: GroupUserAccessCmdletEnum
 Parameter Sets: (All)
 Aliases:
-Accepted values: Member, Admin
+Accepted values: Member, Admin, Contributor
 
 Required: True
 Position: Named
