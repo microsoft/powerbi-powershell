@@ -20,9 +20,6 @@ Returns a list of Power BI workspaces.
 ### [Remove-PowerBIWorkspaceUser](Remove-PowerBIWorkspaceUser.md)
 Removes permissions for a specified user to the a Power BI workspace.
 
-### [Restore-PowerBIWorkspace](Restore-PowerBIWorkspace.md)
-Restores a deleted PowerBI workspace
-
 ### [Set-PowerBIWorkspace](Set-PowerBIWorkspace.md)
 Updates a Power BI workspace.
 
