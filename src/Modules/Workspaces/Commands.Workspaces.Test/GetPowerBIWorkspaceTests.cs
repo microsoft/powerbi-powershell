@@ -263,8 +263,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
 
-                var results = ps.Invoke();
-
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
                 var result = ps.Invoke();
                 Assert.Fail("Should not have reached this point");
