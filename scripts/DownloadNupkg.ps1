@@ -86,13 +86,6 @@ foreach($packageName in $PackageNames) {
     if($LASTEXITCODE -ne 0) {
         throw "Nuget.exe failed with exit code: $LASTEXITCODE"
     }
-
-    # $nugetPackageDirectory = Get-ChildItem -Path $OutputDirectory | Where-Object { $_.Name -match "$([regex]::Escape($packageName)).\d+.*" }
-    # if(!$nugetPackageDirectory) {
-    #     throw "Failed to locate package '$packageName' in directory: $OutputDirectory"
-    # }
-
-    # Get-ChildItem -Path $nugetPackageDirectory.FullName -Exclude *.nupkg | Remove-Item -Recurse -Force
 }
 
 Write-Output "Completed running $($MyInvocation.MyCommand.Name)"

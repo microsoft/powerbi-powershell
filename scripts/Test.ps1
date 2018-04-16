@@ -45,11 +45,9 @@ param
 )
 
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
-
 $Path = (Resolve-Path -Path $Path -ErrorAction Stop).ProviderPath
 
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test?tabs=netcore2x
-
 $dotnetExe = Get-Command 'dotnet' -ErrorAction Stop
 
 $testProjects = Get-ChildItem -Path $Path -Recurse -Filter '*.Test.csproj'
