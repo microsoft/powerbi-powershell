@@ -3,21 +3,17 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Commands.Profile;
+using System.Net.Http;
+using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
-using Microsoft.PowerBI.Common.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Commands.Common.Test;
-using Microsoft.PowerBI.Commands.Common;
-using Microsoft.PowerBI.Api.V2.Models;
-using System.Net.Http;
 using Newtonsoft.Json;
-using System.Linq;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -272,13 +268,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         public void GetWorkspacesForIndividual()
         {
-            // Arrange\Setup
-            //var loggerFactory = new TestLoggerFactory();
-            //var storage = new ModuleDataStorage();
-            //var profile = new TestProfile();
-            //var authenticator = new TestAuthenticator();
-            //storage.SetItem("profile", profile);
-
+            // Arrange
             var group = new Group(id: Guid.NewGuid().ToString(), name: "TestGroup", isReadOnly: false, isOnDedicatedCapacity: false, capacityId: null, description: "Test", type: "Workspace", state: "Active"); // users
             var groupList = new ODataResponseListGroup(value: new List<Group>(new []{ group }));
             var clientHandler = new FakeHttpClientHandler(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.OK)
@@ -286,9 +276,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Content = new StringContent(JsonConvert.SerializeObject(groupList))
             });
 
-            //var testClient = new TestClient(clientHandler);
-
-            //var cmdlet = new GetPowerBIWorkspace(new PowerBIClientCmdletInitFactory(loggerFactory, storage, authenticator, new PowerBISettings(), testClient));
             var initFactory = new TestPowerBICmdletInitFactory(clientHandler);
             initFactory.SetProfile();
             var cmdlet = new GetPowerBIWorkspace(initFactory);
@@ -309,7 +296,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             Assert.AreEqual(group.IsOnDedicatedCapacity, returnedGroup.IsOnDedicatedCapacity);
             Assert.AreEqual(group.State, returnedGroup.State);
             Assert.AreEqual(group.Type, returnedGroup.Type);
-            //Assert.AreEqual(group.Users, returnedGroup.Users);
         }
     }
 }
