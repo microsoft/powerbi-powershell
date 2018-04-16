@@ -133,7 +133,7 @@ Cloud environment to connect against. Default is Public.
 Type: PowerBIEnvironmentType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Public, USGov, Germany, China, OneBox, EDog, DXT
+Accepted values: Public, Germany, USGov, China, OneBox, EDog, DXT
 
 Required: False
 Position: Named

@@ -5,15 +5,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Client;
-using Microsoft.Rest;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
@@ -29,6 +26,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
 
+        // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
 
         #region Parameters
@@ -66,11 +64,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             base.BeginProcessing();
 
-            if(!string.IsNullOrEmpty(this.Filter) && this.Scope.Equals(PowerBIUserScope.Individual))
-            {
-                this.Logger.ThrowTerminatingError($"{nameof(this.Filter)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
-            }
-
             if (!string.IsNullOrEmpty(this.User) && this.Scope.Equals(PowerBIUserScope.Individual))
             {
                 this.Logger.ThrowTerminatingError($"{nameof(this.User)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
@@ -92,12 +85,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? OrphanedFilterString : $"({this.Filter}) and ({OrphanedFilterString})";
             }
 
-            if(this.ParameterSetName == IdParameterSetName && this.Scope == PowerBIUserScope.Organization)
+            if(this.ParameterSetName == IdParameterSetName)
             {
                 this.Filter = $"id eq '{this.Id}'";
             }
 
-            if (this.ParameterSetName == NameParameterSetName && this.Scope == PowerBIUserScope.Organization)
+            if (this.ParameterSetName == NameParameterSetName)
             {
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }
@@ -109,37 +102,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             }
 
             var workspacesResult = this.Scope == PowerBIUserScope.Individual ? 
-                client.Groups.GetGroups() : 
+                client.Groups.GetGroups(filter: this.Filter, top: this.First, skip: this.Skip) : 
                 client.Groups.GetGroupsAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
             var workspaces = workspacesResult.Value;
-            if (this.Scope == PowerBIUserScope.Individual)
-            {
-                // non-Admin API doesn't support filter, top, skip; processing after getting result
-                if (this.Id != default)
-                {
-                    workspaces = workspaces.Where(w => this.Id == new Guid(w.Id)).ToList();
-                }
-
-                if(!string.IsNullOrEmpty(this.Name))
-                {
-                    workspaces = workspaces.Where(w => this.Name.Equals(w.Name, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
-
-                if (this.Skip.GetValueOrDefault() > 0)
-                {
-                    workspaces = workspaces.Skip(this.Skip.Value).ToList();
-                }
-
-                if (this.First.GetValueOrDefault() > 0)
-                {
-                    workspaces = workspaces.Take(this.First.Value).ToList();
-                }
-            }
-
-            if(this.Scope == PowerBIUserScope.Organization)
-            {
-                this.Logger.WriteWarning($"Only preview workspaces are returned when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
-            }
 
             this.Logger.WriteObject(workspaces, true);
         }
