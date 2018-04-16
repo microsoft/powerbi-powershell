@@ -4,6 +4,7 @@
  */
 
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -13,25 +14,26 @@ namespace Microsoft.PowerBI.Common.Client
 {
     public abstract class PowerBIClientCmdlet : PowerBICmdlet
     {
-        public PowerBIClientCmdlet() : base()
+        protected IPowerBIClientFactory ClientFactory { get; set; }
+
+        static PowerBIClientCmdlet()
+        {
+            var serviceCollection = GetServiceCollection();
+            serviceCollection = serviceCollection
+                .AddSingleton<IPowerBIClientFactory, PowerBIClientFactory>()
+                .AddSingleton<IPowerBIClientCmdletInitFactory, PowerBIClientCmdletInitFactory>();
+            SetProvider(serviceCollection);
+        }
+
+        public PowerBIClientCmdlet() : this(GetInstance<IPowerBIClientCmdletInitFactory>())
         {
         }
 
-        public PowerBIClientCmdlet(IPowerBICmdletInitFactory init) : base(init)
-        {
-        }
+        public PowerBIClientCmdlet(IPowerBIClientCmdletInitFactory init) : base(init) => this.ClientFactory = init.Client;
 
         protected virtual IPowerBIClient CreateClient()
         {
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
-            if (Uri.TryCreate(this.Profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
-            {
-                return new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
-            }
-            else
-            {
-                return new PowerBIClient(new TokenCredentials(token.AccessToken));
-            }
+            return this.ClientFactory.CreateClient(this.Authenticator, this.Profile, this.Logger, this.Settings);
         }
     }
 }
