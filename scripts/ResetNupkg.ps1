@@ -34,7 +34,7 @@ if($Path -eq $Destination) {
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-[System.IO.FileInfo[]]$nupkgFiles = Get-ChildItem -Path $Path -File -Filter '*.nupkg'
+[System.IO.FileInfo[]]$nupkgFiles = Get-ChildItem -Path $Path -File -Filter '*.nupkg' -Recurse
 if(!$nupkgFiles) {
     throw "Found no NUPKG files in: $Path"
 }
