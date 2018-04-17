@@ -32,7 +32,7 @@ You must have logged in previously before using Login-PowerBIServiceAccount.
 
 ### Example 1
 ```powershell
-PS C:\> Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "TestWorkspace" -UserEmailAddress "john@contoso.com"
+PS C:\> Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -UserEmailAddress "john@contoso.com"
 ```
 
 Restores the workspace with the given ID, assigns the user with the given email address as the owner, and updates the name of the workspace to the given name.
