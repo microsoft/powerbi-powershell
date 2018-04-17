@@ -23,6 +23,9 @@ namespace Microsoft.PowerBI.Commands.Common
 
         [DataMember(Name = "services")]
         public IEnumerable<GSEnvironmentService> Services { get; set; }
+
+        [DataMember(Name = "clients")]
+        public IEnumerable<GSEnvironmentService> Clients { get; set; }
     }
 
     [DataContract]
@@ -30,9 +33,33 @@ namespace Microsoft.PowerBI.Commands.Common
     {
         [DataMember(Name = "name")]
         public string Name { get; set; }
+
         [DataMember(Name = "endpoint")]
         public string Endpoint { get; set; }
+
         [DataMember(Name = "resourceId")]
         public string ResourceId { get; set; }
+
+        [DataMember(Name = "allowedDomains")]
+        public IEnumerable<string> AllowedDomains { get; set; }
+    }
+
+    [DataContract]
+    public class GSEnvironmentClient
+    {
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "appId")]
+        public string AppId { get; set; }
+
+        [DataMember(Name = "redirectUri")]
+        public string RedirectUri { get; set; }
+
+        [DataMember(Name = "appInsightsId")]
+        public string AppInsightsId { get; set; }
+
+        [DataMember(Name = "localyticsId")]
+        public string LocalyticsId { get; set; }
     }
 }
