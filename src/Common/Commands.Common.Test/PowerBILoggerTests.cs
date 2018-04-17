@@ -100,7 +100,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
 
     public class PowerBICmdletMock : PowerBICmdlet
     {
-        protected override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             // Nothing
         }

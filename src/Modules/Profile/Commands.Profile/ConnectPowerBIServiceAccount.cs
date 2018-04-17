@@ -53,7 +53,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public ConnectPowerBIServiceAccount(IPowerBICmdletInitFactory init) : base(init) { }
         #endregion
 
-        protected override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             var environment = this.Settings.Environments[this.Environment];
 

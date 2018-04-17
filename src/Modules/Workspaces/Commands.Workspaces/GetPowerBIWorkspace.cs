@@ -29,6 +29,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
 
+        public GetPowerBIWorkspace() : base() { }
+
+        public GetPowerBIWorkspace(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         #region Parameters
 
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
@@ -70,7 +74,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             }
         }
 
-        protected override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             if (this.Orphaned.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
             {

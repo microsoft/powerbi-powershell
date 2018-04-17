@@ -4,16 +4,19 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>Microsoft.PowerBI.Commands.Common.Test</AssemblyName>
+    <RootNamespace>Microsoft.PowerBI.Commands.Common.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
+    <PackageReference Include="Moq" Version="4.8.2 " />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Commands.Common\Commands.Common.csproj" />
+    <ProjectReference Include="..\Common.Client\Common.Client.csproj" />
   </ItemGroup>
 
 </Project>

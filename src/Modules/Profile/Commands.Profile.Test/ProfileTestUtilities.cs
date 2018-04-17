@@ -6,7 +6,7 @@
 using System;
 using System.Diagnostics;
 using System.Management.Automation;
-using Commands.Common.Test;
+using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -5,7 +5,7 @@
 
 using System.Linq;
 using System.Management.Automation;
-using Commands.Common.Test;
+using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Commands.Reports;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
