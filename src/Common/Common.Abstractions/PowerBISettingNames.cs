@@ -28,6 +28,7 @@ namespace Microsoft.PowerBI.Common.Abstractions
             public const string Redirect = "redirect";
             public const string Resource = "resource";
             public const string GlobalService = "globalService";
+            public const string CloudName = "cloudName";
         }
     }
 }
