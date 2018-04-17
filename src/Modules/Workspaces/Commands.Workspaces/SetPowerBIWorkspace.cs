@@ -62,7 +62,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         public override void ExecuteCmdlet()
         {
-            IPowerBIClient client = this.CreateClient();
+            var client = this.CreateClient();
 
             if (this.ParameterSetName.Equals(PropertiesParameterSetName))
             {

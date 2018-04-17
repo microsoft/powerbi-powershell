@@ -77,7 +77,7 @@ Remove-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035
 Restores a deleted workspace:
 
 ```powershell
-Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "TestWorkspace" -UserEmailAddress "john@contoso.com"
+Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -UserEmailAddress "john@contoso.com"
 ```
 
 ### Get Reports

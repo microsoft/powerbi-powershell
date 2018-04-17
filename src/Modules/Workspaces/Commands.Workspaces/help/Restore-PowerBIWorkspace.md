@@ -55,7 +55,7 @@ Accept wildcard characters: False
 ```
 
 ### -RestoredName
-Optionally, a new name to give to the restored workspace.
+An optional new name to give to the restored workspace.
 
 ```yaml
 Type: String

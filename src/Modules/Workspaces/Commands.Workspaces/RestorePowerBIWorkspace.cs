@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         public override void ExecuteCmdlet()
         {
-            IPowerBIClient client = this.CreateClient();
+            var client = this.CreateClient();
 
             var groupRestoreRequest = new GroupRestoreRequest { Name = this.RestoredName, EmailAddress = this.UserPrincipalName };
 

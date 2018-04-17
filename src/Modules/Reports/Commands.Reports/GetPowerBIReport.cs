@@ -23,7 +23,7 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         public override void ExecuteCmdlet()
         {
-            IPowerBIClient client = this.CreateClient();
+            var client = this.CreateClient();
 
             var reports = client.Reports.GetReports();
             this.Logger.WriteObject(reports.Value, true);
