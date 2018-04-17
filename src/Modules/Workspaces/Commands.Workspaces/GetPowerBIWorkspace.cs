@@ -26,6 +26,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
 
+        private const string DeletedFilterString = "(state eq 'Deleted')";
+
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
 
@@ -52,6 +54,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public string User { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        public SwitchParameter Deleted { get; set; }
+
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public SwitchParameter Orphaned { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
@@ -76,13 +81,24 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         public override void ExecuteCmdlet()
         {
+            if (this.Deleted.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
+            {
+                // You can't view deleted workspaces when scope is Individual
+                return;
+            }
+
             if (this.Orphaned.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
             {
-                // You can't have orphaned workspaces when scope is individual as orphaned workspaces are unassigned
+                // You can't have orphaned workspaces when scope is Individual as orphaned workspaces are unassigned
                 return;
             }
 
             var client = this.CreateClient();
+
+            if (this.Deleted.IsPresent)
+            {
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? DeletedFilterString : $"({this.Filter}) and ({DeletedFilterString})";
+            }
 
             if (this.Orphaned.IsPresent)
             {

@@ -251,6 +251,40 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesOrganizationScopeAndDeleted()
+        {
+            /*
+             * Test requires at least one deleted workspace and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var deletedWorkspace = WorkspacesTestUtilities.GetFirstDeletedWorkspaceInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(deletedWorkspace);
+
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.Deleted), null }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
+
+                var results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
+                }
+                var deletedWorkspaces = results.Select(x => (Group)x.BaseObject);
+                Assert.IsTrue(deletedWorkspaces.Any(x => x.Id == deletedWorkspace.Id));
+            }
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
         public void CallGetWorkspacesWithoutLogin()
         {
