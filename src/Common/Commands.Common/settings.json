@@ -9,14 +9,6 @@
       "globalService": "https://onebox-redirect.analysis.windows-int.net"
     },
     {
-      "name": "Public",
-      "authority": "https://login.windows.net/common/oauth2/authorize",
-      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
-      "redirect": "urn:ietf:wg:oauth:2.0:oob",
-      "resource": "https://analysis.windows.net/powerbi/api",
-      "globalService": "https://api.powerbi.com"
-    },
-    {
       "name": "EDog",
       "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
@@ -33,28 +25,28 @@
       "globalService": "https://wabi-staging-us-east-redirect.analysis.windows.net"
     },
     {
-      "name": "China",
-      "authority": "https://login.chinacloudapi.cn/common/oauth2/authorize",
+      "name": "Public",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
-      "resource": "https://analysis.chinacloudapi.cn/powerbi/api",
-      "globalService": "https://api.powerbi.cn"
+      "cloudName": "GlobalCloud"
     },
     {
       "name": "Germany",
-      "authority": "https://login.microsoftonline.de/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
-      "resource": "https://analysis.cloudapi.de/powerbi/api",
-      "globalService": "https://api.powerbi.de"
+      "cloudName": "GermanyCloud"
     },
     {
       "name": "USGov",
-      "authority": "https://login.microsoftonline.com/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
-      "resource": "https://analysis.usgovcloudapi.net/powerbi/api",
-      "globalService": "https://api.powerbigov.us"
+      "cloudName": "USGovCloud"
+    },
+    {
+      "name": "China",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "ChinaCloud"
     }
   ],
   "Settings": {
