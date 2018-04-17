@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
     [TestClass]
-    public class RestorePowerBIWorkspaceTest
+    public class RestorePowerBIWorkspaceTests
     {
         private static CmdletInfo Cmdlet => new CmdletInfo($"{RestorePowerBIWorkspace.CmdletVerb}-{RestorePowerBIWorkspace.CmdletName}", typeof(RestorePowerBIWorkspace));
 
@@ -58,7 +58,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndSetWorkspaceOrganizationScopeWorkspaceParameterSet()
+        public void EndToEndRestoreWorkspaceOrganizationScopeWorkspaceParameterSet()
         {
             /*
              * Test requires a deleted preview workspace (v2) to exist and login as an administrator
@@ -94,7 +94,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndSetWorkspaceIndividualScope()
+        public void EndToEndRestoreWorkspaceIndividualScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -145,7 +145,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(ParameterBindingException))]
-        public void CallSetWorkspaceWithoutRequiredParameterIdOrWorkspace()
+        public void CallRestoreWorkspaceWithoutRequiredParameterIdOrWorkspace()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {

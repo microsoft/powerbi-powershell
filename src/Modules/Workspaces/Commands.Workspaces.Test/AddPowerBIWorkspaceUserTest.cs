@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
     [TestClass]
-    public class AddPowerBIWorkspaceUserTest
+    public class AddPowerBIWorkspaceUserTests
     {
         private static CmdletInfo Cmdlet => new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser));
 
