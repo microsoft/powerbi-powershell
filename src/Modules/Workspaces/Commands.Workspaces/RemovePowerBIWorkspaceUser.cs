@@ -43,16 +43,21 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         #endregion
 
-        public override void ExecuteCmdlet()
+        protected override void BeginProcessing()
         {
+            base.BeginProcessing();
+
             if (this.Scope == PowerBIUserScope.Organization)
             {
                 this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
+        }
 
-            IPowerBIClient client = this.CreateClient();
+        public override void ExecuteCmdlet()
+        {
+            var client = this.CreateClient();
 
-            string workspaceId = this.ParameterSetName == IdParameterSetName ? this.Id.ToString() : this.Workspace.Id.ToString();
+            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id.ToString() : this.Workspace.Id.ToString();
             var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
                 client.Groups.DeleteUserInGroup(workspaceId, this.UserPrincipalName) : 
                 client.Groups.DeleteUserAsAdmin(workspaceId, this.UserPrincipalName);

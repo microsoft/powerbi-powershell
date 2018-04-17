@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = false)]
-        public string Name { get; set; }
+        public string RestoredName { get; set; }
 
         [Parameter(Mandatory = true)]
         [Alias("UserEmailAddress")]
@@ -46,8 +46,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         #endregion
 
-        public override void ExecuteCmdlet()
+        protected override void BeginProcessing()
         {
+            base.BeginProcessing();
+
             if (this.Scope.Equals(PowerBIUserScope.Individual))
             {
                 throw new NotImplementedException($"{CmdletVerb}-{CmdletName} is only supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
@@ -57,20 +59,17 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             {
                 this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
+        }
 
+        public override void ExecuteCmdlet()
+        {
             IPowerBIClient client = this.CreateClient();
 
-            var groupRestoreRequest = new GroupRestoreRequest { Name = this.Name, EmailAddress = this.UserPrincipalName };
-            if (this.ParameterSetName.Equals(PropertiesParameterSetName))
-            {
-                var response = client.Groups.RestoreDeletedGroupAsAdmin(this.Id.ToString(), groupRestoreRequest);
-                this.Logger.WriteObject(response);
-            }
-            else if (this.ParameterSetName.Equals(WorkspaceParameterSetName))
-            {
-                var response = client.Groups.RestoreDeletedGroupAsAdmin(this.Workspace.Id.ToString(), groupRestoreRequest);
-                this.Logger.WriteObject(response);
-            }
+            var groupRestoreRequest = new GroupRestoreRequest { Name = this.RestoredName, EmailAddress = this.UserPrincipalName };
+
+            var workspaceId = this.ParameterSetName.Equals(PropertiesParameterSetName) ? this.Id.ToString() : this.Workspace.Id.ToString();
+            var response = client.Groups.RestoreDeletedGroupAsAdmin(workspaceId, groupRestoreRequest);
+            this.Logger.WriteObject(response);
         }
     }
 }

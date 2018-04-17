@@ -39,7 +39,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     { nameof(RestorePowerBIWorkspace.Scope), PowerBIUserScope.Organization },
                     { nameof(RestorePowerBIWorkspace.Id), workspace.Id },
-                    { nameof(RestorePowerBIWorkspace.Name), updatedName },
+                    { nameof(RestorePowerBIWorkspace.RestoredName), updatedName },
                     { nameof(RestorePowerBIWorkspace.UserPrincipalName), emailAddress },
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
@@ -74,7 +74,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>
                 {
                     { nameof(RestorePowerBIWorkspace.Scope), PowerBIUserScope.Organization },
-                    { nameof(RestorePowerBIWorkspace.Name), updatedName },
+                    { nameof(RestorePowerBIWorkspace.RestoredName), updatedName },
                     { nameof(RestorePowerBIWorkspace.UserPrincipalName), emailAddress },
                     { nameof(RestorePowerBIWorkspace.Workspace), workspace },
                 };

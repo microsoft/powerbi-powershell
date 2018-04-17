@@ -14,13 +14,13 @@ Restores a deleted Power BI workspace.
 
 ### Properties (Default)
 ```
-Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-Name <String>] -UserPrincipalName <String>
- [<CommonParameters>]
+Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-RestoredName <String>]
+ -UserPrincipalName <String> [<CommonParameters>]
 ```
 
 ### Workspace
 ```
-Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Name <String>] -UserPrincipalName <String>
+Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-RestoredName <String>] -UserPrincipalName <String>
  -Workspace <Group> [<CommonParameters>]
 ```
 
@@ -54,8 +54,8 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Name
-The new name to be given to the workspace.
+### -RestoredName
+Optionally, a new name to give to the restored workspace.
 
 ```yaml
 Type: String
