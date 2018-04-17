@@ -3,13 +3,17 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Commands.Common.Test;
+using System.Net.Http;
+using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -255,10 +259,43 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
 
-                var results = ps.Invoke();
-
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
+                var result = ps.Invoke();
                 Assert.Fail("Should not have reached this point");
             }
+        }
+
+        [TestMethod]
+        public void GetWorkspacesForIndividual()
+        {
+            // Arrange
+            var group = new Group(id: Guid.NewGuid().ToString(), name: "TestGroup", isReadOnly: false, isOnDedicatedCapacity: false, capacityId: null, description: "Test", type: "Workspace", state: "Active"); // users
+            var groupList = new ODataResponseListGroup(value: new List<Group>(new []{ group }));
+            var clientHandler = new FakeHttpClientHandler(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(groupList))
+            });
+
+            var initFactory = new TestPowerBICmdletInitFactory(clientHandler);
+            initFactory.SetProfile();
+            var cmdlet = new GetPowerBIWorkspace(initFactory);
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Verify
+            Assert.AreEqual(0, initFactory.Logger.ErrorRecords.Count());
+            var results = initFactory.Logger.Output.ToList();
+            Assert.AreEqual(1, results.Count());
+            var returnedGroup = results.Cast<Group>().First();
+            Assert.AreEqual(group.Id, returnedGroup.Id);
+            Assert.AreEqual(group.Name, returnedGroup.Name);
+            Assert.AreEqual(group.IsReadOnly, returnedGroup.IsReadOnly);
+            Assert.AreEqual(group.Description, returnedGroup.Description);
+            Assert.AreEqual(group.CapacityId, returnedGroup.CapacityId);
+            Assert.AreEqual(group.IsOnDedicatedCapacity, returnedGroup.IsOnDedicatedCapacity);
+            Assert.AreEqual(group.State, returnedGroup.State);
+            Assert.AreEqual(group.Type, returnedGroup.Type);
         }
     }
 }

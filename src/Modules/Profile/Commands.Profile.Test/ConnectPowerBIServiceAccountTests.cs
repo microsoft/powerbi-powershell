@@ -5,7 +5,8 @@
 
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Commands.Common.Test;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.PowerBI.Commands.Common.Test;
 
 namespace Microsoft.PowerBI.Commands.Profile.Test
 {

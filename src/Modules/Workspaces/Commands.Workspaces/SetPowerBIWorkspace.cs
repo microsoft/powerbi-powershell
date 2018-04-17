@@ -45,7 +45,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         #endregion
 
-        protected override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             if (this.Scope.Equals(PowerBIUserScope.Individual))
             {

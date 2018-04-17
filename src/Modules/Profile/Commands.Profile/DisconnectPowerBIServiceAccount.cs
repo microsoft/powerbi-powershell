@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public const string CmdletVerb = VerbsCommunications.Disconnect;
         public const string CmdletName = "PowerBIServiceAccount";
 
-        protected override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             if (this.Profile != null)
             {

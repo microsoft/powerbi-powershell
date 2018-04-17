@@ -3,7 +3,12 @@
  * Licensed under the MIT License.
  */
 
-using Commands.Common.Test;
+using System;
+using System.Collections.Generic;
+using System.Management.Automation;
+using System.Text;
+using Microsoft.PowerBI.Commands.Common;
+using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.Profile.Test

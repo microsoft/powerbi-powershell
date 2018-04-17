@@ -21,7 +21,7 @@ namespace Microsoft.PowerBI.Commands.Reports
         public const string CmdletVerb = VerbsCommon.Get;
         public const string CmdletName = "PowerBIReport";
 
-        protected override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             IPowerBIClient client = this.CreateClient();
 
