@@ -27,14 +27,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
 
+                var emailAddress = "user1@granularcontrols1.ccsctp.net";
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(RemovePowerBIWorkspaceUser.Scope), PowerBIUserScope.Organization },
                     { nameof(RemovePowerBIWorkspaceUser.Id), workspace.Id },
-                    { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net"},
+                    { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), emailAddress },
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -42,7 +43,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
-                Assert.IsTrue(results.Any());
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
+                Assert.IsFalse(updatedWorkspace.Users.Any(x => x.EmailAddress.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)));
             }
         }
 
@@ -60,11 +62,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
                 WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
 
+                var emailAddress = "user1@granularcontrols1.ccsctp.net";
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(RemovePowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
                     { nameof(RemovePowerBIWorkspaceUser.Id), workspace.Id }, 
-                    { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net"},
+                    { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), emailAddress},
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 

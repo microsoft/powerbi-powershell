@@ -7,31 +7,34 @@ using System;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
-    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = IdParameterSetName)]
-    [Alias("Remove-PowerBIGroupUser")]
-    public class RemovePowerBIWorkspaceUser : PowerBIClientCmdlet, IUserScope
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = PropertiesParameterSetName)]
+    [Alias("Restore-PowerBIGroup")]
+    public class RestorePowerBIWorkspace : PowerBIClientCmdlet, IUserScope
     {
-        public const string CmdletName = "PowerBIWorkspaceUser";
-        public const string CmdletVerb = VerbsCommon.Remove;
+        public const string CmdletName = "PowerBIWorkspace";
+        public const string CmdletVerb = VerbsData.Restore;
 
-        private const string IdParameterSetName = "Id";
+        private const string PropertiesParameterSetName = "Properties";
         private const string WorkspaceParameterSetName = "Workspace";
 
         #region Parameters
 
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = false, ParameterSetName = PropertiesParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = WorkspaceParameterSetName)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName, ValueFromPipelineByPropertyName = true)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public string RestoredName { get; set; }
 
         [Parameter(Mandatory = true)]
         [Alias("UserEmailAddress")]
@@ -47,6 +50,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             base.BeginProcessing();
 
+            if (this.Scope.Equals(PowerBIUserScope.Individual))
+            {
+                throw new NotImplementedException($"{CmdletVerb}-{CmdletName} is only supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
+            }
+
             if (this.Scope == PowerBIUserScope.Organization)
             {
                 this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
@@ -57,11 +65,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id.ToString() : this.Workspace.Id.ToString();
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
-                client.Groups.DeleteUserInGroup(workspaceId, this.UserPrincipalName) : 
-                client.Groups.DeleteUserAsAdmin(workspaceId, this.UserPrincipalName);
-            this.Logger.WriteObject(result, true);
+            var groupRestoreRequest = new GroupRestoreRequest { Name = this.RestoredName, EmailAddress = this.UserPrincipalName };
+
+            var workspaceId = this.ParameterSetName.Equals(PropertiesParameterSetName) ? this.Id.ToString() : this.Workspace.Id.ToString();
+            var response = client.Groups.RestoreDeletedGroupAsAdmin(workspaceId, groupRestoreRequest);
+            this.Logger.WriteObject(response);
         }
     }
 }

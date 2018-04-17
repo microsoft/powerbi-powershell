@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
     [TestClass]
-    public class AddPowerBIWorkspaceUserTest
+    public class AddPowerBIWorkspaceUserTests
     {
         private static CmdletInfo Cmdlet => new CmdletInfo($"{AddPowerBIWorkspaceUser.CmdletVerb}-{AddPowerBIWorkspaceUser.CmdletName}", typeof(AddPowerBIWorkspaceUser));
 
@@ -30,11 +30,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
 
+                var emailAddress = "user1@granularcontrols1.ccsctp.net";
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Organization },
                     { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id},
-                    { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net"}, //update parameters for all tests to use a test account, this user email will only work on OneBox
+                    { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
                     { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Admin }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
@@ -43,7 +44,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
-                Assert.IsTrue(results.Any());
+                var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
+                Assert.IsTrue(updatedWorkspace.Users
+                    .Any(x => x.EmailAddress.Equals(emailAddress, StringComparison.OrdinalIgnoreCase) && x.GroupUserAccessRightProperty == "Admin"));
             }
         }
 
@@ -61,11 +64,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
                 WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
 
+                var emailAddress = "user1@granularcontrols1.ccsctp.net";
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
                     { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id }, 
-                    { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net" },
+                    { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
                     { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Admin }
                 };
 

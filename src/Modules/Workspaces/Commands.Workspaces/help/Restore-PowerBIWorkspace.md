@@ -5,50 +5,67 @@ online version:
 schema: 2.0.0
 ---
 
-# Add-PowerBIWorkspaceUser
+# Restore-PowerBIWorkspace
 
 ## SYNOPSIS
-Gives permissions to a given user to access a Power BI workspace.
+Restores a deleted Power BI workspace.
 
 ## SYNTAX
 
-### Id (Default)
+### Properties (Default)
 ```
-Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
- -UserAccessRight <GroupUserAccessCmdletEnum> [<CommonParameters>]
+Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-RestoredName <String>]
+ -UserPrincipalName <String> [<CommonParameters>]
 ```
 
 ### Workspace
 ```
-Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
- -UserAccessRight <GroupUserAccessCmdletEnum> -Workspace <Group> [<CommonParameters>]
+Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-RestoredName <String>] -UserPrincipalName <String>
+ -Workspace <Group> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Grants permissions to a given user to access a Power BI workspace using the provided inputs and scope specified.
-You must have logged in previously before using, Login-PowerBIServiceAccount.
+Restores a deleted Power BI workspace with the user matching the provided email address as the owner.
+You must have logged in previously before using Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Add-PowerBIWorkspaceUser -Scope Organization -Id 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com -UserAccessRight Admin
+PS C:\> Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -UserEmailAddress "john@contoso.com"
 ```
+
+Restores the workspace with the given ID, assigns the user with the given email address as the owner, and updates the name of the workspace to the given name.
 
 ## PARAMETERS
 
 ### -Id
-Workspace or Group Id for which user has to be added.
+The ID of the workspace to restore.
 
 ```yaml
 Type: Guid
-Parameter Sets: Id
+Parameter Sets: Properties
 Aliases: GroupId, WorkspaceId
 
 Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -RestoredName
+An optional new name to give to the restored workspace.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -68,24 +85,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UserAccessRight
-Permissions to assign to the user.
-
-```yaml
-Type: GroupUserAccessCmdletEnum
-Parameter Sets: (All)
-Aliases:
-Accepted values: Member, Admin, Contributor
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -UserPrincipalName
-User Principal Name (or UPN, commonly their email address) for the user whose permissions need to be added.
+User Principal Name (or UPN, commonly their email address) for the user who will become the new owner of the restored workspace.
 
 ```yaml
 Type: String
@@ -100,7 +101,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-The workspace entity to add user to.
+The workspace entity to be restored.
 
 ```yaml
 Type: Group
@@ -119,7 +120,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.Guid
 
 ## OUTPUTS
 

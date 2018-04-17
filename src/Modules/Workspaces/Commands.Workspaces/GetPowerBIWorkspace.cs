@@ -82,14 +82,14 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 return;
             }
 
-            IPowerBIClient client = this.CreateClient();
+            var client = this.CreateClient();
 
-            if(this.Orphaned.IsPresent)
+            if (this.Orphaned.IsPresent)
             {
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? OrphanedFilterString : $"({this.Filter}) and ({OrphanedFilterString})";
             }
 
-            if(this.ParameterSetName == IdParameterSetName)
+            if (this.ParameterSetName == IdParameterSetName)
             {
                 this.Filter = $"id eq '{this.Id}'";
             }
@@ -99,7 +99,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }
 
-            if(!string.IsNullOrEmpty(this.User) && this.Scope == PowerBIUserScope.Organization)
+            if (!string.IsNullOrEmpty(this.User) && this.Scope == PowerBIUserScope.Organization)
             {
                 var userFilter = $"users/any(u: tolower(u/emailAddress) eq '{this.User.ToLower()}')";
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? userFilter : $"({this.Filter}) and ({userFilter})";

@@ -45,8 +45,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         #endregion
 
-        public override void ExecuteCmdlet()
+        protected override void BeginProcessing()
         {
+            base.BeginProcessing();
+
             if (this.Scope.Equals(PowerBIUserScope.Individual))
             {
                 throw new NotImplementedException($"{CmdletVerb}-{CmdletName} is only supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
@@ -56,8 +58,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             {
                 this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
+        }
 
-            IPowerBIClient client = this.CreateClient();
+        public override void ExecuteCmdlet()
+        {
+            var client = this.CreateClient();
 
             if (this.ParameterSetName.Equals(PropertiesParameterSetName))
             {
