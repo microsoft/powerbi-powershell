@@ -96,6 +96,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
                 }
+
                 Assert.AreEqual(1, results.Count);
             }
         }
@@ -126,6 +127,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     Assert.Inconclusive("No workspaces returned. Verify you are assigned or own any workspaces.");
                 }
+
                 Assert.AreEqual(1, results.Count);
             }
         }
@@ -279,6 +281,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
                 }
+
                 var deletedWorkspaces = results.Select(x => (Group)x.BaseObject);
                 Assert.IsTrue(deletedWorkspaces.Any(x => x.Id == deletedWorkspace.Id));
             }
