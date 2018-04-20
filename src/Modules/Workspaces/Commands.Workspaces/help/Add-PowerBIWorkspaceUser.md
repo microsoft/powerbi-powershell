@@ -15,13 +15,13 @@ Gives permissions to a given user to access a Power BI workspace.
 ### Id (Default)
 ```
 Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
- -UserAccessRight <GroupUserAccessCmdletEnum> [<CommonParameters>]
+ -UserAccessRight <WorkspaceUserAccessRight> [<CommonParameters>]
 ```
 
 ### Workspace
 ```
 Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
- -UserAccessRight <GroupUserAccessCmdletEnum> -Workspace <Group> [<CommonParameters>]
+ -UserAccessRight <WorkspaceUserAccessRight> -Workspace <Workspace> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 Permissions to assign to the user.
 
 ```yaml
-Type: GroupUserAccessCmdletEnum
+Type: WorkspaceUserAccessRight
 Parameter Sets: (All)
 Aliases:
 Accepted values: Member, Admin, Contributor
@@ -103,7 +103,7 @@ Accept wildcard characters: False
 The workspace entity to add user to.
 
 ```yaml
-Type: Group
+Type: Workspace
 Parameter Sets: Workspace
 Aliases: Group
 

@@ -3,12 +3,13 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
@@ -17,7 +18,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
     {
         public static CmdletInfo GetPowerBIWorkspaceCmdletInfo => new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace));
 
-        public static void AssertShouldContinueOrganizationTest(Group workspace)
+        public static void AssertShouldContinueOrganizationTest(Workspace workspace)
         {
             if (workspace == null)
             {
@@ -25,7 +26,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             }
         }
 
-        public static void AssertShouldContinueIndividualTest(Group workspace)
+        public static void AssertShouldContinueIndividualTest(Workspace workspace)
         {
             if (workspace == null)
             {
@@ -33,24 +34,24 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             }
         }
 
-        public static Group GetWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope, string id)
+        public static Workspace GetWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope, Guid id)
         {
             var results = InvokeGetPowerBIWorkspace(ps, scope);
             if (results.Any())
             {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
+                var workspaces = results.Select(x => (Workspace)x.BaseObject);
                 return workspaces.First(x => x.Id == id);
             }
 
             return null;
         }
 
-        public static Group GetFirstWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope)
+        public static Workspace GetFirstWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope)
         {
             var results = InvokeGetPowerBIWorkspace(ps, scope);
             if (results.Any())
             {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
+                var workspaces = results.Select(x => (Workspace)x.BaseObject);
                 return workspaces.First();
             }
 
@@ -58,12 +59,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         // TODO: Until the non-admin endpoint exposes type, this can only call the cmdlet with Organization scope
-        public static Group GetFirstWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
+        public static Workspace GetFirstWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
         {
             var results = InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization);
             if (results.Any())
             {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
+                var workspaces = results.Select(x => (Workspace)x.BaseObject);
                 return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace);
             }
 
@@ -71,24 +72,24 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         // TODO: Until the non-admin endpoint supports users, this can only call the cmdlet with Organization scope
-        public static Group GetFirstWorkspaceWithUsersInOrganization(System.Management.Automation.PowerShell ps)
+        public static Workspace GetFirstWorkspaceWithUsersInOrganization(System.Management.Automation.PowerShell ps)
         {
             var results = InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization);
             if (results.Any())
             {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
+                var workspaces = results.Select(x => (Workspace)x.BaseObject);
                 return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.Users.Any());
             }
 
             return null;
         }
 
-        public static Group GetFirstDeletedWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
+        public static Workspace GetFirstDeletedWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
         {
             var results = InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization);
             if (results.Any())
             {
-                var workspaces = results.Select(x => (Group)x.BaseObject);
+                var workspaces = results.Select(x => (Workspace)x.BaseObject);
                 return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.State == WorkspaceState.Deleted);
             }
 

@@ -51,7 +51,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.IsTrue(updatedWorkspace.Users
-                    .Any(x => x.EmailAddress.Equals(emailAddress, StringComparison.OrdinalIgnoreCase) && x.GroupUserAccessRightProperty == "Admin"));
+                    .Any(x => x.UserPrincipalName.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)
+                    && x.AccessRight == WorkspaceUserAccessRight.Admin.ToString()));
             }
         }
 
@@ -87,7 +88,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.IsTrue(updatedWorkspace.Users
-                    .Any(x => x.EmailAddress.Equals(emailAddress, StringComparison.OrdinalIgnoreCase) && x.GroupUserAccessRightProperty == "Admin"));
+                    .Any(x => x.UserPrincipalName.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)
+                    && x.AccessRight == WorkspaceUserAccessRight.Admin.ToString()));
             }
         }
 

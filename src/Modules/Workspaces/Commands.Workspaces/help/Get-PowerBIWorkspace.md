@@ -195,7 +195,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Api.V2.Models.Group, Microsoft.PowerBI.Api, Version=2.0.10.18022, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]
+### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Workspaces.Workspace, Microsoft.PowerBI.Api, Version=2.0.10.18022, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]
 
 ## NOTES
 

@@ -5,11 +5,9 @@
 
 using System;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
@@ -39,7 +37,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
-        public Group Workspace { get; set; }
+        public Workspace Workspace { get; set; }
 
         #endregion
 
@@ -57,10 +55,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id.ToString() : this.Workspace.Id.ToString();
+            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
             var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
-                client.Groups.DeleteUserInGroup(workspaceId, this.UserPrincipalName) : 
-                client.Groups.DeleteUserAsAdmin(workspaceId, this.UserPrincipalName);
+                client.Workspaces.RemoveWorkspaceUser(workspaceId, this.UserPrincipalName) : 
+                client.Workspaces.RemoveWorkspaceUserAsAdmin(workspaceId, this.UserPrincipalName);
             this.Logger.WriteObject(result, true);
         }
     }

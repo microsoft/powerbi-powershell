@@ -6,10 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
@@ -95,7 +95,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>
                 {
                     { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Individual },
-                    { nameof(SetPowerBIWorkspace.Workspace), new Group() }
+                    { nameof(SetPowerBIWorkspace.Workspace), new Workspace() }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -123,7 +123,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>
                 {
                     { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
-                    { nameof(SetPowerBIWorkspace.Workspace), new Group() }
+                    { nameof(SetPowerBIWorkspace.Workspace), new Workspace() }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -158,7 +158,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
                     { nameof(SetPowerBIWorkspace.Id), new Guid() },
-                    { nameof(SetPowerBIWorkspace.Workspace), new Group() }
+                    { nameof(SetPowerBIWorkspace.Workspace), new Workspace() }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 

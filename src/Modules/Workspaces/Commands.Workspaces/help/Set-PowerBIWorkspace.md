@@ -20,7 +20,7 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-Name <String>] [-D
 
 ### Workspace
 ```
-Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Group> [<CommonParameters>]
+Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -116,7 +116,7 @@ Accept wildcard characters: False
 The workspace entity to update. The workspace will be updated with the name and description on the object.
 
 ```yaml
-Type: Group
+Type: Workspace
 Parameter Sets: Workspace
 Aliases: Group
 
