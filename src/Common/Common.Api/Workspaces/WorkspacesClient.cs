@@ -18,22 +18,22 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         public object AddWorkspaceUser(Guid workspaceId, WorkspaceUser userAccessRight)
         {
-            return this.Client.Groups.AddGroupUser(workspaceId.ToString(), WorkspacesConversion.ToGroupUserAccessRight(userAccessRight));
+            return this.Client.Groups.AddGroupUser(workspaceId.ToString(), userAccessRight);
         }
 
         public object AddWorkspaceUserAsAdmin(Guid workspaceId, WorkspaceUser userAccessRight)
         {
-            return this.Client.Groups.AddUserAsAdmin(workspaceId.ToString(), WorkspacesConversion.ToGroupUserAccessRight(userAccessRight));
+            return this.Client.Groups.AddUserAsAdmin(workspaceId.ToString(), userAccessRight);
         }
 
         public IEnumerable<Workspace> GetWorkspaces(string filter = null, int? top = null, int? skip = null)
         {
-            return this.Client.Groups.GetGroups(filter, top, skip).Value.Select(x => WorkspacesConversion.ToWorkspace(x));
+            return this.Client.Groups.GetGroups(filter, top, skip).Value.Select(x => (Workspace)x);
         }
 
         public IEnumerable<Workspace> GetWorkspacesAsAdmin(string expand = null, string filter = null, int? top = null, int? skip = null)
         {
-            return this.Client.Groups.GetGroupsAsAdmin(expand, filter, top, skip).Value.Select(x => WorkspacesConversion.ToWorkspace(x));
+            return this.Client.Groups.GetGroupsAsAdmin(expand, filter, top, skip).Value.Select(x => (Workspace)x);
         }
 
         public object RemoveWorkspaceUser(Guid workspaceId, string userPrincipalName)
@@ -48,12 +48,12 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         public object RestoreDeletedWorkspaceAsAdmin(Guid workspaceId, WorkspaceRestoreRequest restoreRequest)
         {
-            return this.Client.Groups.RestoreDeletedGroupAsAdmin(workspaceId.ToString(), WorkspacesConversion.ToGroupRestoreRequest(restoreRequest));
+            return this.Client.Groups.RestoreDeletedGroupAsAdmin(workspaceId.ToString(), restoreRequest);
         }
 
         public object UpdateWorkspaceAsAdmin(Guid workspaceId, Workspace updatedProperties)
         {
-            return this.Client.Groups.UpdateGroupAsAdmin(workspaceId.ToString(), WorkspacesConversion.ToGroup(updatedProperties));
+            return this.Client.Groups.UpdateGroupAsAdmin(workspaceId.ToString(), updatedProperties);
         }
     }
 }

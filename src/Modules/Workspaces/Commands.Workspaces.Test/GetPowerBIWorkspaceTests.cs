@@ -304,6 +304,19 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Rest.HttpOperationException))]
+        public void GetWorkspacesForIndividual_InternalServerError()
+        {
+            var clientHandler = new FakeHttpClientHandler(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError));
+            var initFactory = new TestPowerBICmdletInitFactory(clientHandler);
+            var cmdlet = new GetPowerBIWorkspace(initFactory);
+
+            cmdlet.InvokePowerBICmdlet();
+
+            Assert.Fail("Should not have reached this point");
+        }
+
+        [TestMethod]
         public void GetWorkspacesForIndividual()
         {
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };

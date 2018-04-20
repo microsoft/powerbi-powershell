@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public IEnumerable<Report> GetReports()
         {
-            return this.Client.Reports.GetReports().Value.Select(x => ReportsConversion.ToReport(x));
+            return this.Client.Reports.GetReports().Value.Select(x => (Report)x);
         }
     }
 }

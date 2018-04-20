@@ -29,6 +29,9 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         public TestPowerBICmdletInitFactory(IPowerBIApiClient client) :
             base(new TestLoggerFactory(), new ModuleDataStorage(), new TestAuthenticator(), new PowerBISettings(), new TestClient(client)) => this.SetProfile();
 
+        public TestPowerBICmdletInitFactory(FakeHttpClientHandler clientHandler) :
+            base(new TestLoggerFactory(), new ModuleDataStorage(), new TestAuthenticator(), new PowerBISettings(), new TestClient(clientHandler)) => this.SetProfile();
+
         private void SetProfile(IPowerBIProfile profile = null)
         {
             if (profile == null)

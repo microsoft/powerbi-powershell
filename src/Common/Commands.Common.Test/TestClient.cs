@@ -13,14 +13,21 @@ namespace Microsoft.PowerBI.Commands.Common.Test
     {
         public IPowerBIApiClient Client { get; }
 
+        public FakeHttpClientHandler ClientHandler { get; }
+
         public TestClient(IPowerBIApiClient client)
         {
             this.Client = client;
         }
 
+        public TestClient(FakeHttpClientHandler handler)
+        {
+            this.ClientHandler = handler;
+        }
+
         public IPowerBIApiClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
-            return this.Client;
+            return this.Client ?? new PowerBIApiClient(authenticator, profile, logger, settings, this.ClientHandler);
         }
     }
 }

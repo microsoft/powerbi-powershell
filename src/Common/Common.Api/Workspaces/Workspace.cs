@@ -5,6 +5,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
@@ -27,5 +29,37 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         public string State { get; set; }
 
         public IEnumerable<WorkspaceUser> Users { get; set; }
+
+        public static implicit operator Workspace(Group group)
+        {
+            return new Workspace
+            {
+                Id = new Guid(group.Id),
+                Name = group.Name,
+                IsReadOnly = group.IsReadOnly,
+                IsOnDedicatedCapacity = group.IsOnDedicatedCapacity,
+                CapacityId = group.CapacityId,
+                Description = group.Description,
+                Type = group.Type,
+                State = group.State,
+                Users = group.Users?.Select(x => (WorkspaceUser)x),
+            };
+        }
+
+        public static implicit operator Group(Workspace workspace)
+        {
+            return new Group
+            {
+                Id = workspace.Id.ToString(),
+                Name = workspace.Name,
+                IsReadOnly = workspace.IsReadOnly,
+                IsOnDedicatedCapacity = workspace.IsOnDedicatedCapacity,
+                CapacityId = workspace.CapacityId,
+                Description = workspace.Description,
+                Type = workspace.Type,
+                State = workspace.State,
+                Users = workspace.Users?.Select(x => (GroupUserAccessRight)x).ToList(),
+            };
+        }
     }
 }

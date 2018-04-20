@@ -3,6 +3,8 @@
  * Licensed under the MIT License.
  */
 
+using Microsoft.PowerBI.Api.V2.Models;
+
 namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
     public class WorkspaceRestoreRequest
@@ -10,5 +12,10 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         public string RestoredName { get; set; }
 
         public string UserPrincipalName { get; set; }
+
+        public static implicit operator GroupRestoreRequest(WorkspaceRestoreRequest workspaceRestoreRequest)
+        {
+            return new GroupRestoreRequest { Name = workspaceRestoreRequest.RestoredName, EmailAddress = workspaceRestoreRequest.UserPrincipalName };
+        }
     }
 }

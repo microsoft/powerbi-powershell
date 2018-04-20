@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Net.Http;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Reports;
@@ -27,7 +28,14 @@ namespace Microsoft.PowerBI.Common.Api
             this.Workspaces = new WorkspacesClient(this.Client);
         }
 
-        private IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
+        public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
+        {
+            this.Client = CreateClient(authenticator, profile, logger, settings, httpClientHandler);
+            this.Reports = new ReportsClient(this.Client);
+            this.Workspaces = new WorkspacesClient(this.Client);
+        }
+
+        private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             var token = authenticator.Authenticate(profile, logger, settings);
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
@@ -37,6 +45,19 @@ namespace Microsoft.PowerBI.Common.Api
             else
             {
                 return new PowerBIClient(new TokenCredentials(token.AccessToken));
+            }
+        }
+
+        private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
+        {
+            var token = authenticator.Authenticate(profile, logger, settings);
+            if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
+            {
+                return new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken), httpClientHandler);
+            }
+            else
+            {
+                return new PowerBIClient(new TokenCredentials(token.AccessToken), httpClientHandler);
             }
         }
 
