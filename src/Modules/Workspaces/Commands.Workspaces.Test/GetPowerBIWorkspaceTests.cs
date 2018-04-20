@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using System.Net.Http;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
@@ -15,7 +14,6 @@ using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -296,10 +294,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
-                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
 
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
+
                 var result = ps.Invoke();
+
                 Assert.Fail("Should not have reached this point");
             }
         }
