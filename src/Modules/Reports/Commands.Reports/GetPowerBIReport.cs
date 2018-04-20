@@ -10,7 +10,6 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Reports
 {
-
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(IEnumerable<Report>))]
     public class GetPowerBIReport : PowerBIClientCmdlet

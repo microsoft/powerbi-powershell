@@ -64,10 +64,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            var groupRestoreRequest = new WorkspaceRestoreRequest { RestoredName = this.RestoredName, UserPrincipalName = this.UserPrincipalName };
+            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = this.RestoredName, UserPrincipalName = this.UserPrincipalName };
 
             var workspaceId = this.ParameterSetName.Equals(PropertiesParameterSetName) ? this.Id : this.Workspace.Id;
-            var response = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, groupRestoreRequest);
+            var response = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
             this.Logger.WriteObject(response);
         }
     }

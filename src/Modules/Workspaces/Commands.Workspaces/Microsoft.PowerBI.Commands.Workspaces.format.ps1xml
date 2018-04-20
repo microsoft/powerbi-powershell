@@ -53,10 +53,10 @@
               </ListItem>
               <ListItem>
                 <ItemSelectionCondition>
-                  <ScriptBlock>$_.UserAccessRights -ne $null</ScriptBlock>
+                  <ScriptBlock>$_.Users -ne $null</ScriptBlock>
                 </ItemSelectionCondition>
-                <Label>UserAccessRights</Label>
-                <ScriptBlock>$_.UserAccessRights | Out-String</ScriptBlock>
+                <Label>Users</Label>
+                <ScriptBlock>$_.Users | Out-String</ScriptBlock>
               </ListItem>
             </ListItems>
           </ListEntry>
@@ -64,9 +64,9 @@
       </ListControl>
     </View>
     <View>
-      <Name>Microsoft.PowerBI.Common.Api.Workspaces.Workspace.WorkspaceUserAccessRight</Name>
+      <Name>Microsoft.PowerBI.Common.Api.Workspaces.WorkspaceUser</Name>
       <ViewSelectedBy>
-        <TypeName>Microsoft.PowerBI.Common.Api.Workspaces.Workspace.WorkspaceUserAccessRight</TypeName>
+        <TypeName>Microsoft.PowerBI.Common.Api.Workspaces.WorkspaceUser</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>

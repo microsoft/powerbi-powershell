@@ -65,8 +65,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             if (this.ParameterSetName.Equals(PropertiesParameterSetName))
             {
-                var updatedGroup = new Workspace { Name = this.Name, Description = this.Description };
-                var response = client.Workspaces.UpdateWorkspaceAsAdmin(this.Id, updatedGroup);
+                var updatedProperties = new Workspace { Name = this.Name, Description = this.Description };
+                var response = client.Workspaces.UpdateWorkspaceAsAdmin(this.Id, updatedProperties);
                 this.Logger.WriteObject(response);
             }
             else if (this.ParameterSetName.Equals(WorkspaceParameterSetName))
