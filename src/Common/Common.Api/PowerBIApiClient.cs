@@ -15,7 +15,9 @@ namespace Microsoft.PowerBI.Common.Api
 {
     public class PowerBIApiClient : IPowerBIApiClient, IDisposable
     {
-        private readonly IPowerBIClient Client;
+        private bool disposed;
+
+        private IPowerBIClient Client { get; set; }
 
         public IReportsClient Reports { get; set; }
 
@@ -63,7 +65,43 @@ namespace Microsoft.PowerBI.Common.Api
 
         public void Dispose()
         {
-            this.Client.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~PowerBIApiClient()
+        {
+            // Finalizer calls Dispose(false)  
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
+            if (disposing)
+            {
+                // Free managed resources  
+                if (this.Client != null)
+                {
+                    this.Client.Dispose();
+                    this.Client = null;
+                }
+
+                if (this.Reports != null)
+                {
+                    this.Reports = null;
+                }
+
+                if (this.Workspaces != null)
+                {
+                    this.Workspaces = null;
+                }
+            }
         }
     }
 }
