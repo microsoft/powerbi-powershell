@@ -20,7 +20,7 @@ Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipa
 
 ### Workspace
 ```
-Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String> -Workspace <Group>
+Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String> -Workspace <Workspace>
  [<CommonParameters>]
 ```
 
@@ -96,7 +96,7 @@ Accept wildcard characters: False
 The workspace entity to remove user from.
 
 ```yaml
-Type: Group
+Type: Workspace
 Parameter Sets: Workspace
 Aliases: Group
 

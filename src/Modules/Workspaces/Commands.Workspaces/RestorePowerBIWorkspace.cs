@@ -5,10 +5,9 @@
 
 using System;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
@@ -42,7 +41,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
-        public Group Workspace { get; set; }
+        public Workspace Workspace { get; set; }
 
         #endregion
 
@@ -65,10 +64,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            var groupRestoreRequest = new GroupRestoreRequest { Name = this.RestoredName, EmailAddress = this.UserPrincipalName };
+            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = this.RestoredName, UserPrincipalName = this.UserPrincipalName };
 
-            var workspaceId = this.ParameterSetName.Equals(PropertiesParameterSetName) ? this.Id.ToString() : this.Workspace.Id.ToString();
-            var response = client.Groups.RestoreDeletedGroupAsAdmin(workspaceId, groupRestoreRequest);
+            var workspaceId = this.ParameterSetName.Equals(PropertiesParameterSetName) ? this.Id : this.Workspace.Id;
+            var response = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
             this.Logger.WriteObject(response);
         }
     }

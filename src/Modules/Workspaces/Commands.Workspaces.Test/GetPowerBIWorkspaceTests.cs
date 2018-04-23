@@ -7,13 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using System.Net.Http;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -226,7 +226,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
 
-                var userEmailAddress = workspace.Users.FirstOrDefault().EmailAddress;
+                var userEmailAddress = workspace.Users.FirstOrDefault().UserPrincipalName;
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
@@ -282,7 +282,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
                 }
 
-                var deletedWorkspaces = results.Select(x => (Group)x.BaseObject);
+                var deletedWorkspaces = results.Select(x => (Workspace)x.BaseObject);
                 Assert.IsTrue(deletedWorkspaces.Any(x => x.Id == deletedWorkspace.Id));
             }
         }
@@ -294,45 +294,44 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
-                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
 
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
+
                 var result = ps.Invoke();
+
                 Assert.Fail("Should not have reached this point");
             }
         }
 
         [TestMethod]
-        public void GetWorkspacesForIndividual()
+        [ExpectedException(typeof(Rest.HttpOperationException))]
+        public void GetWorkspacesForIndividual_InternalServerError()
         {
-            // Arrange
-            var group = new Group(id: Guid.NewGuid().ToString(), name: "TestGroup", isReadOnly: false, isOnDedicatedCapacity: false, capacityId: null, description: "Test", type: "Workspace", state: "Active"); // users
-            var groupList = new ODataResponseListGroup(value: new List<Group>(new []{ group }));
-            var clientHandler = new FakeHttpClientHandler(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.OK)
-            {
-                Content = new StringContent(JsonConvert.SerializeObject(groupList))
-            });
-
+            var clientHandler = new FakeHttpClientHandler(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError));
             var initFactory = new TestPowerBICmdletInitFactory(clientHandler);
-            initFactory.SetProfile();
             var cmdlet = new GetPowerBIWorkspace(initFactory);
 
-            // Act
             cmdlet.InvokePowerBICmdlet();
 
-            // Verify
-            Assert.AreEqual(0, initFactory.Logger.ErrorRecords.Count());
+            Assert.Fail("Should not have reached this point");
+        }
+
+        [TestMethod]
+        public void GetWorkspacesForIndividual()
+        {
+            var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspaces(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>())).Returns(expectedWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory);
+
+            cmdlet.InvokePowerBICmdlet();
+
+            Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
-            Assert.AreEqual(1, results.Count());
-            var returnedGroup = results.Cast<Group>().First();
-            Assert.AreEqual(group.Id, returnedGroup.Id);
-            Assert.AreEqual(group.Name, returnedGroup.Name);
-            Assert.AreEqual(group.IsReadOnly, returnedGroup.IsReadOnly);
-            Assert.AreEqual(group.Description, returnedGroup.Description);
-            Assert.AreEqual(group.CapacityId, returnedGroup.CapacityId);
-            Assert.AreEqual(group.IsOnDedicatedCapacity, returnedGroup.IsOnDedicatedCapacity);
-            Assert.AreEqual(group.State, returnedGroup.State);
-            Assert.AreEqual(group.Type, returnedGroup.Type);
+            Assert.AreEqual(expectedWorkspaces.Count, results.Count());
+            var workspaces = results.Cast<Workspace>().ToList();
+            CollectionAssert.AreEqual(expectedWorkspaces, workspaces);
         }
     }
 }

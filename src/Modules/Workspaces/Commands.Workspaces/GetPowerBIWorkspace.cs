@@ -6,17 +6,16 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
     [Alias("Get-PowerBIGroup")]
-    [OutputType(typeof(IEnumerable<Group>))]
+    [OutputType(typeof(IEnumerable<Workspace>))]
     public class GetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserId
     {
         public const string CmdletName = "PowerBIWorkspace";
@@ -120,11 +119,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? userFilter : $"({this.Filter}) and ({userFilter})";
             }
 
-            var workspacesResult = this.Scope == PowerBIUserScope.Individual ? 
-                client.Groups.GetGroups(filter: this.Filter, top: this.First, skip: this.Skip) : 
-                client.Groups.GetGroupsAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
-            var workspaces = workspacesResult.Value;
-
+            var workspaces = this.Scope == PowerBIUserScope.Individual ? 
+                client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) : 
+                client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
             this.Logger.WriteObject(workspaces, true);
         }
     }

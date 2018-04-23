@@ -3,12 +3,9 @@
  * Licensed under the MIT License.
  */
 
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Commands.Common;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.Rest;
+using Microsoft.PowerBI.Common.Api;
 
 namespace Microsoft.PowerBI.Common.Client
 {
@@ -31,7 +28,7 @@ namespace Microsoft.PowerBI.Common.Client
 
         public PowerBIClientCmdlet(IPowerBIClientCmdletInitFactory init) : base(init) => this.ClientFactory = init.Client;
 
-        protected virtual IPowerBIClient CreateClient()
+        protected virtual IPowerBIApiClient CreateClient()
         {
             return this.ClientFactory.CreateClient(this.Authenticator, this.Profile, this.Logger, this.Settings);
         }

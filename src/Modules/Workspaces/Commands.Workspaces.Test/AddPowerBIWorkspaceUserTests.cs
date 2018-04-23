@@ -36,7 +36,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Organization },
                     { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id},
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
-                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Admin }
+                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), WorkspaceUserAccessRight.Member }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -46,7 +46,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Assert.IsNotNull(results);
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.IsTrue(updatedWorkspace.Users
-                    .Any(x => x.EmailAddress.Equals(emailAddress, StringComparison.OrdinalIgnoreCase) && x.GroupUserAccessRightProperty == "Admin"));
+                    .Any(x => x.UserPrincipalName.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)
+                    && x.AccessRight == WorkspaceUserAccessRight.Member.ToString()));
             }
         }
 
@@ -70,7 +71,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
                     { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id }, 
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
-                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Admin }
+                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), WorkspaceUserAccessRight.Admin }
                 };
 
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
@@ -95,7 +96,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     { nameof(AddPowerBIWorkspaceUser.Id), new Guid() },
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net" },
-                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), GroupUserAccessCmdletEnum.Member }
+                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), WorkspaceUserAccessRight.Admin }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 

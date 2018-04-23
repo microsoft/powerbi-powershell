@@ -44,7 +44,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
-                Assert.IsFalse(updatedWorkspace.Users.Any(x => x.EmailAddress.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)));
+                Assert.IsFalse(updatedWorkspace.Users.Any(x => x.UserPrincipalName.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)));
             }
         }
 

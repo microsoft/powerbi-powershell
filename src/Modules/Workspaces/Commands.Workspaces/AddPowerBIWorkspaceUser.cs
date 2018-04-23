@@ -5,11 +5,9 @@
 
 using System;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
-using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
@@ -38,11 +36,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public string UserPrincipalName { get; set; }
 
         [Parameter(Mandatory = true)]
-        public GroupUserAccessCmdletEnum UserAccessRight { get; set; }
+        public WorkspaceUserAccessRight UserAccessRight { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
-        public Group Workspace { get; set; }
+        public Workspace Workspace { get; set; }
 
         #endregion
 
@@ -60,12 +58,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            var userDetails = new GroupUserAccessRight(this.UserAccessRight.ToString(), this.UserPrincipalName);
+            var userAccessRight = new WorkspaceUser { AccessRight = this.UserAccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
 
-            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id.ToString() : this.Workspace.Id.ToString();
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
-                client.Groups.AddGroupUser(workspaceId, userDetails) : 
-                client.Groups.AddUserAsAdmin(workspaceId, userDetails);
+            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
+            var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
+                client.Workspaces.AddWorkspaceUser(workspaceId, userAccessRight) :
+                client.Workspaces.AddWorkspaceUserAsAdmin(workspaceId, userAccessRight);
             this.Logger.WriteObject(result, true);
         }
     }

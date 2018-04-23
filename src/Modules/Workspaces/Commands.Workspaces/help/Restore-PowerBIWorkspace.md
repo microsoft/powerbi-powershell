@@ -21,7 +21,7 @@ Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-RestoredName <
 ### Workspace
 ```
 Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-RestoredName <String>] -UserPrincipalName <String>
- -Workspace <Group> [<CommonParameters>]
+ -Workspace <Workspace> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -104,7 +104,7 @@ Accept wildcard characters: False
 The workspace entity to be restored.
 
 ```yaml
-Type: Group
+Type: Workspace
 Parameter Sets: Workspace
 Aliases: Group
 

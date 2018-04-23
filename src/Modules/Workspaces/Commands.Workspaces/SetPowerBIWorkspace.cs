@@ -5,10 +5,9 @@
 
 using System;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
@@ -41,7 +40,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
-        public Group Workspace { get; set; }
+        public Workspace Workspace { get; set; }
 
         #endregion
 
@@ -66,15 +65,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             if (this.ParameterSetName.Equals(PropertiesParameterSetName))
             {
-                var updatedGroup = new Group { Name = this.Name, Description = this.Description };
-                var response = client.Groups.UpdateGroupAsAdmin(this.Id.ToString(), updatedGroup);
+                var updatedProperties = new Workspace { Name = this.Name, Description = this.Description };
+                var response = client.Workspaces.UpdateWorkspaceAsAdmin(this.Id, updatedProperties);
                 this.Logger.WriteObject(response);
             }
             else if (this.ParameterSetName.Equals(WorkspaceParameterSetName))
             {
                 // The API will throw 400 saying that it "Cannot apply PATCH to navigation property users" if we don't null this property out
                 this.Workspace.Users = null;
-                var response = client.Groups.UpdateGroupAsAdmin(this.Workspace.Id.ToString(), this.Workspace);
+                var response = client.Workspaces.UpdateWorkspaceAsAdmin(this.Workspace.Id, this.Workspace);
                 this.Logger.WriteObject(response);
             }
         }

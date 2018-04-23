@@ -5,7 +5,7 @@
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
-    public enum GroupUserAccessCmdletEnum
+    public enum WorkspaceUserAccessRight
     {
         Member,
         Admin,

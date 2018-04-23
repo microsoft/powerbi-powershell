@@ -2,9 +2,9 @@
 <Configuration>
   <ViewDefinitions>
     <View>
-      <Name>Microsoft.PowerBI.Api.V2.Models.Group</Name>
+      <Name>Microsoft.PowerBI.Common.Api.Workspaces.Workspace</Name>
       <ViewSelectedBy>
-        <TypeName>Microsoft.PowerBI.Api.V2.Models.Group</TypeName>
+        <TypeName>Microsoft.PowerBI.Common.Api.Workspaces.Workspace</TypeName>
       </ViewSelectedBy>
       <ListControl>
         <ListEntries>
@@ -64,9 +64,9 @@
       </ListControl>
     </View>
     <View>
-      <Name>Microsoft.PowerBI.Api.V2.Models.GroupUserAccessRight</Name>
+      <Name>Microsoft.PowerBI.Common.Api.Workspaces.WorkspaceUser</Name>
       <ViewSelectedBy>
-        <TypeName>Microsoft.PowerBI.Api.V2.Models.GroupUserAccessRight</TypeName>
+        <TypeName>Microsoft.PowerBI.Common.Api.Workspaces.WorkspaceUser</TypeName>
       </ViewSelectedBy>
       <TableControl>
         <TableHeaders>
@@ -76,7 +76,7 @@
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>EmailAddress</Label>
+            <Label>UserPrincipalName</Label>
             <Width>50</Width>
             <Alignment>Left</Alignment>
           </TableColumnHeader>
@@ -85,10 +85,10 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>GroupUserAccessRightProperty</PropertyName>
+                <PropertyName>AccessRight</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>EmailAddress</PropertyName>
+                <PropertyName>UserPrincipalName</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

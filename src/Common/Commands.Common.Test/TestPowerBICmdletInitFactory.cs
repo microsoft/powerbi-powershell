@@ -3,12 +3,9 @@
  * Licensed under the MIT License.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.PowerBI.Common.Client;
-using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api;
 
 namespace Microsoft.PowerBI.Commands.Common.Test
 {
@@ -29,14 +26,15 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             }
         }
 
-        public TestPowerBICmdletInitFactory(FakeHttpClientHandler clientHandler) : 
-            base(new TestLoggerFactory(), new ModuleDataStorage(), new TestAuthenticator(), new PowerBISettings(), new TestClient(clientHandler))
-        {
-        }
+        public TestPowerBICmdletInitFactory(IPowerBIApiClient client) :
+            base(new TestLoggerFactory(), new ModuleDataStorage(), new TestAuthenticator(), new PowerBISettings(), new TestClient(client)) => this.SetProfile();
+
+        public TestPowerBICmdletInitFactory(FakeHttpClientHandler clientHandler) :
+            base(new TestLoggerFactory(), new ModuleDataStorage(), new TestAuthenticator(), new PowerBISettings(), new TestClient(clientHandler)) => this.SetProfile();
 
         public void SetProfile(IPowerBIProfile profile = null)
         {
-            if(profile == null)
+            if (profile == null)
             {
                 this.Profile = new TestProfile();
             }
