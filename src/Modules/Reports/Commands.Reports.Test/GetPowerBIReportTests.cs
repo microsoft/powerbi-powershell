@@ -62,23 +62,20 @@ namespace Commands.Reports.Test
         [TestMethod]
         public void GetReportsIndividualScope()
         {
-            using (var ps = PowerShell.Create())
-            {
-                var expectedReports = new List<Report> { new Report { Id = "1" } };
-                var client = new Mock<IPowerBIApiClient>();
-                client.Setup(x => x.Reports.GetReports()).Returns(expectedReports);
+            var expectedReports = new List<Report> { new Report { Id = "1" } };
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Reports.GetReports()).Returns(expectedReports);
 
-                var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-                var cmdlet = new GetPowerBIReport(initFactory);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIReport(initFactory);
 
-                cmdlet.InvokePowerBICmdlet();
+            cmdlet.InvokePowerBICmdlet();
 
-                Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
-                var results = initFactory.Logger.Output.ToList();
-                Assert.AreEqual(expectedReports.Count, results.Count());
-                var reports = results.Cast<Report>().ToList();
-                CollectionAssert.AreEqual(expectedReports, reports);
-            }
+            Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
+            var results = initFactory.Logger.Output.ToList();
+            Assert.AreEqual(expectedReports.Count, results.Count());
+            var reports = results.Cast<Report>().ToList();
+            CollectionAssert.AreEqual(expectedReports, reports);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         public TestPowerBICmdletInitFactory(FakeHttpClientHandler clientHandler) :
             base(new TestLoggerFactory(), new ModuleDataStorage(), new TestAuthenticator(), new PowerBISettings(), new TestClient(clientHandler)) => this.SetProfile();
 
-        private void SetProfile(IPowerBIProfile profile = null)
+        public void SetProfile(IPowerBIProfile profile = null)
         {
             if (profile == null)
             {
