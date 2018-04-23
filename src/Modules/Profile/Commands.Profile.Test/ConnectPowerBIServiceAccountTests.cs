@@ -20,10 +20,13 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsTrue(results.Count == 1);
                 Assert.IsTrue(results[0].BaseObject is PowerBIProfile);
@@ -32,11 +35,14 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 Assert.IsNotNull(profile.UserName);
                 Assert.IsNotNull(profile.TenantId);
 
+                // Arrange
                 ps.Commands.Clear();
                 ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
 
+                // Act
                 results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.AreEqual(0, results.Count);

@@ -26,10 +26,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
-
                 var emailAddress = "user1@granularcontrols1.ccsctp.net";
                 var parameters = new Dictionary<string, object>()
                 {
@@ -39,8 +39,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
@@ -58,10 +60,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // This can't be elegantly solved until users are available on the non-admin GET endpoint
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
                 WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
-
                 var emailAddress = "user1@granularcontrols1.ccsctp.net";
                 var parameters = new Dictionary<string, object>()
                 {
@@ -71,8 +73,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Any());
@@ -85,17 +89,19 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(RemovePowerBIWorkspaceUser.Id), new Guid() },
                     { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net" },
                 };
-
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 Assert.Fail("Should not have reached this point");
             }
         }

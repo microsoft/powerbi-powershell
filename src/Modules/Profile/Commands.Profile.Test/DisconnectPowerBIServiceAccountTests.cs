@@ -23,10 +23,13 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.AreEqual(0, results.Count);

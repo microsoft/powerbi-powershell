@@ -30,12 +30,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
                     .AddParameter(nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 if (!results.Any())
@@ -55,12 +58,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
                     .AddParameter(nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Individual);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 if (!results.Any())
@@ -80,6 +86,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                     {
@@ -88,8 +95,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 if (!results.Any())
@@ -111,6 +120,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                     {
@@ -119,8 +129,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 if (!results.Any())
@@ -142,10 +154,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Organization);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
-
                 var filterQuery = string.Format("name eq '{0}'", workspace.Name);
                 var parameters = new Dictionary<string, object>()
                     {
@@ -154,18 +166,23 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Any());
-                ps.Commands.Clear();
 
+                // Arrange
+                ps.Commands.Clear();
                 parameters[nameof(GetPowerBIWorkspace.Filter)] = string.Format("name eq '{0}'", TestUtilities.GetRandomString());
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsFalse(results.Any());
@@ -182,10 +199,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
                 WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
-
                 var filterQuery = string.Format("name eq '{0}'", workspace.Name);
                 var parameters = new Dictionary<string, object>()
                     {
@@ -194,18 +211,23 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Any());
-                ps.Commands.Clear();
 
+                // Arrange
+                ps.Commands.Clear();
                 parameters[nameof(GetPowerBIWorkspace.Filter)] = string.Format("name eq '{0}'", TestUtilities.GetRandomString());
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsFalse(results.Any());
@@ -222,10 +244,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
-
                 var userEmailAddress = workspace.Users.FirstOrDefault().UserPrincipalName;
                 var parameters = new Dictionary<string, object>()
                     {
@@ -234,18 +256,23 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsTrue(results.Any());
-                ps.Commands.Clear();
 
+                // Arrange
+                ps.Commands.Clear();
                 parameters[nameof(GetPowerBIWorkspace.User)] = TestUtilities.GetRandomString();
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 Assert.IsFalse(results.Any());
@@ -262,10 +289,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var deletedWorkspace = WorkspacesTestUtilities.GetFirstDeletedWorkspaceInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(deletedWorkspace);
-
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
@@ -273,8 +300,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 if (!results.Any())
@@ -293,12 +322,14 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
-
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo);
 
+                // Act
                 var result = ps.Invoke();
 
+                // Assert
                 Assert.Fail("Should not have reached this point");
             }
         }
@@ -307,26 +338,32 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [ExpectedException(typeof(Rest.HttpOperationException))]
         public void GetWorkspacesForIndividual_InternalServerError()
         {
+            // Arrange
             var clientHandler = new FakeHttpClientHandler(new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError));
             var initFactory = new TestPowerBICmdletInitFactory(clientHandler);
             var cmdlet = new GetPowerBIWorkspace(initFactory);
 
+            // Act
             cmdlet.InvokePowerBICmdlet();
 
+            // Assert
             Assert.Fail("Should not have reached this point");
         }
 
         [TestMethod]
         public void GetWorkspacesForIndividual()
         {
+            // Arrange
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces.GetWorkspaces(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>())).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory);
 
+            // Act
             cmdlet.InvokePowerBICmdlet();
 
+            // Assert
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
             Assert.AreEqual(expectedWorkspaces.Count, results.Count());
