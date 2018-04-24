@@ -185,6 +185,58 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         [TestMethod]
+        public void SetPowerBIWorkspaceOrganizationScope_PropertiesParameterSet()
+        {
+            // Arrange
+            var workspace = new Workspace { Id = Guid.NewGuid(), Name = "UpdatedName", Description = "UpdatedDescription" };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .UpdateWorkspaceAsAdmin(workspace.Id, It.Is<Workspace>(w => w.Name == workspace.Name && w.Description == workspace.Description)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new SetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Id = workspace.Id,
+                Name = workspace.Name,
+                Description = workspace.Description,
+                ParameterSet = "Properties",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void SetPowerBIWorkspaceOrganizationScope_WorkspaceParameterSet()
+        {
+            // Arrange
+            var workspace = new Workspace { Id = Guid.NewGuid(), Name = "UpdatedName", Description = "UpdatedDescription" };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .UpdateWorkspaceAsAdmin(workspace.Id, It.Is<Workspace>(w => w.Name == workspace.Name && w.Description == workspace.Description)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new SetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Workspace = workspace,
+                ParameterSet = "Workspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
         public void SetPowerBIWorkspaceIndividualScope()
         {
             // Arrange

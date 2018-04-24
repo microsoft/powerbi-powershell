@@ -60,7 +60,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             this.Authenticator.Challenge(); // revoke any previous login
             IAccessToken token = null;
             PowerBIProfile profile = null;
-            switch (this.ParameterSetName)
+            switch (this.ParameterSet)
             {
                 case UserParameterSet:
                     token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, new Dictionary<string, string>()
@@ -80,7 +80,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 default:
-                    throw new NotImplementedException($"Parameter set {this.ParameterSetName} was not implemented");
+                    throw new NotImplementedException($"Parameter set {this.ParameterSet} was not implemented");
             }
 
             this.Storage.SetItem("profile", profile);

@@ -129,6 +129,14 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
+        // This is the default value for ParameterSetName
+        private string parameterSet = string.Empty;
+        public string ParameterSet
+        {
+            get => !string.IsNullOrEmpty(this.ParameterSetName) ? this.ParameterSetName : this.parameterSet;
+            set => this.parameterSet = value;
+        }
+
         public int MainThreadId { get; }
 
         protected bool InteractiveConsole
@@ -227,9 +235,9 @@ namespace Microsoft.PowerBI.Commands.Common
 
         protected virtual void LogCmdletStartInvocationInfo()
         {
-            var message = string.IsNullOrEmpty(this.ParameterSetName) ? 
+            var message = string.IsNullOrEmpty(this.ParameterSet) ? 
                 $"{this.CommandName} begin processing without ParameterSet." : 
-                $"{this.CommandName} begin processing with ParameterSet {this.ParameterSetName}.";
+                $"{this.CommandName} begin processing with ParameterSet {this.ParameterSet}.";
             this.WriteDebugWithTimestamp(message);
         }
 

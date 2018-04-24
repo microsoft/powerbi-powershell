@@ -126,6 +126,34 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Organization,
                 Workspace = workspace,
                 UserPrincipalName = userPrincipalName,
+                ParameterSet = "Workspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void RemovePowerBIWorkspaceUserOrganizationScope_IdParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var userPrincipalName = "john@contoso.com";
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RemoveWorkspaceUserAsAdmin(workspaceId, userPrincipalName))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Id = workspaceId,
+                UserPrincipalName = userPrincipalName,
+                ParameterSet = "Id",
             };
 
             // Act
@@ -152,6 +180,34 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Individual,
                 Workspace = workspace,
                 UserPrincipalName = userPrincipalName,
+                ParameterSet = "Workspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void RemovePowerBIWorkspaceUserIndividualScope_IdParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var userPrincipalName = "john@contoso.com";
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RemoveWorkspaceUser(workspaceId, userPrincipalName))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Id = workspaceId,
+                UserPrincipalName = userPrincipalName,
+                ParameterSet = "Id",
             };
 
             // Act

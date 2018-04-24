@@ -191,6 +191,35 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Workspace = workspace,
                 RestoredName = restoreRequest.RestoredName,
                 UserPrincipalName = restoreRequest.UserPrincipalName,
+                ParameterSet = "Workspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void RestorePowerBIWorkspaceOrganizationScope_IdParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = "Undeleted", UserPrincipalName = "john@contoso.com" };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RestoreDeletedWorkspaceAsAdmin(workspaceId, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.UserPrincipalName == restoreRequest.UserPrincipalName)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RestorePowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Id = workspaceId,
+                RestoredName = restoreRequest.RestoredName,
+                UserPrincipalName = restoreRequest.UserPrincipalName,
+                ParameterSet = "Id",
             };
 
             // Act

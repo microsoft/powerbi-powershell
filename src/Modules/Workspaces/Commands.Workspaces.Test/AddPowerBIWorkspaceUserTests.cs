@@ -132,6 +132,35 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Workspace = workspace,
                 UserPrincipalName = user.UserPrincipalName,
                 UserAccessRight = WorkspaceUserAccessRight.Member,
+                ParameterSet = "Workspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void AddPowerBIWorkspaceUserOrganizationScope_IdParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .AddWorkspaceUserAsAdmin(workspaceId, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Id = workspaceId,
+                UserPrincipalName = user.UserPrincipalName,
+                UserAccessRight = WorkspaceUserAccessRight.Member,
+                ParameterSet = "Id",
             };
 
             // Act
@@ -159,6 +188,35 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Workspace = workspace,
                 UserPrincipalName = user.UserPrincipalName,
                 UserAccessRight = WorkspaceUserAccessRight.Member,
+                ParameterSet = "Workspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void AddPowerBIWorkspaceUserIndividualScope_IdParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .AddWorkspaceUser(workspaceId, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Id = workspaceId,
+                UserPrincipalName = user.UserPrincipalName,
+                UserAccessRight = WorkspaceUserAccessRight.Member,
+                ParameterSet = "Id",
             };
 
             // Act

@@ -103,12 +103,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? OrphanedFilterString : $"({this.Filter}) and ({OrphanedFilterString})";
             }
 
-            if (this.ParameterSetName == IdParameterSetName)
+            if (this.ParameterSet.Equals(IdParameterSetName))
             {
                 this.Filter = $"id eq '{this.Id}'";
             }
 
-            if (this.ParameterSetName == NameParameterSetName)
+            if (this.ParameterSet.Equals(NameParameterSetName))
             {
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }

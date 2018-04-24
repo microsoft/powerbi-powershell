@@ -67,13 +67,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            if (this.ParameterSetName.Equals(PropertiesParameterSetName))
+            if (this.ParameterSet.Equals(PropertiesParameterSetName))
             {
                 var updatedProperties = new Workspace { Name = this.Name, Description = this.Description };
                 var response = client.Workspaces.UpdateWorkspaceAsAdmin(this.Id, updatedProperties);
                 this.Logger.WriteObject(response);
             }
-            else if (this.ParameterSetName.Equals(WorkspaceParameterSetName))
+            else if (this.ParameterSet.Equals(WorkspaceParameterSetName))
             {
                 // The API will throw 400 saying that it "Cannot apply PATCH to navigation property users" if we don't null this property out
                 this.Workspace.Users = null;

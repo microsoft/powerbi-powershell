@@ -12,7 +12,7 @@ Restores a deleted Power BI workspace.
 
 ## SYNTAX
 
-### Properties (Default)
+### Id (Default)
 ```
 Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-RestoredName <String>]
  -UserPrincipalName <String> [<CommonParameters>]
@@ -44,7 +44,7 @@ The ID of the workspace to restore.
 
 ```yaml
 Type: Guid
-Parameter Sets: Properties
+Parameter Sets: Id
 Aliases: GroupId, WorkspaceId
 
 Required: True

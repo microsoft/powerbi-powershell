@@ -64,7 +64,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             var userAccessRight = new WorkspaceUser { AccessRight = this.UserAccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
 
-            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
+            var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
             var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
                 client.Workspaces.AddWorkspaceUser(workspaceId, userAccessRight) :
                 client.Workspaces.AddWorkspaceUserAsAdmin(workspaceId, userAccessRight);
