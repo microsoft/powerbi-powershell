@@ -10,7 +10,10 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -85,7 +88,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void CallRemovePowerBIWorkspaceUserWithoutLogin()
+        public void EndToEndRemovePowerBIWorkspaceUserWithoutLogin()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -104,6 +107,58 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 // Assert
                 Assert.Fail("Should not have reached this point");
             }
+        }
+
+        [TestMethod]
+        public void RemovePowerBIWorkspaceUserOrganizationScope_WorkspaceParameterSet()
+        {
+            // Arrange
+            var workspace = new Workspace { Id = Guid.NewGuid() };
+            var userPrincipalName = "john@contoso.com";
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RemoveWorkspaceUserAsAdmin(workspace.Id, userPrincipalName))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Workspace = workspace,
+                UserPrincipalName = userPrincipalName,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void RemovePowerBIWorkspaceUserIndividualScope_WorkspaceParameterSet()
+        {
+            // Arrange
+            var workspace = new Workspace { Id = Guid.NewGuid() };
+            var userPrincipalName = "john@contoso.com";
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RemoveWorkspaceUser(workspace.Id, userPrincipalName))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Workspace = workspace,
+                UserPrincipalName = userPrincipalName,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
         }
     }
 }

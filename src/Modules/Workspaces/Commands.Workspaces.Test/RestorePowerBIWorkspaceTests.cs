@@ -10,7 +10,10 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -131,7 +134,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void CallRestoreWorkspaceWithoutLogin()
+        public void EndToEndRestoreWorkspaceWithoutLogin()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -155,7 +158,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(ParameterBindingException))]
-        public void CallRestoreWorkspaceWithoutRequiredParameterIdOrWorkspace()
+        public void EndToEndRestoreWorkspaceWithoutRequiredParameterIdOrWorkspace()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -167,6 +170,60 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 // Assert
                 Assert.Fail("Should not have reached this point");
+            }
+        }
+
+        [TestMethod]
+        public void RestorePowerBIWorkspaceOrganizationScope_WorkspaceParameterSet()
+        {
+            // Arrange
+            var workspace = new Workspace { Id = Guid.NewGuid() };
+            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = "Undeleted", UserPrincipalName = "john@contoso.com" };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RestoreDeletedWorkspaceAsAdmin(workspace.Id, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.UserPrincipalName == restoreRequest.UserPrincipalName)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RestorePowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Workspace = workspace,
+                RestoredName = restoreRequest.RestoredName,
+                UserPrincipalName = restoreRequest.UserPrincipalName,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void RestorePowerBIWorkspaceIndividualScope()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RestorePowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Id = Guid.NewGuid(),
+                UserPrincipalName = "john@contoso.com",
+            };
+
+            try
+            {
+                // Act
+                cmdlet.InvokePowerBICmdlet();
+
+                Assert.Fail("Should not have reached this point");
+            }
+            catch (System.Reflection.TargetInvocationException ex)
+            {
+                // Assert
+                Assert.AreEqual(ex.InnerException.GetType(), typeof(NotImplementedException));
             }
         }
     }

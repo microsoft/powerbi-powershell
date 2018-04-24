@@ -22,6 +22,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string PropertiesParameterSetName = "Properties";
         private const string WorkspaceParameterSetName = "Workspace";
 
+        public SetPowerBIWorkspace() : base() { }
+
+        public SetPowerBIWorkspace(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         #region Parameters
 
         [Parameter(Mandatory = false, ParameterSetName = PropertiesParameterSetName)]

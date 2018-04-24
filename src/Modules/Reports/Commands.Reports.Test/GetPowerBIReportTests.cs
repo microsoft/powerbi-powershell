@@ -47,7 +47,7 @@ namespace Commands.Reports.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void CallGetReportsWithoutLogin()
+        public void EndToEndGetReportsWithoutLogin()
         {
             using (var ps = PowerShell.Create())
             {

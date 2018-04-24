@@ -9,8 +9,10 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -120,7 +122,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void CallSetWorkspaceWithoutLogin()
+        public void EndToEndSetWorkspaceWithoutLogin()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -143,7 +145,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(ParameterBindingException))]
-        public void CallSetWorkspaceWithoutRequiredParameterIdOrWorkspace()
+        public void EndToEndSetWorkspaceWithoutRequiredParameterIdOrWorkspace()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -161,7 +163,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(ParameterBindingException))]
-        public void CallSetWorkspaceWithBothParameterSets()
+        public void EndToEndSetWorkspaceWithBothParameterSets()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -179,6 +181,32 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 // Assert
                 Assert.Fail("Should not have reached this point");
+            }
+        }
+
+        [TestMethod]
+        public void SetPowerBIWorkspaceIndividualScope()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new SetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Id = Guid.NewGuid(),
+            };
+
+            try
+            {
+                // Act
+                cmdlet.InvokePowerBICmdlet();
+
+                Assert.Fail("Should not have reached this point");
+            }
+            catch (System.Reflection.TargetInvocationException ex)
+            {
+                // Assert
+                Assert.AreEqual(ex.InnerException.GetType(), typeof(NotImplementedException));
             }
         }
     }
