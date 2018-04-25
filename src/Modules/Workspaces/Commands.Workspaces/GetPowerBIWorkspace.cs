@@ -91,8 +91,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 return;
             }
 
-            var client = this.CreateClient();
-
             if (this.Deleted.IsPresent)
             {
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? DeletedFilterString : $"({this.Filter}) and ({DeletedFilterString})";
@@ -119,10 +117,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? userFilter : $"({this.Filter}) and ({userFilter})";
             }
 
-            var workspaces = this.Scope == PowerBIUserScope.Individual ? 
-                client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) : 
+            using (var client = this.CreateClient())
+            {
+                var workspaces = this.Scope == PowerBIUserScope.Individual ?
+                client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) :
                 client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
-            this.Logger.WriteObject(workspaces, true);
+                this.Logger.WriteObject(workspaces, true);
+            }
         }
     }
 }

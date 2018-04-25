@@ -60,15 +60,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         public override void ExecuteCmdlet()
         {
-            var client = this.CreateClient();
-
+            var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
             var userAccessRight = new WorkspaceUser { AccessRight = this.UserAccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
 
-            var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
+            using (var client = this.CreateClient())
+            {
+                var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
                 client.Workspaces.AddWorkspaceUser(workspaceId, userAccessRight) :
                 client.Workspaces.AddWorkspaceUserAsAdmin(workspaceId, userAccessRight);
-            this.Logger.WriteObject(result, true);
+                this.Logger.WriteObject(result, true);
+            }
         }
     }
 }

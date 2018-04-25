@@ -57,13 +57,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         public override void ExecuteCmdlet()
         {
-            var client = this.CreateClient();
-
             var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
-            var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
-                client.Workspaces.RemoveWorkspaceUser(workspaceId, this.UserPrincipalName) : 
+
+            using (var client = this.CreateClient())
+            {
+                var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
+                client.Workspaces.RemoveWorkspaceUser(workspaceId, this.UserPrincipalName) :
                 client.Workspaces.RemoveWorkspaceUserAsAdmin(workspaceId, this.UserPrincipalName);
-            this.Logger.WriteObject(result, true);
+                this.Logger.WriteObject(result, true);
+            }
         }
     }
 }

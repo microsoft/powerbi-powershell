@@ -66,13 +66,14 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         public override void ExecuteCmdlet()
         {
-            var client = this.CreateClient();
-
+            var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
             var restoreRequest = new WorkspaceRestoreRequest { RestoredName = this.RestoredName, AdminUserPrincipalName = this.AdminUserPrincipalName };
 
-            var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
-            var response = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
-            this.Logger.WriteObject(response);
+            using (var client = this.CreateClient())
+            {
+                var result = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
+                this.Logger.WriteObject(result, true);
+            }
         }
     }
 }
