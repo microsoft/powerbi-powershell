@@ -11,11 +11,11 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
     {
         public string RestoredName { get; set; }
 
-        public string UserPrincipalName { get; set; }
+        public string AdminUserPrincipalName { get; set; }
 
         public static implicit operator GroupRestoreRequest(WorkspaceRestoreRequest workspaceRestoreRequest)
         {
-            return new GroupRestoreRequest { Name = workspaceRestoreRequest.RestoredName, EmailAddress = workspaceRestoreRequest.UserPrincipalName };
+            return new GroupRestoreRequest { Name = workspaceRestoreRequest.RestoredName, EmailAddress = workspaceRestoreRequest.AdminUserPrincipalName };
         }
     }
 }

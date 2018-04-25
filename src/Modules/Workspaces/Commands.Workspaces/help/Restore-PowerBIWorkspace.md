@@ -15,12 +15,12 @@ Restores a deleted Power BI workspace.
 ### Id (Default)
 ```
 Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-RestoredName <String>]
- -UserPrincipalName <String> [<CommonParameters>]
+ -AdminUserPrincipalName <String> [<CommonParameters>]
 ```
 
 ### Workspace
 ```
-Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-RestoredName <String>] -UserPrincipalName <String>
+Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-RestoredName <String>] -AdminUserPrincipalName <String>
  -Workspace <Workspace> [<CommonParameters>]
 ```
 
@@ -32,12 +32,27 @@ You must have logged in previously before using Login-PowerBIServiceAccount.
 
 ### Example 1
 ```powershell
-PS C:\> Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -UserEmailAddress "john@contoso.com"
+PS C:\> Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -AdminEmailAddress "john@contoso.com"
 ```
 
-Restores the workspace with the given ID, assigns the user with the given email address as the owner, and updates the name of the workspace to the given name.
+Restores the workspace with the given ID, assigns the user with the given email address as the admin, and updates the name of the workspace to the given name.
 
 ## PARAMETERS
+
+### -AdminUserPrincipalName
+User Principal Name (or UPN, commonly their email address) of the user who will become the admin of the restored workspace.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: AdminEmailAddress
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Id
 The ID of the workspace to restore.
@@ -79,21 +94,6 @@ Aliases:
 Accepted values: Individual, Organization
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UserPrincipalName
-User Principal Name (or UPN, commonly their email address) for the user who will become the new owner of the restored workspace.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: UserEmailAddress
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
