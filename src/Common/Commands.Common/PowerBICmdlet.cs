@@ -129,11 +129,16 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        // This is the default value for ParameterSetName
-        private string parameterSet = string.Empty;
+        private string parameterSet;
+        /// <summary>
+        /// The name of the current parameter set.
+        /// </summary>
+        /// <remarks>
+        /// ParameterSet should be used in place of ParameterSetName for cmdlets in order to enable unit testing.
+        /// </remarks>
         public string ParameterSet
         {
-            get => !string.IsNullOrEmpty(this.ParameterSetName) ? this.ParameterSetName : this.parameterSet;
+            get => this.parameterSet ?? this.ParameterSetName;
             set => this.parameterSet = value;
         }
 
