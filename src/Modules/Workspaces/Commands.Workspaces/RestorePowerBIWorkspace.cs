@@ -40,8 +40,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public string RestoredName { get; set; }
 
         [Parameter(Mandatory = true)]
-        [Alias("UserEmailAddress")]
-        public string UserPrincipalName { get; set; }
+        [Alias("AdminEmailAddress")]
+        public string AdminUserPrincipalName { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
@@ -68,7 +68,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = this.RestoredName, UserPrincipalName = this.UserPrincipalName };
+            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = this.RestoredName, AdminUserPrincipalName = this.AdminUserPrincipalName };
 
             var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
             var response = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
