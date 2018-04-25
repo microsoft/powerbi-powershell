@@ -22,6 +22,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string IdParameterSetName = "Id";
         private const string WorkspaceParameterSetName = "Workspace";
 
+        public RemovePowerBIWorkspaceUser() : base() { }
+
+        public RemovePowerBIWorkspaceUser(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         #region Parameters
 
         [Parameter(Mandatory = false)]
@@ -55,7 +59,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             var client = this.CreateClient();
 
-            var workspaceId = this.ParameterSetName.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
+            var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
             var result = this.Scope.Equals(PowerBIUserScope.Individual) ? 
                 client.Workspaces.RemoveWorkspaceUser(workspaceId, this.UserPrincipalName) : 
                 client.Workspaces.RemoveWorkspaceUserAsAdmin(workspaceId, this.UserPrincipalName);

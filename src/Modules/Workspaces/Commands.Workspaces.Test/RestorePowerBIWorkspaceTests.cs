@@ -10,7 +10,10 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.Workspaces.Test
 {
@@ -29,10 +32,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstDeletedWorkspaceInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
-
                 var updatedName = TestUtilities.GetRandomString();
                 var emailAddress = "user1@granularcontrols1.ccsctp.net"; //change to a valid test user account
                 var parameters = new Dictionary<string, object>
@@ -44,8 +47,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
@@ -66,10 +71,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
              */
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstDeletedWorkspaceInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
-
                 var updatedName = TestUtilities.GetRandomString();
                 var emailAddress = "user1@granularcontrols1.ccsctp.net"; //change to valid test user email
                 var parameters = new Dictionary<string, object>
@@ -81,8 +86,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
@@ -100,8 +107,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
                 var parameters = new Dictionary<string, object>
                 {
                     { nameof(RestorePowerBIWorkspace.Scope), PowerBIUserScope.Individual },
@@ -112,12 +119,14 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 try
                 {
+                    // Act
                     ps.Invoke();
 
                     Assert.Fail("Should not have reached this point");
                 }
                 catch (CmdletInvocationException ex)
                 {
+                    // Assert
                     Assert.AreEqual(ex.InnerException.GetType(), typeof(NotImplementedException));
                 }
             }
@@ -125,12 +134,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void CallRestoreWorkspaceWithoutLogin()
+        public void EndToEndRestoreWorkspaceWithoutLogin()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
-
                 var parameters = new Dictionary<string, object>
                 {
                     { nameof(RestorePowerBIWorkspace.Scope), PowerBIUserScope.Organization },
@@ -139,23 +148,111 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
+                // Act
                 ps.Invoke();
 
+                // Assert
                 Assert.Fail("Should not have reached this point");
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ParameterBindingException))]
-        public void CallRestoreWorkspaceWithoutRequiredParameterIdOrWorkspace()
+        public void EndToEndRestoreWorkspaceWithoutRequiredParameterIdOrWorkspace()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ps.AddCommand(Cmdlet);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 Assert.Fail("Should not have reached this point");
+            }
+        }
+
+        [TestMethod]
+        public void RestorePowerBIWorkspaceOrganizationScope_WorkspaceParameterSet()
+        {
+            // Arrange
+            var workspace = new Workspace { Id = Guid.NewGuid() };
+            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = "Undeleted", UserPrincipalName = "john@contoso.com" };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RestoreDeletedWorkspaceAsAdmin(workspace.Id, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.UserPrincipalName == restoreRequest.UserPrincipalName)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RestorePowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Workspace = workspace,
+                RestoredName = restoreRequest.RestoredName,
+                UserPrincipalName = restoreRequest.UserPrincipalName,
+                ParameterSet = "Workspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void RestorePowerBIWorkspaceOrganizationScope_IdParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var restoreRequest = new WorkspaceRestoreRequest { RestoredName = "Undeleted", UserPrincipalName = "john@contoso.com" };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .RestoreDeletedWorkspaceAsAdmin(workspaceId, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.UserPrincipalName == restoreRequest.UserPrincipalName)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RestorePowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Id = workspaceId,
+                RestoredName = restoreRequest.RestoredName,
+                UserPrincipalName = restoreRequest.UserPrincipalName,
+                ParameterSet = "Id",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void RestorePowerBIWorkspaceIndividualScope()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new RestorePowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Id = Guid.NewGuid(),
+                UserPrincipalName = "john@contoso.com",
+            };
+
+            try
+            {
+                // Act
+                cmdlet.InvokePowerBICmdlet();
+
+                Assert.Fail("Should not have reached this point");
+            }
+            catch (System.Reflection.TargetInvocationException ex)
+            {
+                // Assert
+                Assert.AreEqual(ex.InnerException.GetType(), typeof(NotImplementedException));
             }
         }
     }

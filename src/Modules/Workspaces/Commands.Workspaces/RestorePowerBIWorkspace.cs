@@ -12,23 +12,27 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Workspaces
 {
-    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = PropertiesParameterSetName)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = IdParameterSetName)]
     [Alias("Restore-PowerBIGroup")]
     public class RestorePowerBIWorkspace : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsData.Restore;
 
-        private const string PropertiesParameterSetName = "Properties";
+        private const string IdParameterSetName = "Id";
         private const string WorkspaceParameterSetName = "Workspace";
+
+        public RestorePowerBIWorkspace() : base() { }
+
+        public RestorePowerBIWorkspace(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         #region Parameters
 
-        [Parameter(Mandatory = false, ParameterSetName = PropertiesParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = WorkspaceParameterSetName)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName, ValueFromPipelineByPropertyName = true)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
@@ -66,7 +70,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             var restoreRequest = new WorkspaceRestoreRequest { RestoredName = this.RestoredName, UserPrincipalName = this.UserPrincipalName };
 
-            var workspaceId = this.ParameterSetName.Equals(PropertiesParameterSetName) ? this.Id : this.Workspace.Id;
+            var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
             var response = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
             this.Logger.WriteObject(response);
         }

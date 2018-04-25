@@ -28,12 +28,14 @@ namespace Commands.Reports.Test
         {
             using (var ps = PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-
                 ps.AddCommand(Cmdlet);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
                 if (!results.Any())
@@ -45,16 +47,18 @@ namespace Commands.Reports.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void CallGetReportsWithoutLogin()
+        public void EndToEndGetReportsWithoutLogin()
         {
             using (var ps = PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
-
                 ps.AddCommand(Cmdlet);
 
+                // Act
                 var results = ps.Invoke();
 
+                // Assert
                 Assert.Fail("Should not have reached this point");
             }
         }
@@ -62,15 +66,17 @@ namespace Commands.Reports.Test
         [TestMethod]
         public void GetReportsIndividualScope()
         {
+            // Arrange
             var expectedReports = new List<Report> { new Report { Id = "1" } };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Reports.GetReports()).Returns(expectedReports);
-
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIReport(initFactory);
 
+            // Act
             cmdlet.InvokePowerBICmdlet();
 
+            // Assert
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
             Assert.AreEqual(expectedReports.Count, results.Count());

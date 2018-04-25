@@ -129,6 +129,19 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
+        private string parameterSet;
+        /// <summary>
+        /// The name of the current parameter set.
+        /// </summary>
+        /// <remarks>
+        /// ParameterSet should be used in place of ParameterSetName for cmdlets in order to enable unit testing.
+        /// </remarks>
+        public string ParameterSet
+        {
+            get => this.parameterSet ?? this.ParameterSetName;
+            set => this.parameterSet = value;
+        }
+
         public int MainThreadId { get; }
 
         protected bool InteractiveConsole
@@ -227,9 +240,9 @@ namespace Microsoft.PowerBI.Commands.Common
 
         protected virtual void LogCmdletStartInvocationInfo()
         {
-            var message = string.IsNullOrEmpty(this.ParameterSetName) ? 
+            var message = string.IsNullOrEmpty(this.ParameterSet) ? 
                 $"{this.CommandName} begin processing without ParameterSet." : 
-                $"{this.CommandName} begin processing with ParameterSet {this.ParameterSetName}.";
+                $"{this.CommandName} begin processing with ParameterSet {this.ParameterSet}.";
             this.WriteDebugWithTimestamp(message);
         }
 

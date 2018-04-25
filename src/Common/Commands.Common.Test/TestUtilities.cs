@@ -6,7 +6,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using Microsoft.PowerBI.Common.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.Common.Test
 {
@@ -17,6 +19,15 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         public static void AssertNoCmdletErrors(System.Management.Automation.PowerShell ps)
         {
             Assert.IsFalse(ps.HadErrors, $"Error messages: {string.Join(Environment.NewLine, ps.Streams.Error?.Select(e => e.ToString()))}");
+        }
+
+        public static void AssertExpectedUnitTestResults(object expectedResponse, Mock<IPowerBIApiClient> client, TestPowerBICmdletInitFactory initFactory)
+        {
+            Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
+            var results = initFactory.Logger.Output.ToList();
+            var response = results.Cast<object>().FirstOrDefault();
+            Assert.AreEqual(expectedResponse, response);
+            client.VerifyAll();
         }
 
         public static string GetRandomString()
