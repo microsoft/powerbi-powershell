@@ -62,8 +62,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             using (var client = this.CreateClient())
             {
                 var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
-                client.Workspaces.RemoveWorkspaceUser(workspaceId, this.UserPrincipalName) :
-                client.Workspaces.RemoveWorkspaceUserAsAdmin(workspaceId, this.UserPrincipalName);
+                    client.Workspaces.RemoveWorkspaceUser(workspaceId, this.UserPrincipalName) :
+                    client.Workspaces.RemoveWorkspaceUserAsAdmin(workspaceId, this.UserPrincipalName);
                 this.Logger.WriteObject(result, true);
             }
         }

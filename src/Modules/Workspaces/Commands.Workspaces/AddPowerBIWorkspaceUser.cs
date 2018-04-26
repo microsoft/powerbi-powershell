@@ -66,8 +66,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             using (var client = this.CreateClient())
             {
                 var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
-                client.Workspaces.AddWorkspaceUser(workspaceId, userAccessRight) :
-                client.Workspaces.AddWorkspaceUserAsAdmin(workspaceId, userAccessRight);
+                    client.Workspaces.AddWorkspaceUser(workspaceId, userAccessRight) :
+                    client.Workspaces.AddWorkspaceUserAsAdmin(workspaceId, userAccessRight);
                 this.Logger.WriteObject(result, true);
             }
         }

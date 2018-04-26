@@ -120,8 +120,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             using (var client = this.CreateClient())
             {
                 var workspaces = this.Scope == PowerBIUserScope.Individual ?
-                client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) :
-                client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
+                    client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) :
+                    client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
                 this.Logger.WriteObject(workspaces, true);
             }
         }
