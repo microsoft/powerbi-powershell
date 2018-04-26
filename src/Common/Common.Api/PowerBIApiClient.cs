@@ -13,7 +13,7 @@ using Microsoft.Rest;
 
 namespace Microsoft.PowerBI.Common.Api
 {
-    public class PowerBIApiClient : IPowerBIApiClient, IDisposable
+    public class PowerBIApiClient : IPowerBIApiClient
     {
         private bool disposed;
 

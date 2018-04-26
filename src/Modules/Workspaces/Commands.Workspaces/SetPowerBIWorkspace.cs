@@ -65,20 +65,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         public override void ExecuteCmdlet()
         {
-            var client = this.CreateClient();
+            var workspaceId = this.ParameterSet.Equals(PropertiesParameterSetName) ? this.Id : this.Workspace.Id;
+            var updatedProperties = this.ParameterSet.Equals(PropertiesParameterSetName) ? new Workspace { Name = this.Name, Description = this.Description } : this.Workspace;
 
-            if (this.ParameterSet.Equals(PropertiesParameterSetName))
+            // The API will throw 400 saying that it "Cannot apply PATCH to navigation property users" if we don't null this property out
+            updatedProperties.Users = null;
+
+            using (var client = this.CreateClient())
             {
-                var updatedProperties = new Workspace { Name = this.Name, Description = this.Description };
-                var response = client.Workspaces.UpdateWorkspaceAsAdmin(this.Id, updatedProperties);
-                this.Logger.WriteObject(response);
-            }
-            else if (this.ParameterSet.Equals(WorkspaceParameterSetName))
-            {
-                // The API will throw 400 saying that it "Cannot apply PATCH to navigation property users" if we don't null this property out
-                this.Workspace.Users = null;
-                var response = client.Workspaces.UpdateWorkspaceAsAdmin(this.Workspace.Id, this.Workspace);
-                this.Logger.WriteObject(response);
+                var result = client.Workspaces.UpdateWorkspaceAsAdmin(workspaceId, updatedProperties);
+                this.Logger.WriteObject(result, true);
             }
         }
     }
