@@ -40,7 +40,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public string UserPrincipalName { get; set; }
 
         [Parameter(Mandatory = true)]
-        public WorkspaceUserAccessRight UserAccessRight { get; set; }
+        [Alias("UserAccessRight")]
+        public WorkspaceUserAccessRight AccessRight { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
@@ -61,7 +62,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public override void ExecuteCmdlet()
         {
             var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
-            var userAccessRight = new WorkspaceUser { AccessRight = this.UserAccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
+            var userAccessRight = new WorkspaceUser { AccessRight = this.AccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
 
             using (var client = this.CreateClient())
             {

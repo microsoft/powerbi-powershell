@@ -15,13 +15,13 @@ Gives permissions to a given user to access a Power BI workspace.
 ### Id (Default)
 ```
 Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
- -UserAccessRight <WorkspaceUserAccessRight> [<CommonParameters>]
+ -AccessRight <WorkspaceUserAccessRight> [<CommonParameters>]
 ```
 
 ### Workspace
 ```
 Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
- -UserAccessRight <WorkspaceUserAccessRight> -Workspace <Workspace> [<CommonParameters>]
+ -AccessRight <WorkspaceUserAccessRight> -Workspace <Workspace> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,10 +32,26 @@ You must have logged in previously before using, Login-PowerBIServiceAccount.
 
 ### Example 1
 ```powershell
-PS C:\> Add-PowerBIWorkspaceUser -Scope Organization -Id 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com -UserAccessRight Admin
+PS C:\> Add-PowerBIWorkspaceUser -Scope Organization -Id 23FCBDBD-A979-45D8-B1C8-6D21E0F4BE50 -UserEmailAddress john@contoso.com -AccessRight Admin
 ```
 
 ## PARAMETERS
+
+### -AccessRight
+Permissions to assign to the user.
+
+```yaml
+Type: WorkspaceUserAccessRight
+Parameter Sets: (All)
+Aliases: UserAccessRight
+Accepted values: Member, Admin, Contributor
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Id
 Workspace or Group Id for which user has to be added.
@@ -62,22 +78,6 @@ Aliases:
 Accepted values: Individual, Organization
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UserAccessRight
-Permissions to assign to the user.
-
-```yaml
-Type: WorkspaceUserAccessRight
-Parameter Sets: (All)
-Aliases:
-Accepted values: Member, Admin, Contributor
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

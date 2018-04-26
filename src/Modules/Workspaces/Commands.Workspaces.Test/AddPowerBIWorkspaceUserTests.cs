@@ -39,7 +39,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Organization },
                     { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id},
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
-                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), WorkspaceUserAccessRight.Member }
+                    { nameof(AddPowerBIWorkspaceUser.AccessRight), WorkspaceUserAccessRight.Member }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -76,7 +76,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
                     { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id }, 
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
-                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), WorkspaceUserAccessRight.Admin }
+                    { nameof(AddPowerBIWorkspaceUser.AccessRight), WorkspaceUserAccessRight.Admin }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -102,7 +102,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 {
                     { nameof(AddPowerBIWorkspaceUser.Id), new Guid() },
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), "user1@granularcontrols1.ccsctp.net" },
-                    { nameof(AddPowerBIWorkspaceUser.UserAccessRight), WorkspaceUserAccessRight.Admin }
+                    { nameof(AddPowerBIWorkspaceUser.AccessRight), WorkspaceUserAccessRight.Admin }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -131,7 +131,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Organization,
                 Workspace = workspace,
                 UserPrincipalName = user.UserPrincipalName,
-                UserAccessRight = WorkspaceUserAccessRight.Member,
+                AccessRight = WorkspaceUserAccessRight.Member,
                 ParameterSet = "Workspace",
             };
 
@@ -159,7 +159,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Organization,
                 Id = workspaceId,
                 UserPrincipalName = user.UserPrincipalName,
-                UserAccessRight = WorkspaceUserAccessRight.Member,
+                AccessRight = WorkspaceUserAccessRight.Member,
                 ParameterSet = "Id",
             };
 
@@ -187,7 +187,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Individual,
                 Workspace = workspace,
                 UserPrincipalName = user.UserPrincipalName,
-                UserAccessRight = WorkspaceUserAccessRight.Member,
+                AccessRight = WorkspaceUserAccessRight.Member,
                 ParameterSet = "Workspace",
             };
 
@@ -215,7 +215,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Individual,
                 Id = workspaceId,
                 UserPrincipalName = user.UserPrincipalName,
-                UserAccessRight = WorkspaceUserAccessRight.Member,
+                AccessRight = WorkspaceUserAccessRight.Member,
                 ParameterSet = "Id",
             };
 
