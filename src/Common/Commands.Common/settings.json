@@ -1,24 +1,56 @@
 ﻿{
   "Environments": [
     {
-      "name": "PPE",
+      "name": "OneBox",
       "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
       "resource": "https://analysis.windows-int.net/powerbi/api",
-      "override": "https://onebox-redirect.analysis.windows-int.net",
-      "globalService": "https://api.powerbi.com"
+      "globalService": "https://onebox-redirect.analysis.windows-int.net"
     },
     {
-      "name": "Public",
-      "authority": "https://login.windows.net/common/oauth2/authorize",
+      "name": "EDog",
+      "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "resource": "https://analysis.windows-int.net/powerbi/api",
+      "globalService": "https://biazure-int-edog-redirect.analysis-df.windows.net"
+    },
+    {
+      "name": "DXT",
+      "authority": "https://login.microsoftonline.com/common/oauth2/authorize",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
       "resource": "https://analysis.windows.net/powerbi/api",
-      "globalService": "https://api.powerbi.com"
+      "globalService": "https://wabi-staging-us-east-redirect.analysis.windows.net"
+    },
+    {
+      "name": "Public",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "GlobalCloud"
+    },
+    {
+      "name": "Germany",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "GermanyCloud"
+    },
+    {
+      "name": "USGov",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "USGovCloud"
+    },
+    {
+      "name": "China",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "ChinaCloud"
     }
   ],
   "Settings": {
-    "ForceDeviceCodeAuthentication": false
+    "ForceDeviceCodeAuthentication": false,
+    "ShowADALDebugMessages":  false
   }
 }

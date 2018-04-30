@@ -30,7 +30,7 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         #region Parameters
         [Parameter(Mandatory = false)]
-        public PowerBIEnvironmentType Environment { get; set; }
+        public PowerBIEnvironmentType Environment { get; set; } = PowerBIEnvironmentType.Public;
 
         [Parameter(ParameterSetName = UserParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = true)]
@@ -53,14 +53,14 @@ namespace Microsoft.PowerBI.Commands.Profile
         public ConnectPowerBIServiceAccount(IPowerBICmdletInitFactory init) : base(init) { }
         #endregion
 
-        protected override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             var environment = this.Settings.Environments[this.Environment];
 
             this.Authenticator.Challenge(); // revoke any previous login
             IAccessToken token = null;
             PowerBIProfile profile = null;
-            switch (this.ParameterSetName)
+            switch (this.ParameterSet)
             {
                 case UserParameterSet:
                     token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, new Dictionary<string, string>()
@@ -80,7 +80,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 default:
-                    throw new NotImplementedException($"Parameter set {this.ParameterSetName} was not implemented");
+                    throw new NotImplementedException($"Parameter set {this.ParameterSet} was not implemented");
             }
 
             this.Storage.SetItem("profile", profile);

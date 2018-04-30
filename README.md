@@ -1,12 +1,12 @@
-# Microsoft PowerBI Cmdlets for Windows PowerShell and PowerShell Core
+# Microsoft Power BI Cmdlets for Windows PowerShell and PowerShell Core
 
-Welcome to the PowerShell community for Microsoft PowerBI. Here you will find resources and source for PowerShell modules targeting PowerBI.
+Welcome to the PowerShell community for Microsoft Power BI. Here you will find resources and source for PowerShell modules targeting PowerBI.
 
 For questions or issues using the modules, please log an issue and we will respond as quickly as possible.
 
 ## PowerShell Modules
 
-Below is a table of the various PowerBI PowerShell modules found in this repository.
+Below is a table of the various Power BI PowerShell modules found in this repository.
 
 | Description | Module Name | PowerShell Gallery link |
 | ----------- | ----------- | ----------------------- |
@@ -30,23 +30,59 @@ We haven't published to PowerShell Gallery which is TBD, but will once we build 
 
 ## Usage
 
-### Login to PowerBI
+>Two scopes are supported by cmdlets that interact with Power BI entities:
+> * Individual is used to access entities that belong to the current user.
+> * Organization is used to access entities across the entire company. Only Power BI tenant admins are allowed to use.
+
+### Login to Power BI
 
 ```powershell
 Connect-PowerBIServiceAccount   # or Login-PowerBIServiceAccount
 ```
 
-### Getting Workspaces
+### Get Workspaces
 
-Fetching all user's workspaces:
+Get all workspaces for the user:
 
 ```powershell
 Get-PowerBIWorkspace
 ```
 
-### Getting Reports
+### Update Workspace
 
-Fetching all user's reports:
+Update the name or description of a user's workspace:
+
+```powershell
+Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
+```
+
+### Add new user to workspace
+
+Add a user to a given workspace:
+
+```powershell
+Add-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com -AccessRight Admin
+```
+
+### Remove a user from a given workspace
+
+Remove user's permissions from a given workspace:
+
+```powershell
+Remove-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com
+```
+
+### Restore Workspace
+
+Restores a deleted workspace:
+
+```powershell
+Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -AdminEmailAddress "john@contoso.com"
+```
+
+### Get Reports
+
+Get all reports for the user:
 
 ```powershell
 Get-PowerBIReport
@@ -54,9 +90,11 @@ Get-PowerBIReport
 
 ## Issues and Feedback
 
-If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for PowerBI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues).
+If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for Power BI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues).
 
-If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [PowerBI Community](http://community.powerbi.com/) or the official [PowerBI Support](https://powerbi.microsoft.com/en-us/support/) site.
+If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [Power BI Community](http://community.powerbi.com/) or the official [Power BI Support](https://powerbi.microsoft.com/en-us/support/) site.
+
+We track our roadmap of planned features in [ROADMAP.md](ROADMAP.md).
 
 ### Reporting Security Issues
 

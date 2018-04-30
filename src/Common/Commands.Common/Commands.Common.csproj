@@ -18,12 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="GitVersionTask" Version="4.0.0-beta0012">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>-->
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01" />
   </ItemGroup>
 
@@ -31,7 +29,5 @@
     <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
     <ProjectReference Include="..\Common.Authentication\Common.Authentication.csproj" />
   </ItemGroup>
-
-  <!--<Import Project="..\..\..\build\Microsoft.PowerBI.Build.targets" />-->
 
 </Project>

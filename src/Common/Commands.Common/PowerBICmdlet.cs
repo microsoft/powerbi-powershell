@@ -8,12 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Common.Authentication;
 
 namespace Microsoft.PowerBI.Commands.Common
 {
@@ -44,15 +42,19 @@ namespace Microsoft.PowerBI.Commands.Common
         static PowerBICmdlet()
         {
             AppDomain.CurrentDomain.AssemblyResolve += RedirectAssemblyLoad;
+            var serviceCollection = GetServiceCollection();
+            SetProvider(serviceCollection);
+        }
 
+        protected static IServiceCollection GetServiceCollection()
+        {
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IPowerBILoggerFactory, PowerBILoggerFactory>()
                 .AddSingleton<IDataStorage, ModuleDataStorage>()
                 .AddSingleton<IPowerBISettings, PowerBISettings>()
                 .AddSingleton<IPowerBICmdletInitFactory, PowerBICmdletInitFactory>()
                 .AddSingleton<IAuthenticationFactory, AuthenticationFactorySelector>();
-
-            SetProvider(serviceCollection);
+            return serviceCollection;
         }
 
         protected static void SetProvider(IServiceCollection serviceCollection)
@@ -127,6 +129,19 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
+        private string parameterSet;
+        /// <summary>
+        /// The name of the current parameter set.
+        /// </summary>
+        /// <remarks>
+        /// ParameterSet should be used in place of ParameterSetName for cmdlets in order to enable unit testing.
+        /// </remarks>
+        public string ParameterSet
+        {
+            get => this.parameterSet ?? this.ParameterSetName;
+            set => this.parameterSet = value;
+        }
+
         public int MainThreadId { get; }
 
         protected bool InteractiveConsole
@@ -162,7 +177,7 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        protected virtual bool IsTerminatingError(Exception ex) => ex is PipelineStoppedException pipelineStoppedEx && pipelineStoppedEx.InnerException == null;
+        protected virtual bool IsTerminatingError(Exception ex) => ex is PipelineStoppedException pipelineStoppedEx && pipelineStoppedEx.InnerException == null || ex is NotImplementedException;
 
         protected virtual string CurrentPath => this.SessionState != null ? SessionState.Path.CurrentLocation.Path : Directory.GetCurrentDirectory();
 
@@ -197,10 +212,10 @@ namespace Microsoft.PowerBI.Commands.Common
             base.EndProcessing();
         }
 
-        protected abstract void ExecuteCmdlet();
-        protected virtual string ModuleName => this.MyInvocation?.MyCommand.ModuleName ?? this.GetType().Module.Name;
+        public abstract void ExecuteCmdlet();
+        protected virtual string ModuleName => this.MyInvocation?.MyCommand?.ModuleName ?? this.GetType().Module.Name;
 
-        protected virtual string CommandName => this.MyInvocation?.MyCommand.Name ?? this.GetType().Name;
+        protected virtual string CommandName => this.MyInvocation?.MyCommand?.Name ?? this.GetType().Name;
 
         protected override void ProcessRecord()
         {
@@ -225,9 +240,9 @@ namespace Microsoft.PowerBI.Commands.Common
 
         protected virtual void LogCmdletStartInvocationInfo()
         {
-            var message = string.IsNullOrEmpty(this.ParameterSetName) ? 
+            var message = string.IsNullOrEmpty(this.ParameterSet) ? 
                 $"{this.CommandName} begin processing without ParameterSet." : 
-                $"{this.CommandName} begin processing with ParameterSet {this.ParameterSetName}.";
+                $"{this.CommandName} begin processing with ParameterSet {this.ParameterSet}.";
             this.WriteDebugWithTimestamp(message);
         }
 

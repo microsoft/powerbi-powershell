@@ -26,38 +26,51 @@ Licensed under the MIT License.
 
   
   <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles" Condition="'$(IsPackable)' == 'true'">
-    
+
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\**\*.*">
+      
+      <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\**\*.*" Condition="Exists('$(OutputPath)\WindowsAuthenticator')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)\WindowsAuthenticator</PackagePath>
       </_PackageFiles>
-      <_PackageFiles Include="$(OutputPath)\settings.json">
+      
+      <_PackageFiles Include="$(OutputPath)\settings.json" Condition="Exists('$(OutputPath)\settings.json') AND '$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
-      <_PackageFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)">
+      
+      <_PackageFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="'$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
-      <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*">
+      
+      <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>$(LangName)</PackagePath>
       </_PackageFiles>
+      
       <_PackageFiles Include="$(OutputPath)\$(PackageId).psd1">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath></PackagePath>
       </_PackageFiles>
+      
       <_PackageFiles Include="$(OutputPath)\$(AssemblyName).types.ps1xml" Condition="Exists('$(OutputPath)\$(AssemblyName).types.ps1xml')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath></PackagePath>
       </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\$(AssemblyName).format.ps1xml" Condition="Exists('$(OutputPath)\$(AssemblyName).format.ps1xml')">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath></PackagePath>
+      </_PackageFiles>
+      
     </ItemGroup>
     
   </Target>
@@ -78,7 +91,7 @@ Licensed under the MIT License.
   </Target>
 
   
-  <Target Name="GenerateMarkdownHelp" AfterTargets="AfterBuild" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
+  <Target Name="GenerateMarkdownHelp" AfterTargets="AfterBuild" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true' AND '$(NoHelpGen)' != 'true'">
 
     <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -Language &apos;$(LangName)&apos; -GenerateMarkdown -DependentAssemblies &apos;@(_ResolveAssemblyReferenceResolvedFiles)&apos;} &quot;" />
 
@@ -92,7 +105,7 @@ Licensed under the MIT License.
   </Target>
   
   
-  <Target Name="GeneratePSHelp" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
+  <Target Name="GeneratePSHelp" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true' AND '$(NoHelpGen)' != 'true'">
     
     <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
     

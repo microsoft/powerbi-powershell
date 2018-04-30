@@ -3,12 +3,10 @@
  * Licensed under the MIT License.
  */
 
-using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Commands.Profile;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.PowerBI.Commands.Common.Test;
 
 namespace Microsoft.PowerBI.Commands.Profile.Test
 {
@@ -22,14 +20,32 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ps.AddCommand(new CmdletInfo($"{ConnectPowerBIServiceAccount.CmdletVerb}-{ConnectPowerBIServiceAccount.CmdletName}", typeof(ConnectPowerBIServiceAccount)));
-                var result = ps.Invoke();
-                Assert.IsTrue(result.Count == 1);
-                Assert.IsTrue(result[0].BaseObject is PowerBIProfile);
-                var profile = result[0].BaseObject as PowerBIProfile;
+                // Arrange
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsTrue(results.Count == 1);
+                Assert.IsTrue(results[0].BaseObject is PowerBIProfile);
+                var profile = results[0].BaseObject as PowerBIProfile;
                 Assert.IsNotNull(profile.Environment);
                 Assert.IsNotNull(profile.UserName);
                 Assert.IsNotNull(profile.TenantId);
+
+                // Arrange
+                ps.Commands.Clear();
+                ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
+
+                // Act
+                results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.AreEqual(0, results.Count);
             }
         }
     }

@@ -1,10 +1,14 @@
-# Contribute Code to PowerShell Cmdlets for PowerBI
+# Contribute Code to PowerShell Cmdlets for Power BI
 
 ## Developer Environment Requirements
 
 * [Visual Studio 2017](https://www.visualstudio.com/thank-you-downloading-visual-studio/)
 * [.NET Core SDK](https://www.microsoft.com/net/learn/get-started/windows)
     * Version driven by [global.json](src/Common/Commands.Common/global.json)
+    * Cmdlets are designed to use .NET Core 2.0 SDK with .NET Standard 2.0
+
+> If you plan to build with Configuration=Release which Delay Signs the build output, call `.\scripts\DisableStrongName.ps1`. 
+> Add the -Enable to renable strong name verification once developing.
 
 ### Optional requirements (for testing)
 * [PowerShell Core (6.0.0)](https://github.com/powershell/powershell)
@@ -16,23 +20,60 @@ Driven and enforced by [.editorconfig](src/.editorconfig). You can learn more ab
 
 Optionally you can install the [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfigTeam.EditorConfig) Visual Studio extension to give you intellisense editing the file.
 
+
+## Design
+
+<table width=500 border="1" frame="box">
+    <tr>
+        <th rowspan="3">Common</th>
+        <td align="center" colspan="2">Common.Abstractions</td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2">Common.Authentication</td>
+    </tr>
+    <tr>
+        <td align="center">Common.Commands</td>
+        <td align="center">AzureADWindowsAuthenticator</td>
+    </tr>
+    <tr>
+        <th rowspan="3">Modules</td>
+        <td align="center" colspan="2">Commands.Profile</td>
+    </tr>
+    <tr>
+        <td align="center">Commands.Workspaces</td>
+        <td align="center">Commands.Reports</td>
+    </tr>
+<table>
+
+> * Test Projects are located next to implementation.
+> * AzureADWindowsAuthenticator has an independent depenency stack as it's compiled against .NET 4.6 (opposed to .NET Core) to be a bridge for ADAL on Windows (providing interactive login).
+
+
+
+## CI Build
+| Branch       | Status      |
+| ------------ | ----------- |
+| Master | [![Build status](https://ci.appveyor.com/api/projects/status/4kdopsyh3y70ad9w/branch/master?svg=true)](https://ci.appveyor.com/project/CodeCyclone/powerbi-powershell/branch/master) |
+
+Defined by [appveyor.yml](appveyor.yml), see [AppVeyor Docs](https://www.appveyor.com/docs/) if you need to edit.
+
 ## Common Developer Scenarios
 
 ### Build and Packaging
 
 #### Command line
 
-1. Open PowerShell prompt (replace your path with your VS edition and install directory):
+1. Open PowerShell prompt:
 ```powershell
-cd .\src
-& "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe" .\PowerBIPowerShell.sln
+.\scripts\Build.ps1
 
 # Packaging
-& "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe" .\PowerBIPowerShell.sln /t:Build,Pack
-```
+.\scripts\Build.ps1 -Pack
 
-> Note: dotnet build or dotnet msbuild does not work due to this [issue](https://github.com/Microsoft/msbuild/issues/2111), using this [workaround](https://github.com/RazorGenerator/RazorGenerator/issues/159). 
-> The only impacted build task is from GitVersion, you will see errors like `Could not load file or assembly Microsoft.Build.Utilities.v4.0`.
+# To manually test module\package output
+.\scripts\PrepManualTesting.ps1    # Optionally add -Build if you haven't previously built with -Pack from command-line or Visual Studio
+# You can call cmdlets after this point such as Connect-PowerBIServiceAccount, their modules get auto-imported
+```
 
 #### Visual Studio 2017
 
@@ -41,10 +82,12 @@ cd .\src
 
 Binary output will be under each project's `bin\$(Configuration)\$(TargetFramework)` directory (TargetFramework is typically `netstandard2.0` unless its a test project then it's `netcoreapp2.0`)
 
-For Packaging, right-click on a module project and select `Pack`. Output is in `bin\$(Configuration)\*.nupkg`.
-To test module, rename extension from NuGet package `.nupkg` to Zip `.zip` and extract archive. Load the PSD1 file in the extracted directory by using `Import-Module -Path`.
+For Packaging, right-click on a module project and select `Pack` in Visual Studio. Output is in `PkgOut` folder at the root.
 
-To execute tests, just open `Test Explorer` and run tests from the explorer. Solution supports Live Unit Testing, there are interactive tests in the suite that are auto excluded from running with this feature. 
+To test package\module, rename extension from NuGet package `.nupkg` to Zip `.zip` and extract archive. Load the PSD1 file in the extracted directory by using `Import-Module -Path`.
+> This is essentially what `.\scripts\PrepManualTesting.ps1` does with the cavet it appends `PkgOut` folder to `$env:PSModulePath` for your console session, when cmdlets get called their module will get auto-imported.
+
+To execute unit tests, just open `Test Explorer` and run tests from the explorer. Solution supports Live Unit Testing, there are interactive tests in the suite that are auto excluded from running with this feature. 
 
 ### Creating a new Cmdlet and Unit Test
 
@@ -90,7 +133,7 @@ New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
     -Copyright 'Microsoft Corporation. All rights reserved.' `
     -RootModule "Microsoft.PowerBI.Commands.$moduleName.dll" `
     -ModuleVersion '1.0.0' `
-    -Description "Microsoft PowerBI PowerShell - $moduleName cmdlets for Microsoft PowerBI" `
+    -Description "Microsoft Power BI PowerShell - $moduleName cmdlets for Microsoft Power BI" `
     -PowerShellVersion '3.0' `
     -PrivateData @{
          PSData=@{
@@ -168,9 +211,15 @@ If the content extension is not `.psd1` or `.types.ps1xml` then add the followin
 15. Save the project file and build the solution.
 16. A `help` folder should appear under your project after you build, the files contain the documenation for your module and cmdlets which you can fill out.
 
-## Develolper Resources
+## Developer Resources
+
+### PowerShell Cmdlet Design Reference
+* [Creating a cross-platform binary module with the .NET Core command-line interface tools](https://github.com/PowerShell/PowerShell/blob/master/docs/cmdlet-example/command-line-simple-example.md)
+* [Cmdlet Development Guidelines][1]
 
 ### MSBuild and NuGet
 
 * https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets
 * https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files
+
+[1]: https://msdn.microsoft.com/en-us/library/ms714657(v=vs.85).aspx

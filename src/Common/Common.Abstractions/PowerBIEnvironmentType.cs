@@ -8,8 +8,13 @@ namespace Microsoft.PowerBI.Common.Abstractions
     public enum PowerBIEnvironmentType
     {
 #if DEBUG
-        PPE = int.MaxValue,
+        OneBox = 100,
+        EDog = 101,
+        DXT = 102,
 #endif
-        Public = 0
+        Public = 0,
+        Germany = 1,
+        USGov = 2,
+        China = 3
     }
 }

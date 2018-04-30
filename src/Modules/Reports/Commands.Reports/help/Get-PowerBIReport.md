@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBIReport
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Returns a list of Power BI reports.
 
 ## SYNTAX
 
@@ -17,16 +17,17 @@ Get-PowerBIReport [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retrieves a list of Power BI reports with the provided search criteria and scope specified.
+You must have logged in previously before using, Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-PowerBIReport
 ```
 
-{{ Add example description here }}
+Returns a list of all PowerBI reports a user has access to.
 
 ## PARAMETERS
 
@@ -39,7 +40,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Api.V2.Models.Report, Microsoft.PowerBI.Api, Version=2.0.10.18022, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]
+### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Reports.Report, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
 
 ## NOTES
 

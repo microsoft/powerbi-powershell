@@ -15,7 +15,6 @@ namespace Microsoft.PowerBI.Common.Abstractions
         public string AzureADClientId { get; set; }
         public string AzureADRedirectAddress { get; set; }
         public string GlobalServiceEndpoint { get; set; }
-        public string BackendUriOverride { get; set; }
 
         public override string ToString()
         {

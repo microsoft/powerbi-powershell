@@ -8,9 +8,9 @@ Locale: en-US
 
 # MicrosoftPowerBIMgmt.Reports Module
 ## Description
-{{Manually Enter Description Here}}
+PowerShell cmdlets for managing and interacting with Power BI reports.
 
 ## MicrosoftPowerBIMgmt.Reports Cmdlets
 ### [Get-PowerBIReport](Get-PowerBIReport.md)
-{{Fill in the Synopsis}}
+Returns a list of Power BI reports.
 

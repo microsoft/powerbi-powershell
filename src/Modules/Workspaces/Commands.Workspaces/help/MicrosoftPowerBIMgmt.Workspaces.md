@@ -8,9 +8,21 @@ Locale: en-US
 
 # MicrosoftPowerBIMgmt.Workspaces Module
 ## Description
-{{Manually Enter Description Here}}
+PowerShell cmdlets for managing and interacting with Power BI workspaces.
 
 ## MicrosoftPowerBIMgmt.Workspaces Cmdlets
+### [Add-PowerBIWorkspaceUser](Add-PowerBIWorkspaceUser.md)
+Gives permissions to a given user to access a Power BI workspace.
+
 ### [Get-PowerBIWorkspace](Get-PowerBIWorkspace.md)
-{{Fill in the Synopsis}}
+Returns a list of Power BI workspaces.
+
+### [Remove-PowerBIWorkspaceUser](Remove-PowerBIWorkspaceUser.md)
+Removes permissions for a specified user to the a Power BI workspace.
+
+### [Restore-PowerBIWorkspace](Restore-PowerBIWorkspace.md)
+Restores a deleted Power BI workspace.
+
+### [Set-PowerBIWorkspace](Set-PowerBIWorkspace.md)
+Updates a Power BI workspace.
 

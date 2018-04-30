@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Microsoft.PowerBI.Common.Client</AssemblyName>
+    <RootNamespace>Microsoft.PowerBI.Common.Client</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Commands.Common\Commands.Common.csproj" />
+    <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
+    <ProjectReference Include="..\Common.Api\Common.Api.csproj" />
+  </ItemGroup>
+  
+</Project>

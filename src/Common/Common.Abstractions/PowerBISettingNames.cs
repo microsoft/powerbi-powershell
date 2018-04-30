@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-namespace Microsoft.PowerBI.Commands.Common
+namespace Microsoft.PowerBI.Common.Abstractions
 {
     public static class PowerBISettingNames
     {
@@ -14,6 +14,8 @@ namespace Microsoft.PowerBI.Commands.Common
             public const string SectionName = "Settings";
 
             public const string ForceDeviceCodeAuthentication = "ForceDeviceCodeAuthentication";
+
+            public const string ShowADALDebugMessages = "ShowADALDebugMessages";
         }
 
         public static class Environments
@@ -25,8 +27,8 @@ namespace Microsoft.PowerBI.Commands.Common
             public const string ClientId = "clientId";
             public const string Redirect = "redirect";
             public const string Resource = "resource";
-            public const string Override = "override";
             public const string GlobalService = "globalService";
+            public const string CloudName = "cloudName";
         }
     }
 }

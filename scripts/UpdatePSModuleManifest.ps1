@@ -1,20 +1,37 @@
+##############################
+#.SYNOPSIS
+# Updates a PowerShell manifest (*.psd1) file.
+#
+#.DESCRIPTION
+# Updates PowerShell manifest (*.psd1) content such as Version, release notes, root module.
+#
+#.EXAMPLE
+# PS:> .\UpdatePSModuleManifest.ps1 -ModulePath ..\src\Modules\Profile\Commands.Profile\bin\Debug\netstandard2.0\MicrosoftPowerBIMgmt.Profile.psd1 -TargetFramework netstandard2.0 -Version 1.1.0
+# Updates content in *.psd1 file specified to have version 1.1.0 and target path in RootModule.
+#
+##############################
 [CmdletBinding()]
 param
 (
+    # Path to PowerShell manifest (*.psd1) file to update.
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $ModulePath,
 
+    # Target framework to append to RootModule.
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $TargetFramework,
 
+    # Version of the module.
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string] $Version,
 
+    # Indicates to remove the prerelease tag.
     [switch] $RemovePrereleaseTag,
 
+    # Release notes of the module.
     [string] $ReleaseNotes
 )
 

@@ -8,7 +8,7 @@ schema: 2.0.0
 # Connect-PowerBIServiceAccount
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Login to Power BI service.
 
 ## SYNTAX
 
@@ -31,21 +31,45 @@ Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -Certifica
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Login to Power BI service with either a user or service principal account (application key or certificate).
+For user accounts, an Azure Active Directory (AAD) First-Party application is leveraged for authentication.
+To logout call Disconnect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Connect-PowerBIServiceAccount
 ```
 
-{{ Add example description here }}
+Logs in using user authentication against the Public cloud, a prompt will display to collect credentials.
+
+### Example 2
+```powershell
+PS C:\> Connect-PowerBIServiceAccount -Environment China
+```
+
+Logs in using user authentication against the China cloud, a prompt will display to collect credentials.
+
+### Example 3
+```powershell
+PS C:\> Connect-PowerBIServiceAccount -ServicePrincipal -Credential (Get-Credential)
+```
+
+Logs in using a service principal against the Public cloud, a prompt will display from Get-Credential to enter your username (your AAD client ID) and password (your application secret key).
+
+### Example 4
+```powershell
+PS C:\> Connect-PowerBIServiceAccount -ServicePrincipal -CertificateThumbprint 38DA4BED389A014E69A6E6D8AE56761E85F0DFA4 -ApplicationId b5fde143-722c-4e8d-8113-5b33a9291468
+```
+
+Logs in using a service principal with an installed certificate to the Public cloud. 
+The certificate must be installed in either CurrentUser or LocalMachine certificate store (LocalMachine requires administrator access) with a private key installed.
 
 ## PARAMETERS
 
 ### -ApplicationId
-{{Fill ApplicationId Description}}
+Azure Active Directory (AAD) Application ID (also known as Client ID) to be used with a certificate thumbprint (-CertificateThumbprint) to authenticate with a service principal account (-ServicePrincipal).
 
 ```yaml
 Type: String
@@ -60,7 +84,8 @@ Accept wildcard characters: False
 ```
 
 ### -CertificateThumbprint
-{{Fill CertificateThumbprint Description}}
+Certificate thumbprint of an installed certificate associated to an Azure Active Directory (AAD) Application.
+Certificate must be installed in either the CurrentUser or LocalMachine personal certificate stores (LocalMachine requires an administrator prompt to access) with a private key installed.
 
 ```yaml
 Type: String
@@ -75,7 +100,7 @@ Accept wildcard characters: False
 ```
 
 ### -Credential
-{{Fill Credential Description}}
+PSCredential representing the Azure Active Directory (AAD) application client ID (username) and application secret key (password) to authenticate with a service principal account (-ServicePrincipal).
 
 ```yaml
 Type: PSCredential
@@ -102,13 +127,13 @@ Accept wildcard characters: False
 ```
 
 ### -Environment
-{{Fill Environment Description}}
+Cloud environment to connect against. Default is Public.
 
 ```yaml
 Type: PowerBIEnvironmentType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Public, PPE
+Accepted values: Public, Germany, USGov, China, OneBox, EDog, DXT
 
 Required: False
 Position: Named
@@ -118,7 +143,7 @@ Accept wildcard characters: False
 ```
 
 ### -ServicePrincipal
-{{Fill ServicePrincipal Description}}
+Indicates to use a service principal account, as opposed to a user account.
 
 ```yaml
 Type: SwitchParameter
