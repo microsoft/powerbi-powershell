@@ -39,7 +39,8 @@ if(!(Test-Path -Path $Path)) {
 
 $nugetExe = Get-Command 'nuget.exe' -ErrorAction Stop
 
-$nupkgFiles = Get-ChildItem -Path $Path -Filter *.nupkg -Recurse
+# Sorting by CreationTime as this should represent the order of construction so dependency order is followed for publishing
+$nupkgFiles = Get-ChildItem -Path $Path -Filter *.nupkg -Recurse | Sort-Object CreationTime
 if(!$nupkgFiles) {
     throw "No *.nupkg files found under: $Path"
 }
