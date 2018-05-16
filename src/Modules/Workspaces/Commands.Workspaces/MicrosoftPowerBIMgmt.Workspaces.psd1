@@ -91,7 +91,7 @@
     PrivateData = @{
         PSData = @{
 
-            Prerelease = '-beta1'
+            Prerelease = '-beta'
             
             # Tags applied to this module. These help with module discovery in online galleries.
             Tags = @('PowerBI', 'Workspaces', 'Groups')
