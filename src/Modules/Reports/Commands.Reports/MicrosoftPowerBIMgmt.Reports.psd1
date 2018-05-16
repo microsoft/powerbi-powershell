@@ -95,7 +95,7 @@ PrivateData = @{
         Prerelease = '-beta1'
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'PowerBI Reports'
+        Tags = @('PowerBI', 'Reports')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/Microsoft/powerbi-powershell/blob/master/LICENSE'

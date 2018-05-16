@@ -26,12 +26,14 @@ param
     [ValidateNotNullOrEmpty()]
     [string] $ApiKey,
 
-    # NuGet feed to publish to. Defaults to https://www.powershellgallery.com/api/v2/.
+    # NuGet feed to publish to. Defaults to https://www.powershellgallery.com/api/v2/package/.
     [ValidateNotNullOrEmpty()]
-    [string] $NuGetSource = 'https://www.powershellgallery.com/api/v2/'
+    [string] $NuGetSource = 'https://www.powershellgallery.com/api/v2/package/'
 )
 
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
+
+# This file mimics behavior from C:\Program Files\WindowsPowerShell\Modules\PowerShellGet\<version>\PSModule.psm1
 
 if(!(Test-Path -Path $Path)) {
     throw "-Path not found: $Path"
