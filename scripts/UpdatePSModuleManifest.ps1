@@ -28,9 +28,6 @@ param
     [ValidateNotNullOrEmpty()]
     [string] $Version,
 
-    # Indicates to remove the prerelease tag.
-    [switch] $RemovePrereleaseTag,
-
     # Release notes of the module.
     [string] $ReleaseNotes
 )
@@ -64,13 +61,6 @@ if(($psdFileContent -match $matchRegex) -and ($Matches['ModVersion'] -ne $Versio
 }
 else {
     Write-Output "Module '$ModulePath' already contains ModuleVersion $($Matches['ModVersion'])"
-}
-
-# Remove Prerelease tag
-if($RemovePrereleaseTag) {
-    Write-Output "Removing Prerelease tag"
-    $psdFileContent = $psdFileContent -replace "Prerelease = '.*'", ''
-    $updatePsdFile = $true
 }
 
 # Add release notes

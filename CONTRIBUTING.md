@@ -137,7 +137,6 @@ New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
     -PowerShellVersion '3.0' `
     -PrivateData @{
          PSData=@{
-             Prerelease='-beta1'
              Tags=@('PowerBI', $moduleName)
              ProjectUri='https://github.com/Microsoft/powerbi-powershell'
          }
