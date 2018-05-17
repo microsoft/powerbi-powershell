@@ -42,7 +42,7 @@ Update-Module -Name MicrosoftPowerBIMgmt
 
 ### Uninstall
 
-If you wanted to uninstall all the Power BI PowerShell cmdlets, you can run the following in an elevated PowerShell session:
+If you want to uninstall all the Power BI PowerShell cmdlets, run the following in an elevated PowerShell session:
 
 ```powershell
 Get-Module MicrosoftPowerBIMgmt* -ListAvailable | Uninstall-Module -Force
