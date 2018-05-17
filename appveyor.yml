@@ -3,10 +3,6 @@ image: Visual Studio 2017
 # Versioning
 version: '1.0.{build}'
 
-init:
-  - ps: $env:nugetVersion = "$($env:APPVEYOR_BUILD_VERSION)"
-  - ps: if($env:APPVEYOR_REPO_BRANCH -ne 'release') { $env:nugetVersion = "$($env:nugetVersion)-beta"}
-
 assembly_info:
   patch: true
   file: 'src\Common\AzureADWindowsAuthenticator\Properties\AssemblyInfo.cs'
@@ -18,7 +14,7 @@ dotnet_csproj:
   patch: true
   file: 'src\Directory.Build.props'
   version: '{version}'
-  package_version: '$(nugetVersion)'
+  package_version: '{version}'
   assembly_version: '{version}'
   file_version: '{version}'
   informational_version: '{version}'
