@@ -10,23 +10,43 @@ Below is a table of the various Power BI PowerShell modules found in this reposi
 
 | Description | Module Name | PowerShell Gallery link |
 | ----------- | ----------- | ----------------------- |
-| Rollup Module for PowerBI Cmdlets | `MicrosoftPowerBIMgmt` | TBD |
-| Profile modules for PowerBI Cmdlets | `MicrosoftPowerBIMgmt.Profile` | TBD |
-| Workspace module for PowerBI | `MicrosoftPowerBIMgmt.Workspace` | TBD |
-| Reports module for PowerBI | `MicrosoftPowerBIMgmt.Reports` | TBD |
+| Rollup Module for PowerBI Cmdlets | `MicrosoftPowerBIMgmt` | [![MicrosoftPowerBIMgmt](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.svg?style=flat-square&label=MicrosoftPowerBIMgmt)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt/) |
+| Profile module for PowerBI Cmdlets | `MicrosoftPowerBIMgmt.Profile` | [![MicrosoftPowerBIMgmt.Profile](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Profile.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Profile)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Profile/) |
+| Workspaces module for PowerBI | `MicrosoftPowerBIMgmt.Workspaces` | [![MicrosoftPowerBIMgmt.Workspaces](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Workspaces.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Workspaces)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Workspaces/) |
+| Reports module for PowerBI | `MicrosoftPowerBIMgmt.Reports` | [![MicrosoftPowerBIMgmt.Reports](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Reports.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Reports)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Reports/) |
 
 ## Supported Environments and PowerShell Versions
 
 * Windows PowerShell v3.0 and up with .NET 4.6.1 or above.
-* PowerShell Core (v6) and up on any OS platform supported by PowerShell Core.
+* _[Future Release]_ PowerShell Core (v6) and up on any OS platform supported by PowerShell Core.
 
 ## Installation
 
-Currently you must build the cmdlets and load them manually but eventually they will be available on PowerShell Gallery.
+The cmdlets are available on PowerShell Gallery and can be installed in an elevated PowerShell session:
 
-### PowerShell Gallery
+```powershell
+Install-Module -Name MicrosoftPowerBIMgmt
+```
 
-We haven't published to PowerShell Gallery which is TBD, but will once we build out more cmdlets.
+Optionally you could install individual modules (based on your needs) instead of the rollup module, for example if you only wanted the Workspaces module:
+
+```powershell
+Install-Module -Name MicrosoftPowerBIMgmt.Workspaces
+```
+
+If you have an earlier version, you can update to the latest version by running:
+
+```powershell
+Update-Module -Name MicrosoftPowerBIMgmt
+```
+
+### Uninstall
+
+If you wanted to uninstall all the Power BI PowerShell cmdlets, you can run the following in an elevated PowerShell session:
+
+```powershell
+Get-Module MicrosoftPowerBIMgmt* -ListAvailable | Uninstall-Module -Force
+```
 
 ## Usage
 
