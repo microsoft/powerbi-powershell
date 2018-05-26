@@ -17,3 +17,6 @@ Login to Power BI service.
 ### [Disconnect-PowerBIServiceAccount](Disconnect-PowerBIServiceAccount.md)
 Logout of the Power BI service.
 
+### [Invoke-PowerBIRestMethod](Invoke-PowerBIRestMethod.md)
+Executes a REST call to the Power BI service with provided URL and body.
+
