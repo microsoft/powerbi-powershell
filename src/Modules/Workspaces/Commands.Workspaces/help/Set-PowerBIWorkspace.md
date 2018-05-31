@@ -26,7 +26,7 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<Common
 ## DESCRIPTION
 Updates the name or description of a Power BI workspace.
 Currently only -Scope Organization is supported.
-You must have logged in previously before using, Login-PowerBIServiceAccount.
+You must have logged in previously before, using Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -35,7 +35,7 @@ You must have logged in previously before using, Login-PowerBIServiceAccount.
 PS C:\> Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -Name "Test Name" -Description "Test Description"
 ```
 
-If the current user is an administrator, this will update the workspace matching the given ID with the given name and description values for a workspace in the caller's organization.
+If the current user is an administrator, this will update the workspace matching the specified ID with the specified name and description values for a workspace in the caller's organization.
 
 ### Example 2
 ```powershell
@@ -46,7 +46,7 @@ PS C:\> $workspace.Description = "Test Description"
 PS C:\> Set-PowerBIWorkspace -Scope Organization -Workspace $workspace
 ```
 
-If the current user is an administrator, this will update the given workspace object with the given name and description values for a workspace in teh caller's organization.
+If the current user is an administrator, this will update the specified workspace object with the specified name and description values for a workspace in the caller's organization.
 
 ## PARAMETERS
 
@@ -97,7 +97,7 @@ Accept wildcard characters: False
 
 ### -Scope
 Indicates scope of the call. Only Organization is supported with this cmdlet.
-Individual only operates against workspaces assigned to them; Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
+Individual only operates against workspaces assigned to the caller; Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
