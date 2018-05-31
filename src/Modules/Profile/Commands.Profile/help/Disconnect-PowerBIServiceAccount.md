@@ -18,7 +18,7 @@ Disconnect-PowerBIServiceAccount [<CommonParameters>]
 
 ## DESCRIPTION
 Disconnects from any previous PowerBI Service connections.
-If there was no connections, the command completes without error.
+If there were no connections, the command completes without error.
 
 ## EXAMPLES
 

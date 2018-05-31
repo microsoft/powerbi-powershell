@@ -18,7 +18,7 @@ Get-PowerBIReport [<CommonParameters>]
 
 ## DESCRIPTION
 Retrieves a list of Power BI reports with the provided search criteria and scope specified.
-You must have logged in previously before using, Login-PowerBIServiceAccount.
+You must have logged in previously before, using Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 

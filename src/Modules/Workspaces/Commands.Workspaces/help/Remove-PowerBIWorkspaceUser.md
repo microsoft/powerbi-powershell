@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-PowerBIWorkspaceUser
 
 ## SYNOPSIS
-Removes permissions for a specified user to the a Power BI workspace.
+Removes permissions to a Power BI workspace for the specified user.
 
 ## SYNTAX
 
@@ -25,8 +25,8 @@ Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <Stri
 ```
 
 ## DESCRIPTION
-Removes permissions for a given user to a Power BI workspace using the provided inputs and scope specified.
-You must have logged in previously before using, Login-PowerBIServiceAccount.
+Removes permissions for a specified user to a Power BI workspace using the provided inputs and scope specified.
+You must have logged in previously before, using Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -47,7 +47,7 @@ Removes permissions for john@contoso.com on workspace with ID 23FCBDBD-A979-45D8
 ## PARAMETERS
 
 ### -Id
-Workspace or Group Id for which user has to be removed.
+Workspace or Group Id for which user should be removed.
 
 ```yaml
 Type: Guid
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only workspaces assigned to them; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns only workspaces assigned to the caller; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -78,7 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserPrincipalName
-User Principal Name (or UPN, commonly their email address) for the user whose permissions need to be removed.
+User Principal Name (or UPN, commonly an email address) for the user whose permissions need to be removed.
 
 ```yaml
 Type: String
@@ -93,7 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-The workspace entity to remove user from.
+The workspace entity to remove the user from.
 
 ```yaml
 Type: Workspace

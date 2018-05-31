@@ -30,7 +30,7 @@ Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParamete
 
 ## DESCRIPTION
 Retrieves a list of Power BI workspaces with the provided search criteria and scope specified.
-You must have logged in previously before using, Login-PowerBIServiceAccount.
+You must have logged in previously before, using Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -141,7 +141,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only workspaces assigned to them; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns only workspaces assigned to the caller; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
