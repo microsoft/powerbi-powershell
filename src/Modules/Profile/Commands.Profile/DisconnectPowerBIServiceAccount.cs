@@ -12,7 +12,7 @@ using Microsoft.PowerBI.Commands.Common;
 namespace Microsoft.PowerBI.Commands.Profile
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [Alias("Logout-PowerBIServiceAccount", "Remove-PowerBIServiceAccount")]
+    [Alias("Logout-PowerBIServiceAccount", "Remove-PowerBIServiceAccount", "Logout-PowerBI")]
     public class DisconnectPowerBIServiceAccount : PowerBICmdlet
     {
         public const string CmdletVerb = VerbsCommunications.Disconnect;

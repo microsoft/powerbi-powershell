@@ -13,7 +13,7 @@ Executes a REST call to the Power BI service with provided URL and body.
 ## SYNTAX
 
 ```
-Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>] [-AsObject]
+Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>]
  [-Organization <String>] [-Version <String>] [<CommonParameters>]
 ```
 
@@ -31,21 +31,6 @@ PS C:\> Invoke-PowerBIRestMethod -Url 'groups' -Method Get
 Invokes the URL https://api.powerbi.com/v1.0/myorg/groups with GET method\verb.
 
 ## PARAMETERS
-
-### -AsObject
-Indicates to return the result as an object instead of a string
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Body
 Body of the request, also called content. This is optional unless the request method is POST, PUT, or PATCH.
@@ -94,7 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -Url
-Relative URL of the Power BI entity you want to access. Example if you wanted https://api.powerbi.com/v1.0/myorg/groups then specify 'groups'.
+Relative or absolute URL of the Power BI entity you want to access. Example if you wanted https://api.powerbi.com/v1.0/myorg/groups then specify 'groups' or pass in the entire URL.
 
 ```yaml
 Type: String
@@ -109,7 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -Version
-Version of the API to include in the URL. Default is 'v1.0'.
+Version of the API to include in the URL. Default is 'v1.0'. Ignored if -Url is an absolute.
 
 ```yaml
 Type: String

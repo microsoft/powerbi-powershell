@@ -1,7 +1,7 @@
 ---
 Module Name: MicrosoftPowerBIMgmt.Reports
 Module Guid: dc5af656-715d-465d-8b57-e167cd6fce39
-Download Help Link: {{Please enter FwLink manually}}
+Download Help Link: https://go.microsoft.com/fwlink/?linkid=2002111&clcid=0x409
 Help Version: {{Please enter version of help manually (X.X.X.X) format}}
 Locale: en-US
 ---

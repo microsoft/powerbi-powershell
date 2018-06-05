@@ -11,6 +11,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 namespace Microsoft.PowerBI.Commands.Profile
 {
     [Cmdlet(CmdletVerb, CmdletName)]
+    [OutputType(typeof(string))]
     public class InvokePowerBIRestMethod : PowerBICmdlet
     {
         public const string CmdletVerb = VerbsLifecycle.Invoke;
@@ -37,26 +38,25 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         [Parameter(Mandatory = false)]
         public string Version = "v1.0";
-
-        [Parameter(Mandatory = false)]
-        public SwitchParameter AsObject { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
         {
-            this.Url = $"{this.Version}/{this.Organization}/" + this.Url;
-            var response = this.InvokeRestMethod(this.Url, this.Body, this.Method).Result;
-            if (this.AsObject.IsPresent)
+            if(Uri.TryCreate(this.Url, UriKind.Absolute, out Uri testUri))
             {
-                throw new NotSupportedException("TODO");
+                this.Url = testUri.AbsoluteUri;
             }
             else
             {
-                var result = response.Content.ReadAsStringAsync().Result;
-                if (result != null)
-                {
-                    this.Logger.WriteObject(result);
-                }
+                this.Url = $"{this.Version}/{this.Organization}/" + this.Url;
+            }
+            
+            var response = this.InvokeRestMethod(this.Url, this.Body, this.Method).Result;
+            
+            var result = response.Content.ReadAsStringAsync().Result;
+            if (result != null)
+            {
+                this.Logger.WriteObject(result);
             }
         }
 
