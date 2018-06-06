@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Workspaces.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Workspaces
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/set-powerbiworkspace?view=powerbi-ps-1.0.193
 schema: 2.0.0
 ---
 

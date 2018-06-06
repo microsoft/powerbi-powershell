@@ -13,7 +13,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 namespace Microsoft.PowerBI.Commands.Profile
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = UserParameterSet)]
-    [Alias("Login-PowerBIServiceAccount", "Set-PowerBIServiceAccount", "Add-PowerBIServiceAccount")]
+    [Alias("Login-PowerBIServiceAccount", "Set-PowerBIServiceAccount", "Add-PowerBIServiceAccount", "Login-PowerBI")]
     [OutputType(typeof(IPowerBIProfile))]
     public class ConnectPowerBIServiceAccount : PowerBICmdlet
     {

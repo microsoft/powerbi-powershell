@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Profile.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Profile
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/connect-powerbiserviceaccount?view=powerbi-ps-1.0.193
 schema: 2.0.0
 ---
 
