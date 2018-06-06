@@ -19,7 +19,7 @@ Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body 
 
 ## DESCRIPTION
 Invokes a REST request against the Power BI service using your logged in profile (Connect-PowerBIServiceAccount).
-The type of REST question is determined by -Method and body is required for certain methods such as POST, PUT, and PATCH.
+The REST verb can be specified using the -Method parameter. -Body is required for certain verbs such as POST, PUT, and PATCH.
 
 ## EXAMPLES
 
