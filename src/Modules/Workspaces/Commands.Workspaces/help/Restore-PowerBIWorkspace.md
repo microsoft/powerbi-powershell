@@ -25,7 +25,7 @@ Restore-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-RestoredName <String>] -A
 ```
 
 ## DESCRIPTION
-Restores a deleted Power BI workspace with the user matching the provided email address as the owner.
+Restores a deleted Power BI workspace with the owner set to the user that matches the specified email address.
 You must have logged in previously before using Login-PowerBIServiceAccount.
 
 ## EXAMPLES
@@ -35,12 +35,12 @@ You must have logged in previously before using Login-PowerBIServiceAccount.
 PS C:\> Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -AdminEmailAddress "john@contoso.com"
 ```
 
-Restores the workspace with the given ID, assigns the user with the given email address as the admin, and updates the name of the workspace to the given name.
+Restores the workspace with the specified ID, assigns the user with the specified email address as the admin, and updates the name of the workspace to the specified name.
 
 ## PARAMETERS
 
 ### -AdminUserPrincipalName
-User Principal Name (or UPN, commonly their email address) of the user who will become the admin of the restored workspace.
+User Principal Name (or UPN, commonly an email address) of the user who will become the admin of the restored workspace.
 
 ```yaml
 Type: String
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only workspaces assigned to them; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns only workspaces assigned to the caller; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope

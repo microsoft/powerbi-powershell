@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIWorkspaceUser
 
 ## SYNOPSIS
-Gives permissions to a given user to access a Power BI workspace.
+Gives permissions to a specified user to access a Power BI workspace.
 
 ## SYNTAX
 
@@ -25,8 +25,8 @@ Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
 ```
 
 ## DESCRIPTION
-Grants permissions to a given user to access a Power BI workspace using the provided inputs and scope specified.
-You must have logged in previously before using, Login-PowerBIServiceAccount.
+Grants permissions to a specified user to access a Power BI workspace using the provided inputs and scope specified.
+You must have logged in previously before, using Login-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -54,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Workspace or Group Id for which user has to be added.
+Workspace or Group Id for which user should be added.
 
 ```yaml
 Type: Guid
@@ -69,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only workspaces assigned to them; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns only workspaces assigned to the caller; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserPrincipalName
-User Principal Name (or UPN, commonly their email address) for the user whose permissions need to be added.
+User Principal Name (or UPN, commonly an email address) for the user whose permissions need to be added.
 
 ```yaml
 Type: String
@@ -100,7 +100,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-The workspace entity to add user to.
+The workspace entity to add the user to.
 
 ```yaml
 Type: Workspace

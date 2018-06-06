@@ -69,7 +69,7 @@ The certificate must be installed in either CurrentUser or LocalMachine certific
 ## PARAMETERS
 
 ### -ApplicationId
-Azure Active Directory (AAD) Application ID (also known as Client ID) to be used with a certificate thumbprint (-CertificateThumbprint) to authenticate with a service principal account (-ServicePrincipal).
+Azure Active Directory (AAD) application ID (also known as Client ID) to be used with a certificate thumbprint (-CertificateThumbprint) to authenticate with a service principal account (-ServicePrincipal).
 
 ```yaml
 Type: String
@@ -84,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -CertificateThumbprint
-Certificate thumbprint of an installed certificate associated to an Azure Active Directory (AAD) Application.
+Certificate thumbprint of an installed certificate associated to an Azure Active Directory (AAD) application.
 Certificate must be installed in either the CurrentUser or LocalMachine personal certificate stores (LocalMachine requires an administrator prompt to access) with a private key installed.
 
 ```yaml
