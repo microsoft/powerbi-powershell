@@ -27,12 +27,12 @@ PS C:\> $headers = Get-PowerBIAccessToken
 PS C:\> Invoke-RestMethod -Headers $headers -Uri 'https://api.powerbi.com/v1.0/myorg/groups'
 ```
 
-Gets the Power BI access token as a hashtable and passes it to Invoke-RestMethod as its headers to authenticate.
+Gets the Power BI access token as a hashtable and passes it to Invoke-RestMethod, as part of the header, to authenticate.
 
 ## PARAMETERS
 
 ### -AsString
-Indicates to returns the access token as a string instead of a hashtable. The string contains the authentication type such as "Bearer".
+Indicates to return the access token as a string instead of a hashtable. The string contains the authentication type, such as "Bearer".
 
 ```yaml
 Type: SwitchParameter
