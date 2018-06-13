@@ -54,7 +54,7 @@ Get-Module MicrosoftPowerBIMgmt* -ListAvailable | Uninstall-Module -Force
 > * Individual is used to access entities that belong to the current user.
 > * Organization is used to access entities across the entire company. Only Power BI tenant admins are allowed to use.
 
-### Login to Power BI
+### Log in to Power BI
 
 ```powershell
 Connect-PowerBIServiceAccount   # or Login-PowerBIServiceAccount

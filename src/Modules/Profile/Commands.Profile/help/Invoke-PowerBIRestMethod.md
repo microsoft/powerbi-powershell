@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-PowerBIRestMethod
 
 ## SYNOPSIS
-Executes a REST call to the Power BI service with provided URL and body.
+Executes a REST call to the Power BI service, with the specified URL and body.
 
 ## SYNTAX
 
@@ -18,8 +18,8 @@ Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body 
 ```
 
 ## DESCRIPTION
-Invokes a REST request against the Power BI service using your logged in profile (Connect-PowerBIServiceAccount).
-The REST verb can be specified using the -Method parameter. -Body is required for certain verbs such as POST, PUT, and PATCH.
+Invokes a REST request against the Power BI service using the profile you're logged in with (Connect-PowerBIServiceAccount).
+The REST verb can be specified using the -Method parameter. The -Body parameter is required for the verbs POST, PUT, and PATCH.
 
 ## EXAMPLES
 
@@ -28,12 +28,12 @@ The REST verb can be specified using the -Method parameter. -Body is required fo
 PS C:\> Invoke-PowerBIRestMethod -Url 'groups' -Method Get
 ```
 
-Invokes the URL https://api.powerbi.com/v1.0/myorg/groups with GET method\verb.
+Invokes the URL https://api.powerbi.com/v1.0/myorg/groups with the GET method\verb.
 
 ## PARAMETERS
 
 ### -Body
-Body of the request, also called content. This is optional unless the request method is POST, PUT, or PATCH.
+Body of the request, also known as *content*. This is optional unless the request method is POST, PUT, or PATCH.
 
 ```yaml
 Type: String
@@ -79,7 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -Url
-Relative or absolute URL of the Power BI entity you want to access. Example if you wanted https://api.powerbi.com/v1.0/myorg/groups then specify 'groups' or pass in the entire URL.
+Relative or absolute URL of the Power BI entity you want to access. For example, if you want to access https://api.powerbi.com/v1.0/myorg/groups, then specify 'groups', or pass in the entire URL.
 
 ```yaml
 Type: String
@@ -94,7 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -Version
-Version of the API to include in the URL. Default is 'v1.0'. Ignored if -Url is an absolute.
+Version of the API to include in the URL. Default is 'v1.0'. Ignored if -Url is an absolute URL.
 
 ```yaml
 Type: String

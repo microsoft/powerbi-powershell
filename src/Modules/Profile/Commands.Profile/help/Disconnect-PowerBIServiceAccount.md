@@ -8,7 +8,7 @@ schema: 2.0.0
 # Disconnect-PowerBIServiceAccount
 
 ## SYNOPSIS
-Logout of the Power BI service.
+Log out of the Power BI service.
 
 ## SYNTAX
 
