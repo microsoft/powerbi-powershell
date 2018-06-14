@@ -8,7 +8,7 @@ schema: 2.0.0
 # Connect-PowerBIServiceAccount
 
 ## SYNOPSIS
-Login to Power BI service.
+Log in to the Power BI service.
 
 ## SYNTAX
 
@@ -31,9 +31,9 @@ Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -Certifica
 ```
 
 ## DESCRIPTION
-Login to Power BI service with either a user or service principal account (application key or certificate).
+Log in to Power BI service with either a user or service principal account (application key or certificate).
 For user accounts, an Azure Active Directory (AAD) First-Party application is leveraged for authentication.
-To logout call Disconnect-PowerBIServiceAccount.
+To log out call Disconnect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
