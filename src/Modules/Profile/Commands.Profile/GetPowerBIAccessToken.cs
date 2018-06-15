@@ -36,7 +36,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             else
             {
                 this.Logger.WriteObject(new Hashtable() {
-                    { "Bearer", token.AccessToken }
+                    { "Authorization", token.AuthorizationHeader }
                 });
             }
             

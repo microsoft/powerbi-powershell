@@ -13,7 +13,7 @@ Executes a REST call to the Power BI service, with the specified URL and body.
 ## SYNTAX
 
 ```
-Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>]
+Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>] [-OutFile <String>]
  [-Organization <String>] [-Version <String>] [<CommonParameters>]
 ```
 
@@ -65,6 +65,21 @@ Accept wildcard characters: False
 
 ### -Organization
 Organization name or tenant GUID to include in the URL. Default is 'myorg'.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutFile
+{{Fill OutFile Description}}
 
 ```yaml
 Type: String

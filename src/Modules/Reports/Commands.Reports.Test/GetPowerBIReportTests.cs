@@ -69,7 +69,7 @@ namespace Commands.Reports.Test
             // Arrange
             var expectedReports = new List<Report> { new Report { Id = "1" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Reports.GetReports()).Returns(expectedReports);
+            client.Setup(x => x.Reports.GetReports(It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>())).Returns(expectedReports);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIReport(initFactory);
 

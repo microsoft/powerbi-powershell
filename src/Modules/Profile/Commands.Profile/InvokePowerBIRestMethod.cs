@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Management.Automation;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
@@ -14,6 +15,8 @@ namespace Microsoft.PowerBI.Commands.Profile
     [OutputType(typeof(string))]
     public class InvokePowerBIRestMethod : PowerBICmdlet
     {
+        // Similiar to Invoke-RestMethod - https://github.com/PowerShell/PowerShell/blob/master/src/Microsoft.PowerShell.Commands.Utility/commands/utility/WebCmdlet/Common/InvokeRestMethodCommand.Common.cs
+
         public const string CmdletVerb = VerbsLifecycle.Invoke;
         public const string CmdletName = "PowerBIRestMethod";
 
@@ -38,10 +41,23 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         [Parameter(Mandatory = false)]
         public string Version = "v1.0";
+
+        [Parameter(Mandatory = false)]
+
+        public virtual string OutFile { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
         {
+            if(!string.IsNullOrEmpty(this.OutFile))
+            {
+                this.OutFile = this.ResolveFilePath(this.OutFile, false);
+                if(File.Exists(this.OutFile))
+                {
+                    this.Logger.ThrowTerminatingError(new NotSupportedException($"OutFile '{this.OutFile}' already exists, specify a new file path"), ErrorCategory.InvalidArgument);
+                }
+            }
+
             if(Uri.TryCreate(this.Url, UriKind.Absolute, out Uri testUri))
             {
                 this.Url = testUri.AbsoluteUri;
@@ -52,11 +68,25 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
             
             var response = this.InvokeRestMethod(this.Url, this.Body, this.Method).Result;
-            
-            var result = response.Content.ReadAsStringAsync().Result;
-            if (result != null)
+            if (string.IsNullOrEmpty(this.OutFile))
             {
-                this.Logger.WriteObject(result);
+                var result = response.Content.ReadAsStringAsync().Result;
+                if (result != null)
+                {
+                    this.Logger.WriteObject(result);
+                }
+            }
+            else
+            {
+                using (var stream = response.Content.ReadAsStreamAsync().Result)
+                {
+                    using (var fileStream = new FileStream(this.OutFile, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+
+                this.Logger.WriteVerbose($"OutFile '{this.OutFile}' created");
             }
         }
 
@@ -73,28 +103,61 @@ namespace Microsoft.PowerBI.Commands.Profile
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
 
                 HttpResponseMessage response = null;
-                switch (requestType)
+                if (string.IsNullOrEmpty(this.OutFile))
                 {
-                    case PowerBIWebRequestMethod.Get:
-                        response = await client.GetAsync(url);
-                        break;
-                    case PowerBIWebRequestMethod.Post:
-                        response = await client.PostAsync(url, new StringContent(body));
-                        break;
-                    case PowerBIWebRequestMethod.Delete:
-                        response = await client.DeleteAsync(url);
-                        break;
-                    case PowerBIWebRequestMethod.Put:
-                        response = await client.PutAsync(url, new StringContent(body));
-                        break;
-                    case PowerBIWebRequestMethod.Patch:
-                        response = await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body) });
-                        break;
-                    case PowerBIWebRequestMethod.Options:
-                        response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Options, url));
-                        break;
-                    default:
-                        throw new NotSupportedException($"{nameof(requestType)} of value {requestType} is not supported");
+                    switch (requestType)
+                    {
+                        case PowerBIWebRequestMethod.Get:
+                            response = await client.GetAsync(url);
+                            break;
+                        case PowerBIWebRequestMethod.Post:
+                            response = await client.PostAsync(url, new StringContent(body));
+                            break;
+                        case PowerBIWebRequestMethod.Delete:
+                            response = await client.DeleteAsync(url);
+                            break;
+                        case PowerBIWebRequestMethod.Put:
+                            response = await client.PutAsync(url, new StringContent(body));
+                            break;
+                        case PowerBIWebRequestMethod.Patch:
+                            response = await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body) });
+                            break;
+                        case PowerBIWebRequestMethod.Options:
+                            response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Options, url));
+                            break;
+                        default:
+                            throw new NotSupportedException($"{nameof(requestType)} of value {requestType} is not supported");
+                    }
+                }
+                else
+                {
+                    // Stream based, OutFile
+                    HttpRequestMessage request = null;
+                    switch (requestType)
+                    {
+                        case PowerBIWebRequestMethod.Get:
+                            request = new HttpRequestMessage(HttpMethod.Get, url);
+                            break;
+                        case PowerBIWebRequestMethod.Post:
+                            request = new HttpRequestMessage(HttpMethod.Post, url) { Content = new StringContent(body) };
+                            break;
+                        case PowerBIWebRequestMethod.Delete:
+                            request = new HttpRequestMessage(HttpMethod.Delete, url);
+                            break;
+                        case PowerBIWebRequestMethod.Put:
+                            request = new HttpRequestMessage(HttpMethod.Put, url) { Content = new StringContent(body) };
+                            break;
+                        case PowerBIWebRequestMethod.Patch:
+                            request = new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body) };
+                            break;
+                        case PowerBIWebRequestMethod.Options:
+                            request = new HttpRequestMessage(HttpMethod.Options, url);
+                            break;
+                        default:
+                            throw new NotSupportedException($"{nameof(requestType)} of value {requestType} is not supported");
+                    }
+
+                    response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 }
 
                 this.Logger.WriteVerbose($"Request Uri: {response.RequestMessage.RequestUri}");
