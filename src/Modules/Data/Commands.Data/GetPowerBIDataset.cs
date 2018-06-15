@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.Data
 
         public override void ExecuteCmdlet()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
