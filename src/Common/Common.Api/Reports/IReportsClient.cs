@@ -9,7 +9,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 {
     public interface IReportsClient
     {
-        IEnumerable<Report> GetReports(string filter = default, int? top = default, int? skip = default);
+        IEnumerable<Report> GetReports();
 
         IEnumerable<Report> GetReportsAsAdmin(string filter = default, int? top = default, int? skip = default);
     }

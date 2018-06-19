@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -50,6 +51,15 @@ namespace Microsoft.PowerBI.Commands.Reports
         public int? Skip { get; set; }
         #endregion
 
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+            if(this.Scope == PowerBIUserScope.Individual && !string.IsNullOrEmpty(this.Filter))
+            {
+                this.Logger.ThrowTerminatingError($"{nameof(this.Filter)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+            }
+        }
+
         public override void ExecuteCmdlet()
         {
             if (this.ParameterSet.Equals(IdParameterSetName))
@@ -62,13 +72,38 @@ namespace Microsoft.PowerBI.Commands.Reports
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }
 
+            IEnumerable<Report> reports = null;
             using (var client = this.CreateClient())
             {
-                var reports = this.Scope == PowerBIUserScope.Individual ?
-                    client.Reports.GetReports(filter: this.Filter, top: this.First, skip: this.Skip) :
+                reports = this.Scope == PowerBIUserScope.Individual ?
+                    client.Reports.GetReports() :
                     client.Reports.GetReportsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip);
-                this.Logger.WriteObject(reports, true);
             }
+
+            if(this.Scope == PowerBIUserScope.Individual)
+            {
+                if(this.Id != default)
+                {
+                    reports = reports.Where(r => this.Id == new Guid(r.Id)).ToList();
+                }
+
+                if(!string.IsNullOrEmpty(this.Name))
+                {
+                    reports.Where(r => r.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                if(this.Skip.HasValue)
+                {
+                    reports = reports.Skip(this.Skip.Value);
+                }
+
+                if(this.First.HasValue)
+                {
+                    reports = reports.Take(this.First.Value);
+                }
+            }
+
+            this.Logger.WriteObject(reports, true);
         }
     }
 }

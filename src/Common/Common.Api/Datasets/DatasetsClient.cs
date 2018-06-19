@@ -14,12 +14,24 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public IEnumerable<Dataset> GetDatasets()
         {
-            throw new NotImplementedException();
+            return this.Client.Datasets.GetDatasets().Value?.Select(x => (Dataset)x);
         }
 
         public IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = null, int? top = null, int? skip = null)
         {
-            return Client.Datasets.GetDatasetsAsAdmin(filter: filter, top: top, skip: skip).Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasetsAsAdmin(filter: filter, top: top, skip: skip).Value?.Select(x => (Dataset)x);
+        }
+
+        public IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default)
+        {
+            var result = workspaceId.HasValue ? this.Client.Datasets.GetDatasources(groupId: workspaceId.ToString(), datasetKey: datasetId.ToString()) : this.Client.Datasets.GetDatasources(datasetKey: workspaceId.ToString());
+            return result.Value?.Select(x => (Datasource)x);
+
+        }
+
+        public IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId)
+        {
+            return this.Client.Datasets.GetDatasourcesAsAdmin(datasetId.ToString()).Value?.Select(x => (Datasource)x);
         }
     }
 }

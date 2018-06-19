@@ -15,14 +15,14 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         {
         }
 
-        public IEnumerable<Report> GetReports(string filter = null, int? top = null, int? skip = null)
+        public IEnumerable<Report> GetReports()
         {
-            return this.Client.Reports.GetReports(filter: filter, top: top, skip: skip).Value.Select(x => (Report)x);
+            return this.Client.Reports.GetReports().Value?.Select(x => (Report)x);
         }
 
         public IEnumerable<Report> GetReportsAsAdmin(string filter = null, int? top = null, int? skip = null)
         {
-            return this.Client.Reports.GetReportsAsAdmin(filter: filter, top: top, skip: skip).Value.Select(x => (Report)x);
+            return this.Client.Reports.GetReportsAsAdmin(filter: filter, top: top, skip: skip).Value?.Select(x => (Report)x);
         }
     }
 }
