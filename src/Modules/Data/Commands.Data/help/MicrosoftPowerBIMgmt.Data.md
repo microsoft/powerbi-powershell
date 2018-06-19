@@ -14,3 +14,6 @@ Locale: en-US
 ### [Get-PowerBIDataset](Get-PowerBIDataset.md)
 {{Fill in the Synopsis}}
 
+### [Get-PowerBIDatasource](Get-PowerBIDatasource.md)
+{{Fill in the Synopsis}}
+

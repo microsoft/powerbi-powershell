@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-PowerBIDataset
+# Get-PowerBIDatasource
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -14,18 +14,34 @@ schema: 2.0.0
 
 ### List (Default)
 ```
-Get-PowerBIDataset [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int32>] [-Skip <Int32>]
- [-WorkspaceId <Guid>] [<CommonParameters>]
+Get-PowerBIDatasource -DatasetId <Guid> [-WorkspaceId <Guid>] [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-PowerBIDataset -Id <Guid> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
+Get-PowerBIDatasource -DatasetId <Guid> [-WorkspaceId <Guid>] -Id <Guid> [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-PowerBIDataset -Name <String> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
+Get-PowerBIDatasource -DatasetId <Guid> [-WorkspaceId <Guid>] -Name <String> [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
+```
+
+### ObjectAndId
+```
+Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIUserScope>] [<CommonParameters>]
+```
+
+### ObjectAndName
+```
+Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIUserScope>] [<CommonParameters>]
+```
+
+### ObjectAndList
+```
+Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,30 +58,30 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Filter
-{{Fill Filter Description}}
+### -Dataset
+{{Fill Dataset Description}}
 
 ```yaml
-Type: String
-Parameter Sets: List
+Type: Dataset
+Parameter Sets: ObjectAndId, ObjectAndName, ObjectAndList
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -First
-{{Fill First Description}}
+### -DatasetId
+{{Fill DatasetId Description}}
 
 ```yaml
-Type: Int32
-Parameter Sets: List
-Aliases: Top
+Type: Guid
+Parameter Sets: List, Id, Name
+Aliases: DatasetKey
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -78,7 +94,7 @@ Accept wildcard characters: False
 ```yaml
 Type: Guid
 Parameter Sets: Id
-Aliases: DatasetId
+Aliases: DatasourceId
 
 Required: True
 Position: Named
@@ -118,21 +134,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Skip
-{{Fill Skip Description}}
-
-```yaml
-Type: Int32
-Parameter Sets: List
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -WorkspaceId
 {{Fill WorkspaceId Description}}
 
@@ -153,7 +154,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### Microsoft.PowerBI.Common.Api.Datasets.Dataset
 
 ## OUTPUTS
 

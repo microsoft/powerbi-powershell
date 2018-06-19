@@ -54,6 +54,15 @@ namespace Microsoft.PowerBI.Commands.Data
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
         #endregion
 
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+            if (this.Scope == PowerBIUserScope.Organization && this.WorkspaceId != default)
+            {
+                this.Logger.ThrowTerminatingError($"{nameof(this.WorkspaceId)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Individual)}");
+            }
+        }
+
         public override void ExecuteCmdlet()
         {
             if(this.Dataset != null)

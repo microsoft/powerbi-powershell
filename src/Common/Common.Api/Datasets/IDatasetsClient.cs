@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
@@ -11,5 +12,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
     {
         IEnumerable<Dataset> GetDatasets();
         IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = default, int? top = default, int? skip = default);
+
+        IEnumerable<Dataset> GetDatasetsForWorkspace(Guid workspaceId);
+        IEnumerable<Dataset> GetDatasetsAsAdminForWorkspace(Guid workspaceId, string filter = null, int? top = null, int? skip = null);
+
+        IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default);
+        IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId);
     }
 }

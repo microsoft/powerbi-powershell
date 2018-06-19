@@ -44,6 +44,10 @@ namespace Microsoft.PowerBI.Commands.Data
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public int? Skip { get; set; }
+
+        [Alias("GroupId")]
+        [Parameter(Mandatory = false)]
+        public Guid WorkspaceId { get; set; }
         #endregion
 
         protected override void BeginProcessing()
@@ -70,31 +74,40 @@ namespace Microsoft.PowerBI.Commands.Data
             IEnumerable<Dataset> datasets = null;
             using (var client = this.CreateClient())
             {
-                datasets = this.Scope == PowerBIUserScope.Individual ?
-                    client.Datasets.GetDatasets() :
-                    client.Datasets.GetDatasetsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip);
+                if(this.WorkspaceId != default)
+                {
+                    datasets = this.Scope == PowerBIUserScope.Individual ?
+                        client.Datasets.GetDatasetsForWorkspace(this.WorkspaceId) :
+                        client.Datasets.GetDatasetsAsAdminForWorkspace(this.WorkspaceId, filter: this.Filter, top: this.First, skip: this.Skip);
+                }
+                else
+                {
+                    datasets = this.Scope == PowerBIUserScope.Individual ?
+                        client.Datasets.GetDatasets() :
+                        client.Datasets.GetDatasetsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip);
+                }
             }
 
             if (this.Scope == PowerBIUserScope.Individual)
             {
                 if (this.Id != default)
                 {
-                    datasets = datasets.Where(r => this.Id == new Guid(r.Id)).ToList();
+                    datasets = datasets?.Where(r => this.Id == new Guid(r.Id)).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(this.Name))
                 {
-                    datasets.Where(r => r.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+                    datasets?.Where(r => r.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
 
                 if (this.Skip.HasValue)
                 {
-                    datasets = datasets.Skip(this.Skip.Value);
+                    datasets = datasets?.Skip(this.Skip.Value);
                 }
 
                 if (this.First.HasValue)
                 {
-                    datasets = datasets.Take(this.First.Value);
+                    datasets = datasets?.Take(this.First.Value);
                 }
             }
 
