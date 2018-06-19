@@ -25,9 +25,11 @@ namespace Microsoft.PowerBI.Commands.Reports
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
 
+        #region Constructors
         public GetPowerBIReport() : base() { }
 
         public GetPowerBIReport(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        #endregion
 
         #region Parameters
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
@@ -49,6 +51,10 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public int? Skip { get; set; }
+
+        [Alias("GroupId")]
+        [Parameter(Mandatory = false)]
+        public Guid WorkspaceId { get; set; }
         #endregion
 
         protected override void BeginProcessing()
@@ -56,7 +62,7 @@ namespace Microsoft.PowerBI.Commands.Reports
             base.BeginProcessing();
             if(this.Scope == PowerBIUserScope.Individual && !string.IsNullOrEmpty(this.Filter))
             {
-                this.Logger.ThrowTerminatingError($"{nameof(this.Filter)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+                this.Logger.ThrowTerminatingError($"{nameof(this.Filter)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}", ErrorCategory.InvalidArgument);
             }
         }
 
@@ -75,9 +81,18 @@ namespace Microsoft.PowerBI.Commands.Reports
             IEnumerable<Report> reports = null;
             using (var client = this.CreateClient())
             {
-                reports = this.Scope == PowerBIUserScope.Individual ?
-                    client.Reports.GetReports() :
-                    client.Reports.GetReportsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip);
+                if(this.WorkspaceId != default)
+                {
+                    reports = this.Scope == PowerBIUserScope.Individual ?
+                        client.Reports.GetReportsForWorkspace(this.WorkspaceId) :
+                        client.Reports.GetReportsAsAdminForWorkspace(this.WorkspaceId, filter: this.Filter, top: this.First, skip: this.Skip);
+                }
+                else
+                {
+                    reports = this.Scope == PowerBIUserScope.Individual ?
+                        client.Reports.GetReports() :
+                        client.Reports.GetReportsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip);
+                } 
             }
 
             if(this.Scope == PowerBIUserScope.Individual)

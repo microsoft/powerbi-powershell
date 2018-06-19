@@ -11,6 +11,7 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
+    [OutputType(typeof(IEnumerable<Datasource>))]
     public class GetPowerBIDatasource : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletVerb = VerbsCommon.Get;

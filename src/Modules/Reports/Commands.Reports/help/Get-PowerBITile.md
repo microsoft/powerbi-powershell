@@ -1,57 +1,52 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Reports.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Reports
-online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.reports/get-powerbireport?view=powerbi-ps
+online version:
 schema: 2.0.0
 ---
 
-# Get-PowerBIReport
+# Get-PowerBITile
 
 ## SYNOPSIS
-Returns a list of Power BI reports.
+{{Fill in the Synopsis}}
 
 ## SYNTAX
 
 ### List (Default)
 ```
-Get-PowerBIReport [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int32>] [-Skip <Int32>]
+Get-PowerBITile -DashboardId <Guid> [-Scope <PowerBIUserScope>] [-First <Int32>] [-Skip <Int32>]
  [-WorkspaceId <Guid>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-PowerBIReport -Id <Guid> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
-```
-
-### Name
-```
-Get-PowerBIReport -Name <String> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
+Get-PowerBITile -DashboardId <Guid> -Id <Guid> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI reports with the provided search criteria and scope specified.
-You must have logged in previously before, using Login-PowerBIServiceAccount.
+{{Fill in the Description}}
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-PowerBIReport
+PS C:\> {{ Add example code here }}
 ```
 
-Returns a list of all PowerBI reports a user has access to.
+{{ Add example description here }}
 
 ## PARAMETERS
 
-### -Filter
-{{Fill Filter Description}}
+### -DashboardId
+{{Fill DashboardId Description}}
 
 ```yaml
-Type: String
-Parameter Sets: List
+Type: Guid
+Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -79,22 +74,7 @@ Accept wildcard characters: False
 ```yaml
 Type: Guid
 Parameter Sets: Id
-Aliases: ReportId
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{Fill Name Description}}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
+Aliases: ImportId
 
 Required: True
 Position: Named
@@ -150,15 +130,18 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
 
+
 ## OUTPUTS
 
-### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Reports.Report, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Reports.Tile, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+
 
 ## NOTES
 
