@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBIDatasource
 
 ## SYNOPSIS
-Returns a list of Power BI datasources.
+Returns a list of Power BI data sources.
 
 ## SYNTAX
 
@@ -45,8 +45,8 @@ Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIU
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI datasources under the specified dataset along with the provided search criteria and scope specified.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Retrieves a list of Power BI data sources under the specified dataset along that match the specified search criteria and scope.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -55,19 +55,19 @@ You must have logged in previously before, using Connect-PowerBIServiceAccount.
 PS C:\> Get-PowerBIDatasource -DatasetId 23d088a0-a395-483e-b81c-54f51f3e4e3c
 ```
 
-Returns all datasources in Power BI dataset with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for dataset the calling user has access to.
+Returns all data sources in Power BI dataset with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for dataset the calling user has access to.
 
 ### Example 2
 ```powershell
 PS C:\> Get-PowerBIDatasource -DatasetId 23d088a0-a395-483e-b81c-54f51f3e4e3c -Scope Organization
 ```
 
-Returns all datasources in Power BI dataset with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for a dataset in the calling user's organization.
+Returns all data sources in Power BI dataset with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for a dataset in the calling user's organization.
 
 ## PARAMETERS
 
 ### -Dataset
-Dataset for returning datasources for.
+Dataset for returning data sources for.
 
 ```yaml
 Type: Dataset
@@ -82,7 +82,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-Id of the dataset to return datasources for.
+Id of the dataset to return data sources for.
 
 ```yaml
 Type: Guid
@@ -97,7 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Id of the datasource to return.
+Id of the data source to return.
 
 ```yaml
 Type: Guid
@@ -112,7 +112,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Name of the datasource to return if one exists with that name. Case insensitive search.
+Name of the data source to return if one exists with that name. Case insensitive search.
 
 ```yaml
 Type: String
@@ -127,7 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only datasources assigned to the caller; Organization returns all datasources within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns only data sources assigned to the caller; Organization returns all data sources within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -143,7 +143,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, datasources only belonging to that workspace are shown. Only available when -Scope is Individual.
+Workspace ID to filter results to, data sources only belonging to that workspace are shown. Only available when -Scope is Individual.
 
 ```yaml
 Type: Guid

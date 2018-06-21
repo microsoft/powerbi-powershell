@@ -32,14 +32,14 @@ Outputs additional information for any errors produced from MicrosoftPowerBIMgmt
 PS C:\> Resolve-PowerBIError
 ```
 
-Displays all errors occuring in the PowerShell session.
+Displays all errors occurring in the PowerShell session.
 
 ### Example 2
 ```powershell
 PS C:\> Resolve-PowerBIError -Last
 ```
 
-Displays last error occuring in the PowerShell session.
+Displays the last error occurring in the PowerShell session.
 
 ## PARAMETERS
 
@@ -59,7 +59,7 @@ Accept wildcard characters: False
 ```
 
 ### -Last
-Indicates to show the last error occuring in the PowerShell session.
+Indicates to show the last error occurring in the PowerShell session.
 
 ```yaml
 Type: SwitchParameter

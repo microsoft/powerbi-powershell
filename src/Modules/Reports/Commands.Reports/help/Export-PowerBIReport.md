@@ -17,8 +17,8 @@ Export-PowerBIReport [-WorkspaceId <Guid>] -Id <Guid> -OutFile <String> [<Common
 ```
 
 ## DESCRIPTION
-Saves a Power BI report from the Power BI service into a .pbix file that can be loaded by the Power BI Desktop or reuploaded to Power BI service.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Saves a Power BI report from the Power BI service into a .pbix file that can be loaded by the Power BI Desktop or uploaded back to Power BI service.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID containing the Power BI report to export.
+Workspace Id containing the Power BI report to export.
 
 ```yaml
 Type: Guid

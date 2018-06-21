@@ -45,8 +45,8 @@ Get-PowerBIDashboard [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI dashboards with the provided search criteria and scope specified.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Retrieves a list of Power BI dashboards that match the specified search criteria and scope.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -55,7 +55,7 @@ You must have logged in previously before, using Connect-PowerBIServiceAccount.
 PS C:\> Get-PowerBIDashboard
 ```
 
-Returns all Power BI dashboards the calling user is assigned to (-Scope Individual).
+Returns all Power BI dashboards that the calling user is assigned to (-Scope Individual).
 
 ### Example 2
 ```powershell
@@ -127,7 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only dashboards assigned to the caller; Organization returns all dashboards within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates the scope of the call. Individual returns only dashboards assigned to the caller; Organization returns all dashboards within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -158,7 +158,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to filter results to, dashboards only belonging to that workspace are shown.
+Workspace to filter results to; only dashboards that belong to that workspace are shown.
 
 ```yaml
 Type: Workspace
@@ -173,7 +173,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, dashboards only belonging to that workspace are shown.
+Workspace Id to filter results to; only dashboards that belong to that workspace are shown.
 
 ```yaml
 Type: Guid

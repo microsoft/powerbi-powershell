@@ -27,7 +27,7 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<Common
 Updates the name or description of a Power BI workspace.
 Only workspaces in the new workspace experiences preview are supported.
 Only -Scope Organization is supported and you must have administrator rights (such as Office 365 Global Administrator or Power BI Service Administrator) to call this command.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 

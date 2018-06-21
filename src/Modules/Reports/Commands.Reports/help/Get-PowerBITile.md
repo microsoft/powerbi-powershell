@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBITile
 
 ## SYNOPSIS
-Returns a list of Power BI tiles under a dashboard.
+Returns a list of Power BI tiles for a dashboard.
 
 ## SYNTAX
 
@@ -25,8 +25,8 @@ Get-PowerBITile -DashboardId <Guid> -Id <Guid> [-Scope <PowerBIUserScope>] [-Wor
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI tiles under the specified workspace with the provided search criteria and scope.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Retrieves a list of Power BI tiles that match the specified search criteria and scope.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -35,7 +35,7 @@ You must have logged in previously before, using Connect-PowerBIServiceAccount.
 PS C:\> Get-PowerBITile -DashboardId 6b071d0b-7430-4342-a3a6-d5c0fac130e4
 ```
 
-Returns a list of tiles in the Power BI dashboard with ID 6b071d0b-7430-4342-a3a6-d5c0fac130e4, for a user having access to the dashboard.
+Returns a list of tiles in the Power BI dashboard with ID 6b071d0b-7430-4342-a3a6-d5c0fac130e4, for a user that has access to the dashboard.
 
 ### Example 2
 ```powershell
@@ -47,7 +47,7 @@ Returns a list of tiles in the Power BI dashboard with ID 6b071d0b-7430-4342-a3a
 ## PARAMETERS
 
 ### -DashboardId
-ID of dashboard to return tiles for.
+Id of the dashboard to return tiles for.
 
 ```yaml
 Type: Guid
@@ -123,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, tiles only belonging to that workspace are shown. Only available when -Scope is Individual.
+Workspace Id to filter results to; only tiles that belong to that workspace are shown. Only available when -Scope is Individual.
 
 ```yaml
 Type: Guid

@@ -45,8 +45,8 @@ Get-PowerBIDataset [-Scope <PowerBIUserScope>] [-First <Int32>] [-Skip <Int32>] 
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI datasets with the provided search criteria and scope specified.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Retrieves a list of Power BI datasets that match the specified search criteria and scope.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 

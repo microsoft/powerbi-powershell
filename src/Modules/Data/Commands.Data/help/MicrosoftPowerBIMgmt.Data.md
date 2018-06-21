@@ -8,12 +8,12 @@ Locale: en-US
 
 # MicrosoftPowerBIMgmt.Data Module
 ## Description
-{{Manually Enter Description Here}}
+PowerShell cmdlets for managing and interacting with Power BI datasets and data sources.
 
 ## MicrosoftPowerBIMgmt.Data Cmdlets
 ### [Get-PowerBIDataset](Get-PowerBIDataset.md)
 Returns a list of Power BI datasets.
 
 ### [Get-PowerBIDatasource](Get-PowerBIDatasource.md)
-Returns a list of Power BI datasources.
+Returns a list of Power BI data sources.
 

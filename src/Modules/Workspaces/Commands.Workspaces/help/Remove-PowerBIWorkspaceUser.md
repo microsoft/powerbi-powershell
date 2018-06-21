@@ -26,7 +26,7 @@ Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <Stri
 
 ## DESCRIPTION
 Removes permissions for a specified user to a Power BI workspace using the provided inputs and scope specified.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 

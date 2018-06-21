@@ -26,7 +26,7 @@ Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
 
 ## DESCRIPTION
 Grants permissions to a specified user to access a Power BI workspace using the provided inputs and scope specified.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
