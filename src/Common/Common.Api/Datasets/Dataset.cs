@@ -1,13 +1,17 @@
-﻿using System;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
     public class Dataset
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string ConfiguredBy { get; set; }
         public string DefaultRetentionPolicy { get; set; }
@@ -16,7 +20,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public string WebUrl { get; set; }
         public IEnumerable<Relationship> Relationships { get; set; }
         public IEnumerable<Datasource> Datasources { get; set; }
-        public DatasetMode DefaultMode { get; set; }
+        public DatasetMode? DefaultMode { get; set; }
         public bool IsRefreshable { get; set; }
         public bool IsEffectiveIdentityRequired { get; set; }
         public bool IsEffectiveIdentityRolesRequired { get; set; }
@@ -26,7 +30,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         {
             return new Dataset
             {
-                Id = dataset.Id,
+                Id = new Guid(dataset.Id),
                 Name = dataset.Name,
                 ConfiguredBy = dataset.ConfiguredBy,
                 DefaultRetentionPolicy = dataset.DefaultRetentionPolicy,
@@ -35,11 +39,21 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 WebUrl = dataset.WebUrl,
                 Relationships = dataset.Relationships?.Select(r => (Relationship)r),
                 Datasources = dataset.Datasources?.Select(d => (Datasource)d),
-                DefaultMode = (DatasetMode)Enum.Parse(typeof(DatasetMode), dataset.DefaultMode),
+                DefaultMode = ConvertDefaultMode(dataset.DefaultMode),
                 IsRefreshable = dataset.IsRefreshable.GetValueOrDefault(),
                 IsEffectiveIdentityRequired = dataset.IsEffectiveIdentityRequired.GetValueOrDefault(),
                 IsOnPremGatewayRequired = dataset.IsOnPremGatewayRequired.GetValueOrDefault()
             };
+        }
+
+        private static DatasetMode? ConvertDefaultMode(string defaultMode)
+        {
+            if(string.IsNullOrEmpty(defaultMode))
+            {
+                return null;
+            }
+
+            return (DatasetMode)Enum.Parse(typeof(DatasetMode), defaultMode, true);
         }
     }
 

@@ -190,31 +190,44 @@ namespace Microsoft.PowerBI.Commands.Common
 
             if (this.SessionState != null)
             {
-                if (isLiteralPath)
+                try
                 {
-                    filePaths.Add(this.SessionState.Path.GetUnresolvedProviderPathFromPSPath(path, out provider, out drive));
-                }
-                else
-                {
-                    filePaths.AddRange(this.SessionState.Path.GetResolvedProviderPathFromPSPath(path, out provider));
-                }
+                    if (isLiteralPath)
+                    {
+                        filePaths.Add(this.SessionState.Path.GetUnresolvedProviderPathFromPSPath(path, out provider, out drive));
+                    }
+                    else
+                    {
+                        filePaths.AddRange(this.SessionState.Path.GetResolvedProviderPathFromPSPath(path, out provider));
+                    }
 
-                if (provider != null && !provider.Name.Contains("FileSystem"))
-                {
-                    this.logger.ThrowTerminatingError(new NotSupportedException($"Unsupported PowerShell provider '{provider.Name}' for resolving path: {path}"));
-                }
+                    if (provider != null && !provider.Name.Contains("FileSystem"))
+                    {
+                        this.logger.ThrowTerminatingError(new NotSupportedException($"Unsupported PowerShell provider '{provider.Name}' for resolving path: {path}"));
+                    }
 
-                if (filePaths.Count > 1)
-                {
-                    this.logger.ThrowTerminatingError(new NotSupportedException("Multiple files not supported"), ErrorCategory.InvalidArgument);
-                }
+                    if (filePaths.Count > 1)
+                    {
+                        this.logger.ThrowTerminatingError(new NotSupportedException("Multiple files not supported"), ErrorCategory.InvalidArgument);
+                    }
 
-                if (filePaths.Count == 0)
-                {
-                    this.logger.ThrowTerminatingError(new FileNotFoundException("Wildcard unable to find file"), ErrorCategory.OpenError);
-                }
+                    if (filePaths.Count == 0)
+                    {
+                        this.logger.ThrowTerminatingError(new FileNotFoundException("Wildcard unable to find file"), ErrorCategory.OpenError);
+                    }
 
-                return filePaths[0];
+                    return filePaths[0];
+                }
+                catch (ItemNotFoundException)
+                {
+                    path = this.SessionState.Path.GetUnresolvedProviderPathFromPSPath(path, out provider, out drive);
+                    if (provider != null && !provider.Name.Contains("FileSystem"))
+                    {
+                        this.logger.ThrowTerminatingError(new NotSupportedException($"Unsupported PowerShell provider '{provider.Name}' for resolving path: {path}"));
+                    }
+
+                    return path;
+                }
             }
             else
             {

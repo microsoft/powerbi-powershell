@@ -23,14 +23,30 @@ Get-PowerBIReport [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int32>
 Get-PowerBIReport -Id <Guid> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
 ```
 
+### ObjectAndId
+```
+Get-PowerBIReport -Id <Guid> [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<CommonParameters>]
+```
+
 ### Name
 ```
 Get-PowerBIReport -Name <String> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
 ```
 
+### ObjectAndName
+```
+Get-PowerBIReport -Name <String> [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<CommonParameters>]
+```
+
+### ObjectAndList
+```
+Get-PowerBIReport [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int32>] [-Skip <Int32>]
+ -Workspace <Workspace> [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Retrieves a list of Power BI reports with the provided search criteria and scope specified.
-You must have logged in previously before, using Login-PowerBIServiceAccount.
+You must have logged in previously before, using Connect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -41,14 +57,21 @@ PS C:\> Get-PowerBIReport
 
 Returns a list of all PowerBI reports a user has access to.
 
+### Example 2
+```powershell
+PS C:\> Get-PowerBIReport -Scope Organization
+```
+
+Returns a list of all PowerBI reports within a user's organization.
+
 ## PARAMETERS
 
 ### -Filter
-{{Fill Filter Description}}
+OData filter, case-sensitive (element names start lowercase). Only supported when -Scope Organization is specified.
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, ObjectAndList
 Aliases:
 
 Required: False
@@ -59,11 +82,11 @@ Accept wildcard characters: False
 ```
 
 ### -First
-{{Fill First Description}}
+First (top) list of results.
 
 ```yaml
 Type: Int32
-Parameter Sets: List
+Parameter Sets: List, ObjectAndList
 Aliases: Top
 
 Required: False
@@ -74,11 +97,11 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-{{Fill Id Description}}
+Id of the report to return.
 
 ```yaml
 Type: Guid
-Parameter Sets: Id
+Parameter Sets: Id, ObjectAndId
 Aliases: ReportId
 
 Required: True
@@ -89,11 +112,11 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{Fill Name Description}}
+Name of the report to return if one exists with that name. Case insensitive search.
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: Name, ObjectAndName
 Aliases:
 
 Required: True
@@ -104,7 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Indicates scope of the call. Individual returns only reports assigned to the caller; Organization returns all reports within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -120,11 +143,11 @@ Accept wildcard characters: False
 ```
 
 ### -Skip
-{{Fill Skip Description}}
+Skips the first set of results.
 
 ```yaml
 Type: Int32
-Parameter Sets: List
+Parameter Sets: List, ObjectAndList
 Aliases:
 
 Required: False
@@ -134,12 +157,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Workspace
+Workspace to filter results to, reports only belonging to that workspace are shown.
+
+```yaml
+Type: Workspace
+Parameter Sets: ObjectAndId, ObjectAndName, ObjectAndList
+Aliases: Group
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -WorkspaceId
-{{Fill WorkspaceId Description}}
+Workspace ID to filter results to, reports only belonging to that workspace are shown.
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: List, Id, Name
 Aliases: GroupId
 
 Required: False

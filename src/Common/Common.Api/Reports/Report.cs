@@ -3,11 +3,13 @@
  * Licensed under the MIT License.
  */
 
+using System;
+
 namespace Microsoft.PowerBI.Common.Api.Reports
 {
     public class Report
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
@@ -21,7 +23,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         {
             return new Report
             {
-                Id = report.Id,
+                Id = new Guid(report.Id),
                 Name = report.Name,
                 WebUrl = report.WebUrl,
                 EmbedUrl = report.EmbedUrl,

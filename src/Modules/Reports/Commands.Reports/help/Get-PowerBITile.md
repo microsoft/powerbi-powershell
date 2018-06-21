@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBITile
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Returns a list of Power BI tiles under a dashboard.
 
 ## SYNTAX
 
@@ -25,21 +25,29 @@ Get-PowerBITile -DashboardId <Guid> -Id <Guid> [-Scope <PowerBIUserScope>] [-Wor
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retrieves a list of Power BI tiles under the specified workspace with the provided search criteria and scope.
+You must have logged in previously before, using Connect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-PowerBITile -DashboardId 6b071d0b-7430-4342-a3a6-d5c0fac130e4
 ```
 
-{{ Add example description here }}
+Returns a list of tiles in the Power BI dashboard with ID 6b071d0b-7430-4342-a3a6-d5c0fac130e4, for a user having access to the dashboard.
+
+### Example 2
+```powershell
+PS C:\> Get-PowerBITile -DashboardId 6b071d0b-7430-4342-a3a6-d5c0fac130e4 -Scope Organization
+```
+
+Returns a list of tiles in the Power BI dashboard with ID 6b071d0b-7430-4342-a3a6-d5c0fac130e4, for a dashboard in the user's organization.
 
 ## PARAMETERS
 
 ### -DashboardId
-{{Fill DashboardId Description}}
+ID of dashboard to return tiles for.
 
 ```yaml
 Type: Guid
@@ -54,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -First
-{{Fill First Description}}
+First (top) list of results.
 
 ```yaml
 Type: Int32
@@ -69,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-{{Fill Id Description}}
+Id of the tile to return.
 
 ```yaml
 Type: Guid
@@ -84,7 +92,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Indicates scope of the call. Individual returns only tiles assigned to the caller; Organization returns all tiles within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -100,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -Skip
-{{Fill Skip Description}}
+Skips the first set of results.
 
 ```yaml
 Type: Int32
@@ -115,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-{{Fill WorkspaceId Description}}
+Workspace ID to filter results to, tiles only belonging to that workspace are shown. Only available when -Scope is Individual.
 
 ```yaml
 Type: Guid
@@ -130,18 +138,15 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
 
-
 ## OUTPUTS
 
 ### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Reports.Tile, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
-
 
 ## NOTES
 

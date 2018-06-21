@@ -1,6 +1,10 @@
-﻿using System;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
@@ -16,9 +20,9 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return new Table
             {
                 Name = table.Name,
-                // Columns
-                // Rows
-                // Measures
+                Columns = table.Columns?.Select(c => (Column)c),
+                Rows = table.Rows?.Select(r => (Row)r),
+                Measures = table.Measures?.Select(m => (Measure)m)
             };
         }
     }

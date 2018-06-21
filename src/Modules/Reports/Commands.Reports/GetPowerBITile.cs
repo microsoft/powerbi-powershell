@@ -1,7 +1,12 @@
-﻿using System;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
-using System.Text;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Reports;
@@ -16,22 +21,24 @@ namespace Microsoft.PowerBI.Commands.Reports
         public const string CmdletVerb = VerbsCommon.Get;
         public const string CmdletName = "PowerBITile";
 
+        #region ParameterSets
         private const string IdParameterSetName = "Id";
         private const string ListParameterSetName = "List";
+        #endregion
 
         #region Parameters
         [Parameter(Mandatory = true)]
         public Guid DashboardId { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
         [Alias("ImportId")]
+        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public int? First { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
@@ -74,7 +81,20 @@ namespace Microsoft.PowerBI.Commands.Reports
                 }
             }
 
-            // TODO filter result
+            if (this.Id != default)
+            {
+                tiles = tiles?.Where(d => this.Id == d.Id);
+            }
+
+            if (this.Skip.HasValue)
+            {
+                tiles = tiles?.Skip(this.Skip.Value);
+            }
+
+            if (this.First.HasValue)
+            {
+                tiles = tiles?.Take(this.First.Value);
+            }
 
             this.Logger.WriteObject(tiles, true);
         }

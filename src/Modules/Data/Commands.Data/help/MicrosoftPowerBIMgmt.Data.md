@@ -12,8 +12,8 @@ Locale: en-US
 
 ## MicrosoftPowerBIMgmt.Data Cmdlets
 ### [Get-PowerBIDataset](Get-PowerBIDataset.md)
-{{Fill in the Synopsis}}
+Returns a list of Power BI datasets.
 
 ### [Get-PowerBIDatasource](Get-PowerBIDatasource.md)
-{{Fill in the Synopsis}}
+Returns a list of Power BI datasources.
 

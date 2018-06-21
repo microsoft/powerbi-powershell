@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -67,7 +68,7 @@ namespace Commands.Reports.Test
         public void GetReportsIndividualScope()
         {
             // Arrange
-            var expectedReports = new List<Report> { new Report { Id = "1" } };
+            var expectedReports = new List<Report> { new Report { Id = Guid.NewGuid() } };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Reports.GetReports()).Returns(expectedReports);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);

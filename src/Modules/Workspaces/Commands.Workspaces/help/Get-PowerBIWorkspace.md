@@ -30,7 +30,7 @@ Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParamete
 
 ## DESCRIPTION
 Retrieves a list of Power BI workspaces with the provided search criteria and scope specified.
-You must have logged in previously before, using Login-PowerBIServiceAccount.
+You must have logged in previously before, using Connect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -66,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-OData filter, case-sensitive (element names start lowercase). Only supported when -Scope Organization is specified.
+OData filter, case-sensitive (element names start lowercase).
 
 ```yaml
 Type: String

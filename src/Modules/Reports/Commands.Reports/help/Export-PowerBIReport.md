@@ -8,7 +8,7 @@ schema: 2.0.0
 # Export-PowerBIReport
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Exports a Power BI report to the .pbix file format.
 
 ## SYNTAX
 
@@ -17,21 +17,22 @@ Export-PowerBIReport [-WorkspaceId <Guid>] -Id <Guid> -OutFile <String> [<Common
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Saves a Power BI report from the Power BI service into a .pbix file that can be loaded by the Power BI Desktop or reuploaded to Power BI service.
+You must have logged in previously before, using Connect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Export-PowerBIReport -Id 9b519499-5ba1-4f1c-878b-be3a69f1791f -OutFile .\Sales.pbix
 ```
 
-{{ Add example description here }}
+Saves report with ID 9b519499-5ba1-4f1c-878b-be3a69f1791f into a file named Sales.pbix in your current working directory ($PWD).
 
 ## PARAMETERS
 
 ### -Id
-{{Fill Id Description}}
+Id of the report to export.
 
 ```yaml
 Type: Guid
@@ -41,12 +42,12 @@ Aliases: ReportId
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -OutFile
-{{Fill OutFile Description}}
+Output file to save the exported report to. Path must not already exist.
 
 ```yaml
 Type: String
@@ -61,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-{{Fill WorkspaceId Description}}
+Workspace ID containing the Power BI report to export.
 
 ```yaml
 Type: Guid
@@ -76,13 +77,11 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
-
 
 ## OUTPUTS
 

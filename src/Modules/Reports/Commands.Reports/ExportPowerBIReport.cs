@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 using System.IO;
 using System.Management.Automation;
-using System.Text;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Reports
@@ -13,21 +16,23 @@ namespace Microsoft.PowerBI.Commands.Reports
         public const string CmdletVerb = VerbsData.Export;
         public const string CmdletName = "PowerBIReport";
 
-        public ExportPowerBIReport() : base() { }
-
-        public ExportPowerBIReport(IPowerBIClientCmdletInitFactory init) : base(init) { }
-
         #region Parameters
         [Alias("GroupId")]
         [Parameter(Mandatory = false)]
         public Guid WorkspaceId { get; set; }
 
         [Alias("ReportId")]
-        [Parameter(Mandatory = true)]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true)]
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = true)]
         public string OutFile { get; set; }
+        #endregion
+
+        #region Constructors
+        public ExportPowerBIReport() : base() { }
+
+        public ExportPowerBIReport(IPowerBIClientCmdletInitFactory init) : base(init) { }
         #endregion
 
         public override void ExecuteCmdlet()

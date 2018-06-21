@@ -42,6 +42,9 @@
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.11 ">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

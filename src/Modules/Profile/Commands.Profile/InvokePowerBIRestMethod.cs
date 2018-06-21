@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 using System.IO;
 using System.Management.Automation;
 using System.Net.Http;
-using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -70,7 +72,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             var response = this.InvokeRestMethod(this.Url, this.Body, this.Method).Result;
             if (string.IsNullOrEmpty(this.OutFile))
             {
-                var result = response.Content.ReadAsStringAsync().Result;
+                var result = response.Content;
                 if (result != null)
                 {
                     this.Logger.WriteObject(result);
@@ -78,11 +80,11 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
             else
             {
-                using (var stream = response.Content.ReadAsStreamAsync().Result)
+                using (var fileStream = new FileStream(this.OutFile, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 {
-                    using (var fileStream = new FileStream(this.OutFile, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                    using (var responseStream = response.ContentStream)
                     {
-                        stream.CopyTo(fileStream);
+                        responseStream.CopyTo(fileStream);
                     }
                 }
 
@@ -90,7 +92,9 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
         }
 
-        private async Task<HttpResponseMessage> InvokeRestMethod(string url, string body, PowerBIWebRequestMethod requestType)
+
+
+        private async Task<HttpResult> InvokeRestMethod(string url, string body, PowerBIWebRequestMethod requestType)
         {
             // https://msdn.microsoft.com/en-us/library/mt243842.aspx
             // https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
@@ -164,8 +168,34 @@ namespace Microsoft.PowerBI.Commands.Profile
                 this.Logger.WriteVerbose($"Status Code: {response.StatusCode}");
 
                 response.EnsureSuccessStatusCode();
-                return response;
+
+                var result = new HttpResult()
+                {
+                    ResponseMessage = response
+                };
+
+                if (string.IsNullOrEmpty(this.OutFile))
+                {
+                    result.Content = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var stream = await response.Content.ReadAsStreamAsync();
+                    var memoryStream = new MemoryStream();
+                    await stream.CopyToAsync(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    result.ContentStream = memoryStream;
+                }
+
+                return result;
             }
+        }
+
+        public class HttpResult
+        {
+            public HttpResponseMessage ResponseMessage { get; set; }
+            public string Content { get; set; }
+            public Stream ContentStream { get; set; }
         }
     }
 }

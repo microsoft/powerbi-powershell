@@ -1,6 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
@@ -33,7 +36,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 return CrossFilteringBehaviorEnum.NotAvailable;
             }
 
-            return (CrossFilteringBehaviorEnum)Enum.Parse(typeof(CrossFilteringBehaviorEnum), crossFilteringBehavior.Value.ToString());
+            return (CrossFilteringBehaviorEnum)Enum.Parse(typeof(CrossFilteringBehaviorEnum), crossFilteringBehavior.Value.ToString(), true);
         }
     }
 

@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBIDatasource
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Returns a list of Power BI datasources.
 
 ## SYNTAX
 
@@ -45,21 +45,29 @@ Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIU
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retrieves a list of Power BI datasources under the specified dataset along with the provided search criteria and scope specified.
+You must have logged in previously before, using Connect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-PowerBIDatasource -DatasetId 23d088a0-a395-483e-b81c-54f51f3e4e3c
 ```
 
-{{ Add example description here }}
+Returns all datasources in Power BI dataset with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for dataset the calling user has access to.
+
+### Example 2
+```powershell
+PS C:\> Get-PowerBIDatasource -DatasetId 23d088a0-a395-483e-b81c-54f51f3e4e3c -Scope Organization
+```
+
+Returns all datasources in Power BI dataset with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for a dataset in the calling user's organization.
 
 ## PARAMETERS
 
 ### -Dataset
-{{Fill Dataset Description}}
+Dataset for returning datasources for.
 
 ```yaml
 Type: Dataset
@@ -74,7 +82,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-{{Fill DatasetId Description}}
+Id of the dataset to return datasources for.
 
 ```yaml
 Type: Guid
@@ -89,7 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-{{Fill Id Description}}
+Id of the datasource to return.
 
 ```yaml
 Type: Guid
@@ -104,12 +112,12 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{Fill Name Description}}
+Name of the datasource to return if one exists with that name. Case insensitive search.
 
 ```yaml
 Type: String
 Parameter Sets: Name
-Aliases:
+Aliases: DatasoureName
 
 Required: True
 Position: Named
@@ -119,7 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Indicates scope of the call. Individual returns only datasources assigned to the caller; Organization returns all datasources within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -135,7 +143,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-{{Fill WorkspaceId Description}}
+Workspace ID to filter results to, datasources only belonging to that workspace are shown. Only available when -Scope is Individual.
 
 ```yaml
 Type: Guid
