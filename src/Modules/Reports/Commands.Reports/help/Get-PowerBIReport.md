@@ -45,8 +45,8 @@ Get-PowerBIReport [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int32>
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI reports with the provided search criteria and scope specified.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Retrieves a list of Power BI reports that match the specified search criteria and scope.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -55,7 +55,7 @@ You must have logged in previously before, using Connect-PowerBIServiceAccount.
 PS C:\> Get-PowerBIReport
 ```
 
-Returns a list of all PowerBI reports a user has access to.
+Returns a list of all PowerBI reports that a user has access to.
 
 ### Example 2
 ```powershell
@@ -158,7 +158,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to filter results to, reports only belonging to that workspace are shown.
+Workspace to filter results to; only reports that belong to that workspace are shown.
 
 ```yaml
 Type: Workspace
@@ -173,7 +173,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, reports only belonging to that workspace are shown.
+Workspace Id to filter results to; only reports that belong to that workspace are shown.
 
 ```yaml
 Type: Guid

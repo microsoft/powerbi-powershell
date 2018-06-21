@@ -45,8 +45,8 @@ Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIU
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI datasources under the specified dataset along with the provided search criteria and scope specified.
-You must have logged in previously before, using Connect-PowerBIServiceAccount.
+Retrieves a list of Power BI datasources under the specified dataset along that match the specified search criteria and scope.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
