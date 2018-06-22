@@ -11,7 +11,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>MicrosoftPowerBIMgmt.Workspaces</PackageId>
-    <Description>Microsoft PowerBI PowerShell - Workspace cmdlets for Microsoft PowerBI</Description>
+    <Description>Microsoft Power BI PowerShell - Workspace cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Workspaces;Groups</PackageTags>
   </PropertyGroup>
   

@@ -16,7 +16,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
     [Alias("Get-PowerBIGroup")]
     [OutputType(typeof(IEnumerable<Workspace>))]
-    public class GetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserId
+    public class GetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserId, IUserFirstSkip
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Get;

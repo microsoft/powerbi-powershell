@@ -1,8 +1,10 @@
-﻿using System;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 using System.Collections;
-using System.Collections.Generic;
 using System.Management.Automation;
-using System.Text;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
@@ -36,7 +38,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             else
             {
                 this.Logger.WriteObject(new Hashtable() {
-                    { "Bearer", token.AccessToken }
+                    { "Authorization", token.AuthorizationHeader }
                 });
             }
             

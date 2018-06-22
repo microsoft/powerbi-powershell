@@ -28,7 +28,7 @@
     Copyright = 'Microsoft Corporation. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description = 'Microsoft PowerBI PowerShell - Profile credential management cmdlets for Microsoft PowerBI'
+    Description = 'Microsoft Power BI PowerShell - Profile credential management cmdlets for Microsoft Power BI'
 
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '3.0'
@@ -70,7 +70,7 @@
     # FunctionsToExport = '*'
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport = 'Connect-PowerBIServiceAccount', 'Disconnect-PowerBIServiceAccount', 'Invoke-PowerBIRestMethod', 'Get-PowerBIAccessToken'
+    CmdletsToExport = 'Connect-PowerBIServiceAccount', 'Disconnect-PowerBIServiceAccount', 'Invoke-PowerBIRestMethod', 'Get-PowerBIAccessToken', 'Resolve-PowerBIError'
 
     # Variables to export from this module
     # VariablesToExport = '*'
@@ -111,7 +111,7 @@
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-    # HelpInfoURI = ''
+    HelpInfoURI = 'https://go.microsoft.com/fwlink/?linkid=2002111&clcid=0x409'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''

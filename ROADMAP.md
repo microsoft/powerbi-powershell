@@ -5,11 +5,12 @@ Planned\upcoming cmdlets.
 > Cmdlets follow the following format: `%Verb%-PowerBI%Noun%`  
 > _%Verb%_ must be an approved verb, use `Get-Verb` in PowerShell or visit [here][1] to see list.  
 >
-> Names should also conform to these two guidelines: 
+> Names should also conform to these two guidelines:
 > * [Required Development Guidelines][3]
 > * [Strongly Encouraged Development Guidelines][2]
 
 ## General Improvments
+
 * Adding -Scope parameter to more cmdlets
 * Supporting PowerShell Core (dependent on updating PowerBI.Api and Microsoft.Rest.ClientRuntime to .NET Standard 2.0)
 
@@ -19,7 +20,7 @@ Planned\upcoming cmdlets.
 | ----------- | ------- | ----- | ----- |
 | New-PowerBIWorkspace | Creates a new workspace | Create-PowerBIWorkspace |
 | Remove-PowerBIWorkspace | Deletes a workspace | Delete-PowerBIWorkspace | 
-| Set-PowerBICapacityOnWorkspace | Allocates capcity to a Workspace | Assign-PowerBICapacityToWorkspace |
+| Set-PowerBICapacityOnWorkspace | Allocates capacity to a Workspace | Assign-PowerBICapacityToWorkspace |
 
 ## Reports
 
@@ -36,32 +37,32 @@ Planned\upcoming cmdlets.
 
 | Cmdlet Name | Purpose | Alias | Notes |
 | ----------- | ------- | ----- | ----- |
-| Get-PowerBIDashbord | Get dashboards |
-| Add-PowerBIDashbord | Add dashboards |
-| Copy-PowerBIDashboardTile | Clone tiles |
+| Get-PowerBIDashboard | Get dashboards |
+| Add-PowerBIDashboard | Add dashboards |
+| Copy-PowerBITile | Clone tiles |
 | New-PowerBIDashboardEmbedToken | Generate an embed token |
-| Get-PowerBIDashboardTile | Get tiles |
+| Get-PowerBITile | Get tiles |
 
 ## Datasets and Datasources
 
 | Cmdlet Name | Purpose | Alias | Notes |
 | ----------- | ------- | ----- | ----- |
 | Get-PowerBIDataset | Get datasets |
-| Get-PowerBIDatasource | Get datasources |
+| Get-PowerBIDatasource | Get data sources |
 | Get-PowerBIDatasetParameter | Get parameters for dataset |
 | Add-PowerBIGatewayToDatasource | Bind to a gateway | Mount-PowerBIGatewayToDatasource
 | Remove-PowerBIDatasource | Delete dataset | Delete-PowerBIDatasource |
 | Remove-PowerBIDatasetRow | Delete dataset rows | Delete-PowerBIDatasetRow |
-| Get-PowerBIGatewayForDataset | Discover gateways | 
+| Get-PowerBIGatewayForDataset | Discover gateways |
 | New-PowerBIDatasetEmbedToken | Generate an embed token |
 | Get-PowerBIDatasetRefreshHistory | Get refresh history |
-| Get-PowerBITablesInDatasource | Get tables in datasource |
+| Get-PowerBITablesInDatasource | Get tables in data source |
 | New-PowerBIDatasetData | Create data in dataset |
-| New-PowerBIDatasetRow | Create rows in datasource tables |
+| New-PowerBIDatasetRow | Create rows in data source tables |
 | Update-PowerBIDataset | Refresh dataset | Refresh-PowerBIDataset
-| Update-PowerBITableSchema | Update schema\metadata in datasource table |
+| Update-PowerBITableSchema | Update schema\metadata in data source table |
 | Protect-PowerBIDataset | Take over a dataset | TakeOver-PowerBIDataset
-| Set-PowerBIDatasource | Update a datasource | Update-PowerBIDatasource |
+| Set-PowerBIDatasource | Update a data source | Update-PowerBIDatasource |
 | Set-PowerBIDatasetParameter | Update parameters for a dataset | Update-PowerBIDatasetParameter |
 
 ## Capacity Management

@@ -7,6 +7,7 @@ using System;
 using System.Net.Http;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.Rest;
@@ -22,19 +23,25 @@ namespace Microsoft.PowerBI.Common.Api
         public IReportsClient Reports { get; set; }
 
         public IWorkspacesClient Workspaces { get; set; }
+        public DatasetsClient Datasets { get; set; }
 
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings);
-            this.Reports = new ReportsClient(this.Client);
-            this.Workspaces = new WorkspacesClient(this.Client);
+            InitializeClients();
         }
 
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings, httpClientHandler);
+            InitializeClients();
+        }
+
+        private void InitializeClients()
+        {
             this.Reports = new ReportsClient(this.Client);
             this.Workspaces = new WorkspacesClient(this.Client);
+            this.Datasets = new DatasetsClient(this.Client);
         }
 
         private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
@@ -100,6 +107,11 @@ namespace Microsoft.PowerBI.Common.Api
                 if (this.Workspaces != null)
                 {
                     this.Workspaces = null;
+                }
+
+                if(this.Datasets != null)
+                {
+                    this.Datasets = null;
                 }
             }
         }
