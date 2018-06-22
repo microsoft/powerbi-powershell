@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Data.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Data
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.data/get-powerbidatasource?view=powerbi-ps
 schema: 2.0.0
 ---
 

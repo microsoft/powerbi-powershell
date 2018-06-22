@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Profile.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Profile
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/get-powerbiaccesstoken?view=powerbi-ps
 schema: 2.0.0
 ---
 

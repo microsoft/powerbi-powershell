@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Reports.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Reports
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.reports/get-powerbidashboard?view=powerbi-ps
 schema: 2.0.0
 ---
 
