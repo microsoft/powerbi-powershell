@@ -135,7 +135,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
                 else
                 {
-                    // Stream based, OutFile
+                    // Stream based, OutFile specified
                     HttpRequestMessage request = null;
                     switch (requestType)
                     {
@@ -169,6 +169,7 @@ namespace Microsoft.PowerBI.Commands.Profile
 
                 response.EnsureSuccessStatusCode();
 
+                // Need to stream results back before HttpClient is disposed
                 var result = new HttpResult()
                 {
                     ResponseMessage = response
@@ -191,7 +192,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
         }
 
-        public class HttpResult
+        private class HttpResult
         {
             public HttpResponseMessage ResponseMessage { get; set; }
             public string Content { get; set; }

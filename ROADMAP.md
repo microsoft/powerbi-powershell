@@ -38,9 +38,9 @@ Planned\upcoming cmdlets.
 | ----------- | ------- | ----- | ----- |
 | Get-PowerBIDashbord | Get dashboards |
 | Add-PowerBIDashbord | Add dashboards |
-| Copy-PowerBIDashboardTile | Clone tiles |
+| Copy-PowerBITile | Clone tiles |
 | New-PowerBIDashboardEmbedToken | Generate an embed token |
-| Get-PowerBIDashboardTile | Get tiles |
+| Get-PowerBITile | Get tiles |
 
 ## Datasets and Datasources
 

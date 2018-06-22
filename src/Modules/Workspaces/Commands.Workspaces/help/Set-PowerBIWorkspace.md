@@ -98,7 +98,7 @@ Accept wildcard characters: False
 
 ### -Scope
 Indicates scope of the call. Only Organization is supported with this cmdlet.
-Organization operates against all workspaces within a tenant (must be an administrator to initiate). Organization is the default.
+Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope

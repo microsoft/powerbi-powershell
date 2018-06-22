@@ -24,5 +24,5 @@ Returns a list of Power BI imports.
 Returns a list of Power BI reports.
 
 ### [Get-PowerBITile](Get-PowerBITile.md)
-Returns a list of Power BI tiles under a dashboard.
+Returns a list of Power BI tiles for a dashboard.
 

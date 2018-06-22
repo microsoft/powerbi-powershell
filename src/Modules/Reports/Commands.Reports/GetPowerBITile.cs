@@ -15,6 +15,7 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Reports
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
+    [Alias("Get-PowerBIDashboardTile")]
     [OutputType(typeof(IEnumerable<Tile>))]
     public class GetPowerBITile : PowerBIClientCmdlet, IUserScope, IUserId, IUserFirstSkip
     {

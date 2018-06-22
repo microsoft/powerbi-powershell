@@ -21,7 +21,7 @@ Licensed under the MIT License.
   </ItemGroup>
 
   <PropertyGroup>
-    <BeforePack>$(BeforePack);UpdatePSManifest;GeneratePSHelp</BeforePack>
+    <BeforePack>$(BeforePack);UpdatePSManifest;GeneratePSHelp;UpdateReleaseNotes</BeforePack>
   </PropertyGroup>
 
   
@@ -109,6 +109,22 @@ Licensed under the MIT License.
     
     <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
     
+  </Target>
+
+  <Target Name="UpdateReleaseNotes" Condition="Exists('$(RepoRoot)ReleaseNotes.md')">
+    
+    <ItemGroup>
+      <ReleaseNotesFile Include="$(RepoRoot)ReleaseNotes.md" />
+    </ItemGroup>
+
+    <ReadLinesFromFile File="@(ReleaseNotesFile)">
+      <Output TaskParameter="Lines" ItemName="ReleaseNotesFromFile" />
+    </ReadLinesFromFile>
+  
+    <PropertyGroup>
+      <PackageReleaseNotes>@(ReleaseNotesFromFile, '%0A')</PackageReleaseNotes> <!-- %0A = LF (new line) -->
+    </PropertyGroup>
+
   </Target>
   
 </Project>
