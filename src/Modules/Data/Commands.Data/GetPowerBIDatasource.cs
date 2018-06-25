@@ -30,7 +30,6 @@ namespace Microsoft.PowerBI.Commands.Data
         private const string ObjectListParameterSetName = "ObjectAndList";
         #endregion
 
-        
         #region Parameters
         [Alias("DatasetKey")]
         [Parameter(Mandatory = true, ParameterSetName = ListParameterSetName)]
@@ -84,9 +83,16 @@ namespace Microsoft.PowerBI.Commands.Data
             IEnumerable<Datasource> datasources = null;
             using (var client = this.CreateClient())
             {
-                datasources = this.Scope == PowerBIUserScope.Individual ?
-                    client.Datasets.GetDatasources(this.DatasetId, this.WorkspaceId) :
-                    client.Datasets.GetDatasourcesAsAdmin(this.DatasetId);
+                if (this.WorkspaceId != default)
+                {
+                    datasources = client.Datasets.GetDatasources(this.DatasetId, this.WorkspaceId);
+                }
+                else
+                {
+                    datasources = this.Scope == PowerBIUserScope.Individual ?
+                        client.Datasets.GetDatasources(this.DatasetId) :
+                        client.Datasets.GetDatasourcesAsAdmin(this.DatasetId);
+                }
             }
 
             if(this.Id != default)

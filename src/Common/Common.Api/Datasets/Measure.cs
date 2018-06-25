@@ -12,6 +12,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public static implicit operator Measure(PowerBI.Api.V2.Models.Measure measure)
         {
+            if(measure == null)
+            {
+                return null;
+            }
+
             return new Measure
             {
                 Name = measure.Name,

@@ -23,7 +23,8 @@ namespace Microsoft.PowerBI.Common.Api
         public IReportsClient Reports { get; set; }
 
         public IWorkspacesClient Workspaces { get; set; }
-        public DatasetsClient Datasets { get; set; }
+
+        public IDatasetsClient Datasets { get; set; }
 
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {

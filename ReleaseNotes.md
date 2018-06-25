@@ -1,10 +1,10 @@
 * New MicrosoftPowerBIMgmt.Data module
     - New Get-PowerBIDataset cmdlet for getting datasets.
-    - New Get-PowerBIDatasource cmdlet for getting datas sources.
+    - New Get-PowerBIDatasource cmdlet for getting data sources.
 
 
 * Updated MicrosoftPowerBIMgmt.Profile module
-    - -OutFile parameter added to Invoke-PowerBIRestMethod
+    - Added -OutFile parameter to Invoke-PowerBIRestMethod.
     - New Resolve-PowerBIError cmdlet for resolving cmdlet errors.
     - Fixed Get-PowerBIAccessToken header output to work with Invoke-RestMethod.
 

@@ -36,7 +36,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return this.Client.Datasets.GetDatasetsAsAdmin(groupId: workspaceId.ToString(), filter: filter, top: top, skip: skip).Value?.Select(x => (Dataset)x);
         }
 
-        public IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default)
+        public virtual IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default)
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ? 
                 this.Client.Datasets.GetDatasources(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) : 

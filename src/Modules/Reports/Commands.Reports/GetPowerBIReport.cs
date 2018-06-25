@@ -92,12 +92,12 @@ namespace Microsoft.PowerBI.Commands.Reports
                 this.WorkspaceId = this.Workspace.Id;
             }
 
-            if (this.ParameterSet.Equals(IdParameterSetName))
+            if (this.Id != default)
             {
                 this.Filter = $"id eq '{this.Id}'";
             }
 
-            if (this.ParameterSet.Equals(NameParameterSetName))
+            if (this.Name != default)
             {
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }
@@ -119,13 +119,14 @@ namespace Microsoft.PowerBI.Commands.Reports
                 } 
             }
 
-            if(this.Scope == PowerBIUserScope.Individual)
+            // Bug in OData filter for ID, workaround is to use LINQ
+            if (this.Id != default)
             {
-                if(this.Id != default)
-                {
-                    reports = reports?.Where(r => this.Id == r.Id);
-                }
+                reports = reports?.Where(r => this.Id == r.Id);
+            }
 
+            if (this.Scope == PowerBIUserScope.Individual)
+            {
                 if(!string.IsNullOrEmpty(this.Name))
                 {
                     reports = reports?.Where(r => r.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase));

@@ -18,6 +18,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public static implicit operator Relationship(PowerBI.Api.V2.Models.Relationship relationship)
         {
+            if(relationship == null)
+            {
+                return null;
+            }
+
             return new Relationship
             {
                 Name = relationship.Name,

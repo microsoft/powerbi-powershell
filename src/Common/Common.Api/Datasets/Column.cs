@@ -12,6 +12,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public static implicit operator Column(PowerBI.Api.V2.Models.Column column)
         {
+            if(column == null)
+            {
+                return null;
+            }
+
             return new Column
             {
                 Name = column.Name,

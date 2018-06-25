@@ -28,6 +28,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public static implicit operator Dataset(PowerBI.Api.V2.Models.Dataset dataset)
         {
+            if(dataset == null)
+            {
+                return null;
+            }
+
             return new Dataset
             {
                 Id = new Guid(dataset.Id),
