@@ -26,13 +26,18 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetPowerBIDatasource()
+        public void EndToEndGetPowerBIDatasourceIndividualScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDatasource.DatasetId), "b077389f-0238-4312-b014-0c6212fc904e");//.AddParameter("Scope", "Organization");
+                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDatasource.DatasetId), "b077389f-0238-4312-b014-0c6212fc904e");
+
+                // Act
                 var result = ps.Invoke();
+
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
@@ -64,7 +69,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void EndToEndGetPowerBIDatasourceWithWorkspaceIdAndOrganization()
+        public void EndToEndGetPowerBIDatasourceOrganizationScopeAndWorkspaceId()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -87,7 +92,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void GetPowerBIDatasourceWithIndividual()
+        public void GetPowerBIDatasourceIndividualScope_ListParameterSet()
         {
             // Arrange
             var datasetId = Guid.NewGuid();
@@ -110,7 +115,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void GetPowerBIDatasourceWithIndividualAndWorkspaceId()
+        public void GetPowerBIDatasourceIndividualScopeAndWorkspaceId_ListParameterSet()
         {
             // Arrange
             var datasetId = Guid.NewGuid();
@@ -135,7 +140,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void GetPowerBIDatasourceWithOrganization()
+        public void GetPowerBIDatasourceOrganizationScope_ListParameterSet()
         {
             // Arrange
             var datasetId = Guid.NewGuid();

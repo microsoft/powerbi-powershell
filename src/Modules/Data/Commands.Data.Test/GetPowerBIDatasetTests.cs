@@ -18,13 +18,18 @@ namespace Microsoft.PowerBI.Commands.Data
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetPowerBIDataset()
+        public void EndToEndGetPowerBIDatasetOrganizationScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
+                // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter("Scope", "Organization");
+
+                // Act
                 var result = ps.Invoke();
+
+                // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
