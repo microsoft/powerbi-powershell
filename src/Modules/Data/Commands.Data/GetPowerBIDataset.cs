@@ -92,12 +92,12 @@ namespace Microsoft.PowerBI.Commands.Data
                 this.WorkspaceId = this.Workspace.Id;
             }
 
-            if (this.ParameterSet.Equals(IdParameterSetName))
+            if (this.Id != default)
             {
                 this.Filter = $"id eq '{this.Id}'";
             }
 
-            if (this.ParameterSet.Equals(NameParameterSetName))
+            if (this.Name != default)
             {
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }

@@ -17,6 +17,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public static implicit operator Table(PowerBI.Api.V2.Models.Table table)
         {
+            if(table == null)
+            {
+                return null;
+            }
+
             return new Table
             {
                 Name = table.Name,

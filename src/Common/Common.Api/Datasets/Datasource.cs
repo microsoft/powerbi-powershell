@@ -18,12 +18,17 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public static implicit operator Datasource(PowerBI.Api.V2.Models.Datasource datasource)
         {
+            if(datasource == null)
+            {
+                return null;
+            }
+
             return new Datasource
             {
                 Name = datasource.Name,
                 ConnectionString = datasource.ConnectionString,
                 DatasourceType = datasource.DatasourceType,
-                ConnectionDetails = (DatasourceConnectionDetails)datasource.ConnectionDetails,
+                ConnectionDetails = datasource.ConnectionDetails,
                 GatewayId = datasource.GatewayId,
                 DatasourceId = datasource.DatasourceId
             };

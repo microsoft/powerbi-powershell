@@ -40,7 +40,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ? 
                 this.Client.Datasets.GetDatasources(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) : 
-                this.Client.Datasets.GetDatasources(datasetKey: workspaceId.ToString());
+                this.Client.Datasets.GetDatasources(datasetKey: datasetId.ToString());
             return result.Value?.Select(x => (Datasource)x);
 
         }

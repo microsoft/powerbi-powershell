@@ -13,6 +13,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public static implicit operator DatasourceConnectionDetails(PowerBI.Api.V2.Models.DatasourceConnectionDetails datasourceConnectionDetails)
         {
+            if(datasourceConnectionDetails == null)
+            {
+                return null;
+            }
+
             return new DatasourceConnectionDetails
             {
                 Server = datasourceConnectionDetails.Server,
