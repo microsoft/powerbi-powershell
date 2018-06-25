@@ -4,6 +4,7 @@
  */
 
 using System;
+using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 
@@ -14,5 +15,7 @@ namespace Microsoft.PowerBI.Common.Api
         IReportsClient Reports { get; set; }
 
         IWorkspacesClient Workspaces { get; set; }
+
+        IDatasetsClient Datasets { get; set; }
     }
 }

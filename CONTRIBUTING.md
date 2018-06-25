@@ -122,9 +122,9 @@ dotnet new mstest --name "Commands.$moduleName.Test"
 
 cd ".\Commands.$moduleName"
 dotnet add package PowerShellStandard.Library --version 3.0.0-preview-01
-dotnet add package Microsoft.PowerBI.Api --version 2.0.10
 dotnet add reference "$root\src\Common\Commands.Common\Commands.Common.csproj"
 dotnet add reference "$root\src\Common\Common.Abstractions\Common.Abstractions.csproj"
+dotnet add reference "$root\src\Common\Common.Client\Common.Client.csproj"
 dotnet add reference "$root\src\Modules\Profile\Commands.Profile\Commands.Profile.csproj"
 Remove-Item .\Class1.cs
 New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
@@ -155,7 +155,7 @@ New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
 <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>MicrosoftPowerBIMgmt.<fill out with module name></PackageId>
-    <Description>Microsoft PowerBI PowerShell - <fill out with module name> cmdlets for Microsoft PowerBI</Description>
+    <Description>Microsoft Power BI PowerShell - <fill out with module name> cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;<fill out with module name></PackageTags>
 </PropertyGroup>
 ```
@@ -166,13 +166,15 @@ New-ModuleManifest -Path ".\MicrosoftPowerBIMgmt.$moduleName.psd1" `
 ```powershell
 cd "..\Commands.$moduleName.Test"
 dotnet add package PowerShellStandard.Library --version 3.0.0-preview-01
-dotnet add package Microsoft.PowerBI.Api --version 2.0.10
 dotnet add package Microsoft.PowerShell.SDK --version 6.0.1
 dotnet add package Microsoft.PowerShell.Commands.Diagnostics --version 6.0.1
 dotnet add package Microsoft.WSMan.Management --version 6.0.1
+dotnet add reference "$root\src\Common\Commands.Common.Test\Commands.Common.Test.csproj"
 dotnet add reference "$root\src\Common\Commands.Common\Commands.Common.csproj"
 dotnet add reference "$root\src\Common\Common.Abstractions\Common.Abstractions.csproj"
 dotnet add reference "$root\src\Common\Common.Authentication\Common.Authentication.csproj"
+dotnet add reference "$root\src\Common\Common.Client\Common.Client.csproj"
+dotnet add reference "$root\src\Modules\Profile\Commands.Profile.Test\Commands.Profile.Test.csproj"
 dotnet add reference "$root\src\Modules\Profile\Commands.Profile\Commands.Profile.csproj"
 dotnet add reference "$root\src\Modules\$moduleName\Commands.$moduleName\Commands.$moduleName.csproj"
 ```

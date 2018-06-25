@@ -21,5 +21,8 @@ Log out of the Power BI service.
 Gets the access token for your current Power BI authenticated session.
 
 ### [Invoke-PowerBIRestMethod](Invoke-PowerBIRestMethod.md)
-Executes a REST call to the Power BI service with provided URL and body.
+Executes a REST call to the Power BI service, with the specified URL and body.
+
+### [Resolve-PowerBIError](Resolve-PowerBIError.md)
+Shows detailed error information produced from MicrosoftPowerBIMgmt.* cmdlets.
 

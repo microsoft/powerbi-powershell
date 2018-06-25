@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Workspaces.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Workspaces
-online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/set-powerbiworkspace?view=powerbi-ps-1.0.193
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/set-powerbiworkspace?view=powerbi-ps
 schema: 2.0.0
 ---
 
@@ -25,8 +25,9 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<Common
 
 ## DESCRIPTION
 Updates the name or description of a Power BI workspace.
-Currently only -Scope Organization is supported.
-You must have logged in previously before, using Login-PowerBIServiceAccount.
+Only workspaces in the new workspace experiences preview are supported.
+Only -Scope Organization is supported and you must have administrator rights (such as Office 365 Global Administrator or Power BI Service Administrator) to call this command.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -97,7 +98,7 @@ Accept wildcard characters: False
 
 ### -Scope
 Indicates scope of the call. Only Organization is supported with this cmdlet.
-Individual only operates against workspaces assigned to the caller; Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
+Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope

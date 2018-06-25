@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Profile.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Profile
-online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/disconnect-powerbiserviceaccount?view=powerbi-ps-1.0.193
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/disconnect-powerbiserviceaccount?view=powerbi-ps
 schema: 2.0.0
 ---
 

@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Workspaces.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Workspaces
-online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/get-powerbiworkspace?view=powerbi-ps-1.0.193
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/get-powerbiworkspace?view=powerbi-ps
 schema: 2.0.0
 ---
 
@@ -29,8 +29,8 @@ Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParamete
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI workspaces with the provided search criteria and scope specified.
-You must have logged in previously before, using Login-PowerBIServiceAccount.
+Retrieves a list of Power BI workspaces that match the specified search criteria and scope.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -66,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-OData filter, case-sensitive (element names start lowercase). Only supported when -Scope Organization is specified.
+OData filter, case-sensitive (element names start lowercase).
 
 ```yaml
 Type: String

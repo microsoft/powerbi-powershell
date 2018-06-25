@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Profile.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Profile
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/invoke-powerbirestmethod?view=powerbi-ps
 schema: 2.0.0
 ---
 
@@ -13,13 +13,14 @@ Executes a REST call to the Power BI service, with the specified URL and body.
 ## SYNTAX
 
 ```
-Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>]
+Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>] [-OutFile <String>]
  [-Organization <String>] [-Version <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Invokes a REST request against the Power BI service using the profile you're logged in with (Connect-PowerBIServiceAccount).
+Invokes a REST request against the Power BI service using the profile you're logged in with.
 The REST verb can be specified using the -Method parameter. The -Body parameter is required for the verbs POST, PUT, and PATCH.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -65,6 +66,21 @@ Accept wildcard characters: False
 
 ### -Organization
 Organization name or tenant GUID to include in the URL. Default is 'myorg'.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutFile
+Output file for writing the response content to. File path specified must not exist.
 
 ```yaml
 Type: String

@@ -28,7 +28,7 @@
     Copyright = 'Microsoft Corporation. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description = 'Microsoft PowerBI PowerShell - Workspace cmdlets for Microsoft PowerBI'
+    Description = 'Microsoft Power BI PowerShell - Workspace cmdlets for Microsoft Power BI'
 
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '3.0'
@@ -111,7 +111,7 @@
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-    # HelpInfoURI = ''
+    HelpInfoURI = 'https://go.microsoft.com/fwlink/?linkid=2002111&clcid=0x409'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''

@@ -11,6 +11,18 @@ Locale: en-US
 PowerShell cmdlets for managing and interacting with Power BI reports.
 
 ## MicrosoftPowerBIMgmt.Reports Cmdlets
+### [Export-PowerBIReport](Export-PowerBIReport.md)
+Exports a Power BI report to the .pbix file format.
+
+### [Get-PowerBIDashboard](Get-PowerBIDashboard.md)
+Returns a list of Power BI dashboards.
+
+### [Get-PowerBIImport](Get-PowerBIImport.md)
+Returns a list of Power BI imports.
+
 ### [Get-PowerBIReport](Get-PowerBIReport.md)
 Returns a list of Power BI reports.
+
+### [Get-PowerBITile](Get-PowerBITile.md)
+Returns a list of Power BI tiles for a dashboard.
 

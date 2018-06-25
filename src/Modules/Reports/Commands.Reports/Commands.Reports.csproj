@@ -11,7 +11,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>MicrosoftPowerBIMgmt.Reports</PackageId>
-    <Description>Microsoft PowerBI PowerShell - Report cmdlets for Microsoft PowerBI</Description>
+    <Description>Microsoft Power BI PowerShell - Report cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Reports</PackageTags>
   </PropertyGroup>
   <ItemGroup>

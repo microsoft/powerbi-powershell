@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Profile.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Profile
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/get-powerbiaccesstoken?view=powerbi-ps
 schema: 2.0.0
 ---
 
@@ -17,7 +17,8 @@ Get-PowerBIAccessToken [-AsString] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the Power BI access token gathered from Connect-PowerBIServiceAccount.
+Returns the Power BI access token gathered from logged in Power BI profile.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 

@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Workspaces.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Workspaces
-online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/remove-powerbiworkspaceuser?view=powerbi-ps-1.0.193
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/remove-powerbiworkspaceuser?view=powerbi-ps
 schema: 2.0.0
 ---
 
@@ -26,7 +26,7 @@ Remove-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <Stri
 
 ## DESCRIPTION
 Removes permissions for a specified user to a Power BI workspace using the provided inputs and scope specified.
-You must have logged in previously before, using Login-PowerBIServiceAccount.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only workspaces assigned to the caller; Organization returns all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual operates against only workspaces assigned to the caller; Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope

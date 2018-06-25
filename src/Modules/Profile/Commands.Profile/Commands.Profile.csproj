@@ -11,7 +11,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>MicrosoftPowerBIMgmt.Profile</PackageId>
-    <Description>Microsoft PowerBI PowerShell - Profile credential management cmdlets for Microsoft PowerBI</Description>
+    <Description>Microsoft Power BI PowerShell - Profile credential management cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Profile;Authentication;Environment</PackageTags>
   </PropertyGroup>
   
@@ -40,6 +40,9 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.11 ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>

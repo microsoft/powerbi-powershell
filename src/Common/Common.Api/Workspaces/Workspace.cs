@@ -42,7 +42,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                 Description = group.Description,
                 Type = group.Type,
                 State = group.State,
-                Users = group.Users?.Select(x => (WorkspaceUser)x),
+                Users = group.Users?.Select(x => (WorkspaceUser)x)
             };
         }
 
@@ -58,7 +58,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                 Description = workspace.Description,
                 Type = workspace.Type,
                 State = workspace.State,
-                Users = workspace.Users?.Select(x => (GroupUserAccessRight)x).ToList(),
+                Users = workspace.Users?.Select(x => (GroupUserAccessRight)x).ToList()
             };
         }
     }

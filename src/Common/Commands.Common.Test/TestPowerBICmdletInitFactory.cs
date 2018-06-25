@@ -3,9 +3,12 @@
  * Licensed under the MIT License.
  */
 
-using Microsoft.PowerBI.Common.Client;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Client;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.Common.Test
 {
@@ -44,6 +47,15 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             }
 
             this.Storage.SetItem("profile", this.Profile);
+        }
+
+        public void AssertExpectedUnitTestResults<T>(List<T> expected)
+        {
+            Assert.IsFalse(this.Logger.ErrorRecords.Any());
+            var results = this.Logger.Output.ToList();
+            Assert.AreEqual(expected.Count, results.Count());
+            var castedResults = results.Cast<T>().ToList();
+            CollectionAssert.AreEqual(expected, castedResults);
         }
     }
 }
