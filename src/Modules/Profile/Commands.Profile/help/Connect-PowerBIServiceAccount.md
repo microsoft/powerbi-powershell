@@ -14,20 +14,19 @@ Log in to the Power BI service.
 
 ### User (Default)
 ```
-Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-Credential <PSCredential>]
- [<CommonParameters>]
+Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-Tenant <String>] [<CommonParameters>]
 ```
 
 ### ServicePrincipal
 ```
 Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -Credential <PSCredential>
- [-ServicePrincipal] [<CommonParameters>]
+ [-ServicePrincipal] [-Tenant <String>] [<CommonParameters>]
 ```
 
 ### ServicePrincipalCertificate
 ```
 Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -CertificateThumbprint <String>
- -ApplicationId <String> [-ServicePrincipal] [<CommonParameters>]
+ -ApplicationId <String> [-ServicePrincipal] [-Tenant <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -104,18 +103,6 @@ PSCredential representing the Azure Active Directory (AAD) application client ID
 
 ```yaml
 Type: PSCredential
-Parameter Sets: User
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: PSCredential
 Parameter Sets: ServicePrincipal
 Aliases:
 
@@ -151,6 +138,21 @@ Parameter Sets: ServicePrincipal, ServicePrincipalCertificate
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Tenant
+Tenant name or tenant ID containing the service principal account. If not specified, the 'COMMON' tenant is used.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: TenantId
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
