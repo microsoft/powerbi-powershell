@@ -28,11 +28,27 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetPowerBIDatasourceIndividualScope()
         {
+            /*
+             * Requirement to run test:
+             * Need at least one dataset containing a datasource assigned to the user logging into the test.
+             */
+
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDatasource.DatasetId), "b077389f-0238-4312-b014-0c6212fc904e");
+                ps.AddCommand(GetPowerBIDatasetTests.GetPowerBIDatasetCmdletInfo);
+                var existingDatasets = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
+                ps.Commands.Clear();
+
+                if(!existingDatasets.Any())
+                {
+                    Assert.Inconclusive("No datasets returned. Verify you have datasets under your logged in user.");
+                }
+
+                var testDataset = existingDatasets.Select(d => (Dataset)d.BaseObject).FirstOrDefault();
+                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDatasource.DatasetId), testDataset.Id.ToString());
 
                 // Act
                 var result = ps.Invoke();
@@ -88,6 +104,37 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
                 // Assert
                 Assert.Fail("Should not have reached this point");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndPipingDatasetIntoGetPowerBIDatasourceIndividualScope()
+        {
+            /*
+             * Requirement to run test:
+             * Need at least one dataset containing a datasource assigned to the user logging into the test.
+             */
+
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
+                ps.AddCommand(GetPowerBIDatasetTests.GetPowerBIDatasetCmdletInfo).AddCommand(GetPowerBIDatasourceCmdletInfo);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No datasources returned. Verify you have datasources under your logged in user.");
+                }
+
+                Assert.IsTrue(results.Count > 0);
             }
         }
 
@@ -153,6 +200,29 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 Scope = PowerBIUserScope.Organization,
                 DatasetId = datasetId,
                 ParameterSet = "List",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            initFactory.AssertExpectedUnitTestResults(expectedDatasources);
+        }
+
+        [TestMethod]
+        public void GetPowerBIDatasourceIndividualScope_ObjectAndListParameterSet()
+        {
+            // Arrange
+            var testDataset = new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" };
+            var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Datasets.GetDatasources(testDataset.Id, null)).Returns(expectedDatasources);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIDatasource(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Dataset = testDataset,
+                ParameterSet = "ObjectAndList",
             };
 
             // Act

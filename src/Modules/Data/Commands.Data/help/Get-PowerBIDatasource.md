@@ -31,12 +31,14 @@ Get-PowerBIDatasource -DatasetId <Guid> [-WorkspaceId <Guid>] -Name <String> [-S
 
 ### ObjectAndId
 ```
-Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] -Id <Guid> [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ### ObjectAndName
 ```
-Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIDatasource -Dataset <Dataset> [-WorkspaceId <Guid>] -Name <String> [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ### ObjectAndList
@@ -101,7 +103,7 @@ Id of the data source to return.
 
 ```yaml
 Type: Guid
-Parameter Sets: Id
+Parameter Sets: Id, ObjectAndId
 Aliases: DatasourceId
 
 Required: True
@@ -116,7 +118,7 @@ Name of the data source to return if one exists with that name. Case insensitive
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: Name, ObjectAndName
 Aliases: DatasoureName
 
 Required: True

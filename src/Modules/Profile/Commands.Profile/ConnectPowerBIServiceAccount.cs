@@ -32,7 +32,6 @@ namespace Microsoft.PowerBI.Commands.Profile
         [Parameter(Mandatory = false)]
         public PowerBIEnvironmentType Environment { get; set; } = PowerBIEnvironmentType.Public;
 
-        [Parameter(ParameterSetName = UserParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = true)]
         public PSCredential Credential { get; set; }
 
@@ -45,6 +44,11 @@ namespace Microsoft.PowerBI.Commands.Profile
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = true)]
         [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = true)]
         public SwitchParameter ServicePrincipal { get; set; }
+
+        [Alias("TenantId")]
+        [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
+        public string Tenant { get; set; }
         #endregion
 
         #region Constructors
@@ -56,6 +60,13 @@ namespace Microsoft.PowerBI.Commands.Profile
         public override void ExecuteCmdlet()
         {
             var environment = this.Settings.Environments[this.Environment];
+            if(!string.IsNullOrEmpty(this.Tenant))
+            {
+                var tempEnvironment = (PowerBIEnvironment) environment;
+                tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", $"/{this.Tenant}");
+                this.Logger.WriteVerbose($"Updated Azure AD authority with -Tenant specified, new value: {tempEnvironment.AzureADAuthority}");
+                environment = tempEnvironment;
+            }
 
             this.Authenticator.Challenge(); // revoke any previous login
             IAccessToken token = null;
