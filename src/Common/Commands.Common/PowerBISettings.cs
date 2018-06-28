@@ -21,6 +21,8 @@ namespace Microsoft.PowerBI.Commands.Common
     {
         private IConfigurationRoot Configuration { get; }
 
+        private static GSEnvironments GlobalServiceEnvironments { get; set; }
+
         public PowerBISettings(IConfigurationBuilder builder = null)
         {
             var executingDirectory = this.GetExecutingDirectory();
@@ -83,14 +85,19 @@ namespace Microsoft.PowerBI.Commands.Common
 
         public async Task<GSEnvironments> GetGlobalServiceConfig(string clientName = "powerbi-msolap")
         {
-            using (var client = new HttpClient())
+            if(GlobalServiceEnvironments != null)
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                var response = await client.PostAsync("https://api.powerbi.com/powerbi/globalservice/v201606/environments/discover?client=" + clientName, null);
-                var serializer = new DataContractJsonSerializer(typeof(GSEnvironments));
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    var response = await client.PostAsync("https://api.powerbi.com/powerbi/globalservice/v201606/environments/discover?client=" + clientName, null);
+                    var serializer = new DataContractJsonSerializer(typeof(GSEnvironments));
 
-                return serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as GSEnvironments;
+                    GlobalServiceEnvironments = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as GSEnvironments;
+                }
             }
+
+            return GlobalServiceEnvironments;
         }
 
         public IDictionary<PowerBIEnvironmentType, IPowerBIEnvironment> Environments { get; }
