@@ -28,6 +28,12 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetPowerBIDatasourceIndividualScope()
         {
+            /*
+             * Requirement to run test:
+             * Need at least one dataset containing a datasource assigned to the user logging into the test.
+             * Update the test with the dataset ID before running.
+             */
+
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
@@ -88,6 +94,32 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
                 // Assert
                 Assert.Fail("Should not have reached this point");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndPipingDatasetIntoGetPowerBIDatasourceIndividualScope()
+        {
+            /*
+             * Requirement to run test:
+             * Need at least one dataset containing a datasource assigned to the user logging into the test.
+             */
+
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
+                ps.AddCommand(GetPowerBIDatasetTests.GetPowerBIDatasetCmdletInfo).AddCommand(GetPowerBIDatasourceCmdletInfo);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Count > 0);
             }
         }
 
@@ -153,6 +185,29 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 Scope = PowerBIUserScope.Organization,
                 DatasetId = datasetId,
                 ParameterSet = "List",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            initFactory.AssertExpectedUnitTestResults(expectedDatasources);
+        }
+
+        [TestMethod]
+        public void GetPowerBIDatasourceIndividualScope_ObjectAndListParameterSet()
+        {
+            // Arrange
+            var testDataset = new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" };
+            var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Datasets.GetDatasources(testDataset.Id, null)).Returns(expectedDatasources);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIDatasource(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Dataset = testDataset,
+                ParameterSet = "ObjectAndList",
             };
 
             // Act

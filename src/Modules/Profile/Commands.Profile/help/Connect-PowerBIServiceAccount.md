@@ -14,7 +14,7 @@ Log in to the Power BI service.
 
 ### User (Default)
 ```
-Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-Tenant <String>] [<CommonParameters>]
+Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [<CommonParameters>]
 ```
 
 ### ServicePrincipal
@@ -149,7 +149,7 @@ Tenant name or tenant ID containing the service principal account. If not specif
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: ServicePrincipal, ServicePrincipalCertificate
 Aliases: TenantId
 
 Required: False

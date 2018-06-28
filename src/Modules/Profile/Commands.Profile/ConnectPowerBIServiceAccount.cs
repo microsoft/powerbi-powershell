@@ -46,7 +46,6 @@ namespace Microsoft.PowerBI.Commands.Profile
         public SwitchParameter ServicePrincipal { get; set; }
 
         [Alias("TenantId")]
-        [Parameter(ParameterSetName = UserParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
         public string Tenant { get; set; }
@@ -64,7 +63,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             if(!string.IsNullOrEmpty(this.Tenant))
             {
                 var tempEnvironment = (PowerBIEnvironment) environment;
-                tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common/", $"/{this.Tenant}/");
+                tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", $"/{this.Tenant}");
                 this.Logger.WriteVerbose($"Updated Azure AD authority with -Tenant specified, new value: {tempEnvironment.AzureADAuthority}");
                 environment = tempEnvironment;
             }
