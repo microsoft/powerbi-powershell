@@ -85,7 +85,7 @@ namespace Microsoft.PowerBI.Commands.Common
 
         public async Task<GSEnvironments> GetGlobalServiceConfig(string clientName = "powerbi-msolap")
         {
-            if(GlobalServiceEnvironments != null)
+            if(GlobalServiceEnvironments == null)
             {
                 using (var client = new HttpClient())
                 {
