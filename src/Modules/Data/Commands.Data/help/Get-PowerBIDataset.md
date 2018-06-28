@@ -128,7 +128,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns datasets from "My Workspace" unless -Workspace or -WorkspaceId is specified which shows datasets under the workspace assigned to the caller; Organization returns all datasets within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns datasets from "My Workspace" by default. With -Workspace or -WorkspaceId, datasets under the workspace assigned to the caller are returned; Organization returns all datasets within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
