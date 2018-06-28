@@ -30,6 +30,12 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             }
         }
 
+        /// <summary>
+        /// Constructor for TestPowerBICmdletNoClientInitFactory.
+        /// Used by tests\cmdlets that don't need a client.
+        /// </summary>
+        /// <param name="setProfile">True if profile should be assigned; false otherwise. If testing cmdlets for profile assignment, pass false.</param>
+        /// <param name="profile">Profile to assign, only assigned if setProfile is true. If setProfile is true and profile is null, TestProfile will be constructed for assignment.</param>
         public TestPowerBICmdletNoClientInitFactory(bool setProfile, IPowerBIProfile profile = null) :
             base(new TestLoggerFactory(), new ModuleDataStorage(), new TestAuthenticator(), new PowerBISettings())
         {

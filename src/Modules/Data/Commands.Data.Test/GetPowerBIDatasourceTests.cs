@@ -31,14 +31,24 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             /*
              * Requirement to run test:
              * Need at least one dataset containing a datasource assigned to the user logging into the test.
-             * Update the test with the dataset ID before running.
              */
 
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDatasource.DatasetId), "b077389f-0238-4312-b014-0c6212fc904e");
+                ps.AddCommand(GetPowerBIDatasetTests.GetPowerBIDatasetCmdletInfo);
+                var existingDatasets = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
+                ps.Commands.Clear();
+
+                if(!existingDatasets.Any())
+                {
+                    Assert.Inconclusive("No datasets returned. Verify you have datasets under your logged in user.");
+                }
+
+                var testDataset = existingDatasets.Select(d => (Dataset)d.BaseObject).FirstOrDefault();
+                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDatasource.DatasetId), testDataset.Id.ToString());
 
                 // Act
                 var result = ps.Invoke();
@@ -119,6 +129,11 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No datasources returned. Verify you have datasources under your logged in user.");
+                }
+
                 Assert.IsTrue(results.Count > 0);
             }
         }
