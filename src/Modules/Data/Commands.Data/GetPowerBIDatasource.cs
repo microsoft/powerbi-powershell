@@ -48,10 +48,12 @@ namespace Microsoft.PowerBI.Commands.Data
 
         [Alias("DatasourceId")]
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = ObjectIdParameterSetName)]
         public Guid Id { get; set; }
 
         [Alias("DatasoureName")]
         [Parameter(Mandatory = true, ParameterSetName = NameParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = ObjectNameParameterSetName)]
         public string Name { get; set; }
 
         [Parameter(Mandatory = false)]

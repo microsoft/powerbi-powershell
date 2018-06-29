@@ -3,10 +3,11 @@
  * Licensed under the MIT License.
  */
 
+using System.Management.Automation;
+using System.Security;
+using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.PowerBI.Commands.Common.Test;
 
 namespace Microsoft.PowerBI.Commands.Profile.Test
 {
@@ -47,6 +48,30 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 Assert.IsNotNull(results);
                 Assert.AreEqual(0, results.Count);
             }
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccountServiceWithTenantId_PrincipalParameterSet()
+        {
+            // Arrange
+            var initFactory = new TestPowerBICmdletNoClientInitFactory(false);
+            var testTenantName = "test.microsoftonline.com";
+            var cmdlet = new ConnectPowerBIServiceAccount(initFactory)
+            {
+                Tenant = testTenantName,
+                ServicePrincipal = true,
+                Credential = new PSCredential("appId", new SecureString()),
+                ParameterSet = "ServicePrincipal"
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            var profile = initFactory.GetProfileFromStorage();
+            Assert.IsNotNull(profile);
+            Assert.IsTrue(profile.Environment.AzureADAuthority.Contains(testTenantName));
+            initFactory.AssertExpectedUnitTestResults(new[] { profile });
         }
     }
 }
