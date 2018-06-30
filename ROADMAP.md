@@ -56,7 +56,7 @@ Planned\upcoming cmdlets.
 | Get-PowerBIGatewayForDataset | Discover gateways |
 | New-PowerBIDatasetEmbedToken | Generate an embed token |
 | Get-PowerBIDatasetRefreshHistory | Get refresh history |
-| Get-PowerBITablesInDatasource | Get tables in data source |
+| Get-PowerBITable | Get tables in dataset |
 | New-PowerBIDatasetData | Create data in dataset |
 | New-PowerBIDatasetRow | Create rows in data source tables |
 | Update-PowerBIDataset | Refresh dataset | Refresh-PowerBIDataset

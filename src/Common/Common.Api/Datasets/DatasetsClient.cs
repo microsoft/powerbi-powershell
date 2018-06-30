@@ -49,5 +49,13 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         {
             return this.Client.Datasets.GetDatasourcesAsAdmin(datasetId.ToString()).Value?.Select(x => (Datasource)x);
         }
+
+        public IEnumerable<Table> GetTables(Guid datasetId, Guid? workspaceId = default)
+        {
+            var result = workspaceId.HasValue && workspaceId.Value != default ?
+                this.Client.Datasets.GetTables(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) :
+                this.Client.Datasets.GetTables(datasetKey: datasetId.ToString());
+            return result.Value?.Select(x => (Table)x);
+        }
     }
 }

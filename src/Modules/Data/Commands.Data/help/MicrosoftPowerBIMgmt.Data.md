@@ -17,3 +17,6 @@ Returns a list of Power BI datasets.
 ### [Get-PowerBIDatasource](Get-PowerBIDatasource.md)
 Returns a list of Power BI data sources.
 
+### [Get-PowerBITable](Get-PowerBITable.md)
+Returns a list of Power BI tables.
+
