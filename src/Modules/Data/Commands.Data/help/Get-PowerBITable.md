@@ -25,7 +25,7 @@ Get-PowerBITable -Dataset <Dataset> [-Name <String>] [-First <Int32>] [-Skip <In
 ```
 
 ## DESCRIPTION
-etrieves a list of Power BI tables in the dataset that match the specified search criteria.
+Retrieves a list of Power BI tables in the dataset that match the specified search criteria.
 Before you run this command, make sure you log in using Login-PowerBIServiceAccount. 
 
 ## EXAMPLES
@@ -122,7 +122,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to filter results to, datasets only belonging to that workspace are shown.
+Workspace to filter results to, tables only belonging to that workspace are shown.
 
 ```yaml
 Type: Workspace
@@ -137,7 +137,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, datasets only belonging to that workspace are shown.
+Workspace ID to filter results to, tables only belonging to that workspace are shown.
 
 ```yaml
 Type: Guid
@@ -152,8 +152,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

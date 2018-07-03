@@ -16,7 +16,7 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Data
 {
-    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetIdSetName)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetIdParameterSetName)]
     [OutputType(typeof(IEnumerable<Table>))]
     public class GetPowerBITable : PowerBIClientCmdlet, IUserFirstSkip
     {
@@ -24,38 +24,38 @@ namespace Microsoft.PowerBI.Commands.Data
         public const string CmdletName = "PowerBITable";
 
         #region ParameterSets
-        private const string DatasetIdSetName = "DatasetId";
-        private const string DatasetSetName = "Dataset";
+        private const string DatasetIdParameterSetName = "DatasetId";
+        private const string DatasetSetNameParameter = "Dataset";
         #endregion
 
         #region Parameters
-        [Parameter(Mandatory = true, ParameterSetName = DatasetIdSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = DatasetIdParameterSetName)]
         public Guid DatasetId { get; set; }
 
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = DatasetSetName)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = DatasetSetNameParameter)]
         public Dataset Dataset { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = DatasetIdSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
         public string Name { get; set; }
            
         [Alias("Top")]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetIdSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
         public int? First { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = DatasetIdSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
         public int? Skip { get; set; }
 
         [Alias("GroupId")]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetIdSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
         public Guid WorkspaceId { get; set; }
 
         [Alias("Group")]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetIdSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
         public Workspace Workspace { get; set; }
         #endregion
 
