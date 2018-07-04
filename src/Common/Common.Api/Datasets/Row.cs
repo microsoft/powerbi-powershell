@@ -20,5 +20,18 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 Id = new Guid(row.Id)
             };
         }
+
+        public static implicit operator PowerBI.Api.V2.Models.Row(Row row)
+        {
+            if (row == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.Row
+            {
+                Id = row.Id.ToString()
+            };
+        }
     }
 }

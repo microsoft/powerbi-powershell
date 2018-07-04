@@ -33,5 +33,23 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 DatasourceId = datasource.DatasourceId
             };
         }
+
+        public static implicit operator PowerBI.Api.V2.Models.Datasource(Datasource datasource)
+        {
+            if (datasource == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.Datasource
+            {
+                Name = datasource.Name,
+                ConnectionString = datasource.ConnectionString,
+                DatasourceType = datasource.DatasourceType,
+                ConnectionDetails = datasource.ConnectionDetails,
+                GatewayId = datasource.GatewayId,
+                DatasourceId = datasource.DatasourceId
+            };
+        }
     }
 }

@@ -16,6 +16,15 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         {
         }
 
+        public object AddDataset(Dataset dataset, Guid? workspaceId = default)
+        {
+            var result = workspaceId.HasValue && workspaceId.Value != default ?
+             this.Client.Datasets.PostDatasetInGroup(groupId: workspaceId.Value.ToString(), dataset: dataset) :            
+            this.Client.Datasets.PostDataset(dataset: dataset) ;
+
+            return result;
+        }
+
         public IEnumerable<Dataset> GetDatasets()
         {
             return this.Client.Datasets.GetDatasets().Value?.Select(x => (Dataset)x);

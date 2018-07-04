@@ -25,5 +25,20 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 Url = datasourceConnectionDetails.Url
             };
         }
+
+        public static implicit operator PowerBI.Api.V2.Models.DatasourceConnectionDetails(DatasourceConnectionDetails datasourceConnectionDetails)
+        {
+            if (datasourceConnectionDetails == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.DatasourceConnectionDetails
+            {
+                Server = datasourceConnectionDetails.Server,
+                Database = datasourceConnectionDetails.Database,
+                Url = datasourceConnectionDetails.Url
+            };
+        }
     }
 }
