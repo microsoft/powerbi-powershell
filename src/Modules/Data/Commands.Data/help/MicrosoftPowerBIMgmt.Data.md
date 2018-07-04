@@ -32,3 +32,6 @@ Creates New Power BI dataset object.
 ### [New-PowerBITable](New-PowerBITable.md)
 Creates New Power BI table object.
 
+### [Set-PowerBITable](Set-PowerBITable.md)
+{{Fill in the Synopsis}}
+

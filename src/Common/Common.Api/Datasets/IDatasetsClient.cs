@@ -27,5 +27,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId);
 
         IEnumerable<Table> GetTables(Guid datasetId, Guid? workspaceId = default);
+
+        Table UpdateTable(Table table, Guid datasetId, Guid? workspaceId = default);
     }
 }
