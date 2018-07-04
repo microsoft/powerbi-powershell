@@ -14,14 +14,14 @@ Returns a list of Power BI tables.
 
 ### DatasetId (Default)
 ```
-Get-PowerBITable -DatasetId <Guid> [-Name <String>] [-First <Int32>] [-Skip <Int32>] [-WorkspaceId <Guid>]
- [-Workspace <Workspace>] [<CommonParameters>]
+Get-PowerBITable -DatasetId <Guid> [-Name <String>] [-Scope <PowerBIUserScope>] [-First <Int32>]
+ [-Skip <Int32>] [-WorkspaceId <Guid>] [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
 ### Dataset
 ```
-Get-PowerBITable -Dataset <Dataset> [-Name <String>] [-First <Int32>] [-Skip <Int32>] [-WorkspaceId <Guid>]
- [-Workspace <Workspace>] [<CommonParameters>]
+Get-PowerBITable -Dataset <Dataset> [-Name <String>] [-Scope <PowerBIUserScope>] [-First <Int32>]
+ [-Skip <Int32>] [-WorkspaceId <Guid>] [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,6 +98,22 @@ Name of the table to return if one exists with that name. Case insensitive searc
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Scope
+{{Fill Scope Description}}
+
+```yaml
+Type: PowerBIUserScope
+Parameter Sets: (All)
+Aliases:
+Accepted values: Individual, Organization
 
 Required: False
 Position: Named

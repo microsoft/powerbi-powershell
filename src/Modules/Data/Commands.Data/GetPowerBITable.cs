@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetIdParameterSetName)]
     [OutputType(typeof(IEnumerable<Table>))]
-    public class GetPowerBITable : PowerBIClientCmdlet, IUserFirstSkip
+    public class GetPowerBITable : PowerBIClientCmdlet, IUserFirstSkip, IUserScope
     {
         public const string CmdletVerb = VerbsCommon.Get;
         public const string CmdletName = "PowerBITable";
@@ -38,7 +38,10 @@ namespace Microsoft.PowerBI.Commands.Data
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
         public string Name { get; set; }
-           
+
+        [Parameter(Mandatory = false)]
+        public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
+
         [Alias("Top")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
@@ -68,6 +71,10 @@ namespace Microsoft.PowerBI.Commands.Data
         protected override void BeginProcessing()
         {           
             base.BeginProcessing();
+            if (this.Scope.Equals(PowerBIUserScope.Organization))
+            {
+                throw new NotImplementedException($"{CmdletVerb}-{CmdletName} is only supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Individual)} is specified");
+            }
         }
 
         public override void ExecuteCmdlet()

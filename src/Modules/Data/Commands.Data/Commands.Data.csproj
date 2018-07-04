@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Microsoft.PowerBI.Commands.Data</AssemblyName>
@@ -14,9 +14,6 @@
     <Description>Microsoft Power BI PowerShell - Dataset and Datasource cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Datasources;Datasets</PackageTags>
 </PropertyGroup>
-<ItemGroup>
-  <Compile Remove="AddPowerBIDataset.cs" />
-</ItemGroup>
 <ItemGroup>
   <None Remove="MicrosoftPowerBIMgmt.Data.psd1" />
 </ItemGroup>

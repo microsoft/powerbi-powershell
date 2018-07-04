@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
                 ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter("Scope", PowerBIUserScope.Individual);
                 var dataSetResult = ps.Invoke();
                 ps.Commands.Clear();
@@ -57,7 +57,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, "Public");
+                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
                 ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter("Scope", PowerBIUserScope.Individual);
                 ps.AddCommand("Where-Object");
                 var filter = ScriptBlock.Create("$_.AddRowsApiEnabled -eq $true");
@@ -93,17 +93,32 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             getTableCmdlet.InvokePowerBICmdlet();
 
             // Assert
-            AssertExpectedUnitTestResults(expectedTables, tableInitFactory);
-
+            tableInitFactory.AssertExpectedUnitTestResults(expectedTables);
         }
-        
-        private static void AssertExpectedUnitTestResults(List<Table> expectedWorkspaces, TestPowerBICmdletInitFactory initFactory)
+
+        [TestMethod]
+        public void GetPowerBITable_OrganizationScope()
         {
-            Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
-            var results = initFactory.Logger.Output.ToList();
-            Assert.AreEqual(expectedWorkspaces.Count, results.Count());
-            var workspaces = results.Cast<Table>().ToList();
-            CollectionAssert.AreEqual(expectedWorkspaces, workspaces);
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Datasets.GetTables(Guid.Empty, null)).Returns(new List<Table>());
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+
+            var cmdlet = new GetPowerBITable(initFactory);
+            cmdlet.DatasetId = Guid.Empty;
+            cmdlet.Scope = PowerBIUserScope.Organization;
+
+            try
+            {
+                // Act
+                cmdlet.InvokePowerBICmdlet();
+
+                Assert.Fail("Should not have reached this point");
+            }
+            catch (System.Reflection.TargetInvocationException ex)
+            {
+                // Assert
+                Assert.AreEqual(ex.InnerException.GetType(), typeof(NotImplementedException));
+            }
         }
     }    
 }
