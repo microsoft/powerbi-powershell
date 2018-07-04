@@ -23,5 +23,19 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 Expression = measure.Expression
             };
         }
+
+        public static implicit operator PowerBI.Api.V2.Models.Measure(Measure measure)
+        {
+            if (measure == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.Measure
+            {
+                Name = measure.Name,
+                Expression = measure.Expression
+            };
+        }
     }
 }

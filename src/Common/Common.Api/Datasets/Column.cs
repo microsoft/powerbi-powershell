@@ -23,5 +23,19 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 DataType = column.DataType
             };
         }
+
+        public static implicit operator PowerBI.Api.V2.Models.Column(Column column)
+        {
+            if (column == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.Column
+            {
+                Name = column.Name,
+                DataType = column.DataType
+            };
+        }
     }
 }
