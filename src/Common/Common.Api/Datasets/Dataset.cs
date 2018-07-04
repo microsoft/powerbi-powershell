@@ -51,6 +51,32 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             };
         }
 
+        public static implicit operator PowerBI.Api.V2.Models.Dataset(Dataset dataset)
+        {
+            if (dataset == null)
+            {
+                return null;
+            }
+
+            // We can assign all properties to dataset but some values prevent from creating push dataset, thus I didn't set them.
+            return new PowerBI.Api.V2.Models.Dataset
+            {
+                Id = dataset.Id == Guid.Empty ? null : dataset.Id.ToString(),
+                Name = dataset.Name,
+                // ConfiguredBy = dataset.ConfiguredBy,
+                // DefaultRetentionPolicy = dataset.DefaultRetentionPolicy,
+                // AddRowsAPIEnabled = dataset.AddRowsApiEnabled,
+                Tables = dataset.Tables?.Select(t => (PowerBI.Api.V2.Models.Table)t).ToList(),
+                // WebUrl = dataset.WebUrl,
+                // Relationships = dataset.Relationships?.Select(r => (PowerBI.Api.V2.Models.Relationship)r).ToList(),
+                // Datasources = dataset.Datasources?.Select(d => (PowerBI.Api.V2.Models.Datasource)d).ToList(),
+                // DefaultMode = dataset.DefaultMode.ToString(),
+                // IsRefreshable = dataset.IsRefreshable,
+                // IsEffectiveIdentityRequired = dataset.IsEffectiveIdentityRequired,
+                // IsOnPremGatewayRequired = dataset.IsOnPremGatewayRequired
+            };
+        }
+
         private static DatasetMode? ConvertDefaultMode(string defaultMode)
         {
             if(string.IsNullOrEmpty(defaultMode))
