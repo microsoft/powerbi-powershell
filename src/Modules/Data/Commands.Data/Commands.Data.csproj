@@ -15,9 +15,6 @@
     <PackageTags>PowerBI;Datasources;Datasets</PackageTags>
 </PropertyGroup>
 <ItemGroup>
-  <Compile Remove="AddPowerBIDataset.cs" />
-</ItemGroup>
-<ItemGroup>
   <None Remove="MicrosoftPowerBIMgmt.Data.psd1" />
 </ItemGroup>
 <ItemGroup>
