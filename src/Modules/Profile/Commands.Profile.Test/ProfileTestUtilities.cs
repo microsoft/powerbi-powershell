@@ -18,14 +18,14 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         public static CmdletInfo DisconnectPowerBIServiceAccountCmdletInfo { get; } = new CmdletInfo($"{DisconnectPowerBIServiceAccount.CmdletVerb}-{DisconnectPowerBIServiceAccount.CmdletName}", typeof(DisconnectPowerBIServiceAccount));
 
 
-        public static void ConnectToPowerBI(System.Management.Automation.PowerShell ps, string environment = null)
+        public static void ConnectToPowerBI(System.Management.Automation.PowerShell ps, PowerBIEnvironmentType? environment = null)
         {
-            if (string.IsNullOrEmpty(environment))
+            if (environment == null)
             {
 #if DEBUG
-                environment = nameof(PowerBIEnvironmentType.OneBox);
+                environment = PowerBIEnvironmentType.OneBox;
 #else
-                environment = nameof(PowerBIEnvironmentType.Public);
+                environment = PowerBIEnvironmentType.Public;
 #endif
             }
 
