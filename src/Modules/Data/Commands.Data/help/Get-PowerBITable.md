@@ -107,7 +107,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only data sources assigned to the caller; Organization returns all data sources within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns only tables under datasets assigned to the caller; Organization returns tables under any dataset within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
