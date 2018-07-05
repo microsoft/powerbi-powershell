@@ -31,21 +31,25 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
-                ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter("Scope", PowerBIUserScope.Individual);
-                var dataSetResult = ps.Invoke();
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter(nameof(GetPowerBITable.Scope), PowerBIUserScope.Individual);
+                var datasetResults = ps.Invoke();
                 ps.Commands.Clear();
+                var datasetId = datasetResults.FirstOrDefault(x => (bool)x.Members["AddRowsAPIEnabled"].Value == true).Members["Id"].Value;
                 ps.AddCommand(GetPowerBITableCmdletInfo)
-                    .AddParameter("DatasetId", dataSetResult.Where(x => (bool)x.Members["addRowsAPIEnabled"].Value == true).FirstOrDefault().Members["Id"].Value)
-                    .AddParameter("Name", "Product");
+                    .AddParameter(nameof(GetPowerBITable.DatasetId), datasetId)
+                    .AddParameter(nameof(GetPowerBITable.Name), "Product");
                 
                 // Act
-                var result = ps.Invoke();
+                var results = ps.Invoke();
 
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No tables returned. Verify you have tables under your logged in user.");
+                }
             }
         }
 
@@ -57,55 +61,57 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
-                ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter("Scope", PowerBIUserScope.Individual);
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter(nameof(GetPowerBITable.Scope), PowerBIUserScope.Individual);
                 ps.AddCommand("Where-Object");
                 var filter = ScriptBlock.Create("$_.AddRowsApiEnabled -eq $true");
                 ps.AddParameter("FilterScript", filter);
                 ps.AddCommand(GetPowerBITableCmdletInfo);
 
                 // Act
-                var result = ps.Invoke();
+                var results = ps.Invoke();
+
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
-                Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No tables returned. Verify you have tables under your logged in user.");
+                }
             }
         }
 
         [TestMethod]
-        public void GetPowerBITable_DatasetIdParameterSetName()
+        public void GetPowerBITable_IndividualScope_DatasetIdParameterSetName()
         {
-            var expectedDatasets = new List<Dataset> { new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" } };
+            var datasetId = Guid.NewGuid();
             var expectedTables = new List<Table> { new Table {  Name = "TestTable" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.GetDatasets()).Returns(expectedDatasets);
-            var datasetInitFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var getDatasetCmdlet = new GetPowerBIDataset(datasetInitFactory);
-            getDatasetCmdlet.InvokePowerBICmdlet();
-            var datasets = datasetInitFactory.Logger.Output.ToList();
-            var tableInitFactory = new TestPowerBICmdletInitFactory(client.Object);
-            client.Setup(x => x.Datasets.GetTables(((Dataset)datasets[0]).Id, null)).Returns(expectedTables);
-            var getTableCmdlet = new GetPowerBITable(tableInitFactory);
-            getTableCmdlet.DatasetId = ((Dataset)datasets[0]).Id;
+            client.Setup(x => x.Datasets.GetTables(datasetId, null)).Returns(expectedTables);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var getTableCmdlet = new GetPowerBITable(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                DatasetId = datasetId
+            };
 
             // Act
             getTableCmdlet.InvokePowerBICmdlet();
 
             // Assert
-            tableInitFactory.AssertExpectedUnitTestResults(expectedTables);
+            initFactory.AssertExpectedUnitTestResults(expectedTables);
         }
 
         [TestMethod]
         public void GetPowerBITable_OrganizationScope()
         {
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.GetTables(Guid.Empty, null)).Returns(new List<Table>());
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-
-            var cmdlet = new GetPowerBITable(initFactory);
-            cmdlet.DatasetId = Guid.Empty;
-            cmdlet.Scope = PowerBIUserScope.Organization;
+            var cmdlet = new GetPowerBITable(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                DatasetId = Guid.NewGuid()
+            };
 
             try
             {

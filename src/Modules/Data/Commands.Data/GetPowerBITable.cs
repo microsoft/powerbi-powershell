@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using System.Text;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Datasets;
@@ -25,18 +24,18 @@ namespace Microsoft.PowerBI.Commands.Data
 
         #region ParameterSets
         private const string DatasetIdParameterSetName = "DatasetId";
-        private const string DatasetSetNameParameter = "Dataset";
+        private const string DatasetParameterSetName = "Dataset";
         #endregion
 
         #region Parameters
         [Parameter(Mandatory = true, ParameterSetName = DatasetIdParameterSetName)]
         public Guid DatasetId { get; set; }
 
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = DatasetSetNameParameter)]
+        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = DatasetParameterSetName)]
         public Dataset Dataset { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetParameterSetName)]
         public string Name { get; set; }
 
         [Parameter(Mandatory = false)]
@@ -44,21 +43,21 @@ namespace Microsoft.PowerBI.Commands.Data
 
         [Alias("Top")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetParameterSetName)]
         public int? First { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetParameterSetName)]
         public int? Skip { get; set; }
 
         [Alias("GroupId")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetParameterSetName)]
         public Guid WorkspaceId { get; set; }
 
         [Alias("Group")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = DatasetSetNameParameter)]
+        [Parameter(Mandatory = false, ParameterSetName = DatasetParameterSetName)]
         public Workspace Workspace { get; set; }
         #endregion
 

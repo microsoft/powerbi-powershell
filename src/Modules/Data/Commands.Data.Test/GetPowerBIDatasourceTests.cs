@@ -120,7 +120,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
                 ps.AddCommand(GetPowerBIDatasetTests.GetPowerBIDatasetCmdletInfo).AddCommand(GetPowerBIDatasourceCmdletInfo);
 
                 // Act

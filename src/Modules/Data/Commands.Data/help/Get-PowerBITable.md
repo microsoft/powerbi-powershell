@@ -47,7 +47,7 @@ Returns a list of all Power BI tables in datasets which supports AddRowApi.
 ## PARAMETERS
 
 ### -Dataset
-A dataset where tables stored. You can pass it via pipe.
+The dataset where the tables are stored. You can pass it via pipe.
 
 ```yaml
 Type: Dataset
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An id of dataset where tables stored.
+The id of the dataset where the tables are stored.
 
 ```yaml
 Type: Guid
@@ -107,7 +107,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Indicates scope of the call. Individual returns only data sources assigned to the caller; Organization returns all data sources within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
