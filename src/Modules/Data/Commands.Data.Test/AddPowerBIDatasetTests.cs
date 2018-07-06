@@ -33,24 +33,24 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
-                ps.AddCommand(NewPowerBIColumnCmdletInfo).AddParameter("Name", "Col1").AddParameter("DataType", PowerBIDataType.String);
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ps.AddCommand(NewPowerBIColumnCmdletInfo).AddParameter(nameof(NewPowerBIColumn.Name), "Col1").AddParameter(nameof(NewPowerBIColumn.DataType), PowerBIDataType.String);
                 var col1 = ps.Invoke();
                 ps.Commands.Clear();
-                ps.AddCommand(NewPowerBIColumnCmdletInfo).AddParameter("Name", "Col2").AddParameter("DataType", PowerBIDataType.Boolean);
+                ps.AddCommand(NewPowerBIColumnCmdletInfo).AddParameter(nameof(NewPowerBIColumn.Name), "Col2").AddParameter(nameof(NewPowerBIColumn.DataType), PowerBIDataType.Boolean);
                 var col2 = ps.Invoke();
                 ps.Commands.Clear();
                 var columns = new List<Column>() { col1.First().BaseObject as Column, col2.First().BaseObject as Column };
-                ps.AddCommand(NewPowerBITableCmdletInfo).AddParameter("Name", "Table1").AddParameter("Columns", columns);
+                ps.AddCommand(NewPowerBITableCmdletInfo).AddParameter(nameof(NewPowerBITable.Name), "Table1").AddParameter(nameof(NewPowerBITable.Columns), columns);
                 var table1 = ps.Invoke();
                 var tables = new List<Table>() { table1.First().BaseObject as Table };
                 ps.Commands.Clear();
-                ps.AddCommand(NewPowerBIDatasetCmdletInfo).AddParameter("Name", "MyDataSet").AddParameter("Tables", tables);
+                ps.AddCommand(NewPowerBIDatasetCmdletInfo).AddParameter(nameof(NewPowerBIDataset.Name), "MyDataSet").AddParameter(nameof(NewPowerBIDataset.Tables), tables);
                 var dataset = ps.Invoke();
                 ps.Commands.Clear();
 
                 ps.AddCommand(AddPowerBIDatasetCmdletInfo)
-                    .AddParameter("Dataset", dataset.First().BaseObject as Dataset);
+                    .AddParameter(nameof(AddPowerBIDataset.Dataset), dataset.First().BaseObject as Dataset);
                 
                 // Act
                 var result = ps.Invoke();
@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void AddPowerBIDataset_DatasetParameterSetName()
+        public void AddPowerBIDataset_IndividualScope_DatasetParameterSetName()
         {
             var expectedDataset = new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" };
             var client = new Mock<IPowerBIApiClient>();

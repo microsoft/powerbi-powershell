@@ -50,7 +50,7 @@ Then, it creates the dataset in PowerBI.
 ## PARAMETERS
 
 ### -Dataset
-A dataset to be added.
+The dataset to be added.
 
 ```yaml
 Type: Dataset
