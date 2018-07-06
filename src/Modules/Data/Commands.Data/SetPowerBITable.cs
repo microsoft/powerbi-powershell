@@ -26,8 +26,6 @@ namespace Microsoft.PowerBI.Commands.Data
         #region ParameterSets
         private const string DatasetParameterSetName = "Dataset";
         private const string DatasetIdParameterSetName = "DatasetId";
-        private const string WorkspaceParameterSetName = "Workspace";
-        private const string WorkspaceIdParameterSetName = "WorkspaceId";
         #endregion
 
         #region Parameters
@@ -36,25 +34,19 @@ namespace Microsoft.PowerBI.Commands.Data
         public Table Table { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = DatasetIdParameterSetName)]
-        [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
-        [Parameter(Mandatory = true, ParameterSetName = WorkspaceIdParameterSetName)]
         public Guid DatasetId { get; set; }
 
         [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = DatasetParameterSetName)]
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = WorkspaceParameterSetName)]
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = WorkspaceIdParameterSetName)]
         public Dataset Dataset { get; set; }
 
         [Alias("GroupId")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = DatasetParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = WorkspaceIdParameterSetName)]
         public Guid WorkspaceId { get; set; }
 
         [Alias("Group")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName, ValueFromPipeline = true)]
         [Parameter(Mandatory = false, ParameterSetName = DatasetParameterSetName, ValueFromPipeline = true)]
-        [Parameter(Mandatory = false, ParameterSetName = WorkspaceParameterSetName, ValueFromPipeline = true)]
         public Workspace Workspace { get; set; }
 
         [Parameter(Mandatory = false)]

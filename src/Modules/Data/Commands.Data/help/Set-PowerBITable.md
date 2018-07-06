@@ -8,25 +8,13 @@ schema: 2.0.0
 # Set-PowerBITable
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Updates the metadata and schema for the specified table.
 
 ## SYNTAX
 
 ### DatasetId (Default)
 ```
 Set-PowerBITable -Table <Table> -DatasetId <Guid> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
- [-Scope <PowerBIUserScope>] [<CommonParameters>]
-```
-
-### Workspace
-```
-Set-PowerBITable -Table <Table> -DatasetId <Guid> -Dataset <Dataset> [-Workspace <Workspace>]
- [-Scope <PowerBIUserScope>] [<CommonParameters>]
-```
-
-### WorkspaceId
-```
-Set-PowerBITable -Table <Table> -DatasetId <Guid> -Dataset <Dataset> [-WorkspaceId <Guid>]
  [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
@@ -37,33 +25,30 @@ Set-PowerBITable -Table <Table> -Dataset <Dataset> [-WorkspaceId <Guid>] [-Works
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Set-PowerBITable lets you update the metadata and schema for the specified table
+Before you run this command, make sure you log in using Login-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+$currentTables = Get-PowerBITable -DatasetId c47f6cff-70de-4837-a094-93a6f26e20bf
+
+$currentTable = $currentTables[0]
+$col1 = New-PowerBIColumn -Name Col1 -DataType Int64
+$col2 = New-PowerBIColumn -Name Col2 -DataType String
+$updatedTable = New-PowerBITable -Name $currentTable.Name -Columns $col1,$col2
+
+Set-PowerBITable -Table $updatedTable -DatasetId c47f6cff-70de-4837-a094-93a6f26e20bf
 ```
 
-{{ Add example description here }}
+This example retrieves current table and create new one from the table.
+Then, it updates the table schema.
 
 ## PARAMETERS
 
 ### -Dataset
 A dataset where tables stored. You can pass it via pipe.
-
-```yaml
-Type: Dataset
-Parameter Sets: Workspace, WorkspaceId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ```yaml
 Type: Dataset
@@ -73,7 +58,7 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -82,7 +67,7 @@ An id of dataset where tables stored.
 
 ```yaml
 Type: Guid
-Parameter Sets: DatasetId, Workspace, WorkspaceId
+Parameter Sets: DatasetId
 Aliases:
 
 Required: True
@@ -128,7 +113,7 @@ Workspace to filter the place where table resides.
 
 ```yaml
 Type: Workspace
-Parameter Sets: DatasetId, Workspace, Dataset
+Parameter Sets: (All)
 Aliases: Group
 
 Required: False
@@ -143,7 +128,7 @@ WorkspaceId to filter the place where table resides.
 
 ```yaml
 Type: Guid
-Parameter Sets: DatasetId, WorkspaceId, Dataset
+Parameter Sets: (All)
 Aliases: GroupId
 
 Required: False

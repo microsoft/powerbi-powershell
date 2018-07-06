@@ -32,23 +32,23 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, nameof(PowerBIEnvironmentType.Public));
-                ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter("Scope", PowerBIUserScope.Individual);
-                var dataSetResult = ps.Invoke();
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ps.AddCommand(GetPowerBIDatasetCmdletInfo).AddParameter(nameof(GetPowerBITable.Scope), PowerBIUserScope.Individual);
+                var dataSetResults = ps.Invoke();
                 ps.Commands.Clear();
-                var datasetId = dataSetResult.Where(x => (bool)x.Members["addRowsAPIEnabled"].Value == true).First().Members["Id"].Value;
+                var datasetId = dataSetResults.Where(x => (bool)x.Members["addRowsAPIEnabled"].Value == true).First().Members["Id"].Value;
                 ps.AddCommand(GetPowerBITableCmdletInfo)
-                    .AddParameter("DatasetId", datasetId);
-                var tableResult = ps.Invoke();
+                    .AddParameter(nameof(GetPowerBITable.DatasetId), datasetId);
+                var tableResults = ps.Invoke();
                 ps.Commands.Clear();
 
-                var table = tableResult.First().BaseObject as Table;
+                var table = tableResults.First().BaseObject as Table;
                 var cols = new List<Column>();
                 cols.Add(new Column { Name = "newcol", DataType = PowerBIDataType.String.ToString() });
                 table.Columns = cols;
                 ps.AddCommand(SetPowerBITestCmdletInfo)
-                    .AddParameter("Table", table)
-                    .AddParameter("DatasetId", datasetId);
+                    .AddParameter(nameof(SetPowerBITable.Table), table)
+                    .AddParameter(nameof(SetPowerBITable.DatasetId), datasetId);
 
                 // Act
                 var result = ps.Invoke();

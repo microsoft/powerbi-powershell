@@ -33,5 +33,5 @@ Creates New Power BI dataset object.
 Creates New Power BI table object.
 
 ### [Set-PowerBITable](Set-PowerBITable.md)
-{{Fill in the Synopsis}}
+Updates the metadata and schema for the specified table.
 
