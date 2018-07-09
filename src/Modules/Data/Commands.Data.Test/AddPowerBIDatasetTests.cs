@@ -69,15 +69,16 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.AddDataset(expectedDataset, null)).Returns(expectedDataset);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new AddPowerBIDataset(initFactory);
-
-            cmdlet.Dataset = expectedDataset;
+            var cmdlet = new AddPowerBIDataset(initFactory)
+            {
+                Dataset = expectedDataset
+            };
 
             // Act
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            Assert.AreEqual(expectedDataset.Name, (initFactory.Logger.Output.First() as Dataset).Name);
+            TestUtilities.AssertExpectedUnitTestResults(expectedDataset, client, initFactory);
         }
 
         [TestMethod]
@@ -88,9 +89,11 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             client.Setup(x => x.Datasets.AddDataset(dataset, null)).Returns(dataset);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
 
-            var cmdlet = new AddPowerBIDataset(initFactory);
-            cmdlet.Dataset = dataset;
-            cmdlet.Scope = PowerBIUserScope.Organization;
+            var cmdlet = new AddPowerBIDataset(initFactory)
+            {
+                Dataset = dataset,
+                Scope = PowerBIUserScope.Organization
+            };
 
             try
             {
