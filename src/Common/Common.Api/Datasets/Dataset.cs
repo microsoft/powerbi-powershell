@@ -51,7 +51,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             };
         }
 
-        public static PowerBI.Api.V2.Models.Dataset ConvertToPushDataset(Dataset dataset)
+        public static PowerBI.Api.V2.Models.Dataset ConvertToDatasetV2Model(Dataset dataset)
         {
             if (dataset == null)
             {

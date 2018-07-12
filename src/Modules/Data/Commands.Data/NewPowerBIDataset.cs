@@ -5,14 +5,14 @@
 
 using System.Collections.Generic;
 using System.Management.Automation;
+using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Api.Datasets;
-using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(Dataset))]
-    public class NewPowerBIDataset : PowerBIClientCmdlet
+    public class NewPowerBIDataset : PowerBICmdlet
     {
         public const string CmdletVerb = VerbsCommon.New;
         public const string CmdletName = "PowerBIDataset";

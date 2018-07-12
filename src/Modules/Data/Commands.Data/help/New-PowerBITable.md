@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PowerBITable
 
 ## SYNOPSIS
-Creates New PowerBI table object.
+Creates New Power BI table object.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ New-PowerBITable -Name <String> [-Columns <Column[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The New-PowerBITable cmdlet lets you create New PowerBI table object.
+The New-PowerBITable cmdlet lets you create New Power BI table object.
 
 ## EXAMPLES
 
@@ -39,12 +39,12 @@ PS C:\>Add-PowerBIDataSet -DataSet $dataset
 ```
 
 This example instantiate a table with two columns and another table with four columns, and instantiate a dataset.
-Then, it creates the dataset in PowerBI.
+Then, it creates the dataset in Power BI.
 
 ## PARAMETERS
 
 ### -Columns
-An array of Column objects.
+An array of column objects.
 
 ```yaml
 Type: Column[]
@@ -59,7 +59,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Table Name.
+Table name.
 
 ```yaml
 Type: String

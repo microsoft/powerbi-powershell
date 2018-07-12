@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-namespace Microsoft.PowerBI.Common.Abstractions
+namespace Microsoft.PowerBI.Common.Api.Datasets
 {
     public enum PowerBIDataType
     {

@@ -19,8 +19,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public object AddDataset(Dataset dataset, Guid? workspaceId = default)
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.PostDatasetInGroup(groupId: workspaceId.Value.ToString(), dataset: Dataset.ConvertToPushDataset(dataset)) :
-                this.Client.Datasets.PostDataset(dataset: Dataset.ConvertToPushDataset(dataset));
+                this.Client.Datasets.PostDatasetInGroup(groupId: workspaceId.Value.ToString(), dataset: Dataset.ConvertToDatasetV2Model(dataset)) :
+                this.Client.Datasets.PostDataset(dataset: Dataset.ConvertToDatasetV2Model(dataset));
 
             return result;
         }

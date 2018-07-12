@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIDataset
 
 ## SYNOPSIS
-Creates new dataset to PowerBI.
+Creates new dataset to Power BI.
 
 ## SYNTAX
 
@@ -45,7 +45,7 @@ PS C:\>Add-PowerBIDataSet -DataSet $dataset
 ```
 
 This example instantiate a table with two columns and another table with four columns, and instantiate a dataset.
-Then, it creates the dataset in PowerBI.
+Then, it creates the dataset in Power BI.
 
 ## PARAMETERS
 
