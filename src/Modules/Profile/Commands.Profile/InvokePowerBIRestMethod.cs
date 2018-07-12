@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Collections;
 using System.IO;
 using System.Management.Automation;
 using System.Net.Http;
@@ -45,8 +46,13 @@ namespace Microsoft.PowerBI.Commands.Profile
         public string Version = "v1.0";
 
         [Parameter(Mandatory = false)]
-
         public virtual string OutFile { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public string ContentType { get; set; } = "application/json";
+
+        [Parameter(Mandatory = false)]
+        public Hashtable Headers { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
@@ -92,8 +98,6 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
         }
 
-
-
         private async Task<HttpResult> InvokeRestMethod(string url, string body, PowerBIWebRequestMethod requestType)
         {
             // https://msdn.microsoft.com/en-us/library/mt243842.aspx
@@ -101,11 +105,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(this.Profile.Environment.GlobalServiceEndpoint);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
-
+                this.PopulateClient(token, client);
                 HttpResponseMessage response = null;
                 if (string.IsNullOrEmpty(this.OutFile))
                 {
@@ -189,6 +189,25 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
 
                 return result;
+            }
+        }
+
+        protected virtual void PopulateClient(IAccessToken token, HttpClient client)
+        {
+            client.BaseAddress = new Uri(this.Profile.Environment.GlobalServiceEndpoint);
+            client.DefaultRequestHeaders.Accept.Clear();
+            if (this.ContentType != null)
+            {
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(this.ContentType));
+            }
+
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
+            if (this.Headers != null)
+            {
+                foreach (DictionaryEntry header in this.Headers)
+                {
+                    client.DefaultRequestHeaders.Add(header.Key.ToString(), header.Value.ToString());
+                }
             }
         }
 

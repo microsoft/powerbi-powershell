@@ -14,7 +14,8 @@ Executes a REST call to the Power BI service, with the specified URL and body.
 
 ```
 Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>] [-OutFile <String>]
- [-Organization <String>] [-Version <String>] [<CommonParameters>]
+ [-ContentType <String>] [-Headers <Hashtable>] [-Organization <String>] [-Version <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,6 +39,36 @@ Body of the request, also known as *content*. This is optional unless the reques
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ContentType
+Content type to specify inside the header for the request. Default is 'application/json'.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Headers
+Optional headers to include with the request.
+
+```yaml
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
