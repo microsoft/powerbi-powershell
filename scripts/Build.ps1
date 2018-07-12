@@ -27,9 +27,9 @@ param
     [ValidateNotNull()]
     [string[]] $MSBuildTargets = @(),
 
-    # MSBuild properties to execute build with.
+    # MSBuild properties to execute build with. Default is @{'GenerateFullPaths'='true'}.
     [ValidateNotNull()]
-    [Hashtable] $MSBuildProperties = @{},
+    [Hashtable] $MSBuildProperties = @{'GenerateFullPaths'='true'},
 
     # Build Configuration. Default is to use the MSBuild project defaults which is likely Debug.
     [ValidateSet($null, 'Debug', 'Release')]

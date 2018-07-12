@@ -6,9 +6,15 @@
 * [.NET Core SDK](https://www.microsoft.com/net/learn/get-started/windows)
     * Version driven by [global.json](src/Common/Commands.Common/global.json)
     * Cmdlets are designed to use .NET Core 2.0 SDK with .NET Standard 2.0
+* [Visual Studio Code](https://code.visualstudio.com/download)
+    * Experimental and optional, still need Visual Studio installed
+    * Install the following extensions:
+        * [C#](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp): `code --install-extension ms-vscode.csharp`
+        * [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell): `code --install-extension ms-vscode.PowerShell`
 
-> If you plan to build with Configuration=Release which Delay Signs the build output, call `.\scripts\DisableStrongName.ps1`. 
-> Add the -Enable to renable strong name verification once developing.
+
+> If you plan to build with Configuration=Release which Delay Signs the build output, call `.\scripts\DisableStrongName.ps1`.
+> Add the -Enable to re-enable strong name verification once developing.
 
 ### Optional requirements (for testing)
 * [PowerShell Core (6.0.0)](https://github.com/powershell/powershell)
@@ -25,7 +31,7 @@ Optionally you can install the [EditorConfig](https://marketplace.visualstudio.c
 
 <table width=500 border="1" frame="box">
     <tr>
-        <th rowspan="3">Common</th>
+        <th rowspan="5">Common</th>
         <td align="center" colspan="2">Common.Abstractions</td>
     </tr>
     <tr>
@@ -36,17 +42,24 @@ Optionally you can install the [EditorConfig](https://marketplace.visualstudio.c
         <td align="center">AzureADWindowsAuthenticator</td>
     </tr>
     <tr>
-        <th rowspan="3">Modules</td>
-        <td align="center" colspan="2">Commands.Profile</td>
+        <td align="center" colspan="2">Common.Api</td>
+    </tr>
+    <tr>
+        <td align="center" colspan="2">Common.Client</td>
+    </tr>
+    <tr>
+        <th rowspan="4">Modules</td>
+        <td align="center" colspan="3">Commands.Profile</td>
     </tr>
     <tr>
         <td align="center">Commands.Workspaces</td>
         <td align="center">Commands.Reports</td>
+        <td align="center">Commands.Data</td>
     </tr>
 <table>
 
-> * Test Projects are located next to implementation.
-> * AzureADWindowsAuthenticator has an independent depenency stack as it's compiled against .NET 4.6 (opposed to .NET Core) to be a bridge for ADAL on Windows (providing interactive login).
+> * Test Projects are located next to implementation (module project).
+> * AzureADWindowsAuthenticator has an independent dependency stack as it's compiled against .NET 4.6 (opposed to .NET Core) to be a bridge for ADAL on Windows (providing interactive login).
 
 
 
@@ -54,6 +67,7 @@ Optionally you can install the [EditorConfig](https://marketplace.visualstudio.c
 | Branch       | Status      |
 | ------------ | ----------- |
 | Master | [![Build status](https://ci.appveyor.com/api/projects/status/4kdopsyh3y70ad9w/branch/master?svg=true)](https://ci.appveyor.com/project/CodeCyclone/powerbi-powershell/branch/master) |
+| Dev | [![Build status](https://ci.appveyor.com/api/projects/status/4kdopsyh3y70ad9w/branch/dev?svg=true)](https://ci.appveyor.com/project/CodeCyclone/powerbi-powershell/branch/dev) |
 
 Defined by [appveyor.yml](appveyor.yml), see [AppVeyor Docs](https://www.appveyor.com/docs/) if you need to edit.
 
@@ -63,7 +77,8 @@ Defined by [appveyor.yml](appveyor.yml), see [AppVeyor Docs](https://www.appveyo
 
 #### Command line
 
-1. Open PowerShell prompt:
+Open PowerShell prompt and run (in repository root directory):
+
 ```powershell
 .\scripts\Build.ps1
 
@@ -85,31 +100,48 @@ Binary output will be under each project's `bin\$(Configuration)\$(TargetFramewo
 For Packaging, right-click on a module project and select `Pack` in Visual Studio. Output is in `PkgOut` folder at the root.
 
 To test package\module, rename extension from NuGet package `.nupkg` to Zip `.zip` and extract archive. Load the PSD1 file in the extracted directory by using `Import-Module -Path`.
-> This is essentially what `.\scripts\PrepManualTesting.ps1` does with the cavet it appends `PkgOut` folder to `$env:PSModulePath` for your console session, when cmdlets get called their module will get auto-imported.
+> This is essentially what `.\scripts\PrepManualTesting.ps1` does with the caveat it appends `PkgOut` folder to `$env:PSModulePath` for your console session, when cmdlets get called their module will get auto-imported.
 
-To execute unit tests, just open `Test Explorer` and run tests from the explorer. Solution supports Live Unit Testing, there are interactive tests in the suite that are auto excluded from running with this feature. 
+To execute unit tests, just open `Test Explorer` and run tests from the explorer. Solution supports Live Unit Testing, there are interactive tests in the suite that are auto excluded from running with this feature.
+
+#### Visual Studio Code (experimental)
+
+> Note: Due to some usage of .NET Framework by source code, building and executing tests have been customized and features such as run and debug test out-of-box in the IDE won't execute correctly (see workaround below).
+
+Open  Visual Studio Code by navigating to the root directory of the repository in a PowerShell (or a command prompt) window and type `code .`, press `Enter`. Visual Studio Code should open with `POWERBI-POWERSHELL` in the Explorer pane. Settings, configurations, and tasks are auto-loaded by the files in the `.vscode` directory.
+
+To build, first-time run task `Restore` by pressing `Ctrl+P`, type `task Restore`, press `Enter`.
+After restoring packages you can execute build by pressing `Ctrl+Shift+B`.
+
+To run tests, highlight the name of the test with your cursor and press `Ctrl+P`, type `task DebugTest`, press `Enter`. If you don't want to build do `task DebugTest (No Build)` instead. Set your breakpoint in the test and press `F5` to start debugging by picking the dotnet process ID shown from `DebugTest`. Press `F5` once more to trigger the breakpoint.
 
 ### Creating a new Cmdlet and Unit Test
 
-1. Create a new class in a Module project and extend `PowerBICmdlet` from `Microsoft.PowerBI.Commands.Common` project and implement class.
-2. Add `[Cmdlet(CmdletVerb, CmdletName)]` attribute to class and provide `public const string` for `CmdletVerb` and `CmdletName`.
+1. Create a new class in a Module project.
+2. Either extend `PowerBIClientCmdlet` from `Microsoft.PowerBI.Common.Client` project or extend `PowerBICmdlet` from `Microsoft.PowerBI.Commands.Common` project if a client is not needed.
+3. Implement class and optionally add other interfaces from `Microsoft.PowerBI.Common.Abstractions` for common parameters.
+4. Add `[Cmdlet(CmdletVerb, CmdletName)]` attribute to class and provide `public const string` for `CmdletVerb` and `CmdletName`.
     * For `CmdletVerb`, pick from the System.Management.Automation.Verbs* classes.
-3. Optionally add `[OutputType(typeof(type))]` if your Cmdlet class if it writes an object to the output stream.
-4. Optionally add `[Alias("Get-Alias1", "Get-Alias2")]` to your Cmdlet class. 
-5. Add a test class to verify your cmdlet by adding (replacing with your new class name):
+5. Optionally add `[OutputType(typeof(type))]` if your Cmdlet class if it writes an object to the output stream.
+6. Optionally add `[Alias("Get-Alias1", "Get-Alias2")]` to your Cmdlet class. 
+7. Add a test class to verify your cmdlet by adding (replacing with your new class name):
 ```csharp
 using (var ps = System.Management.Automation.PowerShell.Create())
 {
+    ProfileTestUtilities.ConnectToPowerBI(ps); // If login is needed
     ps.AddCommand(new CmdletInfo($"{<class name>.CmdletVerb}-{<class name>.CmdletName}", typeof(<class name>))); // Optionally .AddParameter(), use intellisense to see options
     var result = ps.Invoke();
     // Add asserts to verify
+    TestUtilities.AssertNoCmdletErrors(ps);
 }
 ```
-6. If your test is interactive, add method attributes `[TestCategory("Interactive")]` and `[TestCategory("SkipWhenLiveUnitTesting")]` (last tells Live Unit Testing to skip it).
+8. If your test is interactive, add method attributes `[TestCategory("Interactive")]` and `[TestCategory("SkipWhenLiveUnitTesting")]` (last tells Live Unit Testing to skip it).
+9. Run test to verify cmdlet is being called correctly.
+10. Add parameters to cmdlet class and implement cmdlet logic in `ExecuteCmdlet()` method.
 
 ### Creating a new PowerShell module
 
-1. Open PowerShell and set your current directory to the root of this repo.
+1. Open PowerShell and set your current directory to the root of this repository.
 2. In PowerShell, execute the following by supplying your module name:
 ```powershell
 $moduleName = '<fill out with module name>'
@@ -211,6 +243,9 @@ If the content extension is not `.psd1` or `.types.ps1xml` then add the followin
 ```
 15. Save the project file and build the solution.
 16. A `help` folder should appear under your project after you build, the files contain the documenation for your module and cmdlets which you can fill out.
+
+> Note: The PowerShell Manifest file (*.psd1) might get its encoding messed up when pushing and pulling from Git.
+> After pushing changes to Git, pull down changes and verify encoding looks correct. This issue may be fixed in PowerShell Core with [PR 2048](https://github.com/PowerShell/PowerShell-Docs/pull/2048).
 
 ## Developer Resources
 
