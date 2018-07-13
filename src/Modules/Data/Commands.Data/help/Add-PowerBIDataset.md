@@ -23,7 +23,7 @@ Add-PowerBIDataset -Dataset <Dataset> -Workspace <Workspace> [-Scope <PowerBIUse
 ```
 
 ## DESCRIPTION
-Add-PowerBIDataset creates new push dataset to PowerBI.
+Add-PowerBIDataset creates new push dataset to Power BI.
 
 ## EXAMPLES
 
@@ -44,7 +44,7 @@ PS C:\>
 PS C:\>Add-PowerBIDataSet -DataSet $dataset
 ```
 
-This example instantiate a table with two columns and another table with four columns, and instantiate a dataset.
+This example instantiates a table with two columns and another table with four columns, and instantiates a dataset.
 Then, it creates the dataset in Power BI.
 
 ## PARAMETERS

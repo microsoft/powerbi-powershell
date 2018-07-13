@@ -10,7 +10,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         Int64,
         Double,
         Boolean,
-        Datetime,
+        DateTime,
         String
     }
 }
