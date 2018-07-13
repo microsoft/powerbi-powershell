@@ -1,0 +1,9 @@
+{
+    "files.exclude": {
+        "**/packages/": true,
+        "**/.vs/": true,
+        "**/bin/": true,
+        "**/obj/": true,
+        "TestResult/": true
+    }
+}

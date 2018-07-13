@@ -14,7 +14,7 @@
 # Executes build, pack and clean for the solution.
 #
 #.NOTES
-# Requires Visual Studio 2015 to be installed (at least 15.2 where vswhere.exe is available).
+# Requires Visual Studio 2017 to be installed (at least 15.2 where vswhere.exe is available).
 ##############################
 [CmdletBinding()]
 param
@@ -27,9 +27,9 @@ param
     [ValidateNotNull()]
     [string[]] $MSBuildTargets = @(),
 
-    # MSBuild properties to execute build with.
+    # MSBuild properties to execute build with. Default is @{'GenerateFullPaths'='true'}.
     [ValidateNotNull()]
-    [Hashtable] $MSBuildProperties = @{},
+    [Hashtable] $MSBuildProperties = @{'GenerateFullPaths'='true'},
 
     # Build Configuration. Default is to use the MSBuild project defaults which is likely Debug.
     [ValidateSet($null, 'Debug', 'Release')]

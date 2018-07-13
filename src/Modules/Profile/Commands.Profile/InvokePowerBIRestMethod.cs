@@ -4,9 +4,11 @@
  */
 
 using System;
+using System.Collections;
 using System.IO;
 using System.Management.Automation;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -45,12 +47,22 @@ namespace Microsoft.PowerBI.Commands.Profile
         public string Version = "v1.0";
 
         [Parameter(Mandatory = false)]
-
         public virtual string OutFile { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public string ContentType { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public Hashtable Headers { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
         {
+            if(string.IsNullOrWhiteSpace(this.ContentType))
+            {
+                this.ContentType = "application/json";
+            }
+
             if(!string.IsNullOrEmpty(this.OutFile))
             {
                 this.OutFile = this.ResolveFilePath(this.OutFile, false);
@@ -92,8 +104,6 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
         }
 
-
-
         private async Task<HttpResult> InvokeRestMethod(string url, string body, PowerBIWebRequestMethod requestType)
         {
             // https://msdn.microsoft.com/en-us/library/mt243842.aspx
@@ -101,11 +111,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(this.Profile.Environment.GlobalServiceEndpoint);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
-
+                this.PopulateClient(token, client);
                 HttpResponseMessage response = null;
                 if (string.IsNullOrEmpty(this.OutFile))
                 {
@@ -115,16 +121,16 @@ namespace Microsoft.PowerBI.Commands.Profile
                             response = await client.GetAsync(url);
                             break;
                         case PowerBIWebRequestMethod.Post:
-                            response = await client.PostAsync(url, new StringContent(body));
+                            response = await client.PostAsync(url, new StringContent(body, Encoding.UTF8, this.ContentType));
                             break;
                         case PowerBIWebRequestMethod.Delete:
                             response = await client.DeleteAsync(url);
                             break;
                         case PowerBIWebRequestMethod.Put:
-                            response = await client.PutAsync(url, new StringContent(body));
+                            response = await client.PutAsync(url, new StringContent(body, Encoding.UTF8, this.ContentType));
                             break;
                         case PowerBIWebRequestMethod.Patch:
-                            response = await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body) });
+                            response = await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body, Encoding.UTF8, this.ContentType) });
                             break;
                         case PowerBIWebRequestMethod.Options:
                             response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Options, url));
@@ -143,16 +149,16 @@ namespace Microsoft.PowerBI.Commands.Profile
                             request = new HttpRequestMessage(HttpMethod.Get, url);
                             break;
                         case PowerBIWebRequestMethod.Post:
-                            request = new HttpRequestMessage(HttpMethod.Post, url) { Content = new StringContent(body) };
+                            request = new HttpRequestMessage(HttpMethod.Post, url) { Content = new StringContent(body, Encoding.UTF8, this.ContentType) };
                             break;
                         case PowerBIWebRequestMethod.Delete:
                             request = new HttpRequestMessage(HttpMethod.Delete, url);
                             break;
                         case PowerBIWebRequestMethod.Put:
-                            request = new HttpRequestMessage(HttpMethod.Put, url) { Content = new StringContent(body) };
+                            request = new HttpRequestMessage(HttpMethod.Put, url) { Content = new StringContent(body, Encoding.UTF8, this.ContentType) };
                             break;
                         case PowerBIWebRequestMethod.Patch:
-                            request = new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body) };
+                            request = new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body, Encoding.UTF8, this.ContentType) };
                             break;
                         case PowerBIWebRequestMethod.Options:
                             request = new HttpRequestMessage(HttpMethod.Options, url);
@@ -189,6 +195,20 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
 
                 return result;
+            }
+        }
+
+        protected virtual void PopulateClient(IAccessToken token, HttpClient client)
+        {
+            client.BaseAddress = new Uri(this.Profile.Environment.GlobalServiceEndpoint);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
+            if (this.Headers != null)
+            {
+                foreach (DictionaryEntry header in this.Headers)
+                {
+                    client.DefaultRequestHeaders.Add(header.Key.ToString(), header.Value.ToString());
+                }
             }
         }
 
