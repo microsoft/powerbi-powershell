@@ -14,7 +14,7 @@
 # Executes build, pack and clean for the solution.
 #
 #.NOTES
-# Requires Visual Studio 2015 to be installed (at least 15.2 where vswhere.exe is available).
+# Requires Visual Studio 2017 to be installed (at least 15.2 where vswhere.exe is available).
 ##############################
 [CmdletBinding()]
 param

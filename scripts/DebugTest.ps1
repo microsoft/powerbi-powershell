@@ -1,7 +1,28 @@
+##############################
+#.SYNOPSIS
+# Executes .\Build.ps1 and .\Test.ps1 for use in debugging unit tests in Visual Studio Code.
+#
+#.DESCRIPTION
+# Invokes MSBuild and dotnet test.
+# Instructs 'dotnet test' to execute a specific test name under a test project (via filter) and allows a debugger to attach to dotnet.exe.
+# Meant to be called from Visual Studio Code, see ..\.vscode\tasks.json.
+#
+#.EXAMPLE
+# PS:> .\DebugTest.ps1 -TestName 'UnitTestName' -DirectoryName 'c:\pbi-ps\src\Modules\Profile\Commands.Profile.Test'
+# Executes a build followed by 'dotnet test' supplying testname and *.csproj located under the directory name to '--filter'.
+#
+#.NOTES
+# Requires Visual Studio 2017 to be installed (at least 15.2 where vswhere.exe is available).
+##############################
 param
 (
+    # Name of unit test to execute.
     [string] $TestName,
+
+    # Directory containing *.csproj for unit test.
     [string] $DirectoryName,
+
+    # Indicates to not build before executing unit tests.
     [switch] $NoBuild
 )
 
@@ -29,13 +50,6 @@ $csProj = Get-ChildItem -Path $DirectoryName -Filter '*.csproj' | Select-Object 
 if(!$csProj) {
     throw "Failed to find CSProj in: $DirectoryName"
 }
-
-# [xml] $csProjXml = Get-Content -Path $csProj.FullName -Raw
-# $pG = $csProjXml.Project.PropertyGroup | Select-Object -First 1
-# $assemblyName = $pG.AssemblyName
-# if(!$assemblyName) {
-#     throw "Failed to get assembly name from CSProj: $($csProj.FullName)"
-# }
 
 # Run tests
 Write-Host "Set breakpoint in test method '$TestName', and use .NET Core Attach to debug test (using process ID)" -ForegroundColor Magenta

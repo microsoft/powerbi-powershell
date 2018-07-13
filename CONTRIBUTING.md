@@ -14,7 +14,7 @@
 
 
 > If you plan to build with Configuration=Release which Delay Signs the build output, call `.\scripts\DisableStrongName.ps1`.
-> Add the -Enable to re-enable strong name verification once developing.
+> Add the -Enable switch parameter to re-enable strong name verification once developing.
 
 ### Optional requirements (for testing)
 * [PowerShell Core (6.0.0)](https://github.com/powershell/powershell)
@@ -59,7 +59,7 @@ Optionally you can install the [EditorConfig](https://marketplace.visualstudio.c
 <table>
 
 > * Test Projects are located next to implementation (module project).
-> * AzureADWindowsAuthenticator has an independent dependency stack as it's compiled against .NET 4.6 (opposed to .NET Core) to be a bridge for ADAL on Windows (providing interactive login).
+> * AzureADWindowsAuthenticator has an independent dependency stack as it's compiled against .NET 4.6 (as opposed to .NET Core) to act as a bridge for ADAL on Windows (providing interactive login).
 
 
 
@@ -122,9 +122,10 @@ To run tests, highlight the name of the test with your cursor and press `Ctrl+P`
 3. Implement class and optionally add other interfaces from `Microsoft.PowerBI.Common.Abstractions` for common parameters.
 4. Add `[Cmdlet(CmdletVerb, CmdletName)]` attribute to class and provide `public const string` for `CmdletVerb` and `CmdletName`.
     * For `CmdletVerb`, pick from the System.Management.Automation.Verbs* classes.
-5. Optionally add `[OutputType(typeof(type))]` if your Cmdlet class if it writes an object to the output stream.
-6. Optionally add `[Alias("Get-Alias1", "Get-Alias2")]` to your Cmdlet class. 
-7. Add a test class to verify your cmdlet by adding (replacing with your new class name):
+5. Optionally add `[OutputType(typeof(type))]` if your Cmdlet class writes an object to the output stream.
+6. Optionally add `[Alias("Get-Alias1", "Get-Alias2")]` to your Cmdlet class.
+7. Update PowerShell manifest file (*.ps1), add the new cmdlet to `CmdletsToExport` and if you added an alias update `AliasesToExport` too.
+8. Add a test class to verify your cmdlet by adding (replacing with your new class name):
 ```csharp
 using (var ps = System.Management.Automation.PowerShell.Create())
 {
@@ -135,9 +136,9 @@ using (var ps = System.Management.Automation.PowerShell.Create())
     TestUtilities.AssertNoCmdletErrors(ps);
 }
 ```
-8. If your test is interactive, add method attributes `[TestCategory("Interactive")]` and `[TestCategory("SkipWhenLiveUnitTesting")]` (last tells Live Unit Testing to skip it).
-9. Run test to verify cmdlet is being called correctly.
-10. Add parameters to cmdlet class and implement cmdlet logic in `ExecuteCmdlet()` method.
+9. If your test is interactive, add method attributes `[TestCategory("Interactive")]` and `[TestCategory("SkipWhenLiveUnitTesting")]` (last tells Live Unit Testing to skip it).
+10. Run test to verify cmdlet is being called correctly.
+11. Add parameters to cmdlet class and implement cmdlet logic in `ExecuteCmdlet()` method.
 
 ### Creating a new PowerShell module
 

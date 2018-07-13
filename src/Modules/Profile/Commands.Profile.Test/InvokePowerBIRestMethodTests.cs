@@ -42,7 +42,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         {
             // Arrange
             var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
-            var testAuthenticator = initFactory.Authenticator; //new TestAuthenticator();
+            var testAuthenticator = initFactory.Authenticator;
             var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
             var testHeaderName = "TestExample";
             var testHeaderValue = "Example";

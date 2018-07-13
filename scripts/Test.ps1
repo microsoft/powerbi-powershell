@@ -65,6 +65,7 @@ if(!$testProjects) {
 }
 
 if($VSTestHostDebug) {
+    # Setting this environment variable is necessary for debugging unit tests in Visual Studio Code by instructing 'dotnet test' to wait for a debugger is attached before proceeding.
     # https://github.com/Microsoft/vstest-docs/blob/master/docs/diagnose.md#debug-test-platform-components
     # https://stackoverflow.com/questions/43210794/debugging-mstest-unittests-in-visualstudio-code
     $env:VSTEST_HOST_DEBUG = 1
