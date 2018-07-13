@@ -44,14 +44,12 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
             var testAuthenticator = initFactory.Authenticator; //new TestAuthenticator();
             var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
-            var testContentType = "application/test";
             var testHeaderName = "TestExample";
             var testHeaderValue = "Example";
             using (var client = new HttpClient())
             {
                 var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory)
                 {
-                    ContentType = testContentType,
                     Headers = new System.Collections.Hashtable()
                     {
                         { testHeaderName, testHeaderValue }
@@ -62,8 +60,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 mock.InvokePopulateClient(accessToken, client);
 
                 // Assert
-                Assert.AreEqual(1, client.DefaultRequestHeaders.Accept.Count);
-                Assert.AreEqual(testContentType, client.DefaultRequestHeaders.Accept.ToString());
+                Assert.AreEqual(0, client.DefaultRequestHeaders.Accept.Count);
                 Assert.IsTrue(client.DefaultRequestHeaders.TryGetValues(testHeaderName, out IEnumerable<string> headerValues));
                 Assert.IsNotNull(headerValues);
                 Assert.AreEqual(1, headerValues.Count());
