@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void AddPowerBIDataset_IndividualScope_DatasetParameterSetName()
+        public void AddPowerBIDataset_DatasetParameterSetName()
         {
             var expectedDataset = new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" };
             var client = new Mock<IPowerBIApiClient>();
@@ -79,34 +79,6 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
             // Assert
             TestUtilities.AssertExpectedUnitTestResults(expectedDataset, client, initFactory);
-        }
-
-        [TestMethod]
-        public void AddPowerBIDataset_OrganizationScope()
-        {
-            var dataset = new Dataset();
-            var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.AddDataset(dataset, null)).Returns(dataset);
-            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-
-            var cmdlet = new AddPowerBIDataset(initFactory)
-            {
-                Dataset = dataset,
-                Scope = PowerBIUserScope.Organization
-            };
-
-            try
-            {
-                // Act
-                cmdlet.InvokePowerBICmdlet();
-
-                Assert.Fail("Should not have reached this point");
-            }
-            catch (System.Reflection.TargetInvocationException ex)
-            {
-                // Assert
-                Assert.AreEqual(ex.InnerException.GetType(), typeof(NotImplementedException));
-            }
-        }
+        }      
     }    
 }

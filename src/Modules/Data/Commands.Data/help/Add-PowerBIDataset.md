@@ -14,12 +14,12 @@ Creates new dataset to Power BI.
 
 ### Dataset (Default)
 ```
-Add-PowerBIDataset -Dataset <Dataset> [-WorkspaceId <Guid>] [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Add-PowerBIDataset -Dataset <Dataset> [-WorkspaceId <Guid>] [<CommonParameters>]
 ```
 
 ### Workspace
 ```
-Add-PowerBIDataset -Dataset <Dataset> -Workspace <Workspace> [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Add-PowerBIDataset -Dataset <Dataset> -Workspace <Workspace> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -58,22 +58,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Scope
-Indicates scope of the call. Individual returns datasets from "My Workspace" by default. With -Workspace or -WorkspaceId, datasets under the workspace assigned to the caller are returned; Organization returns all datasets within a tenant (must be an administrator to initiate). Individual is the default.
-
-```yaml
-Type: PowerBIUserScope
-Parameter Sets: (All)
-Aliases:
-Accepted values: Individual, Organization
-
-Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

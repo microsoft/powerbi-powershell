@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetParameterSetName)]
     [OutputType(typeof(Dataset))]
-    public class AddPowerBIDataset : PowerBIClientCmdlet, IUserScope
+    public class AddPowerBIDataset : PowerBIClientCmdlet
     {
         public const string CmdletVerb = VerbsCommon.Add;
         public const string CmdletName = "PowerBIDataset";
@@ -39,10 +39,7 @@ namespace Microsoft.PowerBI.Commands.Data
         [Alias("Group")]
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName, ValueFromPipeline = true)]
         public Workspace Workspace { get; set; }
-
-        [Parameter(Mandatory = false)]
-        public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
-
+             
         #endregion
 
         #region Constructors
@@ -54,10 +51,6 @@ namespace Microsoft.PowerBI.Commands.Data
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
-            if (this.Scope == PowerBIUserScope.Organization)
-            {
-                throw new NotImplementedException($"{CmdletVerb}-{CmdletName} is only supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Individual)} is specified");
-            }
         }
 
         public override void ExecuteCmdlet()
