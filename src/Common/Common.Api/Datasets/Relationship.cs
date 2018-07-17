@@ -34,6 +34,24 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             };
         }
 
+        public static implicit operator PowerBI.Api.V2.Models.Relationship(Relationship relationship)
+        {
+            if (relationship == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.Relationship
+            {
+                Name = relationship.Name,
+                CrossFilteringBehavior = (PowerBI.Api.V2.Models.CrossFilteringBehaviorEnum)Enum.Parse(typeof(PowerBI.Api.V2.Models.CrossFilteringBehaviorEnum), relationship.CrossFilteringBehavior.ToString(), true),
+                FromTable = relationship.FromTable,
+                FromColumn = relationship.FromColumn,
+                ToTable = relationship.ToTable,
+                ToColumn = relationship.ToColumn
+            };
+        }
+
         private static CrossFilteringBehaviorEnum ConvertCrossFilteringBehavior(PowerBI.Api.V2.Models.CrossFilteringBehaviorEnum? crossFilteringBehavior)
         {
             if(crossFilteringBehavior == null)

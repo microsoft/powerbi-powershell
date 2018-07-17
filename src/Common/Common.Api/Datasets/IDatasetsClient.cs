@@ -15,6 +15,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 {
     public interface IDatasetsClient
     {
+        object AddDataset(Dataset dataset, Guid? workspaceId = default);
+
         IEnumerable<Dataset> GetDatasets();
         IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = default, int? top = default, int? skip = default);
 
