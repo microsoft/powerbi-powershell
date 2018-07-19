@@ -27,7 +27,7 @@ namespace Microsoft.PowerBI.Commands.Common
 
         private static IServiceProvider Provider { get; set; }
 
-        protected static readonly string SessionId = Guid.NewGuid().ToString();
+        public static readonly string CmdletVersion = typeof(PowerBICmdlet).Assembly.GetName().Version.ToString();
 
         private bool? interactive;
         private object lockObject = new object();
@@ -303,6 +303,7 @@ namespace Microsoft.PowerBI.Commands.Common
                 $"{this.CommandName} begin processing without ParameterSet." : 
                 $"{this.CommandName} begin processing with ParameterSet {this.ParameterSet}.";
             this.WriteDebugWithTimestamp(message);
+            this.WriteDebugWithTimestamp($"Cmdlet version: {CmdletVersion}");
         }
 
         protected virtual void LogCmdletEndInvocationInfo() => this.WriteDebugWithTimestamp($"{this.CommandName} end processing.");

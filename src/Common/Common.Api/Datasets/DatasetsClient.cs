@@ -16,6 +16,15 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         {
         }
 
+        public object AddDataset(Dataset dataset, Guid? workspaceId = default)
+        {
+            var result = workspaceId.HasValue && workspaceId.Value != default ?
+                this.Client.Datasets.PostDatasetInGroup(groupId: workspaceId.Value.ToString(), dataset: Dataset.ConvertToDatasetV2Model(dataset)) :
+                this.Client.Datasets.PostDataset(dataset: Dataset.ConvertToDatasetV2Model(dataset));
+
+            return result;
+        }
+
         public IEnumerable<Dataset> GetDatasets()
         {
             return this.Client.Datasets.GetDatasets().Value?.Select(x => (Dataset)x);
@@ -48,6 +57,14 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId)
         {
             return this.Client.Datasets.GetDatasourcesAsAdmin(datasetId.ToString()).Value?.Select(x => (Datasource)x);
+        }
+
+        public IEnumerable<Table> GetTables(Guid datasetId, Guid? workspaceId = default)
+        {
+            var result = workspaceId.HasValue && workspaceId.Value != default ?
+                this.Client.Datasets.GetTables(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) :
+                this.Client.Datasets.GetTables(datasetKey: datasetId.ToString());
+            return result.Value?.Select(x => (Table)x);
         }
     }
 }

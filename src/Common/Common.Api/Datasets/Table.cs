@@ -30,5 +30,21 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 Measures = table.Measures?.Select(m => (Measure)m)
             };
         }
+
+        public static implicit operator PowerBI.Api.V2.Models.Table(Table table)
+        {
+            if (table == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.Table
+            {
+                Name = table.Name,
+                Columns = table.Columns?.Cast<PowerBI.Api.V2.Models.Column>().ToList(),
+                Rows = table.Rows?.Cast<PowerBI.Api.V2.Models.Row>().ToList(),
+                Measures = table.Measures?.Cast<PowerBI.Api.V2.Models.Measure>().ToList()
+            };
+        }
     }
 }

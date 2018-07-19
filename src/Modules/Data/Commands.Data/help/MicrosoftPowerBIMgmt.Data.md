@@ -11,9 +11,24 @@ Locale: en-US
 PowerShell cmdlets for managing and interacting with Power BI datasets and data sources.
 
 ## MicrosoftPowerBIMgmt.Data Cmdlets
+### [Add-PowerBIDataset](Add-PowerBIDataset.md)
+Creates new dataset to Power BI.
+
 ### [Get-PowerBIDataset](Get-PowerBIDataset.md)
 Returns a list of Power BI datasets.
 
 ### [Get-PowerBIDatasource](Get-PowerBIDatasource.md)
 Returns a list of Power BI data sources.
+
+### [Get-PowerBITable](Get-PowerBITable.md)
+Returns a list of Power BI tables.
+
+### [New-PowerBIColumn](New-PowerBIColumn.md)
+Creates new Power BI column object.
+
+### [New-PowerBIDataset](New-PowerBIDataset.md)
+Creates New Power BI dataset object.
+
+### [New-PowerBITable](New-PowerBITable.md)
+Creates New Power BI table object.
 

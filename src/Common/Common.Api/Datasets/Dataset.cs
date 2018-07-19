@@ -51,6 +51,21 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             };
         }
 
+        public static PowerBI.Api.V2.Models.Dataset ConvertToDatasetV2Model(Dataset dataset)
+        {
+            if (dataset == null)
+            {
+                return null;
+            }
+
+            return new PowerBI.Api.V2.Models.Dataset
+            {
+                Id = dataset.Id == Guid.Empty ? null : dataset.Id.ToString(),
+                Name = dataset.Name,
+                Tables = dataset.Tables?.Select(t => (PowerBI.Api.V2.Models.Table)t).ToList(),
+            };
+        }
+
         private static DatasetMode? ConvertDefaultMode(string defaultMode)
         {
             if(string.IsNullOrEmpty(defaultMode))

@@ -40,6 +40,15 @@ param
     [ValidateSet('', 'quiet', 'minimal', 'normal', 'detailed', 'diagnostic')]
     [string] $Verbosity,
 
+    # Name of test to execute.
+    [string] $TestName,
+
+    # Name of test project to execute.
+    [string] $TestProject,
+
+    # Indicates to launch testing to allow attachment of a debugger.
+    [switch] $VSTestHostDebug,
+
     # Indicates to upload test results to AppVeyor.
     [switch] $UploadResultsToAppVeyor
 )
@@ -55,7 +64,25 @@ if(!$testProjects) {
     throw "Failed to find any test projects under: $Path"
 }
 
+if($VSTestHostDebug) {
+    # Setting this environment variable is necessary for debugging unit tests in Visual Studio Code by instructing 'dotnet test' to wait for a debugger is attached before proceeding.
+    # https://github.com/Microsoft/vstest-docs/blob/master/docs/diagnose.md#debug-test-platform-components
+    # https://stackoverflow.com/questions/43210794/debugging-mstest-unittests-in-visualstudio-code
+    $env:VSTEST_HOST_DEBUG = 1
+}
+
 $commonDotnetArgs = @('--configuration', $Configuration, '--no-build', '--no-restore')
+if($TestName) {
+    # https://docs.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests
+    $TestName = "Name~$TestName"
+    if($Filter) {
+        $Filter = $Filter + "&$TestName"
+    }
+    else {
+        $Filter = $TestName
+    }
+}
+
 if($Filter) {
     $commonDotnetArgs += @('--filter', "`"$Filter`"")
 }
@@ -71,6 +98,10 @@ if($Verbosity) {
 }
 
 $testProjects | ForEach-Object {
+    if($TestProject -and $_.BaseName -ne $TestProject) {
+        return
+    }
+
     $dotnetArgs = @('test', "`"$($_.FullName)`"")
     $dotnetArgs += $commonDotnetArgs
 

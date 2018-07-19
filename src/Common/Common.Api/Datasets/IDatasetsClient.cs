@@ -15,6 +15,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 {
     public interface IDatasetsClient
     {
+        object AddDataset(Dataset dataset, Guid? workspaceId = default);
+
         IEnumerable<Dataset> GetDatasets();
         IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = default, int? top = default, int? skip = default);
 
@@ -23,5 +25,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default);
         IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId);
+
+        IEnumerable<Table> GetTables(Guid datasetId, Guid? workspaceId = default);
     }
 }
