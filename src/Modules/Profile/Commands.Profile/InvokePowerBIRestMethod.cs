@@ -8,6 +8,7 @@ using System.Collections;
 using System.IO;
 using System.Management.Automation;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
@@ -171,7 +172,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
 
                 this.Logger.WriteVerbose($"Request Uri: {response.RequestMessage.RequestUri}");
-                this.Logger.WriteVerbose($"Status Code: {response.StatusCode}");
+                this.Logger.WriteVerbose($"Status Code: {response.StatusCode} ({(int)response.StatusCode})");
 
                 response.EnsureSuccessStatusCode();
 
@@ -203,6 +204,9 @@ namespace Microsoft.PowerBI.Commands.Profile
             client.BaseAddress = new Uri(this.Profile.Environment.GlobalServiceEndpoint);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
+            client.DefaultRequestHeaders.UserAgent.Clear();
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-InvokeRest", PowerBICmdlet.CmdletVersion));
+
             if (this.Headers != null)
             {
                 foreach (DictionaryEntry header in this.Headers)
