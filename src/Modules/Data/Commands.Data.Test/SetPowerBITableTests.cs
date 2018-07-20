@@ -64,6 +64,9 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         public void SetPowerBITable_DatasetIdParameterSetName()
         {
             var expectedTable = new Table { Name = "TestTable" };
+            var cols = new List<Column>();
+            cols.Add(new Column { Name = "newcol", DataType = PowerBIDataType.String.ToString() });
+            expectedTable.Columns = cols;
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.UpdateTable(expectedTable, Guid.Empty, null)).Returns(expectedTable);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
@@ -76,7 +79,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            Assert.AreEqual(expectedTable.Name, (initFactory.Logger.Output.First() as Table).Name);
+            TestUtilities.AssertExpectedUnitTestResults(expectedTable, client, initFactory);
         }
     }    
 }

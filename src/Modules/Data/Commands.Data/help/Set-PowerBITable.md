@@ -15,17 +15,17 @@ Updates the metadata and schema for the specified table.
 ### DatasetId (Default)
 ```
 Set-PowerBITable -Table <Table> -DatasetId <Guid> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
- [-Scope <PowerBIUserScope>] [<CommonParameters>]
+ [<CommonParameters>]
 ```
 
 ### Dataset
 ```
 Set-PowerBITable -Table <Table> -Dataset <Dataset> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
- [-Scope <PowerBIUserScope>] [<CommonParameters>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Set-PowerBITable lets you update the metadata and schema for the specified table
+Set-PowerBITable lets you update the metadata and schema for the specified table.
 Before you run this command, make sure you log in using Login-PowerBIServiceAccount. 
 
 ## EXAMPLES
@@ -77,24 +77,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Scope
-Only Individual scope is supported.
-
-```yaml
-Type: PowerBIUserScope
-Parameter Sets: (All)
-Aliases:
-Accepted values: Individual, Organization
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Table
-Table to be updated.
+Table to update the schema.
 
 ```yaml
 Type: Table
