@@ -18,21 +18,19 @@ namespace Microsoft.PowerBI.Commands.Common
 {
     public abstract class PowerBICmdlet : PSCmdlet, IPowerBICmdlet
     {
-        #region DI Properties
+        #region Properties
         protected IPowerBILoggerFactory LoggerFactory { get; }
         protected IDataStorage Storage { get; }
         protected IAuthenticationFactory Authenticator { get; }
         protected IPowerBISettings Settings { get; }
         #endregion
 
-        private static IServiceProvider Provider { get; set; }
-
         public static readonly string CmdletVersion = typeof(PowerBICmdlet).Assembly.GetName().Version.ToString();
 
         private bool? interactive;
         private object lockObject = new object();
 
-        public PowerBICmdlet() : this(GetInstance<IPowerBICmdletInitFactory>()) { }
+        public PowerBICmdlet() : this(GetDefaultInitFactory()) { }
 
         public PowerBICmdlet(IPowerBICmdletInitFactory init)
         {
@@ -43,24 +41,6 @@ namespace Microsoft.PowerBI.Commands.Common
         static PowerBICmdlet()
         {
             AppDomain.CurrentDomain.AssemblyResolve += RedirectAssemblyLoad;
-            var serviceCollection = GetServiceCollection();
-            SetProvider(serviceCollection);
-        }
-
-        protected static IServiceCollection GetServiceCollection()
-        {
-            var serviceCollection = new ServiceCollection()
-                .AddSingleton<IPowerBILoggerFactory, PowerBILoggerFactory>()
-                .AddSingleton<IDataStorage, ModuleDataStorage>()
-                .AddSingleton<IPowerBISettings, PowerBISettings>()
-                .AddSingleton<IPowerBICmdletInitFactory, PowerBICmdletInitFactory>()
-                .AddSingleton<IAuthenticationFactory, AuthenticationFactorySelector>();
-            return serviceCollection;
-        }
-
-        protected static void SetProvider(IServiceCollection serviceCollection)
-        {
-            Provider = serviceCollection.BuildServiceProvider();
         }
 
         private static Assembly RedirectAssemblyLoad(object sender, ResolveEventArgs args)
@@ -116,7 +96,7 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        protected static T GetInstance<T>() => Provider.GetService<T>();
+        protected static IPowerBICmdletInitFactory GetDefaultInitFactory() => new PowerBICmdletInitFactory(new PowerBILoggerFactory(), new ModuleDataStorage(), new AuthenticationFactorySelector(), new PowerBISettings());
 
         protected IPowerBIProfile Profile => this.Storage.TryGetItem<IPowerBIProfile>("profile", out IPowerBIProfile profile) ? profile : null;
         

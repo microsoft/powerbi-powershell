@@ -3,7 +3,6 @@
  * Licensed under the MIT License.
  */
 
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Api;
 
@@ -13,18 +12,11 @@ namespace Microsoft.PowerBI.Common.Client
     {
         protected IPowerBIClientFactory ClientFactory { get; set; }
 
-        static PowerBIClientCmdlet()
+        public PowerBIClientCmdlet() : this(GetDefaultClientInitFactory())
         {
-            var serviceCollection = GetServiceCollection();
-            serviceCollection = serviceCollection
-                .AddSingleton<IPowerBIClientFactory, PowerBIClientFactory>()
-                .AddSingleton<IPowerBIClientCmdletInitFactory, PowerBIClientCmdletInitFactory>();
-            SetProvider(serviceCollection);
         }
 
-        public PowerBIClientCmdlet() : this(GetInstance<IPowerBIClientCmdletInitFactory>())
-        {
-        }
+        protected static IPowerBIClientCmdletInitFactory GetDefaultClientInitFactory() => new PowerBIClientCmdletInitFactory(new PowerBILoggerFactory(), new ModuleDataStorage(), new AuthenticationFactorySelector(), new PowerBISettings(), new PowerBIClientFactory());
 
         public PowerBIClientCmdlet(IPowerBIClientCmdletInitFactory init) : base(init) => this.ClientFactory = init.Client;
 
