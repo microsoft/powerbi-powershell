@@ -12,7 +12,7 @@ namespace Microsoft.PowerBI.Common.Client
     {
         public IPowerBIApiClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
-            return new PowerBIApiClient(authenticator, profile, logger, settings);
+            return new PowerBIApiClient(authenticator, profile, logger, settings, new PowerBIHttpClientHandler(logger));
         }
     }
 }

@@ -1,0 +1,133 @@
+{
+    // https://code.visualstudio.com/docs/editor/variables-reference
+    "version": "2.0.0",
+    "windows": {
+        "options": {
+            "shell": {
+                "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "args": [
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-Command"
+                ]
+            }
+        }
+    },
+    "linux": {
+        "options": {
+            "shell": {
+                "executable": "/usr/bin/pwsh",
+                "args": [
+                    "-NoProfile",
+                    "-Command"
+                ]
+            }
+        }
+    },
+    "osx": {
+        "options": {
+            "shell": {
+                "executable": "/usr/local/bin/pwsh",
+                "args": [
+                    "-NoProfile",
+                    "-Command"
+                ]
+            }
+        }
+    },
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\Build.ps1'",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        // {
+        //     "label": "Build",
+        //     "command": "msbuild",
+        //     "args": [
+        //         "/property:GenerateFullPaths=true",
+        //         "/t:build"
+        //     ],
+        //     "group": {
+        //                 "kind": "build",
+        //                 "isDefault": true
+        //             }
+        // },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\Build.ps1' -Clean -NoBuild",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Pack",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\Build.ps1' -Pack -Clean",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Restore",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\RestorePackages.ps1'",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\Test.ps1'",
+            "group": "test",
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+            }
+        },
+        {
+            "label": "PrepManualTesting",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\PrepManualTesting.ps1' -Build -Force",
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "DebugTest",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\DebugTest.ps1' -TestName '${selectedText}' -DirectoryName '${fileDirname}'",
+            "problemMatcher": "$msCompile",
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "DebugTest (No Build)",
+            "type": "shell",
+            "command": "& '${workspaceFolder}\\scripts\\DebugTest.ps1' -TestName '${selectedText}' -DirectoryName '${fileDirname}' -NoBuild",
+            "problemMatcher": "$msCompile",
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false
+            }
+        }
+    ]
+}
