@@ -6,7 +6,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -42,7 +41,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
     }
   ],
   ""Settings"": {
-    ""Option1"": true
+    ""ForceDeviceCodeAuthentication"": true
   }
 }
 ";
@@ -51,11 +50,11 @@ namespace Microsoft.PowerBI.Commands.Common.Test
 
             File.WriteAllText(Path.Combine(testDir, "testSettings.json"), testJson);
 
-            var settings = new PowerBISettings(new ConfigurationBuilder().SetBasePath(testDir).AddJsonFile("testSettings.json"));//.AddInMemoryCollection());
+            var settings = new PowerBISettings(Path.Combine(testDir, "testSettings.json"));
             Assert.IsNotNull(settings.Environments);
             Assert.IsNotNull(settings.Settings);
             Assert.IsTrue(settings.Environments.Count == 1);
-            Assert.IsTrue(settings.Settings.Count == 1);
+            Assert.AreEqual(true, settings.Settings.ForceDeviceCodeAuthentication);
         }
 
         [TestMethod]
@@ -66,7 +65,6 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             Assert.IsNotNull(settings.Environments);
             Assert.IsNotNull(settings.Settings);
             Assert.IsTrue(settings.Environments.Any());
-            Assert.IsTrue(settings.Settings.Any());
 
 #if DEBUG
             var oneBoxEnvironment = settings.Environments[PowerBIEnvironmentType.OneBox];
@@ -101,7 +99,6 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             Assert.IsNotNull(settings.Environments);
             Assert.IsNotNull(settings.Settings);
             Assert.IsTrue(settings.Environments.Any());
-            Assert.IsTrue(settings.Settings.Any());
 
             var publicEnvironment = settings.Environments[PowerBIEnvironmentType.Public];
             Assert.AreEqual(PowerBIEnvironmentType.Public, publicEnvironment.Name);
