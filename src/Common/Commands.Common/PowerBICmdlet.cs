@@ -10,7 +10,6 @@ using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
 using System.Threading;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 

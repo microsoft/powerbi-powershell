@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Common.Authentication
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
 
-            LoggerCallbackHandler.UseDefaultLogging = settings.ShowADALDebugMessages();
+            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
 
             string queryParamString = queryParameters.ToQueryParameterString();
             if(Cache == null)
