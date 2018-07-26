@@ -10,11 +10,16 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
     /// <summary>
     /// PowerBI default settings.
     /// </summary>
-    public interface IPowerBISettings : IExtensibleSettings
+    public interface IPowerBISettings
     {
         /// <summary>
         /// Available PowerBI environment settings to pick from.
         /// </summary>
         IDictionary<PowerBIEnvironmentType, IPowerBIEnvironment> Environments { get; }
+
+        /// <summary>
+        /// Power BI configuration settings.
+        /// </summary>
+        IPowerBIConfigurationSettings Settings { get; }
     }
 }
