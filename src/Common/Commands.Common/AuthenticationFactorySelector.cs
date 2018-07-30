@@ -32,13 +32,7 @@ namespace Microsoft.PowerBI.Commands.Common
                 {
                     if (UserAuthFactory == null)
                     {
-                        bool forceDeviceAuth = false;
-                        if (settings.Settings.TryGetValue(PowerBISettingNames.SettingsSection.ForceDeviceCodeAuthentication, out string forceDeviceAuthString)
-                            && bool.TryParse(forceDeviceAuthString, out bool forceDeviceAuthParsed))
-                        {
-                            forceDeviceAuth = forceDeviceAuthParsed;
-                        }
-
+                        bool forceDeviceAuth = settings.Settings.ForceDeviceCodeAuthentication;
                         if (!forceDeviceAuth && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                         {
                             UserAuthFactory = new WindowsAuthenticationFactory();

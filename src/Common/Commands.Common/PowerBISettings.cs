@@ -10,8 +10,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using System.Xml;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
@@ -19,36 +20,44 @@ namespace Microsoft.PowerBI.Commands.Common
 {
     public class PowerBISettings : IPowerBISettings
     {
-        private IConfigurationRoot Configuration { get; }
+        public const string FileName = "settings.json";
 
         private static GSEnvironments GlobalServiceEnvironments { get; set; }
 
-        public PowerBISettings(IConfigurationBuilder builder = null)
+        public PowerBISettings(string settingsFilePath = null)
         {
-            var executingDirectory = this.GetExecutingDirectory();
-            string settingsFilePath = Path.Combine(executingDirectory, PowerBISettingNames.FileName);
+            if(string.IsNullOrEmpty(settingsFilePath))
+            {
+                var executingDirectory = this.GetExecutingDirectory();
+                settingsFilePath = Path.Combine(executingDirectory, FileName);
+            }
+            
             if(!File.Exists(settingsFilePath))
             {
                 throw new FileNotFoundException("Unable to find setting configuration", settingsFilePath);
             }
 
-            builder = builder ?? new ConfigurationBuilder().AddJsonFile(settingsFilePath);
-            this.Configuration = builder.Build();
+            PowerBIConfiguration configuration = null;
+            using (var fileReader = File.OpenRead(settingsFilePath))
+            {
+                var serializer = new DataContractJsonSerializer(typeof(PowerBIConfiguration));
+                using (var jsonReader = JsonReaderWriterFactory.CreateJsonReader(fileReader, Encoding.UTF8, XmlDictionaryReaderQuotas.Max, null))
+                {
+                    configuration = serializer.ReadObject(jsonReader) as PowerBIConfiguration;
+                }
+            }
 
-            var settings = this.Configuration.GetSection(PowerBISettingNames.SettingsSection.SectionName).GetChildren().ToDictionary(x => x.Key, x => x.Value);
-            this.Settings = settings ?? throw new InvalidOperationException("Failed to load settings");
-
+            this.Settings = configuration.Settings;
             var cloudEnvironments = GetGlobalServiceConfig().Result;
 
             // Ignore non-valid environments
-            var environments = this.Configuration.GetSection(PowerBISettingNames.Environments.SectionName)
-                .GetChildren()
-                .Where(e => Enum.TryParse(e[PowerBISettingNames.Environments.Name], out PowerBIEnvironmentType result))
+            var environments = configuration.Environments
+                .Where(e => Enum.TryParse(e.Name, out PowerBIEnvironmentType result))
                 .Select(e =>
                     {
-                        if (!string.IsNullOrEmpty(e[PowerBISettingNames.Environments.CloudName]))
+                        if (!string.IsNullOrEmpty(e.CloudName))
                         {
-                            string cloudName = e[PowerBISettingNames.Environments.CloudName];
+                            string cloudName = e.CloudName;
                             var cloudEnvironment = cloudEnvironments.Environments.FirstOrDefault(c => c.CloudName.Equals(cloudName, StringComparison.OrdinalIgnoreCase));
                             if (cloudEnvironment == null)
                             {
@@ -58,10 +67,10 @@ namespace Microsoft.PowerBI.Commands.Common
                             var backendService = cloudEnvironment.Services.First(s => s.Name.Equals("powerbi-backend", StringComparison.OrdinalIgnoreCase));
                             return new PowerBIEnvironment()
                             {
-                                Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e[PowerBISettingNames.Environments.Name]),
+                                Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e.Name),
                                 AzureADAuthority = cloudEnvironment.Services.First(s => s.Name.Equals("aad", StringComparison.OrdinalIgnoreCase)).Endpoint,
-                                AzureADClientId = e[PowerBISettingNames.Environments.ClientId],
-                                AzureADRedirectAddress = e[PowerBISettingNames.Environments.Redirect],
+                                AzureADClientId = e.ClientId,
+                                AzureADRedirectAddress = e.Redirect,
                                 AzureADResource = backendService.ResourceId,
                                 GlobalServiceEndpoint = backendService.Endpoint
                             };
@@ -70,12 +79,12 @@ namespace Microsoft.PowerBI.Commands.Common
                         {
                             return new PowerBIEnvironment()
                             {
-                                Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e[PowerBISettingNames.Environments.Name]),
-                                AzureADAuthority = e[PowerBISettingNames.Environments.Authority],
-                                AzureADClientId = e[PowerBISettingNames.Environments.ClientId],
-                                AzureADRedirectAddress = e[PowerBISettingNames.Environments.Redirect],
-                                AzureADResource = e[PowerBISettingNames.Environments.Resource],
-                                GlobalServiceEndpoint = e[PowerBISettingNames.Environments.GlobalService]
+                                Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e.Name),
+                                AzureADAuthority = e.Authority,
+                                AzureADClientId = e.ClientId,
+                                AzureADRedirectAddress = e.Redirect,
+                                AzureADResource = e.Resource,
+                                GlobalServiceEndpoint = e.GlobalService
                             };
                         }
                     })
@@ -102,7 +111,7 @@ namespace Microsoft.PowerBI.Commands.Common
 
         public IDictionary<PowerBIEnvironmentType, IPowerBIEnvironment> Environments { get; }
 
-        public IDictionary<string, string> Settings { get; }
+        public IPowerBIConfigurationSettings Settings { get; }
 
         private string GetExecutingDirectory()
         {

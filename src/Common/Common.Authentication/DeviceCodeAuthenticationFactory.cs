@@ -21,7 +21,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            LoggerCallbackHandler.UseDefaultLogging = settings.ShowADALDebugMessages();
+            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
 
             if (Cache == null)
             {

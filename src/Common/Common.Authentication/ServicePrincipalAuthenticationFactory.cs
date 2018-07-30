@@ -22,7 +22,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         private AuthenticationContext InitializeContext(IPowerBIEnvironment environment, IPowerBISettings settings)
         {
-            LoggerCallbackHandler.UseDefaultLogging = settings.ShowADALDebugMessages();
+            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
 
             if (Cache == null)
             {

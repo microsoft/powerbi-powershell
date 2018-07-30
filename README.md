@@ -10,10 +10,13 @@ Below is a table of the various Power BI PowerShell modules found in this reposi
 
 | Description | Module Name | PowerShell Gallery link |
 | ----------- | ----------- | ----------------------- |
-| Rollup Module for PowerBI Cmdlets | `MicrosoftPowerBIMgmt` | [![MicrosoftPowerBIMgmt](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.svg?style=flat-square&label=MicrosoftPowerBIMgmt)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt/) |
-| Profile module for PowerBI Cmdlets | `MicrosoftPowerBIMgmt.Profile` | [![MicrosoftPowerBIMgmt.Profile](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Profile.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Profile)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Profile/) |
-| Workspaces module for PowerBI | `MicrosoftPowerBIMgmt.Workspaces` | [![MicrosoftPowerBIMgmt.Workspaces](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Workspaces.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Workspaces)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Workspaces/) |
-| Reports module for PowerBI | `MicrosoftPowerBIMgmt.Reports` | [![MicrosoftPowerBIMgmt.Reports](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Reports.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Reports)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Reports/) |
+| Rollup Module for Power BI Cmdlets | `MicrosoftPowerBIMgmt` | [![MicrosoftPowerBIMgmt](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.svg?style=flat-square&label=MicrosoftPowerBIMgmt)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt/) |
+| Data module for Power BI Cmdlets | [MicrosoftPowerBIMgmt.Data](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.data) | [![MicrosoftPowerBIMgmt.Data](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Data.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Data)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Data/) |
+| Profile module for Power BI Cmdlets | [MicrosoftPowerBIMgmt.Profile](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile) | [![MicrosoftPowerBIMgmt.Profile](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Profile.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Profile)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Profile/) |
+| Reports module for Power BI | [MicrosoftPowerBIMgmt.Reports](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.reports) | [![MicrosoftPowerBIMgmt.Reports](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Reports.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Reports)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Reports/) |
+| Workspaces module for Power BI | [MicrosoftPowerBIMgmt.Workspaces](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces) | [![MicrosoftPowerBIMgmt.Workspaces](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Workspaces.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Workspaces)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Workspaces/) |
+
+More documentation can be found at https://docs.microsoft.com/en-us/powershell/power-bi/overview.
 
 ## Supported Environments and PowerShell Versions
 

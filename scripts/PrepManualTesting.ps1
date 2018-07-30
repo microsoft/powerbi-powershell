@@ -29,7 +29,10 @@ param
     [string] $PackageDir = "$PSScriptRoot\..\PkgOut",
 
     # Indicates to force cleaning PackageDir of any files not related to the modules (prevents being prompted to clean).
-    [switch] $Force
+    [switch] $Force,
+
+    # Indicates to only load cmdlets out of PackageDir.
+    [switch] $LoadOnly
 )
 
 if($Build) {
@@ -43,30 +46,31 @@ if(!(Test-Path -Path $PackageDir)) {
     throw "Directory '$PackageDir' does not exist, specify -Build to generate"
 }
 
-$nupkgFiles = Get-ChildItem -Path $PackageDir -Filter *.nupkg
-if(!$nupkgFiles) {
-    throw "No NUPKG files found, specify -Build to generate"
-}
-
-$nonNuPkgFiles = Get-ChildItem -Path $PackageDir -Exclude *.nupkg
-if($nonNuPkgFiles) {
-    if(!$Force -and !$PSCmdlet.ShouldContinue("$($nonNuPkgFiles | ForEach-Object { $_.FullName } | Out-String)", "Delete files")) {
-        exit 0
+$PackageDir = (Resolve-Path -Path $PackageDir).ProviderPath
+if(!$LoadOnly) {
+    $nupkgFiles = Get-ChildItem -Path $PackageDir -Filter *.nupkg
+    if(!$nupkgFiles) {
+        throw "No NUPKG files found, specify -Build to generate"
     }
 
-    Write-Verbose "Removing non-NUPKG files..."
-    $nonNuPkgFiles | Remove-Item -Force -ErrorAction Stop -Recurse
-}
+    $nonNuPkgFiles = Get-ChildItem -Path $PackageDir -Exclude *.nupkg
+    if($nonNuPkgFiles) {
+        if(!$Force -and !$PSCmdlet.ShouldContinue("$($nonNuPkgFiles | ForEach-Object { $_.FullName } | Out-String)", "Delete files")) {
+            exit 0
+        }
 
-$PackageDir = (Resolve-Path -Path $PackageDir).ProviderPath
-Add-Type -AssemblyName System.IO.Compression.FileSystem
+        Write-Verbose "Removing non-NUPKG files..."
+        $nonNuPkgFiles | Remove-Item -Force -ErrorAction Stop -Recurse
+    }
 
-$nupkgFiles | ForEach-Object {
-    $moduleName = $_.BaseName -split '\.\d' | Select-Object -First 1
-    Write-Verbose "Unpacking zip '$($_.Name)' to directory '$moduleName'..."
-    $newName = Rename-Item -Path $_.FullName -NewName "$moduleName.zip" -Force -PassThru
-    $outDir = Join-Path -Path $PackageDir -ChildPath $moduleName
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($newName.FullName, $outDir)
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $nupkgFiles | ForEach-Object {
+        $moduleName = $_.BaseName -split '\.\d' | Select-Object -First 1
+        Write-Verbose "Unpacking zip '$($_.Name)' to directory '$moduleName'..."
+        $newName = Rename-Item -Path $_.FullName -NewName "$moduleName.zip" -Force -PassThru
+        $outDir = Join-Path -Path $PackageDir -ChildPath $moduleName
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($newName.FullName, $outDir)
+    }
 }
 
 if($env:PSModulePath -split ';' -inotcontains $PackageDir) {
