@@ -5,11 +5,8 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.PowerBI.Api.V2;
 using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.IO;
-using System.Text;
+using Microsoft.PowerBI.Api.V2;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
