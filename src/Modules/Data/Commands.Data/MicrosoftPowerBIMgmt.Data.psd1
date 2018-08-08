@@ -71,7 +71,7 @@ PowerShellVersion = '3.0'
 FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'Add-PowerBIDataset','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset', 'Get-PowerBIDatasource', 'Get-PowerBITable'
+CmdletsToExport = 'Add-PowerBIDataset','Set-PowerBITable','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset', 'Get-PowerBIDatasource', 'Get-PowerBITable'
 
 # Variables to export from this module
 VariablesToExport = '*'

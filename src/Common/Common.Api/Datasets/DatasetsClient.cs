@@ -5,8 +5,8 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.PowerBI.Api.V2;
 using System.Linq;
+using Microsoft.PowerBI.Api.V2;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
@@ -47,8 +47,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default)
         {
-            var result = workspaceId.HasValue && workspaceId.Value != default ? 
-                this.Client.Datasets.GetDatasources(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) : 
+            var result = workspaceId.HasValue && workspaceId.Value != default ?
+                this.Client.Datasets.GetDatasources(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) :
                 this.Client.Datasets.GetDatasources(datasetKey: datasetId.ToString());
             return result.Value?.Select(x => (Datasource)x);
 
@@ -66,5 +66,13 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 this.Client.Datasets.GetTables(datasetKey: datasetId.ToString());
             return result.Value?.Select(x => (Table)x);
         }
+
+        public Table UpdateTable(Table table, Guid datasetId, Guid? workspaceId = null)
+        {
+            var result = workspaceId.HasValue && workspaceId.Value != default ?
+                this.Client.Datasets.PutTableInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString(), tableName: table.Name, (Microsoft.PowerBI.Api.V2.Models.Table)table) :
+                this.Client.Datasets.PutTable(datasetKey: datasetId.ToString(), tableName: table.Name, (Microsoft.PowerBI.Api.V2.Models.Table)table);
+            return result as Table;
+        }        
     }
 }
