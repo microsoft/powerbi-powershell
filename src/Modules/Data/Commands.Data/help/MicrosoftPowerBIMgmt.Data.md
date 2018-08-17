@@ -14,6 +14,9 @@ PowerShell cmdlets for managing and interacting with Power BI datasets and data 
 ### [Add-PowerBIDataset](Add-PowerBIDataset.md)
 Creates new dataset to Power BI.
 
+### [Add-PowerBIRows](Add-PowerBIRows.md)
+Insert rows to the specified table in Power BI.
+
 ### [Get-PowerBIDataset](Get-PowerBIDataset.md)
 Returns a list of Power BI datasets.
 
@@ -32,6 +35,9 @@ Creates New Power BI dataset object.
 ### [New-PowerBITable](New-PowerBITable.md)
 Creates New Power BI table object.
 
+### [Remove-PowerBIRows](Remove-PowerBIRows.md)
+{{Fill in the Synopsis}}
+
 ### [Set-PowerBITable](Set-PowerBITable.md)
-Updates the metadata and schema for the specified table.
+Updates the metadata and schema for the specified Power BI table.
 

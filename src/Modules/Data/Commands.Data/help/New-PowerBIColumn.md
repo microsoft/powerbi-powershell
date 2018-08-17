@@ -50,7 +50,7 @@ A type of the column. Type can be String, Int64, DateTime, Boolean, or Double.
 Type: PowerBIDataType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Int64, Double, Boolean, DateTime, String
+Accepted values: In64, Double, Boolean, Datetime, String
 
 Required: True
 Position: Named
