@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -14,7 +13,6 @@ using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Commands.Data.Test
 {
