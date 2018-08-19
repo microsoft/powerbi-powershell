@@ -4,10 +4,10 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.PowerBI.Api.V2;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
@@ -76,7 +76,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return result as Table;
         }
 
-        public object AddRows(string datasetId, string tableName, JArray rows, Guid? workspaceId = default)
+        public object AddRows(string datasetId, string tableName, List<Hashtable> rows, Guid? workspaceId = default)
         {
             
             var result = workspaceId.HasValue && workspaceId.Value != default ?

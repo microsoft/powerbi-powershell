@@ -45,14 +45,6 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 Rows = table.Rows?.Select(r => (PowerBI.Api.V2.Models.Row)r).ToList(),
                 Measures = table.Measures?.Select(m => (PowerBI.Api.V2.Models.Measure)m).ToList()
             };
-
-            //return new PowerBI.Api.V2.Models.Table
-            //{
-            //    Name = table.Name,
-            //    Columns = table.Columns?.Cast<PowerBI.Api.V2.Models.Column>().ToList(),
-            //    Rows = table.Rows?.Cast<PowerBI.Api.V2.Models.Row>().ToList(),
-            //    Measures = table.Measures?.Cast<PowerBI.Api.V2.Models.Measure>().ToList()
-            //};
         }
     }
 }

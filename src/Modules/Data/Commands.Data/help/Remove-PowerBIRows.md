@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-PowerBIRows
 
 ## SYNOPSIS
-Removes all rows from the Power BI table.
+Allows removal of rows from the Power BI table.
 
 ## SYNTAX
 
@@ -25,7 +25,7 @@ Remove-PowerBIRows -DatasetId <Guid> -TableName <String> [-WorkspaceId <Guid>] [
 ```
 
 ## DESCRIPTION
-The Remove-PowerBIRows cmdlet lets you remove rows from the Power BI table. 
+The Remove-PowerBIRows cmdlet lets you allow removal of rows from the Power BI table.
 
 ## EXAMPLES
 

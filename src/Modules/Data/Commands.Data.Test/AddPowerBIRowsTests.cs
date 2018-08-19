@@ -4,6 +4,8 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -13,7 +15,6 @@ using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Commands.Data.Test
 {
@@ -44,13 +45,13 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
                 var table = tableResults.First().BaseObject as Table;
 
-                var row1 = new JObject();
-                row1["Col1"] = "Data1";
-                row1["Col2"] = true;
-                var row2 = new JObject();
-                row2["Col1"] = "Data2";
-                row2["Col2"] = false;
-                var rows = new JArray();
+                var row1 = new Hashtable();
+                row1.Add("Col1","Data1");
+                row1.Add("Col2", true);
+                var row2 = new Hashtable();
+                row2.Add("Col1", "Data2");
+                row2.Add("Col2", false);
+                var rows = new List<Hashtable>();
                 rows.Add(row1);
                 rows.Add(row2);
                 ps.AddCommand(AddPowerBIRowsCmdletInfo)
@@ -73,13 +74,13 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         {
             var datasetId = new Guid();
             var table = new Table { Name = "TestTable" };
-            var row1 = new JObject();
-            row1["Col1"] = "Data1";
-            row1["Col2"] = true;
-            var row2 = new JObject();
-            row2["Col1"] = "Data2";
-            row2["Col2"] = false;
-            var rows = new JArray();
+            var row1 = new Hashtable();
+            row1.Add("Col1", "Data1");
+            row1.Add("Col2", true);
+            var row2 = new Hashtable();
+            row2.Add("Col1", "Data2");
+            row2.Add("Col2", false);
+            var rows = new List<Hashtable>();
             rows.Add(row1);
             rows.Add(row2);
             var client = new Mock<IPowerBIApiClient>();

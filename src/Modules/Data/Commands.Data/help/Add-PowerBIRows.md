@@ -14,13 +14,15 @@ Insert rows to the specified table in Power BI.
 
 ### Dataset (Default)
 ```
-Add-PowerBIRows -Dataset <Dataset> -TableName <String> -Rows <JArray> [-WorkspaceId <Guid>]
+Add-PowerBIRows -Dataset <Dataset> -TableName <String>
+ -Rows <System.Collections.Generic.List`1[System.Collections.Hashtable]> [-WorkspaceId <Guid>]
  [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
 ### DatasetId
 ```
-Add-PowerBIRows -DatasetId <Guid> -TableName <String> -Rows <JArray> [-WorkspaceId <Guid>]
+Add-PowerBIRows -DatasetId <Guid> -TableName <String>
+ -Rows <System.Collections.Generic.List`1[System.Collections.Hashtable]> [-WorkspaceId <Guid>]
  [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
@@ -79,7 +81,7 @@ Accept wildcard characters: False
 An array of rows to be stored in the table.
 
 ```yaml
-Type: JArray
+Type: System.Collections.Generic.List`1[System.Collections.Hashtable]
 Parameter Sets: (All)
 Aliases:
 

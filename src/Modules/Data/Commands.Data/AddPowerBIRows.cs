@@ -4,11 +4,12 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Commands.Data
 {
@@ -36,7 +37,7 @@ namespace Microsoft.PowerBI.Commands.Data
         public string TableName { get; set; }
 
         [Parameter(Mandatory =true)]
-        public JArray Rows { get; set; }
+        public List<Hashtable> Rows { get; set; }
 
         [Alias("GroupId")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]
