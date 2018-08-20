@@ -37,7 +37,7 @@ namespace Microsoft.PowerBI.Commands.Data
         public string TableName { get; set; }
 
         [Parameter(Mandatory =true)]
-        public List<Hashtable> Rows { get; set; }
+        public List<PSObject> Rows { get; set; }
 
         [Alias("GroupId")]
         [Parameter(Mandatory = false, ParameterSetName = DatasetIdParameterSetName)]

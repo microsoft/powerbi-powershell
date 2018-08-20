@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
@@ -76,12 +77,31 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return result as Table;
         }
 
-        public object AddRows(string datasetId, string tableName, List<Hashtable> rows, Guid? workspaceId = default)
+        public object AddRows(string datasetId, string tableName, List<PSObject> rows, Guid? workspaceId = default)
         {
-            
+            var hashRows = new List<Hashtable>();
+            foreach (var row in rows)
+            {
+                var hashtable = new Hashtable();
+                if (row.BaseObject is Hashtable)
+                {
+                    foreach (DictionaryEntry baseObj in (row.BaseObject as Hashtable))
+                    {
+                        hashtable.Add(baseObj.Key, baseObj.Value);
+                    }
+                }
+                else
+                {
+                    foreach (var member in row.Members.Where(x => x is PSNoteProperty))
+                    {
+                        hashtable.Add(member.Name, member.Value);
+                    }
+                }
+                hashRows.Add(hashtable);
+            }
             var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.PostRowsInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId, tableName: tableName, requestMessage: rows) :
-                this.Client.Datasets.PostRows(datasetKey: datasetId, tableName: tableName, requestMessage: rows);
+                this.Client.Datasets.PostRowsInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId, tableName: tableName, requestMessage: hashRows) :
+                this.Client.Datasets.PostRows(datasetKey: datasetId, tableName: tableName, requestMessage: hashRows);
 
             return result;
         }
