@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIDataset
 
 ## SYNOPSIS
-Creates new dataset to Power BI.
+Creates new rows in the specified Power BI table.
 
 ## SYNTAX
 
@@ -23,7 +23,7 @@ Add-PowerBIDataset -Dataset <Dataset> -Workspace <Workspace> [<CommonParameters>
 ```
 
 ## DESCRIPTION
-Add-PowerBIDataset creates new push dataset to Power BI.
+The Add-PowerBIDataset cmdlet lets you create new rows in the specified Power BI table.
 
 ## EXAMPLES
 
