@@ -41,9 +41,7 @@ namespace Microsoft.PowerBI.Commands.Reports
 
             using (var client = this.CreateClient())
             {
-                var id = client.Imports.PostImport(this.Name, this.Path);
-                var import = client.Reports.GetImport(id);
-                var report = import.Reports.Single();
+                var report = client.Reports.PostReport(this.Name, this.Path);
 
                 this.Logger.WriteObject(report, true);
             }

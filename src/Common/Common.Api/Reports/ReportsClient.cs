@@ -98,5 +98,26 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         {
             return this.Client.Imports.GetImports(groupId: workspaceId.ToString()).Value?.Select(x => (Import)x);
         }
+
+        public Guid PostImport(string datasetDisplayName, string filePath)
+        {
+            using (var fileStream = new StreamReader(filePath))
+            {
+                var response = this.Client.Imports.PostImportWithFile(
+                    fileStream: fileStream.BaseStream,
+                    datasetDisplayName: datasetDisplayName,
+                    nameConflict: PowerBI.Api.V2.Models.ImportConflictHandlerMode.CreateOrOverwrite
+                );
+                return Guid.Parse(response.Id);
+            }
+        }
+
+        public Report PostReport(string reportName, string filePath)
+        {
+            var id = PostImport(reportName, filePath);
+            var import = this.GetImport(id);
+            var report = import.Reports.Single();
+            return report;
+        }
     }
 }
