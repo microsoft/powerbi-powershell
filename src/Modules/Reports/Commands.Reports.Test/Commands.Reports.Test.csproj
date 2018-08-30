@@ -28,4 +28,10 @@
     <ProjectReference Include="..\Commands.Reports\Commands.Reports.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="testreport.pbix">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

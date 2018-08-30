@@ -8,6 +8,7 @@ using System.Net.Http;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Datasets;
+using Microsoft.PowerBI.Common.Api.Imports;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.Rest;
@@ -26,6 +27,8 @@ namespace Microsoft.PowerBI.Common.Api
 
         public IDatasetsClient Datasets { get; set; }
 
+        public IImportsClient Imports { get; set; }
+
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings);
@@ -43,6 +46,7 @@ namespace Microsoft.PowerBI.Common.Api
             this.Reports = new ReportsClient(this.Client);
             this.Workspaces = new WorkspacesClient(this.Client);
             this.Datasets = new DatasetsClient(this.Client);
+            this.Imports = new ImportsClient(this.Client);
         }
 
         private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
@@ -110,9 +114,14 @@ namespace Microsoft.PowerBI.Common.Api
                     this.Workspaces = null;
                 }
 
-                if(this.Datasets != null)
+                if (this.Datasets != null)
                 {
                     this.Datasets = null;
+                }
+
+                if (this.Imports != null)
+                {
+                    this.Imports = null;
                 }
             }
         }

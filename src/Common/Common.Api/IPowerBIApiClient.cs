@@ -7,6 +7,7 @@ using System;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
+using Microsoft.PowerBI.Common.Api.Imports;
 
 namespace Microsoft.PowerBI.Common.Api
 {
@@ -17,5 +18,7 @@ namespace Microsoft.PowerBI.Common.Api
         IWorkspacesClient Workspaces { get; set; }
 
         IDatasetsClient Datasets { get; set; }
+
+        IImportsClient Imports { get; set; }
     }
 }

@@ -35,6 +35,8 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         IEnumerable<Tile> GetTilesForWorkspace(Guid workspaceId, Guid dashboardId);
 
+        Import GetImport(Guid importId);
+
         IEnumerable<Import> GetImports();
 
         IEnumerable<Import> GetImportsAsAdmin(string expand = default, string filter = default, int? top = default, int? skip = default);

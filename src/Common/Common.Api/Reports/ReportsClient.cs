@@ -79,6 +79,11 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return this.Client.Dashboards.GetTiles(groupId: workspaceId.ToString(), dashboardKey: dashboardId.ToString()).Value?.Select(x => (Tile)x);
         }
 
+        public Import GetImport(Guid importId)
+        {
+            return this.Client.Imports.GetImportById(importId: importId.ToString());
+        }
+
         public IEnumerable<Import> GetImports()
         {
             return this.Client.Imports.GetImports().Value?.Select(x => (Import)x);
