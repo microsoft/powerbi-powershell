@@ -9,7 +9,7 @@ using Microsoft.PowerBI.Common.Api.Reports;
 namespace Microsoft.PowerBI.Commands.Reports
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(Report))]
+    [OutputType(typeof(IEnumerable<Report>))]
     public class NewPowerBIReport : PowerBIClientCmdlet
     {
         public const string CmdletVerb = VerbsCommon.New;
@@ -17,13 +17,22 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         #region Parameters
 
-        [Parameter(Mandatory = true)]
+        [Parameter(
+            //Position = 0, 
+            Mandatory = true//, 
+            //ValueFromPipelineByPropertyName = true, 
+            //ValueFromPipeline = true
+        )]
         public string Path { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter(
+            //ValueFromPipelineByPropertyName = true, 
+            //ValueFromPipeline = true
+        )]
         public string Name { get; set; }
 
         #endregion
+
         #region Constructors
         public NewPowerBIReport() : base() { }
 
@@ -32,6 +41,7 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         public override void ExecuteCmdlet()
         {
+            var reports = new List<Report>();
 
             if (this.Name == null)
             {
@@ -42,9 +52,10 @@ namespace Microsoft.PowerBI.Commands.Reports
             using (var client = this.CreateClient())
             {
                 var report = client.Reports.PostReport(this.Name, this.Path);
-
-                this.Logger.WriteObject(report, true);
+                reports.Add(report);
             }
+
+            this.Logger.WriteObject(reports, true);
         }
     }
 }
