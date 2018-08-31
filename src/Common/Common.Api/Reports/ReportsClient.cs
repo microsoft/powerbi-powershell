@@ -115,9 +115,20 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         public Report PostReport(string reportName, string filePath)
         {
             var id = PostImport(reportName, filePath);
-            var import = this.GetImport(id);
-            var report = import.Reports.Single();
-            return report;
+
+            Import import = null;
+            do
+            {
+                import = this.GetImport(id);
+                if (import.ImportState != "Succeeded")
+                    System.Threading.Thread.Sleep(500);
+                
+            } while (import.ImportState == "Publishing");
+
+            if (import.ImportState != "Succeeded")
+                throw new Exception(String.Format("ImportState is '{0}'", import.ImportState));
+
+            return import.Reports.Single();
         }
     }
 }
