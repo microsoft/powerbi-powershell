@@ -110,7 +110,7 @@ namespace Microsoft.PowerBI.Common.Api
                     this.Workspaces = null;
                 }
 
-                if (this.Datasets != null)
+                if(this.Datasets != null)
                 {
                     this.Datasets = null;
                 }
