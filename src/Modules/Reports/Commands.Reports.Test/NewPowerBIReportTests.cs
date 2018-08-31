@@ -38,6 +38,9 @@ namespace Commands.Reports.Test
 
                 // Act
                 var reportId = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
             }
         }
     }
