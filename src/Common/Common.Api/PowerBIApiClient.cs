@@ -25,7 +25,7 @@ namespace Microsoft.PowerBI.Common.Api
         public IWorkspacesClient Workspaces { get; set; }
 
         public IDatasetsClient Datasets { get; set; }
-        
+
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings);

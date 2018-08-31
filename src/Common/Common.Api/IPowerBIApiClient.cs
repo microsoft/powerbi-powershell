@@ -17,6 +17,5 @@ namespace Microsoft.PowerBI.Common.Api
         IWorkspacesClient Workspaces { get; set; }
 
         IDatasetsClient Datasets { get; set; }
-      
     }
 }
