@@ -37,6 +37,8 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         Import GetImport(Guid importId);
 
+        Import GetImportForWorkspace(Guid workspaceId, Guid importId);
+
         IEnumerable<Import> GetImports();
 
         IEnumerable<Import> GetImportsAsAdmin(string expand = default, string filter = default, int? top = default, int? skip = default);
@@ -45,6 +47,10 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         Guid PostImport(string datasetDisplayName, string filePath);
 
+        Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath);
+
         Report PostReport(string reportName, string filePath);
+
+        Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath);
     }
 }

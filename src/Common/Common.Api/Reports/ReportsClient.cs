@@ -84,6 +84,11 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return this.Client.Imports.GetImportById(importId: importId.ToString());
         }
 
+        public Import GetImportForWorkspace(Guid workspaceId, Guid importId)
+        {
+            return this.Client.Imports.GetImportByIdInGroup(groupId: workspaceId.ToString(), importId: importId.ToString());
+        }
+
         public IEnumerable<Import> GetImports()
         {
             return this.Client.Imports.GetImports().Value?.Select(x => (Import)x);
@@ -112,17 +117,50 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             }
         }
 
+        public Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath)
+        {
+            using (var fileStream = new StreamReader(filePath))
+            {
+                var response = this.Client.Imports.PostImportWithFileInGroup(
+                    groupId: workspaceId.ToString(),
+                    fileStream: fileStream.BaseStream,
+                    datasetDisplayName: datasetDisplayName,
+                    nameConflict: PowerBI.Api.V2.Models.ImportConflictHandlerMode.CreateOrOverwrite
+                );
+                return Guid.Parse(response.Id);
+            }
+        }
+
         public Report PostReport(string reportName, string filePath)
         {
-            var id = this.PostImport(reportName, filePath);
+            var importId = this.PostImport(reportName, filePath);
 
             Import import = null;
             do
             {
-                import = this.GetImport(id);
+                import = this.GetImport(importId: importId);
                 if (import.ImportState != "Succeeded")
                     System.Threading.Thread.Sleep(500);
-                
+
+            } while (import.ImportState == "Publishing");
+
+            if (import.ImportState != "Succeeded")
+                throw new Exception(string.Format("ImportState is '{0}'", import.ImportState));
+
+            return import.Reports.Single();
+        }
+
+        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath)
+        {
+            var id = this.PostImportForWorkspace(workspaceId, reportName, filePath);
+
+            Import import = null;
+            do
+            {
+                import = this.GetImportForWorkspace(workspaceId: workspaceId, importId: id);
+                if (import.ImportState != "Succeeded")
+                    System.Threading.Thread.Sleep(500);
+
             } while (import.ImportState == "Publishing");
 
             if (import.ImportState != "Succeeded")
