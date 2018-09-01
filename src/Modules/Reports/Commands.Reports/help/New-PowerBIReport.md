@@ -37,7 +37,7 @@ PS C:\> New-PowerBIReport -Path '.\report.pbix' -Name 'Report'
 
 Adds the report to the personal Workspace.
 
-### Example 1
+### Example 2
 ```
 PS C:\> New-PowerBIReport -Path '.\report.pbix' -Name 'Report' -Workspace ( Get-PowerBIWorkspace -Name 'Team Workspace' )
 ```
