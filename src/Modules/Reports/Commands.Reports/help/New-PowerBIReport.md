@@ -12,9 +12,16 @@ Deploys a PowerBI report
 
 ## SYNTAX
 
+### WorkspaceId
 ```
-New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>] [[-Workspace] <Workspace>]
- [[-ConflictAction] <String>] [<CommonParameters>]
+New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>] [[-ConflictAction] <String>]
+ [<CommonParameters>]
+```
+
+### Workspace
+```
+New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-Workspace] <Workspace>] [[-ConflictAction] <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -90,7 +97,7 @@ The workspace to deploy the report to.
 
 ```yaml
 Type: Workspace
-Parameter Sets: (All)
+Parameter Sets: Workspace
 Aliases: Group
 
 Required: False
@@ -105,7 +112,7 @@ The id of the workspace to deploy the report to
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: WorkspaceId
 Aliases: GroupId
 
 Required: False

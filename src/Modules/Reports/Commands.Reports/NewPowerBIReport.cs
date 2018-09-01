@@ -17,6 +17,14 @@ namespace Microsoft.PowerBI.Commands.Reports
         public const string CmdletVerb = VerbsCommon.New;
         public const string CmdletName = "PowerBIReport";
 
+
+        #region ParameterSets
+
+        private const string WorkspaceIdParameterSetName = "WorkspaceId";
+        private const string WorkspaceParameterSetName = "Workspace";
+
+        #endregion
+
         #region Parameters
 
         [Parameter(Position = 0, Mandatory = true)]
@@ -27,11 +35,11 @@ namespace Microsoft.PowerBI.Commands.Reports
         public string Name { get; set; }
 
         [Alias("GroupId")]
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = false, ParameterSetName = WorkspaceIdParameterSetName)]
         public Guid WorkspaceId { get; set; }
 
         [Alias("Group")]
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = false, ParameterSetName = WorkspaceParameterSetName)]
         public Workspace Workspace { get; set; }
 
         [Parameter(Mandatory = false)]
