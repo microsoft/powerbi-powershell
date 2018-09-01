@@ -22,6 +22,7 @@ namespace Microsoft.PowerBI.Commands.Reports
         [Parameter(Position = 0, Mandatory = true)]
         public string Path { get; set; }
 
+        [Alias("ReportName")]
         [Parameter(Mandatory = false)]
         public string Name { get; set; }
 

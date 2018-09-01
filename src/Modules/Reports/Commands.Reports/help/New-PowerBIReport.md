@@ -61,7 +61,7 @@ The report name. If not set, the file name will be used.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: ReportName
 
 Required: False
 Position: Named
