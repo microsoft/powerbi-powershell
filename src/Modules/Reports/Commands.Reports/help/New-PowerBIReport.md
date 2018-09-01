@@ -14,7 +14,7 @@ Deploys a PowerBI report
 
 ```
 New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>] [[-Workspace] <Workspace>]
- [<CommonParameters>]
+ [[-ConflictAction] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,6 +38,22 @@ PS C:\> New-PowerBIReport -Path '.\report.pbix' -Name 'Report' -Workspace ( Get-
 Adds the report to the Team Workspace.
 
 ## PARAMETERS
+
+### -ConflictAction
+{{Fill ConflictAction Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+Accepted values: Abort, CreateOrOverwrite, Ignore, Overwrite
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Name
 The report name. If not set, the file name will be used.

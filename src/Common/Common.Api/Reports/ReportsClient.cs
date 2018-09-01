@@ -104,20 +104,20 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return this.Client.Imports.GetImports(groupId: workspaceId.ToString()).Value?.Select(x => (Import)x);
         }
 
-        public Guid PostImport(string datasetDisplayName, string filePath)
+        public Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
         {
             using (var fileStream = new StreamReader(filePath))
             {
                 var response = this.Client.Imports.PostImportWithFile(
                     fileStream: fileStream.BaseStream,
                     datasetDisplayName: datasetDisplayName,
-                    nameConflict: PowerBI.Api.V2.Models.ImportConflictHandlerMode.CreateOrOverwrite
+                    nameConflict: nameConflict.ToString()
                 );
                 return Guid.Parse(response.Id);
             }
         }
 
-        public Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath)
+        public Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
         {
             using (var fileStream = new StreamReader(filePath))
             {
@@ -125,15 +125,15 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                     groupId: workspaceId.ToString(),
                     fileStream: fileStream.BaseStream,
                     datasetDisplayName: datasetDisplayName,
-                    nameConflict: PowerBI.Api.V2.Models.ImportConflictHandlerMode.CreateOrOverwrite
+                    nameConflict: nameConflict.ToString()
                 );
                 return Guid.Parse(response.Id);
             }
         }
 
-        public Report PostReport(string reportName, string filePath)
+        public Report PostReport(string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict)
         {
-            var importId = this.PostImport(reportName, filePath);
+            var importId = this.PostImport(reportName, filePath, nameConflict);
 
             Import import = null;
             do
@@ -150,9 +150,9 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return import.Reports.Single();
         }
 
-        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath)
+        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict)
         {
-            var id = this.PostImportForWorkspace(workspaceId, reportName, filePath);
+            var id = this.PostImportForWorkspace(workspaceId, reportName, filePath, nameConflict);
 
             Import import = null;
             do

@@ -32,6 +32,16 @@ namespace Microsoft.PowerBI.Commands.Reports
         [Alias("Group")]
         [Parameter(Mandatory = false)]
         public Workspace Workspace { get; set; }
+
+        [Parameter(Mandatory = false)]
+        [ValidateSet(
+            "Abort",
+            "CreateOrOverwrite",
+            "Ignore",
+            "Overwrite"
+        )]
+        [PSDefaultValue(Value = "CreateOrOverwrite")]
+        public string ConflictAction { get; set; }
         #endregion
 
         #region Constructors
@@ -53,16 +63,22 @@ namespace Microsoft.PowerBI.Commands.Reports
                 this.Name = report.Name.Replace(".pbix", "");
             }
 
+            ImportConflictHandlerModeEnum conflictAction = ImportConflictHandlerModeEnum.CreateOrOverwrite;
+            if (this.ConflictAction != null && !Enum.TryParse(this.ConflictAction, out conflictAction))
+            {
+                this.Logger.WriteError("Failed to parse ConflictAction");
+            }
+
             using (var client = this.CreateClient())
             {
                 Report report;
                 if (this.WorkspaceId != default)
                 {
-                    report = client.Reports.PostReportForWorkspace(this.WorkspaceId, this.Name, this.Path);
+                    report = client.Reports.PostReportForWorkspace(this.WorkspaceId, this.Name, this.Path, conflictAction);
                 }
                 else
                 {
-                    report = client.Reports.PostReport(this.Name, this.Path);
+                    report = client.Reports.PostReport(this.Name, this.Path, conflictAction);
                 }
                 this.Logger.WriteObject(report, false);
             }

@@ -45,12 +45,12 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         IEnumerable<Import> GetImportsForWorkspace(Guid workspaceId);
 
-        Guid PostImport(string datasetDisplayName, string filePath);
+        Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict);
 
-        Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath);
+        Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict);
 
-        Report PostReport(string reportName, string filePath);
+        Report PostReport(string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict);
 
-        Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath);
+        Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict);
     }
 }
