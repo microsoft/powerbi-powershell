@@ -34,8 +34,8 @@ namespace Commands.Reports.Test
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
                 ps.AddCommand(Cmdlet)
-                    .AddParameter("Path", "./testreport.pbix")
-                    .AddParameter("Name", "Test");
+                    .AddParameter(nameof(NewPowerBIReport.Path), "./testreport.pbix")
+                    .AddParameter(nameof(NewPowerBIReport.Name), "Test");
 
                 // Act
                 var reportId = ps.Invoke();
@@ -57,9 +57,9 @@ namespace Commands.Reports.Test
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
 
                 ps.AddCommand(Cmdlet)
-                    .AddParameter("Path", "./testreport.pbix")
-                    .AddParameter("Name", "Test")
-                    .AddParameter("WorkspaceId", workspace.Id.ToString());
+                    .AddParameter(nameof(NewPowerBIReport.Path), "./testreport.pbix")
+                    .AddParameter(nameof(NewPowerBIReport.Name), "Test")
+                    .AddParameter(nameof(NewPowerBIReport.WorkspaceId), workspace.Id.ToString());
 
                 // Act
                 var reportId = ps.Invoke();
@@ -78,7 +78,7 @@ namespace Commands.Reports.Test
                 // Arrange
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
                 ps.AddCommand(Cmdlet)
-                    .AddParameter("Path", "./testreport.pbix");
+                    .AddParameter(nameof(NewPowerBIReport.Path), "./testreport.pbix");
 
                 // Act
                 var results = ps.Invoke();
