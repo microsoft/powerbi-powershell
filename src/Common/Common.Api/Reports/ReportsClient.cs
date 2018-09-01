@@ -140,12 +140,16 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             {
                 import = this.GetImport(importId: importId);
                 if (import.ImportState != "Succeeded")
+                {
                     System.Threading.Thread.Sleep(500);
+                }
 
             } while (import.ImportState == "Publishing");
 
             if (import.ImportState != "Succeeded")
+            {
                 throw new Exception(string.Format("ImportState is '{0}'", import.ImportState));
+            }
 
             return import.Reports.Single();
         }
@@ -159,12 +163,16 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             {
                 import = this.GetImportForWorkspace(workspaceId: workspaceId, importId: id);
                 if (import.ImportState != "Succeeded")
+                {
                     System.Threading.Thread.Sleep(500);
+                }
 
             } while (import.ImportState == "Publishing");
 
             if (import.ImportState != "Succeeded")
+            { 
                 throw new Exception(string.Format("ImportState is '{0}'", import.ImportState));
+            }
 
             return import.Reports.Single();
         }
