@@ -10,7 +10,7 @@ using Microsoft.PowerBI.Common.Abstractions;
 
 namespace Microsoft.PowerBI.Commands.Reports
 {
-    [Cmdlet(CmdletVerb, CmdletName)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = WorkspaceIdParameterSetName)]
     [OutputType(typeof(Report))]
     public class NewPowerBIReport : PowerBIClientCmdlet
     {

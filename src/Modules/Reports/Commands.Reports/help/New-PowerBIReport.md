@@ -12,7 +12,7 @@ Deploys a PowerBI report
 
 ## SYNTAX
 
-### WorkspaceId
+### WorkspaceId (Default)
 ```
 New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>] [[-ConflictAction] <String>]
  [<CommonParameters>]
