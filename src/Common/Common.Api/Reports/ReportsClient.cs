@@ -148,7 +148,12 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
             if (import.ImportState != "Succeeded")
             {
-                throw new Exception(string.Format("ImportState is '{0}'", import.ImportState));
+                throw new Exception(string.Format(
+                    "The import was not successful for import ID '{0}', report name '{1}'. The import state was '{2}'.",
+                    importId,
+                    reportName,
+                    import.ImportState
+                ));
             }
 
             return import.Reports.Single();
@@ -156,12 +161,12 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict)
         {
-            var id = this.PostImportForWorkspace(workspaceId, reportName, filePath, nameConflict);
+            var importId = this.PostImportForWorkspace(workspaceId, reportName, filePath, nameConflict);
 
             Import import = null;
             do
             {
-                import = this.GetImportForWorkspace(workspaceId: workspaceId, importId: id);
+                import = this.GetImportForWorkspace(workspaceId: workspaceId, importId: importId);
                 if (import.ImportState != "Succeeded")
                 {
                     System.Threading.Thread.Sleep(500);
@@ -170,8 +175,13 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             } while (import.ImportState == "Publishing");
 
             if (import.ImportState != "Succeeded")
-            { 
-                throw new Exception(string.Format("ImportState is '{0}'", import.ImportState));
+            {
+                throw new Exception(string.Format(
+                    "The import was not successful for import ID '{0}', report name '{1}'. The import state was '{2}'.",
+                    importId,
+                    reportName,
+                    import.ImportState
+                ));
             }
 
             return import.Reports.Single();
