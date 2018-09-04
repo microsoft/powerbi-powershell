@@ -93,6 +93,13 @@ Licensed under the MIT License.
   
   <Target Name="GenerateMarkdownHelp" AfterTargets="AfterBuild" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true' AND '$(NoHelpGen)' != 'true'">
 
+    <ItemGroup>
+      <PSDFileInProject Include="$(MSBuildProjectDirectory)\$(PackageId).psd1" />
+    </ItemGroup>
+
+    <!-- Ensures if packaging previously ran and updated the manifest it is reset for GenerateHelp.ps1 -GenerateMarkdown -->
+    <Copy DestinationFolder="$(OutputPath)" SourceFiles="@(PSDFileInProject)" />
+    
     <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -Language &apos;$(LangName)&apos; -GenerateMarkdown -DependentAssemblies &apos;@(_ResolveAssemblyReferenceResolvedFiles)&apos;} &quot;" />
 
   </Target>
