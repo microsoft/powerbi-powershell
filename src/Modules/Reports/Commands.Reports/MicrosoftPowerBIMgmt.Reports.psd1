@@ -113,7 +113,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-HelpInfoURI = 'https://go.microsoft.com/fwlink/?linkid=2002111&clcid=0x409'
+# HelpInfoURI = 'https://go.microsoft.com/fwlink/?linkid=2002111&clcid=0x409'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
