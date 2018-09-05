@@ -47,7 +47,7 @@ Returns a list of all Power BI tables in datasets which supports AddRowApi.
 ## PARAMETERS
 
 ### -Dataset
-The dataset where the tables are stored. You can pass it via pipe.
+The dataset where the tables are stored.
 
 ```yaml
 Type: Dataset
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-The id of the dataset where the tables are stored.
+ID of the dataset where the tables are stored.
 
 ```yaml
 Type: Guid
@@ -153,7 +153,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, tables only belonging to that workspace are shown.
+ID of the workspace to filter results to, tables only belonging to that workspace are shown.
 
 ```yaml
 Type: Guid

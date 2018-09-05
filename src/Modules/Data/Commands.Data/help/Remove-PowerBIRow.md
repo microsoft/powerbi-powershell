@@ -5,50 +5,41 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-PowerBITable
+# Remove-PowerBIRow
 
 ## SYNOPSIS
-Updates the metadata and schema for the specified Power BI table.
+Removes rows from a Power BI table.
 
 ## SYNTAX
 
-### DatasetId (Default)
+### Dataset (Default)
 ```
-Set-PowerBITable -Table <Table> -DatasetId <Guid> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+Remove-PowerBIRow -Dataset <Dataset> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
  [<CommonParameters>]
 ```
 
-### Dataset
+### DatasetId
 ```
-Set-PowerBITable -Table <Table> -Dataset <Dataset> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+Remove-PowerBIRow -DatasetId <Guid> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates the metadata and schema for the specified Power BI table.
-Before you run this command, make sure you log in using Connect-PowerBIServiceAccount
+Performs removal of rows from a Power BI table.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-$currentTables = Get-PowerBITable -DatasetId c47f6cff-70de-4837-a094-93a6f26e20bf
-
-$currentTable = $currentTables[0]
-$col1 = New-PowerBIColumn -Name Col1 -DataType Int64
-$col2 = New-PowerBIColumn -Name Col2 -DataType String
-$updatedTable = New-PowerBITable -Name $currentTable.Name -Columns $col1,$col2
-
-Set-PowerBITable -Table $updatedTable -DatasetId c47f6cff-70de-4837-a094-93a6f26e20bf
+PS C:\> Remove-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1
 ```
 
-This example retrieves current table and create new one from the table.
-Then, it updates the table schema.
+Removes rows from the table Table1 in specified dataset.
 
 ## PARAMETERS
 
 ### -Dataset
-A dataset where tables are stored.
+A dataset containing the table where rows are to be removed.
 
 ```yaml
 Type: Dataset
@@ -63,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-ID of the dataset where tables are to be stored.
+ID of the dataset containing the table where rows are to be removed.
 
 ```yaml
 Type: Guid
@@ -77,11 +68,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Table
-Table to update the schema.
+### -TableName
+Name of the table.
 
 ```yaml
-Type: Table
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -93,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to filter the place where table resides.
+Workspace containing the dataset and table for row removal.
 
 ```yaml
 Type: Workspace
@@ -108,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-ID of the workspace to filter the place where table resides.
+ID of the workspace containing the dataset and table for row removal.
 
 ```yaml
 Type: Guid

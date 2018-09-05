@@ -5,50 +5,50 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-PowerBITable
+# Add-PowerBIRow
 
 ## SYNOPSIS
-Updates the metadata and schema for the specified Power BI table.
+Adds rows to the specified table in a Power BI dataset.
 
 ## SYNTAX
 
-### DatasetId (Default)
+### Dataset (Default)
 ```
-Set-PowerBITable -Table <Table> -DatasetId <Guid> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
- [<CommonParameters>]
+Add-PowerBIRow -Dataset <Dataset> -TableName <String>
+ -Rows <System.Collections.Generic.List`1[System.Management.Automation.PSObject]> [-WorkspaceId <Guid>]
+ [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
-### Dataset
+### DatasetId
 ```
-Set-PowerBITable -Table <Table> -Dataset <Dataset> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
- [<CommonParameters>]
+Add-PowerBIRow -DatasetId <Guid> -TableName <String>
+ -Rows <System.Collections.Generic.List`1[System.Management.Automation.PSObject]> [-WorkspaceId <Guid>]
+ [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates the metadata and schema for the specified Power BI table.
-Before you run this command, make sure you log in using Connect-PowerBIServiceAccount
+Inserts rows into a Power BI table contained within a dataset.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-$currentTables = Get-PowerBITable -DatasetId c47f6cff-70de-4837-a094-93a6f26e20bf
-
-$currentTable = $currentTables[0]
-$col1 = New-PowerBIColumn -Name Col1 -DataType Int64
-$col2 = New-PowerBIColumn -Name Col2 -DataType String
-$updatedTable = New-PowerBITable -Name $currentTable.Name -Columns $col1,$col2
-
-Set-PowerBITable -Table $updatedTable -DatasetId c47f6cff-70de-4837-a094-93a6f26e20bf
+PS C:\>Add-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1 -Rows @{"Column1"="Value1";"Column2"="Value2"},@{"Column1"="Value1";"Column2"="Value2"}
 ```
 
-This example retrieves current table and create new one from the table.
-Then, it updates the table schema.
+This example inserts two rows to Table1.
+
+### Example 2
+```powershell
+PS C:\>Add-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1 -Rows (Import-Csv -Path ".\data.csv")
+```
+
+This example inserts rows from CSV to Table1.
 
 ## PARAMETERS
 
 ### -Dataset
-A dataset where tables are stored.
+A dataset containing the table where rows are to be stored.
 
 ```yaml
 Type: Dataset
@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-ID of the dataset where tables are to be stored.
+ID of the dataset containing the table where rows are to be stored.
 
 ```yaml
 Type: Guid
@@ -77,11 +77,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Table
-Table to update the schema.
+### -Rows
+An array of rows to be stored in the table.
 
 ```yaml
-Type: Table
+Type: System.Collections.Generic.List`1[System.Management.Automation.PSObject]
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TableName
+Name of the table.
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -93,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to filter the place where table resides.
+Workspace containing the dataset and table for row insertion.
 
 ```yaml
 Type: Workspace
@@ -108,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-ID of the workspace to filter the place where table resides.
+ID of the workspace containing the dataset and table for row insertion.
 
 ```yaml
 Type: Guid

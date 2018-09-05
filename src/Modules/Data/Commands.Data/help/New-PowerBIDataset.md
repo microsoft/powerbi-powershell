@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PowerBIDataset
 
 ## SYNOPSIS
-Creates New Power BI dataset object.
+Creates a new Power BI dataset object.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ New-PowerBIDataset -Name <String> [-Tables <Table[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The New-PowerBIDataSet cmdlet lets you create New Power BI dataset object.
+Initiates the creation of a Power BI dataset object. A Power BI dataset is a container for tables.
 
 ## EXAMPLES
 

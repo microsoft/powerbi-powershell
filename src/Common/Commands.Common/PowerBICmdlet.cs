@@ -53,9 +53,17 @@ namespace Microsoft.PowerBI.Commands.Common
             string assemblyFilePath = Path.Combine(executingDirectory, requestedAssembly.Name + ".dll");
             if (File.Exists(assemblyFilePath))
             {
-                return Assembly.LoadFrom(assemblyFilePath);
+                try
+                {
+                    return Assembly.LoadFrom(assemblyFilePath);
+                }
+                catch (Exception)
+                {
+                    // Ignore as the assembly resolver is meant as a last resort to find an assembly
+                }
             }
 
+            // This allows usage of assemblies in the current application domain to be used when a specific version of an assembly wasn't found
             foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (asm.FullName.Equals(args.Name))
@@ -64,6 +72,7 @@ namespace Microsoft.PowerBI.Commands.Common
                 }
             }
 
+            // Return null to indicate the assembly was not found
             return null;
         }
 

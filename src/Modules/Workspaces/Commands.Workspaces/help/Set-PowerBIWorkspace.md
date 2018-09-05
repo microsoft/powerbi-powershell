@@ -67,7 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-The ID of the workspace to update.
+ID of the workspace to update.
 
 ```yaml
 Type: Guid

@@ -84,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-Id of the dataset to return data sources for.
+ID of the dataset to return data sources for.
 
 ```yaml
 Type: Guid
@@ -99,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Id of the data source to return.
+ID of the data source to return.
 
 ```yaml
 Type: Guid
@@ -145,7 +145,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, data sources only belonging to that workspace are shown. Only available when -Scope is Individual.
+ID of the workspace to filter results to, data sources only belonging to that workspace are shown. Only available when -Scope is Individual.
 
 ```yaml
 Type: Guid

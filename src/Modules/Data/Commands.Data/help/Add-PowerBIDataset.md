@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIDataset
 
 ## SYNOPSIS
-Creates new dataset to Power BI.
+Adds a dataset to a Power BI workspace.
 
 ## SYNTAX
 
@@ -23,7 +23,7 @@ Add-PowerBIDataset -Dataset <Dataset> -Workspace <Workspace> [<CommonParameters>
 ```
 
 ## DESCRIPTION
-Add-PowerBIDataset creates new push dataset to Power BI.
+Publishes a dataset to Power BI service under a workspace.
 
 ## EXAMPLES
 
@@ -45,7 +45,7 @@ PS C:\>Add-PowerBIDataSet -DataSet $dataset
 ```
 
 This example instantiates a table with two columns and another table with four columns, and instantiates a dataset.
-Then, it creates the dataset in Power BI.
+Then, it creates the dataset in Power BI under "My Workspace".
 
 ## PARAMETERS
 
@@ -65,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to add the dataset.
+Workspace to add the dataset. If not specified, the dataset will reside under "My Workspace".
 
 ```yaml
 Type: Workspace
@@ -80,7 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workplace Id to add the dataset.
+ID of the workspace to add the dataset. If not specified, the dataset will reside under "My Workspace".
 
 ```yaml
 Type: Guid

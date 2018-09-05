@@ -47,7 +47,7 @@ Returns a list of tiles in the Power BI dashboard with ID 6b071d0b-7430-4342-a3a
 ## PARAMETERS
 
 ### -DashboardId
-Id of the dashboard to return tiles for.
+ID of the dashboard to return tiles for.
 
 ```yaml
 Type: Guid
@@ -77,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Id of the tile to return.
+ID of the tile to return.
 
 ```yaml
 Type: Guid
@@ -123,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace Id to filter results to; only tiles that belong to that workspace are shown. Only available when -Scope is Individual.
+ID of the workspace to filter results to; only tiles that belong to that workspace are shown. Only available when -Scope is Individual.
 
 ```yaml
 Type: Guid

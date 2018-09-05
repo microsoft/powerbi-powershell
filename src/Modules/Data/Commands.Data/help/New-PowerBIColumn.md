@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PowerBIColumn
 
 ## SYNOPSIS
-Creates new Power BI column object.
+Creates a new Power BI column object.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ New-PowerBIColumn -Name <String> -DataType <PowerBIDataType> [<CommonParameters>
 ```
 
 ## DESCRIPTION
-The New-PowerBIColumn cmdlet lets you create new Power BI column object.
+Initiates the creation of a new Power BI column object. Columns are building blocks for constructing a table object.
 
 ## EXAMPLES
 
@@ -44,7 +44,7 @@ Then, it creates the dataset in Power BI.
 ## PARAMETERS
 
 ### -DataType
-A type of the column. Type can be String, Int64, DateTime, Boolean, or Double.
+A type of the column.
 
 ```yaml
 Type: PowerBIDataType

@@ -54,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Workspace or Group Id for which user should be added.
+ID of the workspace the user should be added to.
 
 ```yaml
 Type: Guid
