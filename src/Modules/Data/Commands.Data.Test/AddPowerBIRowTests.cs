@@ -18,9 +18,9 @@ using Moq;
 namespace Microsoft.PowerBI.Commands.Data.Test
 {
     [TestClass]
-    public class AddPowerBIRowsTests
+    public class AddPowerBIRowTests
     {
-        private static CmdletInfo AddPowerBIRowsCmdletInfo => new CmdletInfo($"{AddPowerBIRow.CmdletVerb}-{AddPowerBIRow.CmdletName}", typeof(AddPowerBIRow));
+        private static CmdletInfo AddPowerBIRowCmdletInfo => new CmdletInfo($"{AddPowerBIRow.CmdletVerb}-{AddPowerBIRow.CmdletName}", typeof(AddPowerBIRow));
         private static CmdletInfo GetPowerBITableCmdletInfo => new CmdletInfo($"{GetPowerBITable.CmdletVerb}-{GetPowerBITable.CmdletName}", typeof(GetPowerBITable));
         private static CmdletInfo GetPowerBIDatasetCmdletInfo => new CmdletInfo($"{GetPowerBIDataset.CmdletVerb}-{GetPowerBIDataset.CmdletName}", typeof(GetPowerBIDataset));
    
@@ -53,7 +53,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 var rows = new List<PSObject>();
                 rows.Add(row1);
                 rows.Add(row2);
-                ps.AddCommand(AddPowerBIRowsCmdletInfo)
+                ps.AddCommand(AddPowerBIRowCmdletInfo)
                     .AddParameter(nameof(AddPowerBIRow.DatasetId), datasetId)
                     .AddParameter(nameof(AddPowerBIRow.TableName), table.Name)
                     .AddParameter(nameof(AddPowerBIRow.Rows), rows);
@@ -92,7 +92,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 ps.AddCommand("Import-CSV").AddParameter("Path",csvPath);
                 var rows = ps.Invoke();
                 ps.Commands.Clear();
-                ps.AddCommand(AddPowerBIRowsCmdletInfo)
+                ps.AddCommand(AddPowerBIRowCmdletInfo)
                     .AddParameter(nameof(AddPowerBIRow.DatasetId), datasetId)
                     .AddParameter(nameof(AddPowerBIRow.TableName), table.Name)
                     .AddParameter(nameof(AddPowerBIRow.Rows), rows);
@@ -130,7 +130,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 ps.AddScript("@{\"Col1\"=\"Value1\";\"Col2\"=$true},@{\"Col1\"=\"Value2\";\"Col2\"=$false}");
                 var rows = ps.Invoke();
                 ps.Commands.Clear();
-                ps.AddCommand(AddPowerBIRowsCmdletInfo)
+                ps.AddCommand(AddPowerBIRowCmdletInfo)
                     .AddParameter(nameof(AddPowerBIRow.DatasetId), datasetId)
                     .AddParameter(nameof(AddPowerBIRow.TableName), table.Name)
                     .AddParameter(nameof(AddPowerBIRow.Rows), rows);

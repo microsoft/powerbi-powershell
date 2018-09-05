@@ -21,7 +21,8 @@ param
     [ValidateNotNullOrEmpty()]
     [string] $SdkInstallDir = 'C:\Program Files\dotnet\sdk\',
 	
-	# Version to check major and minor to match and build has to be less than
+	# The installed .NET SDK must have the same major and minor number and a lower build\patch number.
+	[ValidateNotNullOrEmpty()]
 	[string] $MajorMinorSDKVersionCheck = '2.1.300'
 )
 
@@ -36,7 +37,7 @@ $sdkDir = Get-ChildItem $SdkInstallDir -Directory | Where-Object Name -Match '\d
 } | Where-Object { $_.SDKVersion.Major -eq $versionCheck.Major -and $_.SDKVersion.Minor -eq $versionCheck.Minor -and $_.SDKVersion.Build -lt $versionCheck.Build } | Sort-Object SDKVersion -Descending | Select-Object -First 1
 
 if(!$sdkDir) {
-	throw "Unable to find SDK directory under: $SdkInstallDir"
+	throw "Unable to find SDK version (less than $MajorMinorSDKVersionCheck) under: $SdkInstallDir"
 }
 
 Write-Verbose "Using SDK: $($sdkDir.FullName)"

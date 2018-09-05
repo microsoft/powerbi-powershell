@@ -4,7 +4,7 @@
 
 * Updated MicrosoftPowerBIMgmt.Data module
     - New Add-PowerBIDataset for adding datasets to workspaces.
-    - New Add-PowerBIRows for adding rows to a table.
+    - New Add-PowerBIRow for adding rows to a table.
 	- New Get-PowerBITable for getting tables.
 	- New New-PowerBIColumn for creating a column object.
 	- New New-PowerBITable for creating a table object.

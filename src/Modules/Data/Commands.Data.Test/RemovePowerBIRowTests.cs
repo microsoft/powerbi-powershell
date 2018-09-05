@@ -17,9 +17,9 @@ using Moq;
 namespace Microsoft.PowerBI.Commands.Data.Test
 {
     [TestClass]
-    public class RemovePowerBIRowsTests
+    public class RemovePowerBIRowTests
     {
-        private static CmdletInfo RemovePowerBIRowsCmdletInfo => new CmdletInfo($"{RemovePowerBIRow.CmdletVerb}-{RemovePowerBIRow.CmdletName}", typeof(RemovePowerBIRow));
+        private static CmdletInfo RemovePowerBIRowCmdletInfo => new CmdletInfo($"{RemovePowerBIRow.CmdletVerb}-{RemovePowerBIRow.CmdletName}", typeof(RemovePowerBIRow));
         private static CmdletInfo GetPowerBITableCmdletInfo => new CmdletInfo($"{GetPowerBITable.CmdletVerb}-{GetPowerBITable.CmdletName}", typeof(GetPowerBITable));
         private static CmdletInfo GetPowerBIDatasetCmdletInfo => new CmdletInfo($"{GetPowerBIDataset.CmdletVerb}-{GetPowerBIDataset.CmdletName}", typeof(GetPowerBIDataset));
    
@@ -43,7 +43,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
                 var table = tableResults.First().BaseObject as Table;
 
-                ps.AddCommand(RemovePowerBIRowsCmdletInfo)
+                ps.AddCommand(RemovePowerBIRowCmdletInfo)
                     .AddParameter(nameof(RemovePowerBIRow.DatasetId), datasetId)
                     .AddParameter(nameof(RemovePowerBIRow.TableName), table.Name);
 
