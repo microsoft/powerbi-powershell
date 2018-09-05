@@ -14,7 +14,6 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetParameterSetName)]
-    [Alias("Add-PowerBIRows")]
     [OutputType(typeof(Dataset))]
     public class AddPowerBIRow : PowerBIClientCmdlet
     {

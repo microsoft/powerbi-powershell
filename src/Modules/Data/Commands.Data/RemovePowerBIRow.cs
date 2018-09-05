@@ -12,7 +12,6 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetParameterSetName)]
-    [Alias("Remove-PowerBIRows")]
     [OutputType(typeof(Dataset))]
     public class RemovePowerBIRow : PowerBIClientCmdlet
     {
