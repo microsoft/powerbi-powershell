@@ -15,10 +15,10 @@ namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetParameterSetName)]
     [OutputType(typeof(Dataset))]
-    public class AddPowerBIRows : PowerBIClientCmdlet
+    public class AddPowerBIRow : PowerBIClientCmdlet
     {
         public const string CmdletVerb = VerbsCommon.Add;
-        public const string CmdletName = "PowerBIRows";
+        public const string CmdletName = "PowerBIRow";
 
         #region ParameterSets
         private const string DatasetIdParameterSetName = "DatasetId";
@@ -52,9 +52,9 @@ namespace Microsoft.PowerBI.Commands.Data
         #endregion
 
         #region Constructors
-        public AddPowerBIRows() : base() { }
+        public AddPowerBIRow() : base() { }
 
-        public AddPowerBIRows(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public AddPowerBIRow(IPowerBIClientCmdletInitFactory init) : base(init) { }
         #endregion
 
         protected override void BeginProcessing()

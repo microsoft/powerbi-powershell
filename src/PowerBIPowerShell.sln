@@ -33,6 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		NuGet.config = NuGet.config
+		..\ReleaseNotes.md = ..\ReleaseNotes.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.Workspaces.Test", "Modules\Workspaces\Commands.Workspaces.Test\Commands.Workspaces.Test.csproj", "{BB6AFFCF-E8F1-4E2F-A615-46818A012BC8}"
@@ -56,10 +57,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{622F
 		..\scripts\Build.ps1 = ..\scripts\Build.ps1
 		..\scripts\DisableStrongName.ps1 = ..\scripts\DisableStrongName.ps1
 		..\scripts\DownloadNupkg.ps1 = ..\scripts\DownloadNupkg.ps1
+		..\scripts\GenerateFileCatalog.ps1 = ..\scripts\GenerateFileCatalog.ps1
 		..\scripts\GenerateHelp.ps1 = ..\scripts\GenerateHelp.ps1
+		..\scripts\GetNetstandardAssembly.ps1 = ..\scripts\GetNetstandardAssembly.ps1
 		..\scripts\PrepManualTesting.ps1 = ..\scripts\PrepManualTesting.ps1
 		..\scripts\ResetNupkg.ps1 = ..\scripts\ResetNupkg.ps1
 		..\scripts\RestorePackages.ps1 = ..\scripts\RestorePackages.ps1
+		..\scripts\Test.ps1 = ..\scripts\Test.ps1
 		..\scripts\UpdateModuleDependencies.ps1 = ..\scripts\UpdateModuleDependencies.ps1
 		..\scripts\UpdatePSModuleManifest.ps1 = ..\scripts\UpdatePSModuleManifest.ps1
 	EndProjectSection

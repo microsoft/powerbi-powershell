@@ -97,7 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Id of the dashboard to return.
+ID of the dashboard to return.
 
 ```yaml
 Type: Guid
@@ -173,7 +173,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace Id to filter results to; only dashboards that belong to that workspace are shown.
+ID of the workspace to filter results to; only dashboards that belong to that workspace are shown.
 
 ```yaml
 Type: Guid

@@ -96,7 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Id of the workspace to return.
+ID of the workspace to return.
 
 ```yaml
 Type: Guid

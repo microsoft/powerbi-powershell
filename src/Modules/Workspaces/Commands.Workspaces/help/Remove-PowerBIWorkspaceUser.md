@@ -47,7 +47,7 @@ Removes permissions for john@contoso.com on workspace with ID 23FCBDBD-A979-45D8
 ## PARAMETERS
 
 ### -Id
-Workspace or Group Id for which user should be removed.
+ID of the workspace the user should be removed from.
 
 ```yaml
 Type: Guid

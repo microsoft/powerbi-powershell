@@ -32,7 +32,7 @@ Saves report with ID 9b519499-5ba1-4f1c-878b-be3a69f1791f into a file named Sale
 ## PARAMETERS
 
 ### -Id
-Id of the report to export.
+ID of the report to export.
 
 ```yaml
 Type: Guid
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace Id containing the Power BI report to export.
+ID of the workspace containing the Power BI report to export.
 
 ```yaml
 Type: Guid

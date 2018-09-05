@@ -13,10 +13,10 @@ namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DatasetParameterSetName)]
     [OutputType(typeof(Dataset))]
-    public class RemovePowerBIRows : PowerBIClientCmdlet
+    public class RemovePowerBIRow : PowerBIClientCmdlet
     {
         public const string CmdletVerb = VerbsCommon.Remove;
-        public const string CmdletName = "PowerBIRows";
+        public const string CmdletName = "PowerBIRow";
 
         #region ParameterSets
         private const string DatasetIdParameterSetName = "DatasetId";
@@ -47,9 +47,9 @@ namespace Microsoft.PowerBI.Commands.Data
         #endregion
 
         #region Constructors
-        public RemovePowerBIRows() : base() { }
+        public RemovePowerBIRow() : base() { }
 
-        public RemovePowerBIRows(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public RemovePowerBIRow(IPowerBIClientCmdletInitFactory init) : base(init) { }
         #endregion
 
         protected override void BeginProcessing()

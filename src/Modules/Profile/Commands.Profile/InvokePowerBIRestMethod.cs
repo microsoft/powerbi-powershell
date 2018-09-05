@@ -81,6 +81,12 @@ namespace Microsoft.PowerBI.Commands.Profile
             {
                 this.Url = $"{this.Version}/{this.Organization}/" + this.Url;
             }
+
+            if((this.Body == null) && (this.Method == PowerBIWebRequestMethod.Patch || this.Method == PowerBIWebRequestMethod.Post))
+            {
+                this.Logger.WriteWarning($"The {nameof(this.Body)} parameter was null, the request may be invalid when {nameof(this.Method)} parameter is {this.Method}.");
+                this.Body = string.Empty;
+            }
             
             var response = this.InvokeRestMethod(this.Url, this.Body, this.Method).Result;
             if (string.IsNullOrEmpty(this.OutFile))

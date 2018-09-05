@@ -5,41 +5,41 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-PowerBIRows
+# Remove-PowerBIRow
 
 ## SYNOPSIS
-Allows removal of rows from the Power BI table.
+Removes rows from a Power BI table.
 
 ## SYNTAX
 
 ### Dataset (Default)
 ```
-Remove-PowerBIRows -Dataset <Dataset> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+Remove-PowerBIRow -Dataset <Dataset> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
  [<CommonParameters>]
 ```
 
 ### DatasetId
 ```
-Remove-PowerBIRows -DatasetId <Guid> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+Remove-PowerBIRow -DatasetId <Guid> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Remove-PowerBIRows cmdlet lets you allow removal of rows from the Power BI table.
+Performs removal of rows from a Power BI table.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Remove-PowerBIRows -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1
+PS C:\> Remove-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1
 ```
 
-This exampls removes rows from the table Table1 in specified dataset.
+Removes rows from the table Table1 in specified dataset.
 
 ## PARAMETERS
 
 ### -Dataset
-A dataset of the table where rows are to be stored.
+A dataset containing the table where rows are to be removed.
 
 ```yaml
 Type: Dataset
@@ -54,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An id of dataset of the table where rows are to be stored.
+ID of the dataset containing the table where rows are to be removed.
 
 ```yaml
 Type: Guid
@@ -69,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -TableName
-Name of the table which rows to be stored.
+Name of the table.
 
 ```yaml
 Type: String
@@ -84,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to filter the place where table resides.
+Workspace containing the dataset and table for row removal.
 
 ```yaml
 Type: Workspace
@@ -99,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-The id of the workspace to filter the place where table resides.
+ID of the workspace containing the dataset and table for row removal.
 
 ```yaml
 Type: Guid
