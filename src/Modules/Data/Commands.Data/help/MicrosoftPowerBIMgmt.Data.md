@@ -36,9 +36,6 @@ Creates a new Power BI dataset object.
 Creates a new Power BI table object.
 
 ### [Remove-PowerBIRow](Remove-PowerBIRow.md)
-{{Fill in the Synopsis}}
-
-### [Remove-PowerBIRow](Remove-PowerBIRow.md)
 Removes rows from a Power BI table.
 
 ### [Set-PowerBITable](Set-PowerBITable.md)

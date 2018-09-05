@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An ID of dataset where tables are to be stored.
+ID of the dataset where tables are to be stored.
 
 ```yaml
 Type: Guid
@@ -108,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Id of the workspace to filter the place where table resides.
+ID of the workspace to filter the place where table resides.
 
 ```yaml
 Type: Guid

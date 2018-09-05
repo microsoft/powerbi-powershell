@@ -57,7 +57,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-The ID of the workspace to restore.
+ID of the workspace to restore.
 
 ```yaml
 Type: Guid

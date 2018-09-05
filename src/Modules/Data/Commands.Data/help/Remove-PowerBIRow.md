@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-PowerBIRow
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Removes rows from a Power BI table.
 
 ## SYNTAX
 
@@ -25,21 +25,21 @@ Remove-PowerBIRow -DatasetId <Guid> -TableName <String> [-WorkspaceId <Guid>] [-
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Performs removal of rows from a Power BI table.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1
 ```
 
-{{ Add example description here }}
+Removes rows from the table Table1 in specified dataset.
 
 ## PARAMETERS
 
 ### -Dataset
-{{Fill Dataset Description}}
+A dataset containing the table where rows are to be removed.
 
 ```yaml
 Type: Dataset
@@ -54,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-{{Fill DatasetId Description}}
+ID of the dataset containing the table where rows are to be removed.
 
 ```yaml
 Type: Guid
@@ -69,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -TableName
-{{Fill TableName Description}}
+Name of the table.
 
 ```yaml
 Type: String
@@ -84,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-{{Fill Workspace Description}}
+Workspace containing the dataset and table for row removal.
 
 ```yaml
 Type: Workspace
@@ -99,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-{{Fill WorkspaceId Description}}
+ID of the workspace containing the dataset and table for row removal.
 
 ```yaml
 Type: Guid

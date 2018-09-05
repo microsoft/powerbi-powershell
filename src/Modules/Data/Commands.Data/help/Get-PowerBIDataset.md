@@ -98,7 +98,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Id of the dataset to return.
+ID of the dataset to return.
 
 ```yaml
 Type: Guid
@@ -174,7 +174,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Workspace ID to filter results to, datasets only belonging to that workspace are shown.
+ID of the workspace to filter results to, datasets only belonging to that workspace are shown.
 
 ```yaml
 Type: Guid

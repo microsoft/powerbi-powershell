@@ -80,7 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Id of the workspace to add the dataset. If not specified, the dataset will reside under "My Workspace".
+ID of the workspace to add the dataset. If not specified, the dataset will reside under "My Workspace".
 
 ```yaml
 Type: Guid

@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An ID of the dataset containing the table where rows are to be stored.
+ID of the dataset containing the table where rows are to be stored.
 
 ```yaml
 Type: Guid
@@ -123,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Id of the workspace containing the dataset and table for row insertion.
+ID of the workspace containing the dataset and table for row insertion.
 
 ```yaml
 Type: Guid

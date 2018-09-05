@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-Id of the dataset where the tables are stored.
+ID of the dataset where the tables are stored.
 
 ```yaml
 Type: Guid
@@ -153,7 +153,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Id of the workspace to filter results to, tables only belonging to that workspace are shown.
+ID of the workspace to filter results to, tables only belonging to that workspace are shown.
 
 ```yaml
 Type: Guid
