@@ -5,50 +5,41 @@ online version:
 schema: 2.0.0
 ---
 
-# Add-PowerBIRows
+# Remove-PowerBIRow
 
 ## SYNOPSIS
-Adds rows to the specified table in a Power BI dataset.
+{{Fill in the Synopsis}}
 
 ## SYNTAX
 
 ### Dataset (Default)
 ```
-Add-PowerBIRows -Dataset <Dataset> -TableName <String>
- -Rows <System.Collections.Generic.List`1[System.Management.Automation.PSObject]> [-WorkspaceId <Guid>]
- [-Workspace <Workspace>] [<CommonParameters>]
+Remove-PowerBIRow -Dataset <Dataset> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+ [<CommonParameters>]
 ```
 
 ### DatasetId
 ```
-Add-PowerBIRows -DatasetId <Guid> -TableName <String>
- -Rows <System.Collections.Generic.List`1[System.Management.Automation.PSObject]> [-WorkspaceId <Guid>]
- [-Workspace <Workspace>] [<CommonParameters>]
+Remove-PowerBIRow -DatasetId <Guid> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Inserts rows into a Power BI table contained within a dataset.
+{{Fill in the Description}}
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\>Add-PowerBIRows -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1 -Rows @{"Column1"="Value1";"Column2"="Value2"},@{"Column1"="Value1";"Column2"="Value2"}
+PS C:\> {{ Add example code here }}
 ```
 
-This example inserts two rows to Table1.
-
-### Example 2
-```powershell
-PS C:\>Add-PowerBIRows -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1 -Rows (Import-Csv -Path ".\data.csv")
-```
-
-This example inserts rows from CSV to Table1.
+{{ Add example description here }}
 
 ## PARAMETERS
 
 ### -Dataset
-A dataset containing the table where rows are to be stored.
+{{Fill Dataset Description}}
 
 ```yaml
 Type: Dataset
@@ -63,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An ID of the dataset containing the table where rows are to be stored.
+{{Fill DatasetId Description}}
 
 ```yaml
 Type: Guid
@@ -77,23 +68,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Rows
-An array of rows to be stored in the table.
-
-```yaml
-Type: System.Collections.Generic.List`1[System.Management.Automation.PSObject]
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -TableName
-Name of the table.
+{{Fill TableName Description}}
 
 ```yaml
 Type: String
@@ -108,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace containing the dataset and table for row insertion.
+{{Fill Workspace Description}}
 
 ```yaml
 Type: Workspace
@@ -123,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Id of the workspace containing the dataset and table for row insertion.
+{{Fill WorkspaceId Description}}
 
 ```yaml
 Type: Guid

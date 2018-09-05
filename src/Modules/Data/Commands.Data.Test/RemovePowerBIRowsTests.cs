@@ -19,7 +19,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
     [TestClass]
     public class RemovePowerBIRowsTests
     {
-        private static CmdletInfo RemovePowerBIRowsCmdletInfo => new CmdletInfo($"{RemovePowerBIRows.CmdletVerb}-{RemovePowerBIRows.CmdletName}", typeof(RemovePowerBIRows));
+        private static CmdletInfo RemovePowerBIRowsCmdletInfo => new CmdletInfo($"{RemovePowerBIRow.CmdletVerb}-{RemovePowerBIRow.CmdletName}", typeof(RemovePowerBIRow));
         private static CmdletInfo GetPowerBITableCmdletInfo => new CmdletInfo($"{GetPowerBITable.CmdletVerb}-{GetPowerBITable.CmdletName}", typeof(GetPowerBITable));
         private static CmdletInfo GetPowerBIDatasetCmdletInfo => new CmdletInfo($"{GetPowerBIDataset.CmdletVerb}-{GetPowerBIDataset.CmdletName}", typeof(GetPowerBIDataset));
    
@@ -44,8 +44,8 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 var table = tableResults.First().BaseObject as Table;
 
                 ps.AddCommand(RemovePowerBIRowsCmdletInfo)
-                    .AddParameter(nameof(RemovePowerBIRows.DatasetId), datasetId)
-                    .AddParameter(nameof(RemovePowerBIRows.TableName), table.Name);
+                    .AddParameter(nameof(RemovePowerBIRow.DatasetId), datasetId)
+                    .AddParameter(nameof(RemovePowerBIRow.TableName), table.Name);
 
                 // Act
                 var result = ps.Invoke();
@@ -66,7 +66,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.DeleteRows(datasetId.ToString(), table.Name, null)).Returns(null);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new RemovePowerBIRows(initFactory);
+            var cmdlet = new RemovePowerBIRow(initFactory);
 
             cmdlet.DatasetId = datasetId;
             cmdlet.TableName = table.Name;

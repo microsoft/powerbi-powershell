@@ -5,41 +5,50 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-PowerBIRow
+# Add-PowerBIRow
 
 ## SYNOPSIS
-Removes rows from a Power BI table.
+Adds rows to the specified table in a Power BI dataset.
 
 ## SYNTAX
 
 ### Dataset (Default)
 ```
-Remove-PowerBIRow -Dataset <Dataset> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
- [<CommonParameters>]
+Add-PowerBIRow -Dataset <Dataset> -TableName <String>
+ -Rows <System.Collections.Generic.List`1[System.Management.Automation.PSObject]> [-WorkspaceId <Guid>]
+ [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
 ### DatasetId
 ```
-Remove-PowerBIRow -DatasetId <Guid> -TableName <String> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
- [<CommonParameters>]
+Add-PowerBIRow -DatasetId <Guid> -TableName <String>
+ -Rows <System.Collections.Generic.List`1[System.Management.Automation.PSObject]> [-WorkspaceId <Guid>]
+ [-Workspace <Workspace>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Performs removal of rows from a Power BI table.
+Inserts rows into a Power BI table contained within a dataset.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Remove-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1
+PS C:\>Add-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1 -Rows @{"Column1"="Value1";"Column2"="Value2"},@{"Column1"="Value1";"Column2"="Value2"}
 ```
 
-Removes rows from the table Table1 in specified dataset.
+This example inserts two rows to Table1.
+
+### Example 2
+```powershell
+PS C:\>Add-PowerBIRow -DataSetId 4b644350-f745-48dd-821c-f008350199a8 -TableName Table1 -Rows (Import-Csv -Path ".\data.csv")
+```
+
+This example inserts rows from CSV to Table1.
 
 ## PARAMETERS
 
 ### -Dataset
-A dataset containing the table where rows are to be removed.
+A dataset containing the table where rows are to be stored.
 
 ```yaml
 Type: Dataset
@@ -54,11 +63,26 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An ID of the dataset containing the table where rows are to be removed.
+An ID of the dataset containing the table where rows are to be stored.
 
 ```yaml
 Type: Guid
 Parameter Sets: DatasetId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Rows
+An array of rows to be stored in the table.
+
+```yaml
+Type: System.Collections.Generic.List`1[System.Management.Automation.PSObject]
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -84,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace containing the dataset and table for row removal.
+Workspace containing the dataset and table for row insertion.
 
 ```yaml
 Type: Workspace
@@ -99,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-Id of the workspace containing the dataset and table for row removal.
+Id of the workspace containing the dataset and table for row insertion.
 
 ```yaml
 Type: Guid

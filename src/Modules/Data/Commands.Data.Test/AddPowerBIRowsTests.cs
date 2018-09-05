@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
     [TestClass]
     public class AddPowerBIRowsTests
     {
-        private static CmdletInfo AddPowerBIRowsCmdletInfo => new CmdletInfo($"{AddPowerBIRows.CmdletVerb}-{AddPowerBIRows.CmdletName}", typeof(AddPowerBIRows));
+        private static CmdletInfo AddPowerBIRowsCmdletInfo => new CmdletInfo($"{AddPowerBIRow.CmdletVerb}-{AddPowerBIRow.CmdletName}", typeof(AddPowerBIRow));
         private static CmdletInfo GetPowerBITableCmdletInfo => new CmdletInfo($"{GetPowerBITable.CmdletVerb}-{GetPowerBITable.CmdletName}", typeof(GetPowerBITable));
         private static CmdletInfo GetPowerBIDatasetCmdletInfo => new CmdletInfo($"{GetPowerBIDataset.CmdletVerb}-{GetPowerBIDataset.CmdletName}", typeof(GetPowerBIDataset));
    
@@ -54,9 +54,9 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 rows.Add(row1);
                 rows.Add(row2);
                 ps.AddCommand(AddPowerBIRowsCmdletInfo)
-                    .AddParameter(nameof(AddPowerBIRows.DatasetId), datasetId)
-                    .AddParameter(nameof(AddPowerBIRows.TableName), table.Name)
-                    .AddParameter(nameof(AddPowerBIRows.Rows), rows);
+                    .AddParameter(nameof(AddPowerBIRow.DatasetId), datasetId)
+                    .AddParameter(nameof(AddPowerBIRow.TableName), table.Name)
+                    .AddParameter(nameof(AddPowerBIRow.Rows), rows);
 
                 // Act
                 var result = ps.Invoke();
@@ -93,9 +93,9 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 var rows = ps.Invoke();
                 ps.Commands.Clear();
                 ps.AddCommand(AddPowerBIRowsCmdletInfo)
-                    .AddParameter(nameof(AddPowerBIRows.DatasetId), datasetId)
-                    .AddParameter(nameof(AddPowerBIRows.TableName), table.Name)
-                    .AddParameter(nameof(AddPowerBIRows.Rows), rows);
+                    .AddParameter(nameof(AddPowerBIRow.DatasetId), datasetId)
+                    .AddParameter(nameof(AddPowerBIRow.TableName), table.Name)
+                    .AddParameter(nameof(AddPowerBIRow.Rows), rows);
 
                 // Act
                 var result = ps.Invoke();
@@ -131,9 +131,9 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 var rows = ps.Invoke();
                 ps.Commands.Clear();
                 ps.AddCommand(AddPowerBIRowsCmdletInfo)
-                    .AddParameter(nameof(AddPowerBIRows.DatasetId), datasetId)
-                    .AddParameter(nameof(AddPowerBIRows.TableName), table.Name)
-                    .AddParameter(nameof(AddPowerBIRows.Rows), rows);
+                    .AddParameter(nameof(AddPowerBIRow.DatasetId), datasetId)
+                    .AddParameter(nameof(AddPowerBIRow.TableName), table.Name)
+                    .AddParameter(nameof(AddPowerBIRow.Rows), rows);
 
                 // Act
                 var result = ps.Invoke();
@@ -161,7 +161,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.AddRows(datasetId.ToString(), table.Name, rows, null)).Returns(null);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new AddPowerBIRows(initFactory);
+            var cmdlet = new AddPowerBIRow(initFactory);
 
             cmdlet.DatasetId = datasetId;
             cmdlet.TableName = table.Name;
