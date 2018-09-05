@@ -25,7 +25,7 @@ Set-PowerBITable -Table <Table> -Dataset <Dataset> [-WorkspaceId <Guid>] [-Works
 ```
 
 ## DESCRIPTION
-Set-PowerBITable lets you update the metadata and schema for the specified Power BI table.
+Updates the metadata and schema for the specified Power BI table.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount
 
 ## EXAMPLES
@@ -48,7 +48,7 @@ Then, it updates the table schema.
 ## PARAMETERS
 
 ### -Dataset
-A dataset where tables stored.
+A dataset where tables are stored.
 
 ```yaml
 Type: Dataset
@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An id of dataset where tables are to be stored.
+An ID of dataset where tables are to be stored.
 
 ```yaml
 Type: Guid
@@ -108,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-The id of the workspace to filter the place where table resides.
+Id of the workspace to filter the place where table resides.
 
 ```yaml
 Type: Guid

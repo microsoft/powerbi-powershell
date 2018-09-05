@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIRows
 
 ## SYNOPSIS
-Insert rows to the specified table in Power BI.
+Adds rows to the specified table in a Power BI dataset.
 
 ## SYNTAX
 
@@ -27,7 +27,7 @@ Add-PowerBIRows -DatasetId <Guid> -TableName <String>
 ```
 
 ## DESCRIPTION
-Add-PowerBIRows creates new rows to the specified table.
+Inserts rows into a Power BI table contained within a dataset.
 
 ## EXAMPLES
 
@@ -48,7 +48,7 @@ This example inserts rows from CSV to Table1.
 ## PARAMETERS
 
 ### -Dataset
-A dataset of the table where rows are to be stored.
+A dataset containing the table where rows are to be stored.
 
 ```yaml
 Type: Dataset
@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasetId
-An id of dataset of the table where rows are to be stored.
+An ID of the dataset containing the table where rows are to be stored.
 
 ```yaml
 Type: Guid
@@ -93,7 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -TableName
-Name of the table which rows to be stored.
+Name of the table.
 
 ```yaml
 Type: String
@@ -108,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -Workspace
-Workspace to filter the place where table resides.
+Workspace containing the dataset and table for row insertion.
 
 ```yaml
 Type: Workspace
@@ -123,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-The id of the workspace to filter the place where table resides.
+Id of the workspace containing the dataset and table for row insertion.
 
 ```yaml
 Type: Guid

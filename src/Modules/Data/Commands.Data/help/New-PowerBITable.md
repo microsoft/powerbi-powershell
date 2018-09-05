@@ -17,7 +17,7 @@ New-PowerBITable -Name <String> [-Columns <Column[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Initiates the creation of a new Power BI table object. A table is container for columns and rows, and a building block for datasets.
+Initiates the creation of a new Power BI table object. A table is a container for columns and rows, and contained within datasets.
 
 ## EXAMPLES
 
@@ -59,7 +59,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Table name.
+Name of the table.
 
 ```yaml
 Type: String
