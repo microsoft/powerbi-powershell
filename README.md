@@ -21,7 +21,7 @@ More documentation can be found at https://docs.microsoft.com/en-us/powershell/p
 ## Supported Environments and PowerShell Versions
 
 * Windows PowerShell v3.0 and up with .NET 4.6.1 or above.
-* _[Future Release]_ PowerShell Core (v6) and up on any OS platform supported by PowerShell Core.
+* PowerShell Core (v6) and up on any OS platform supported by PowerShell Core.
 
 ## Installation
 

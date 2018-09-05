@@ -9,10 +9,9 @@ Planned\upcoming cmdlets.
 > * [Required Development Guidelines][3]
 > * [Strongly Encouraged Development Guidelines][2]
 
-## General Improvments
+## General Improvements
 
-* Adding -Scope parameter to more cmdlets
-* Supporting PowerShell Core (dependent on updating PowerBI.Api and Microsoft.Rest.ClientRuntime to .NET Standard 2.0)
+* Adding -Scope parameter to more cmdlets (dependent on building new APIs)
 
 ## Workspaces
 
@@ -28,7 +27,7 @@ Planned\upcoming cmdlets.
 | ----------- | ------- | ----- | ----- |
 | Copy-PowerBIReport | Clone a report | 
 | Remove-PowerBIReport | Delete a report | Delete-PowerBIReport |
-| Export-PowerBIReport  | Export a report
+| Export-PowerBIReport  | Export a report | | Add support for -Scope Organization |
 | New-PowerBIReportEmbedToken | Generate an embed token |
 | Add-PowerBIDatasetToReport | Rebind dataset to report | Mount-PowerBIDatasetToReport |
 | Update-PowerBIReport | Update a report |
@@ -37,18 +36,14 @@ Planned\upcoming cmdlets.
 
 | Cmdlet Name | Purpose | Alias | Notes |
 | ----------- | ------- | ----- | ----- |
-| Get-PowerBIDashboard | Get dashboards |
 | Add-PowerBIDashboard | Add dashboards |
 | Copy-PowerBITile | Clone tiles |
 | New-PowerBIDashboardEmbedToken | Generate an embed token |
-| Get-PowerBITile | Get tiles |
 
 ## Datasets and Datasources
 
 | Cmdlet Name | Purpose | Alias | Notes |
 | ----------- | ------- | ----- | ----- |
-| Get-PowerBIDataset | Get datasets |
-| Get-PowerBIDatasource | Get data sources |
 | Get-PowerBIDatasetParameter | Get parameters for dataset |
 | Add-PowerBIGatewayToDatasource | Bind to a gateway | Mount-PowerBIGatewayToDatasource
 | Remove-PowerBIDatasource | Delete dataset | Delete-PowerBIDatasource |
@@ -72,10 +67,6 @@ Planned\upcoming cmdlets.
 ## Tenant Settings
 
 To be defined
-
-## Imports
-
-To be defined.
 
 ## Gateway
 
