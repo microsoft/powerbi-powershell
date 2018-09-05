@@ -28,6 +28,19 @@ Licensed under the MIT License.
   <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles" Condition="'$(IsPackable)' == 'true'">
 
     <ItemGroup>
+      <FilteredResolveAssemblyReferenceResolvedFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="%(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'netstandard' AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'mscorlib' AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'" />
+    </ItemGroup>
+
+    <RemoveDuplicates Inputs="@(FilteredResolveAssemblyReferenceResolvedFiles)">
+      <Output TaskParameter="Filtered" ItemName="DedupResolveAssemblyReferenceResolvedFiles"/>
+    </RemoveDuplicates>
+
+    <Message Text="Locating netstandard assembly" Importance="high" />
+    <Exec ConsoleToMSBuild="true" Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
+      <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
+    </Exec>
+    
+    <ItemGroup>
       
       <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\**\*.*" Condition="Exists('$(OutputPath)\WindowsAuthenticator')">
         <BuildAction>Content</BuildAction>
@@ -41,7 +54,13 @@ Licensed under the MIT License.
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
       
-      <_PackageFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="'$(NoDependentAssemblies)' != 'true'">
+      <_PackageFiles Include="@(DedupResolveAssemblyReferenceResolvedFiles)" Condition="'$(NoDependentAssemblies)' != 'true'">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(NetStandardDllPath)" Condition="'$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
@@ -107,7 +126,7 @@ Licensed under the MIT License.
   
   <Target Name="UpdatePSManifest" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
 
-    <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)UpdatePSModuleManifest.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -TargetFramework &apos;$(TargetFramework)&apos; -Version &apos;$(PackageVersion)&apos; -ReleaseNotes &apos;$(PackageReleaseNotes)&apos;} &quot;" />
+    <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)UpdatePSModuleManifest.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -TargetFramework &apos;$(TargetFramework)&apos; -Version &apos;$(PackageVersion)&apos; -ReleaseNotes &apos;$(RepoRoot)ReleaseNotes.md&apos;} &quot;" />
 
   </Target>
   

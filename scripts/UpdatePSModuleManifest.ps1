@@ -66,6 +66,11 @@ else {
 # Add release notes
 if($ReleaseNotes) {
     Write-Output "Adding Release notes"
+	if(Test-Path -Path $ReleaseNotes) {
+		$ReleaseNotes = Get-Content -Path $ReleaseNotes | Out-String
+		$ReleaseNotes = $ReleaseNotes.Trim()
+	}
+
     $replaceReleaseNotesText = @"
         ReleaseNotes = @'
 $ReleaseNotes
