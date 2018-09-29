@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PowerBIReport
 
 ## SYNOPSIS
-Deploys a Power BI report
+Creates a Power BI report.
 
 ## SYNTAX
 
@@ -47,7 +47,7 @@ Adds the report to the Team Workspace.
 ## PARAMETERS
 
 ### -ConflictAction
-{{Fill ConflictAction Description}}
+Determines what to do if a dataset with the same name already exists. Default value is 'CreateOrOverwrite'
 
 ```yaml
 Type: ImportConflictHandlerModeEnum
