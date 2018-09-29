@@ -48,14 +48,8 @@ namespace Microsoft.PowerBI.Commands.Reports
         public Workspace Workspace { get; set; }
 
         [Parameter(Mandatory = false)]
-        [ValidateSet(
-            "Abort",
-            "CreateOrOverwrite",
-            "Ignore",
-            "Overwrite"
-        )]
-        [PSDefaultValue(Value = "CreateOrOverwrite")]
-        public string ConflictAction { get; set; }
+        [PSDefaultValue(Value = ImportConflictHandlerModeEnum.CreateOrOverwrite)]
+        public ImportConflictHandlerModeEnum ConflictAction { get; set; }
 
         [Parameter(Mandatory = false)]
         public int Timeout { get; set; }
@@ -80,22 +74,16 @@ namespace Microsoft.PowerBI.Commands.Reports
                 this.Name = report.Name.Replace(".pbix", "");
             }
 
-            ImportConflictHandlerModeEnum conflictAction = ImportConflictHandlerModeEnum.CreateOrOverwrite;
-            if (this.ConflictAction != null && !Enum.TryParse(this.ConflictAction, out conflictAction))
-            {
-                this.Logger.WriteError("Failed to parse ConflictAction");
-            }
-
             using (var client = this.CreateClient())
             {
                 Report report;
                 if (this.WorkspaceId != default)
                 {
-                    report = client.Reports.PostReportForWorkspace(this.WorkspaceId, this.Name, this.Path, conflictAction, this.Timeout);
+                    report = client.Reports.PostReportForWorkspace(this.WorkspaceId, this.Name, this.Path, this.ConflictAction, this.Timeout);
                 }
                 else
                 {
-                    report = client.Reports.PostReport(this.Name, this.Path, conflictAction, this.Timeout);
+                    report = client.Reports.PostReport(this.Name, this.Path, this.ConflictAction, this.Timeout);
                 }
                 this.Logger.WriteObject(report, false);
             }

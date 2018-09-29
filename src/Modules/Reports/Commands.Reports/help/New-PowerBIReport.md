@@ -14,14 +14,14 @@ Deploys a PowerBI report
 
 ### WorkspaceId (Default)
 ```
-New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>] [[-ConflictAction] <String>]
- [-Timeout <Int32>] [<CommonParameters>]
+New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>]
+ [[-ConflictAction] <ImportConflictHandlerModeEnum>] [-Timeout <Int32>] [<CommonParameters>]
 ```
 
 ### Workspace
 ```
-New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-Workspace] <Workspace>] [[-ConflictAction] <String>]
- [-Timeout <Int32>] [<CommonParameters>]
+New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-Workspace] <Workspace>]
+ [[-ConflictAction] <ImportConflictHandlerModeEnum>] [-Timeout <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,7 +50,7 @@ Adds the report to the Team Workspace.
 {{Fill ConflictAction Description}}
 
 ```yaml
-Type: String
+Type: ImportConflictHandlerModeEnum
 Parameter Sets: (All)
 Aliases:
 Accepted values: Abort, CreateOrOverwrite, Ignore, Overwrite
