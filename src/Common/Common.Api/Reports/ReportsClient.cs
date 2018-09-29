@@ -158,12 +158,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
             if (import.ImportState != "Succeeded")
             {
-                throw new Exception(string.Format(
-                    "The import was not successful for import ID '{0}', report name '{1}'. The import state was '{2}'.",
-                    importId,
-                    reportName,
-                    import.ImportState
-                ));
+                throw new ImportException(importId, reportName, import.ImportState);
             }
 
             return import.Reports.Single();
@@ -196,12 +191,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
             if (import.ImportState != "Succeeded")
             {
-                throw new Exception(string.Format(
-                    "The import was not successful for import ID '{0}', report name '{1}'. The import state was '{2}'.",
-                    importId,
-                    reportName,
-                    import.ImportState
-                ));
+                throw new ImportException(importId, reportName, import.ImportState);
             }
 
             return import.Reports.Single();
