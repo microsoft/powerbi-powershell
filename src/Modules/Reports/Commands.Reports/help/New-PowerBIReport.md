@@ -15,13 +15,13 @@ Deploys a PowerBI report
 ### WorkspaceId (Default)
 ```
 New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>] [[-ConflictAction] <String>]
- [<CommonParameters>]
+ [-Timeout <Int32>] [<CommonParameters>]
 ```
 
 ### Workspace
 ```
 New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-Workspace] <Workspace>] [[-ConflictAction] <String>]
- [<CommonParameters>]
+ [-Timeout <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -92,6 +92,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Timeout
+The number of seconds to wait for the service. If not set no timeout will be used.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Workspace
 The workspace to deploy the report to.
 
@@ -127,7 +142,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### Keine
+### None
 
 ## OUTPUTS
 

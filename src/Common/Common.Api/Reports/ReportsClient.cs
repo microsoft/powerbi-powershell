@@ -131,17 +131,27 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             }
         }
 
-        public Report PostReport(string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict)
+        public Report PostReport(string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout)
         {
             var importId = this.PostImport(reportName, filePath, nameConflict);
+
+            Nullable<DateTime> timeoutAt = null;
+            if (timeout > 0) {
+                timeoutAt = DateTime.Now.AddSeconds(timeout);
+            }
 
             Import import = null;
             do
             {
                 import = this.GetImport(importId: importId);
+
                 if (import.ImportState != "Succeeded")
                 {
-                    System.Threading.Thread.Sleep(500);
+                    if (timeoutAt != null && DateTime.Now > timeoutAt) {
+                        throw new TimeoutException();
+                    } else {
+                        System.Threading.Thread.Sleep(500);
+                    }
                 }
 
             } while (import.ImportState == "Publishing");
@@ -159,17 +169,27 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return import.Reports.Single();
         }
 
-        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict)
+        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout)
         {
             var importId = this.PostImportForWorkspace(workspaceId, reportName, filePath, nameConflict);
+
+            Nullable<DateTime> timeoutAt = null;
+            if (timeout > 0) {
+                timeoutAt = DateTime.Now.AddSeconds(timeout);
+            }
 
             Import import = null;
             do
             {
                 import = this.GetImportForWorkspace(workspaceId: workspaceId, importId: importId);
+             
                 if (import.ImportState != "Succeeded")
                 {
-                    System.Threading.Thread.Sleep(500);
+                    if (timeoutAt != null && DateTime.Now > timeoutAt) {
+                        throw new TimeoutException();
+                    } else {
+                        System.Threading.Thread.Sleep(500);
+                    }
                 }
 
             } while (import.ImportState == "Publishing");
