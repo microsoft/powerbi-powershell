@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PowerBIReport
 
 ## SYNOPSIS
-Deploys a PowerBI report
+Deploys a Power BI report
 
 ## SYNTAX
 
@@ -25,7 +25,7 @@ New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-Workspace] <Workspace>]
 ```
 
 ## DESCRIPTION
-Loads a PowerBI report from a pbix file and deploys it to the PowerBI service.
+Loads a Power BI report from a pbix file and deploys it to the Power BI service.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
