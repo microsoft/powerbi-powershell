@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -51,6 +56,9 @@ namespace Microsoft.PowerBI.Commands.Reports
         )]
         [PSDefaultValue(Value = "CreateOrOverwrite")]
         public string ConflictAction { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public int Timeout { get; set; }
         #endregion
 
         #region Constructors
@@ -83,11 +91,11 @@ namespace Microsoft.PowerBI.Commands.Reports
                 Report report;
                 if (this.WorkspaceId != default)
                 {
-                    report = client.Reports.PostReportForWorkspace(this.WorkspaceId, this.Name, this.Path, conflictAction);
+                    report = client.Reports.PostReportForWorkspace(this.WorkspaceId, this.Name, this.Path, conflictAction, this.Timeout);
                 }
                 else
                 {
-                    report = client.Reports.PostReport(this.Name, this.Path, conflictAction);
+                    report = client.Reports.PostReport(this.Name, this.Path, conflictAction, this.Timeout);
                 }
                 this.Logger.WriteObject(report, false);
             }
