@@ -60,7 +60,9 @@ Get-Module MicrosoftPowerBIMgmt* -ListAvailable | Uninstall-Module -Force
 ### Log in to Power BI
 
 ```powershell
-Connect-PowerBIServiceAccount   # or Login-PowerBIServiceAccount
+Login-PowerBI
+Login-PowerBIServiceAccount (Alias)
+Connect-PowerBIServiceAccount (Alias)
 ```
 
 ### Get Workspaces
@@ -69,6 +71,7 @@ Get all workspaces for the user:
 
 ```powershell
 Get-PowerBIWorkspace
+Get-PowerBIGroup (Alias)
 ```
 
 ### Update Workspace
@@ -84,15 +87,16 @@ Set-PowerBIWorkspace -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950f
 Add a user to a given workspace:
 
 ```powershell
-Add-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com -AccessRight Admin
+Add-PowerBIWorkspaceUser -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -UserEmailAddress john@contoso.com -AccessRight Admin
 ```
+_NOTE: It is currently not possible to add a user as with the Member role. This is a limitation of the API._
 
 ### Remove a user from a given workspace
 
 Remove user's permissions from a given workspace:
 
 ```powershell
-Remove-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com
+Remove-PowerBIWorkspaceUser -Scope Organization -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -UserEmailAddress john@contoso.com
 ```
 
 ### Restore Workspace
