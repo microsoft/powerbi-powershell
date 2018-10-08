@@ -79,6 +79,16 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return this.Client.Dashboards.GetTiles(groupId: workspaceId.ToString(), dashboardKey: dashboardId.ToString()).Value?.Select(x => (Tile)x);
         }
 
+        public Import GetImport(Guid importId)
+        {
+            return this.Client.Imports.GetImportById(importId: importId.ToString());
+        }
+
+        public Import GetImportForWorkspace(Guid workspaceId, Guid importId)
+        {
+            return this.Client.Imports.GetImportByIdInGroup(groupId: workspaceId.ToString(), importId: importId.ToString());
+        }
+
         public IEnumerable<Import> GetImports()
         {
             return this.Client.Imports.GetImports().Value?.Select(x => (Import)x);
@@ -92,6 +102,99 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         public IEnumerable<Import> GetImportsForWorkspace(Guid workspaceId)
         {
             return this.Client.Imports.GetImports(groupId: workspaceId.ToString()).Value?.Select(x => (Import)x);
+        }
+
+        public Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
+        {
+            using (var fileStream = new StreamReader(filePath))
+            {
+                var response = this.Client.Imports.PostImportWithFile(
+                    fileStream: fileStream.BaseStream,
+                    datasetDisplayName: datasetDisplayName,
+                    nameConflict: nameConflict.ToString()
+                );
+                return Guid.Parse(response.Id);
+            }
+        }
+
+        public Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
+        {
+            using (var fileStream = new StreamReader(filePath))
+            {
+                var response = this.Client.Imports.PostImportWithFileInGroup(
+                    groupId: workspaceId.ToString(),
+                    fileStream: fileStream.BaseStream,
+                    datasetDisplayName: datasetDisplayName,
+                    nameConflict: nameConflict.ToString()
+                );
+                return Guid.Parse(response.Id);
+            }
+        }
+
+        public Report PostReport(string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout)
+        {
+            var importId = this.PostImport(reportName, filePath, nameConflict);
+
+            Nullable<DateTime> timeoutAt = null;
+            if (timeout > 0) {
+                timeoutAt = DateTime.Now.AddSeconds(timeout);
+            }
+
+            Import import = null;
+            do
+            {
+                import = this.GetImport(importId: importId);
+
+                if (import.ImportState != "Succeeded")
+                {
+                    if (timeoutAt != null && DateTime.Now > timeoutAt) {
+                        throw new TimeoutException();
+                    } else {
+                        System.Threading.Thread.Sleep(500);
+                    }
+                }
+
+            } while (import.ImportState == "Publishing");
+
+            if (import.ImportState != "Succeeded")
+            {
+                throw new ImportException(importId, reportName, import.ImportState);
+            }
+
+            return import.Reports.Single();
+        }
+
+        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout)
+        {
+            var importId = this.PostImportForWorkspace(workspaceId, reportName, filePath, nameConflict);
+
+            Nullable<DateTime> timeoutAt = null;
+            if (timeout > 0) {
+                timeoutAt = DateTime.Now.AddSeconds(timeout);
+            }
+
+            Import import = null;
+            do
+            {
+                import = this.GetImportForWorkspace(workspaceId: workspaceId, importId: importId);
+             
+                if (import.ImportState != "Succeeded")
+                {
+                    if (timeoutAt != null && DateTime.Now > timeoutAt) {
+                        throw new TimeoutException();
+                    } else {
+                        System.Threading.Thread.Sleep(500);
+                    }
+                }
+
+            } while (import.ImportState == "Publishing");
+
+            if (import.ImportState != "Succeeded")
+            {
+                throw new ImportException(importId, reportName, import.ImportState);
+            }
+
+            return import.Reports.Single();
         }
     }
 }
