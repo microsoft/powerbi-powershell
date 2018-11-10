@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Text;
 
 namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
@@ -20,5 +21,7 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         /// <param name="queryParameters">Query parameters to include with the request. This is optional.</param>
         /// <returns>An IAccessToken of an authenticated user.</returns>
         IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null);
+
+        IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password);
     }
 }
