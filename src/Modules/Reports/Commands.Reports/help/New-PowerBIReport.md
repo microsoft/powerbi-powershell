@@ -14,14 +14,14 @@ Creates a Power BI report.
 
 ### WorkspaceId (Default)
 ```
-New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-WorkspaceId] <Guid>]
- [[-ConflictAction] <ImportConflictHandlerModeEnum>] [-Timeout <Int32>] [<CommonParameters>]
+New-PowerBIReport [-Path] <String> [-Name <String>] [-WorkspaceId <Guid>]
+ [-ConflictAction <ImportConflictHandlerModeEnum>] [-Timeout <Int32>] [<CommonParameters>]
 ```
 
 ### Workspace
 ```
-New-PowerBIReport [-Path] <String> [[-Name] <String>] [[-Workspace] <Workspace>]
- [[-ConflictAction] <ImportConflictHandlerModeEnum>] [-Timeout <Int32>] [<CommonParameters>]
+New-PowerBIReport [-Path] <String> [-Name <String>] [-Workspace <Workspace>]
+ [-ConflictAction <ImportConflictHandlerModeEnum>] [-Timeout <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -53,7 +53,7 @@ Determines what to do if a dataset with the same name already exists. Default va
 Type: ImportConflictHandlerModeEnum
 Parameter Sets: (All)
 Aliases:
-Accepted values: Abort, CreateOrOverwrite, Ignore, Overwrite
+Accepted values: Ignore, Abort, Overwrite, CreateOrOverwrite
 
 Required: False
 Position: Named
