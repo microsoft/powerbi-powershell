@@ -18,7 +18,7 @@
 
 ### Optional requirements (for testing)
 * [PowerShell Core (6.0.0)](https://github.com/powershell/powershell)
-* Windows PowerShell v3 and up with .NET 4.6.1 or above
+* Windows PowerShell v3 and up with .NET 4.7.1 or above
 
 ## Coding Style
 
