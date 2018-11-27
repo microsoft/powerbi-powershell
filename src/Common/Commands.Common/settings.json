@@ -43,6 +43,18 @@
       "cloudName": "USGovCloud"
     },
     {
+      "name": "USGovHigh",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "USGovDoDL4Cloud"
+    },
+    {
+      "name": "USGovMil",
+      "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
+      "redirect": "urn:ietf:wg:oauth:2.0:oob",
+      "cloudName": "USGovDoDL5Cloud"
+    },
+    {
       "name": "China",
       "clientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
       "redirect": "urn:ietf:wg:oauth:2.0:oob",
