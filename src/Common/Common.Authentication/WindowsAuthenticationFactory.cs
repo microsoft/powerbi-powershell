@@ -174,7 +174,16 @@ namespace Microsoft.PowerBI.Common.Authentication
             var fileUri = new UriBuilder(codeBase);
             var directory = Uri.UnescapeDataString(fileUri.Path);
             directory = Path.GetDirectoryName(directory);
-            return directory;
+            if (string.IsNullOrEmpty(fileUri.Host))
+            {
+                return directory;
+            }
+            else
+            {
+                // Running on a fileshare
+                directory = $"\\\\{fileUri.Host}\\" + directory.TrimStart(new[] { '\\' });
+                return directory;
+            }
         }
 
         public void Challenge()
