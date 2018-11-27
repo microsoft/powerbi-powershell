@@ -85,7 +85,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                     profile = new PowerBIProfile(environment, token);
                     break;
                 case UserAndCredentialPasswordParameterSet:
-                    this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password);
+                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password);
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token, servicePrincipal: false);
                     break;
                 case ServicePrincipalCertificateParameterSet:
