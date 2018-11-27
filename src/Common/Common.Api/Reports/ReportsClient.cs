@@ -106,10 +106,10 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
         {
-            using (var fileStream = new StreamReader(filePath))
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 var response = this.Client.Imports.PostImportWithFile(
-                    fileStream: fileStream.BaseStream,
+                    fileStream: fileStream,
                     datasetDisplayName: datasetDisplayName,
                     nameConflict: nameConflict.ToString()
                 );
@@ -119,11 +119,11 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
         {
-            using (var fileStream = new StreamReader(filePath))
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 var response = this.Client.Imports.PostImportWithFileInGroup(
                     groupId: workspaceId.ToString(),
-                    fileStream: fileStream.BaseStream,
+                    fileStream: fileStream,
                     datasetDisplayName: datasetDisplayName,
                     nameConflict: nameConflict.ToString()
                 );
