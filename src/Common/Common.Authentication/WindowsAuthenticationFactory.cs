@@ -14,6 +14,7 @@ using System.Security.Authentication;
 using System.Text;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Abstractions.Utilities;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
@@ -30,67 +31,41 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                throw new NotSupportedException("Authenticator only works on Windows");
-            }
-
-            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
-
             string queryParamString = queryParameters.ToQueryParameterString();
-            if(Cache == null)
+            return HandleAuthentication(environment, logger, settings, () =>
             {
-                lock(tokenCacheLock)
-                {
-                    if(Cache == null)
-                    {
-                        Cache = InitializeCache(environment, queryParamString);
-                    }
-                }
-            }
-
-            if(!this.AuthenticatedOnce)
-            {
-                throw new AuthenticationException("Failed to authenticate once");
-            }
-
-            var context = new AuthenticationContext(environment.AzureADAuthority, Cache);
-            AuthenticationResult token = null;
-            try
-            {
-                token = context.AcquireTokenSilentAsync(environment.AzureADResource, environment.AzureADClientId).Result;
-            }
-            catch(AdalSilentTokenAcquisitionException)
-            {
-                // ignore and try one more time by getting a new cache and let the exception fly if it fails
-                lock (tokenCacheLock)
-                {
-                    Cache = InitializeCache(environment, queryParamString);
-                }
-
-                context = new AuthenticationContext(environment.AzureADAuthority, Cache);
-                token = context.AcquireTokenSilentAsync(environment.AzureADResource, environment.AzureADClientId).Result;
-            }
-
-            return token.ToIAccessToken();
+                return InitializeCache(environment, queryParamString);
+            });
         }
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
+            return HandleAuthentication(environment, logger, settings, () =>
+            {
+                return InitializeCache(environment, null, userName, password);
+            });
+        }
+
+        private IAccessToken HandleAuthentication(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, Func<TokenCache> initializeTokenCache)
+        {
+            if(initializeTokenCache == null)
+            {
+                throw new ArgumentNullException(nameof(initializeTokenCache), "Failed to pass initializer for token cache");
+            }
+
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
 
             LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
-
             if (Cache == null)
             {
                 lock (tokenCacheLock)
                 {
                     if (Cache == null)
                     {
-                        Cache = InitializeCache(environment, null, userName, password.SecureStringToString());
+                        Cache = initializeTokenCache();
                     }
                 }
             }
@@ -111,7 +86,7 @@ namespace Microsoft.PowerBI.Common.Authentication
                 // ignore and try one more time by getting a new cache and let the exception fly if it fails
                 lock (tokenCacheLock)
                 {
-                    Cache = InitializeCache(environment, null, userName, password.SecureStringToString());
+                    Cache = initializeTokenCache();
                 }
 
                 context = new AuthenticationContext(environment.AzureADAuthority, Cache);
@@ -121,17 +96,17 @@ namespace Microsoft.PowerBI.Common.Authentication
             return token.ToIAccessToken();
         }
 
-        private static TokenCache InitializeCache(IPowerBIEnvironment environment, string queryParams, string userName = null, string password = null)
+        private static TokenCache InitializeCache(IPowerBIEnvironment environment, string queryParams, string userName = null, SecureString password = null)
         {
             using (var windowAuthProcess = new Process())
             {
-                var executingDirectory = GetExecutingDirectory();
+                var executingDirectory = DirectoryUtility.GetExecutingDirectory();
 
                 windowAuthProcess.StartInfo.FileName = Path.Combine(executingDirectory, "WindowsAuthenticator", "AzureADWindowsAuthenticator.exe");
                 windowAuthProcess.StartInfo.Arguments = $"-Authority:\"{environment.AzureADAuthority}\" -Resource:\"{environment.AzureADResource}\" -ID:\"{environment.AzureADClientId}\" -Redirect:\"{environment.AzureADRedirectAddress}\" -Query:\"{queryParams}\"";
                 if(userName != null && password != null)
                 {
-                    var pwBytes = Encoding.UTF8.GetBytes(password);
+                    var pwBytes = Encoding.UTF8.GetBytes(password.SecureStringToString());
                     var pwBase64 = Convert.ToBase64String(pwBytes);
                     // TODO encrypt with AES or MachineKey (as long as it works with .NET Framework and .NET Core)
                     windowAuthProcess.StartInfo.Arguments += $" -User:\"{userName}\" -PW:\"{pwBase64}\"";
