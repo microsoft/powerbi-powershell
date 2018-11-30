@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
@@ -58,6 +59,12 @@ namespace Microsoft.PowerBI.Common.Authentication
             token = context.AcquireTokenByDeviceCodeAsync(deviceCodeResult).Result;
             authenticatedOnce = true;
             return token.ToIAccessToken();
+        }
+
+        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        {
+            // Not supported in .NET Core or DeviceCodeAuthentication - https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/issues/482
+            throw new NotSupportedException("User and password authentication is not supported in .NET Core or with DeviceCode authentication.");
         }
 
         public void Challenge()

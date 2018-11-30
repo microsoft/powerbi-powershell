@@ -25,7 +25,14 @@
     <ProjectReference Include="..\..\..\Common\Common.Client\Common.Client.csproj" />
     <ProjectReference Include="..\..\Profile\Commands.Profile.Test\Commands.Profile.Test.csproj" />
     <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Commands.Workspaces.Test\Commands.Workspaces.Test.csproj" />
     <ProjectReference Include="..\Commands.Reports\Commands.Reports.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="testreport.pbix">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

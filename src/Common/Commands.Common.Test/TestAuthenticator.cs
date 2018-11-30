@@ -43,6 +43,11 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             return this.Token;
         }
 
+        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        {
+            return this.Token;
+        }
+
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             return this.Token;

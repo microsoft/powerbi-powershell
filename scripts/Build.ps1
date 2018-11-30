@@ -79,7 +79,7 @@ function Get-VSBuildFolder
         throw "Failed to get result from vswhere.exe"
     }
 
-    $vsInstance = $vsWhereOutput | ConvertFrom-Json | Select-Object -First 1
+    $vsInstance = $vsWhereOutput | Out-String | ConvertFrom-Json | Select-Object -First 1
     Write-Verbose "Using VS instance: $($vsInstance.installationPath)"
     Write-Verbose "VS Version: $($vsInstance.installationVersion)"
 

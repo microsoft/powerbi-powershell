@@ -35,10 +35,22 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         IEnumerable<Tile> GetTilesForWorkspace(Guid workspaceId, Guid dashboardId);
 
+        Import GetImport(Guid importId);
+
+        Import GetImportForWorkspace(Guid workspaceId, Guid importId);
+
         IEnumerable<Import> GetImports();
 
         IEnumerable<Import> GetImportsAsAdmin(string expand = default, string filter = default, int? top = default, int? skip = default);
 
         IEnumerable<Import> GetImportsForWorkspace(Guid workspaceId);
+
+        Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict);
+
+        Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict);
+
+        Report PostReport(string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout);
+
+        Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout);
     }
 }

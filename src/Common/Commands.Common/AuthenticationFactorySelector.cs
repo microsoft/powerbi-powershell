@@ -70,12 +70,20 @@ namespace Microsoft.PowerBI.Commands.Common
             return UserAuthFactory.Authenticate(environment, logger, settings, queryParameters);
         }
 
+        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        {
+            this.InitializeUserAuthenticationFactory(logger, settings);
+            return UserAuthFactory.Authenticate(environment, logger, settings, userName, password);
+        }
+
         public IAccessToken Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             switch (profile.LoginType)
             {
                 case PowerBIProfileType.User:
                     return this.Authenticate(profile.Environment, logger, settings, queryParameters);
+                case PowerBIProfileType.UserAndPassword:
+                    return this.Authenticate(profile.Environment, logger, settings, profile.UserName, profile.Password);
                 case PowerBIProfileType.ServicePrincipal:
                     return this.Authenticate(profile.UserName, profile.Password, profile.Environment, logger, settings);
                 case PowerBIProfileType.Certificate:

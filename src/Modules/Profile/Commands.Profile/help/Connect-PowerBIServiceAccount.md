@@ -23,6 +23,12 @@ Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -Credentia
  [-ServicePrincipal] [-Tenant <String>] [<CommonParameters>]
 ```
 
+### UserAndCredential
+```
+Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -Credential <PSCredential>
+ [<CommonParameters>]
+```
+
 ### ServicePrincipalCertificate
 ```
 Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -CertificateThumbprint <String>
@@ -103,7 +109,7 @@ PSCredential representing the Azure Active Directory (AAD) application client ID
 
 ```yaml
 Type: PSCredential
-Parameter Sets: ServicePrincipal
+Parameter Sets: ServicePrincipal, UserAndCredential
 Aliases:
 
 Required: True

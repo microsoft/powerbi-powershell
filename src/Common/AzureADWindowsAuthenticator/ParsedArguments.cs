@@ -21,5 +21,11 @@ namespace AzureADWindowsAuthenticator
 
         [Parameter("Query")]
         public string QueryParams { get; set; }
+
+        [Parameter("PW")]
+        public string Password { get; set; }
+
+        [Parameter("User")]
+        public string UserName { get; set; }
     }
 }
