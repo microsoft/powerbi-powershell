@@ -25,8 +25,8 @@ namespace Microsoft.PowerBI.Common.Abstractions
         public PowerBIProfile(IPowerBIEnvironment environment, IAccessToken token) =>
             (this.Environment, this.TenantId, this.UserName, this.LoginType) = (environment, token.TenantId, token.UserName, PowerBIProfileType.User);
 
-        public PowerBIProfile(IPowerBIEnvironment environment, string userName, SecureString password, IAccessToken token) => 
-            (this.Environment, this.TenantId, this.UserName, this.Password, this.LoginType) = (environment, token.TenantId, userName, password, PowerBIProfileType.ServicePrincipal);
+        public PowerBIProfile(IPowerBIEnvironment environment, string userName, SecureString password, IAccessToken token, bool servicePrincipal = true) => 
+            (this.Environment, this.TenantId, this.UserName, this.Password, this.LoginType) = (environment, token.TenantId, userName, password, servicePrincipal ? PowerBIProfileType.ServicePrincipal : PowerBIProfileType.UserAndPassword);
 
         public PowerBIProfile(IPowerBIEnvironment environment, string clientId, string thumbprint, IAccessToken token) =>
             (this.Environment, this.TenantId, this.UserName, this.Thumbprint, this.LoginType) = (environment, token.TenantId, clientId, thumbprint, PowerBIProfileType.Certificate);

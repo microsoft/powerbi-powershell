@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Abstractions.Utilities;
 
 namespace Microsoft.PowerBI.Commands.Common
 {
@@ -28,7 +29,7 @@ namespace Microsoft.PowerBI.Commands.Common
         {
             if(string.IsNullOrEmpty(settingsFilePath))
             {
-                var executingDirectory = this.GetExecutingDirectory();
+                var executingDirectory = DirectoryUtility.GetExecutingDirectory();
                 settingsFilePath = Path.Combine(executingDirectory, FileName);
             }
             
@@ -112,14 +113,5 @@ namespace Microsoft.PowerBI.Commands.Common
         public IDictionary<PowerBIEnvironmentType, IPowerBIEnvironment> Environments { get; }
 
         public IPowerBIConfigurationSettings Settings { get; }
-
-        private string GetExecutingDirectory()
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var fileUri = new UriBuilder(codeBase);
-            var directory = Uri.UnescapeDataString(fileUri.Path);
-            directory = Path.GetDirectoryName(directory);
-            return directory;
-        }
     }
 }

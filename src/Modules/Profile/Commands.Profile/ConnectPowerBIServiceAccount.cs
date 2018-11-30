@@ -26,6 +26,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public const string UserParameterSet = "User";
         public const string ServicePrincipalParameterSet = "ServicePrincipal";
         public const string ServicePrincipalCertificateParameterSet = "ServicePrincipalCertificate";
+        public const string UserAndCredentialPasswordParameterSet = "UserAndCredential";
         #endregion
 
         #region Parameters
@@ -33,6 +34,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public PowerBIEnvironmentType Environment { get; set; } = PowerBIEnvironmentType.Public;
 
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = true)]
+        [Parameter(ParameterSetName = UserAndCredentialPasswordParameterSet, Mandatory = true)]
         public PSCredential Credential { get; set; }
 
         [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = true)]
@@ -81,6 +83,10 @@ namespace Microsoft.PowerBI.Commands.Profile
                         }
                     );
                     profile = new PowerBIProfile(environment, token);
+                    break;
+                case UserAndCredentialPasswordParameterSet:
+                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password);
+                    profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token, servicePrincipal: false);
                     break;
                 case ServicePrincipalCertificateParameterSet:
                     token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings);

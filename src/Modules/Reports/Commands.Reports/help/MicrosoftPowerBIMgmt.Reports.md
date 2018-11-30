@@ -26,3 +26,6 @@ Returns a list of Power BI reports.
 ### [Get-PowerBITile](Get-PowerBITile.md)
 Returns a list of Power BI tiles for a dashboard.
 
+### [New-PowerBIReport](New-PowerBIReport.md)
+Creates a Power BI report.
+

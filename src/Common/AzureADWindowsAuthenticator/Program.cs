@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
@@ -22,7 +23,20 @@ namespace AzureADWindowsAuthenticator
         private static async Task<string> GetToken(ParsedArguments parsedArgs)
         {
             var context = new AuthenticationContext(parsedArgs.AzureADAuthorityAddress);
-            var result = await context.AcquireTokenAsync(parsedArgs.AzureADResource, parsedArgs.AzureADClientId, new Uri(parsedArgs.AzureADRedirectAddress), new PlatformParameters(PromptBehavior.Auto), UserIdentifier.AnyUser, parsedArgs.QueryParams);
+            AuthenticationResult result = null;
+            if(!string.IsNullOrEmpty(parsedArgs.UserName) && !string.IsNullOrEmpty(parsedArgs.Password))
+            {
+                // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-with-username-and-password
+                var passwordBytes = Convert.FromBase64String(parsedArgs.Password);
+                var password = Encoding.UTF8.GetString(passwordBytes);
+                // TODO encrypt password and decode here, either AES or MachineKey (but it needs to work across .NET Framework and .NET Core)
+                result = await context.AcquireTokenAsync(parsedArgs.AzureADResource, parsedArgs.AzureADClientId, new UserPasswordCredential(parsedArgs.UserName, password));
+            }
+            else
+            {
+                result = await context.AcquireTokenAsync(parsedArgs.AzureADResource, parsedArgs.AzureADClientId, new Uri(parsedArgs.AzureADRedirectAddress), new PlatformParameters(PromptBehavior.Auto), UserIdentifier.AnyUser, parsedArgs.QueryParams);
+            }
+
             var tokenCache = context.TokenCache.Serialize();
             return Convert.ToBase64String(tokenCache);
         }
