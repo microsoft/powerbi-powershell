@@ -15,7 +15,7 @@ Returns a list of Power BI workspaces.
 ### List (Default)
 ```
 Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
- [-First <Int32>] [-Skip <Int32>] [<CommonParameters>]
+ [-All] [-First <Int32>] [-Skip <Int32>] [<CommonParameters>]
 ```
 
 ### Id
@@ -49,6 +49,21 @@ PS C:\> Get-PowerBIWorkspace -Scope Organization -Filter "tolower(name) eq 'cont
 Returns a workspace named 'Contoso Sales' (case insensitive with tolower) within the user's organization.
 
 ## PARAMETERS
+
+### -All
+Indicates to show all the workspaces. Only supported when -Scope Organization is specified. -First and -Skip cannot be used along with this parameter.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Deleted
 Indicates to show only deleted workspaces. Only supported when -Scope Organization is specified.

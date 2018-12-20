@@ -59,6 +59,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public SwitchParameter Orphaned { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        public SwitchParameter All { get; set; }
+
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]
         public int? First { get; set; }
 
@@ -111,6 +114,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }
 
+            if (this.All.IsPresent && this.Scope == PowerBIUserScope.Organization)
+            {
+                this.ExecuteCmdletWithAll();
+                return;
+            }
+
             if (!string.IsNullOrEmpty(this.User) && this.Scope == PowerBIUserScope.Organization)
             {
                 var userFilter = $"users/any(u: tolower(u/emailAddress) eq '{this.User.ToLower()}')";
@@ -123,6 +132,53 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                     client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) :
                     client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
                 this.Logger.WriteObject(workspaces, true);
+            }
+        }
+
+        private void ExecuteCmdletWithAll()
+        {
+            var allWorkspaces = new List<Workspace>();
+            using (var client = this.CreateClient())
+            {
+                var top = 5000;
+                var skip = 0;
+                var workspacesCountBeforeApiCall = 0L;
+                var workspacesCountAfterApiCall = 0L; 
+                while (true)
+                {
+                    var result = client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip);
+                    if (result != null)
+                    {
+                        allWorkspaces.AddRange(result);
+                    }
+                    workspacesCountBeforeApiCall = workspacesCountAfterApiCall;
+                    workspacesCountAfterApiCall = allWorkspaces.Count;
+                    if ((workspacesCountAfterApiCall - workspacesCountBeforeApiCall) < top)
+                    {
+                        break;
+                    }
+                    skip += top;
+                }
+            }
+            if (string.IsNullOrEmpty(this.User))
+            {
+                this.Logger.WriteObject(allWorkspaces, true);
+            }
+            else
+            {
+                var filteredWorkspaces = new List<Workspace>();
+                foreach (Workspace ws in allWorkspaces)
+                {
+                    foreach (WorkspaceUser user in ws.Users)
+                    {
+                        if (user.UserPrincipalName != null && this.User.ToLower().Equals(user.UserPrincipalName.ToLower()))
+                        {
+                            filteredWorkspaces.Add(ws);
+                            break;
+                        }
+                    }
+                }
+                this.Logger.WriteObject(filteredWorkspaces, true);
             }
         }
     }

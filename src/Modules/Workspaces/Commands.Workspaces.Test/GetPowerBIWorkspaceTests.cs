@@ -51,6 +51,76 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesAllAndOrganizationScope()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.All), new SwitchParameter(true) }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesAllAndOrganizationScopeAndUser()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) with the given user and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
+                var userEmailAddress = workspace.Users.FirstOrDefault().UserPrincipalName;
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.All), new SwitchParameter(true) },
+                        { nameof(GetPowerBIWorkspace.User), userEmailAddress }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you have workspaces with the specified user in your organization.");
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetWorkspacesIndividualScope()
         {
             /*
