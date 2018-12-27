@@ -153,6 +153,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 var skip = 0;
                 var workspacesCountBeforeApiCall = 0L;
                 var workspacesCountAfterApiCall = 0L;
+
+                // GetWorkspacesAsAdmin is called with 5000 as the top which retrieves 5000 workspaces in each call.
+                // Loop will terminate when the workspaces retrieved are less than 5000.
                 do
                 {
                     var result = client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip);
