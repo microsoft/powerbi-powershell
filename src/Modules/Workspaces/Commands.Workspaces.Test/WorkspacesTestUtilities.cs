@@ -63,16 +63,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         private static Workspace InvokeGetPowerBIWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope, OperationType type, Guid? id = null)
         {
-            var First = 5000;
-            var Skip = 0;
+            var first = 5000;
+            var skip = 0;
             while (true)
             {
                 ps.Commands.Clear();
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), scope.ToString() },
-                        { nameof(GetPowerBIWorkspace.First), First },
-                        { nameof(GetPowerBIWorkspace.Skip), Skip }
+                        { nameof(GetPowerBIWorkspace.First), first },
+                        { nameof(GetPowerBIWorkspace.Skip), skip }
                     };
                 ps.AddCommand(GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
                 var results = ps.Invoke();
@@ -85,11 +85,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                         return workspace;
                     }
                 }
-                if (results.Count < First)
+                if (results.Count < first)
                 {
                     break;
                 }
-                Skip += First;
+                skip += first;
             }
             
             TestUtilities.AssertNoCmdletErrors(ps);
@@ -99,28 +99,22 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         private static Workspace GetWorkspaceForOperationType(ICollection<PSObject> results, OperationType type, Guid? id = null)
         {
-            var workspaces = Enumerable.Empty<Workspace>();
             switch (type)
             {
                 case OperationType.GetWorkspaceById:
-                    workspaces = results.Select(x => (Workspace)x.BaseObject);
-                    return workspaces.First(x => x.Id == id);
+                    return results.Select(x => (Workspace)x.BaseObject).First(x => x.Id == id);
 
                 case OperationType.GetFirstWorkspace:
-                    workspaces = results.Select(x => (Workspace)x.BaseObject);
-                    return workspaces.First();
+                    return results.Select(x => (Workspace)x.BaseObject).First();
 
                 case OperationType.GetFirstWorkspaceInOrganization:
-                    workspaces = results.Select(x => (Workspace)x.BaseObject);
-                    return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace);
+                    return results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(x => x.Type == WorkspaceType.Workspace);
 
                 case OperationType.GetFirstWorkspaceWithAUserInOrganization:
-                    workspaces = results.Select(x => (Workspace)x.BaseObject);
-                    return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.Users.Any());
+                    return results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.Users.Any());
 
                 case OperationType.GetFirstDeletedWorkspaceInOrganization:
-                    workspaces = results.Select(x => (Workspace)x.BaseObject);
-                    return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.State == WorkspaceState.Deleted);
+                    return results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.State == WorkspaceState.Deleted);
 
                 default:
                     return null;

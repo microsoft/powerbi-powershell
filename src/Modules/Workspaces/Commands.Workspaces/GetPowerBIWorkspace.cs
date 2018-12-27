@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -24,6 +25,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string IdParameterSetName = "Id";
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
+        private const string AllParameterSetName = "All";
 
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
@@ -47,9 +49,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
         public string Filter { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
         public string User { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
@@ -58,12 +62,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public SwitchParameter Orphaned { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
         public SwitchParameter All { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]
-        public int? First { get; set; }
+        public int? First { get; set; } = 5000;
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public int? Skip { get; set; }
@@ -73,6 +77,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
+
+            if (this.All.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
+            {
+                this.Logger.ThrowTerminatingError($"{nameof(this.All)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+            }
 
             if (!string.IsNullOrEmpty(this.User) && this.Scope.Equals(PowerBIUserScope.Individual))
             {
@@ -143,43 +152,24 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 var top = 5000;
                 var skip = 0;
                 var workspacesCountBeforeApiCall = 0L;
-                var workspacesCountAfterApiCall = 0L; 
-                while (true)
+                var workspacesCountAfterApiCall = 0L;
+                do
                 {
                     var result = client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip);
-                    if (result != null)
-                    {
-                        allWorkspaces.AddRange(result);
-                    }
+                    allWorkspaces.AddRange(result);
                     workspacesCountBeforeApiCall = workspacesCountAfterApiCall;
                     workspacesCountAfterApiCall = allWorkspaces.Count;
-                    if ((workspacesCountAfterApiCall - workspacesCountBeforeApiCall) < top)
-                    {
-                        break;
-                    }
                     skip += top;
-                }
+                } while ((workspacesCountAfterApiCall - workspacesCountBeforeApiCall) == top);
             }
-            if (string.IsNullOrEmpty(this.User))
+            if (!string.IsNullOrEmpty(this.User))
             {
-                this.Logger.WriteObject(allWorkspaces, true);
+                allWorkspaces = allWorkspaces
+                    .Where(w => w.Users.Any(u => u.UserPrincipalName != null && u.UserPrincipalName.Equals(this.User, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
             }
-            else
-            {
-                var filteredWorkspaces = new List<Workspace>();
-                foreach (Workspace ws in allWorkspaces)
-                {
-                    foreach (WorkspaceUser user in ws.Users)
-                    {
-                        if (user.UserPrincipalName != null && this.User.ToLower().Equals(user.UserPrincipalName.ToLower()))
-                        {
-                            filteredWorkspaces.Add(ws);
-                            break;
-                        }
-                    }
-                }
-                this.Logger.WriteObject(filteredWorkspaces, true);
-            }
+
+            this.Logger.WriteObject(allWorkspaces, true);
         }
     }
 }

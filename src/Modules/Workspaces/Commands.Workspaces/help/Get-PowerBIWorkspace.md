@@ -15,7 +15,7 @@ Returns a list of Power BI workspaces.
 ### List (Default)
 ```
 Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
- [-All] [-First <Int32>] [-Skip <Int32>] [<CommonParameters>]
+ [-First <Int32>] [-Skip <Int32>] [<CommonParameters>]
 ```
 
 ### Id
@@ -26,6 +26,12 @@ Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ### Name
 ```
 Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
+```
+
+### All
+```
+Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-All]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,10 +61,10 @@ Indicates to show all the workspaces. Only supported when -Scope Organization is
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: All
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -85,7 +91,7 @@ OData filter, case-sensitive (element names start lowercase).
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -105,7 +111,7 @@ Aliases: Top
 
 Required: False
 Position: Named
-Default value: None
+Default value: 5000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -191,7 +197,7 @@ Filter workspaces to show ones which the user is contained within. Only availabl
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False
