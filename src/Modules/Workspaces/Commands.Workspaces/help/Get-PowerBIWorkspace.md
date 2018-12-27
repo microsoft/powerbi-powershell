@@ -23,15 +23,25 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
+### AllWithId
+```
+Get-PowerBIWorkspace [-Id <Guid>] [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
+```
+
 ### Name
 ```
 Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
+### AllWithName
+```
+Get-PowerBIWorkspace [-Name <String>] [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
+```
+
 ### All
 ```
-Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-All]
- [<CommonParameters>]
+Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
+ [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,7 +71,7 @@ Indicates to show all the workspaces. Only supported when -Scope Organization is
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: All
+Parameter Sets: AllWithId, AllWithName, All
 Aliases:
 
 Required: True
@@ -76,7 +86,7 @@ Indicates to show only deleted workspaces. Only supported when -Scope Organizati
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -131,6 +141,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+```yaml
+Type: Guid
+Parameter Sets: AllWithId
+Aliases: GroupId, WorkspaceId
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Name
 Name of the workspace to return if one exists with that name. Case insensitive search.
 
@@ -146,12 +168,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+```yaml
+Type: String
+Parameter Sets: AllWithName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Orphaned
 Indicates to show only orphaned workspaces. Only supported when -Scope Organization is specified.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False

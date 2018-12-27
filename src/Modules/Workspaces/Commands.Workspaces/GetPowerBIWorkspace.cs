@@ -26,6 +26,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
         private const string AllParameterSetName = "All";
+        private const string AllWithIdParameterSetName = "AllWithId";
+        private const string AllWithNameParameterSetName = "AllWithName";
 
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
@@ -39,10 +41,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         #region Parameters
 
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllWithIdParameterSetName)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = NameParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllWithNameParameterSetName)]
         public string Name { get; set; }
 
         [Parameter(Mandatory = false)]
@@ -57,12 +61,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public string User { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
         public SwitchParameter Deleted { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
         public SwitchParameter Orphaned { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = AllWithIdParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = AllWithNameParameterSetName)]
         public SwitchParameter All { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
@@ -113,12 +121,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? OrphanedFilterString : $"({this.Filter}) and ({OrphanedFilterString})";
             }
 
-            if (this.ParameterSet.Equals(IdParameterSetName))
+            if (this.ParameterSet.Equals(IdParameterSetName) || this.ParameterSet.Equals(AllWithIdParameterSetName))
             {
                 this.Filter = $"id eq '{this.Id}'";
             }
 
-            if (this.ParameterSet.Equals(NameParameterSetName))
+            if (this.ParameterSet.Equals(NameParameterSetName) || this.ParameterSet.Equals(AllWithNameParameterSetName))
             {
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }
