@@ -520,7 +520,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Organization,
                 Id = id,
                 All = new SwitchParameter(true),
-                ParameterSet = "AllWithId"
+                ParameterSet = "Id"
             };
             // Act
             cmdlet.InvokePowerBICmdlet();
@@ -567,7 +567,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Scope = PowerBIUserScope.Organization,
                 Name = name,
                 All = new SwitchParameter(true),
-                ParameterSet = "AllWithName"
+                ParameterSet = "Name"
             };
             // Act
             cmdlet.InvokePowerBICmdlet();

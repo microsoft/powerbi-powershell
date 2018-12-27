@@ -20,22 +20,12 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 
 ### Id
 ```
-Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
-```
-
-### AllWithId
-```
-Get-PowerBIWorkspace [-Id <Guid>] [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
+Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
-```
-
-### AllWithName
-```
-Get-PowerBIWorkspace [-Name <String>] [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
+Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
 ```
 
 ### All
@@ -71,7 +61,19 @@ Indicates to show all the workspaces. Only supported when -Scope Organization is
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: AllWithId, AllWithName, All
+Parameter Sets: Id, Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
 Aliases:
 
 Required: True
@@ -141,18 +143,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-```yaml
-Type: Guid
-Parameter Sets: AllWithId
-Aliases: GroupId, WorkspaceId
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Name
 Name of the workspace to return if one exists with that name. Case insensitive search.
 
@@ -162,18 +152,6 @@ Parameter Sets: Name
 Aliases:
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: String
-Parameter Sets: AllWithName
-Aliases:
-
-Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
