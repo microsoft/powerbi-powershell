@@ -92,7 +92,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.EDog);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
                 var userEmailAddress = workspace.Users.FirstOrDefault().UserPrincipalName;
