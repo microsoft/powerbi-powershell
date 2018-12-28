@@ -70,14 +70,14 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 // Act
                 var results = ps.Invoke();
-
-                // Assert
-                TestUtilities.AssertNoCmdletErrors(ps);
-                Assert.IsNotNull(results);
                 if (!results.Any())
                 {
                     Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
                 }
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
             }
         }
 
@@ -92,7 +92,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.EDog);
                 var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
                 WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
                 var userEmailAddress = workspace.Users.FirstOrDefault().UserPrincipalName;
@@ -107,19 +107,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 // Act
                 var results = ps.Invoke();
-
-                // Assert
-                TestUtilities.AssertNoCmdletErrors(ps);
-                Assert.IsNotNull(results);
-
-                Assert.IsNotNull(results
-                    .Select(x => (Workspace)x.BaseObject)
-                    .Where(ws => ws.Users.Any(u => u.UserPrincipalName.Equals(userEmailAddress, StringComparison.OrdinalIgnoreCase))));
-
                 if (!results.Any())
                 {
                     Assert.Inconclusive("No workspaces returned. Verify you have workspaces with the specified user in your organization.");
                 }
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsNotNull(results.Select(x => (Workspace)x.BaseObject).FirstOrDefault());
+                Assert.AreEqual(results.Select(x => (Workspace)x.BaseObject).FirstOrDefault().Id, workspace.Id);
             }
         }
 
