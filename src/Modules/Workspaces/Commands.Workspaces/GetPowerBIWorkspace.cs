@@ -155,32 +155,22 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         private void ExecuteCmdletWithAll()
         {
-            var allWorkspaces = new List<Workspace>();
             using (var client = this.CreateClient())
             {
-                var top = 5000;
-                var skip = 0;
-                var count = 0L;
+                Func<int, int, IEnumerable<Workspace>> GetWorkspaces =
+                    (top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip);
 
-                // GetWorkspacesAsAdmin is called with 5000 as the top which retrieves 5000 workspaces in each call.
-                // Loop will terminate when the workspaces retrieved are less than 5000.
-                do
+                var allWorkspaces = this.ExecuteCmdletWithAll(GetWorkspaces);
+
+                if (!string.IsNullOrEmpty(this.User))
                 {
-                    var result = client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip);
-                    allWorkspaces.AddRange(result);
-                    count = result.Count();
-                    skip += top;
-                } while (count == top);
-            }
+                    allWorkspaces = allWorkspaces
+                        .Where(w => w.Users.Any(u => u.UserPrincipalName != null && u.UserPrincipalName.Equals(this.User, StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+                }
 
-            if (!string.IsNullOrEmpty(this.User))
-            {
-                allWorkspaces = allWorkspaces
-                    .Where(w => w.Users.Any(u => u.UserPrincipalName != null && u.UserPrincipalName.Equals(this.User, StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
+                this.Logger.WriteObject(allWorkspaces, true);
             }
-
-            this.Logger.WriteObject(allWorkspaces, true);
         }
     }
 }
