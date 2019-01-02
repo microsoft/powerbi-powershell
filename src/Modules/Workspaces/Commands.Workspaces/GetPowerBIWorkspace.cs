@@ -25,7 +25,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string IdParameterSetName = "Id";
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
-        private const string AllParameterSetName = "All";
+        private const string AllParameterSetName = "WithAll";
 
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
@@ -81,6 +81,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
+
+            if (this.First > 5000)
+            {
+                this.Logger.ThrowTerminatingError($"{nameof(this.First)} cannot be greater than 5000.");
+            }
 
             if (this.All.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
             {
@@ -155,8 +160,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             {
                 var top = 5000;
                 var skip = 0;
-                var workspacesCountBeforeApiCall = 0L;
-                var workspacesCountAfterApiCall = 0L;
+                var count = 0L;
 
                 // GetWorkspacesAsAdmin is called with 5000 as the top which retrieves 5000 workspaces in each call.
                 // Loop will terminate when the workspaces retrieved are less than 5000.
@@ -164,11 +168,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 {
                     var result = client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip);
                     allWorkspaces.AddRange(result);
-                    workspacesCountBeforeApiCall = workspacesCountAfterApiCall;
-                    workspacesCountAfterApiCall = allWorkspaces.Count;
+                    count = result.Count();
                     skip += top;
-                } while ((workspacesCountAfterApiCall - workspacesCountBeforeApiCall) == top);
+                } while (count == top);
             }
+
             if (!string.IsNullOrEmpty(this.User))
             {
                 allWorkspaces = allWorkspaces
