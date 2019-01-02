@@ -561,7 +561,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var name = "Test";
             var filter = $"tolower(name) eq '{name.ToLower()}'";
-            var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
+            var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = name } };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, It.IsAny<int>(), It.IsAny<int>())).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
@@ -572,6 +572,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 All = true,
                 ParameterSet = "Name"
             };
+
             // Act
             cmdlet.InvokePowerBICmdlet();
 
