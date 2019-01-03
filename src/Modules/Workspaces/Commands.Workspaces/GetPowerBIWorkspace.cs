@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
     [Alias("Get-PowerBIGroup")]
     [OutputType(typeof(IEnumerable<Workspace>))]
-    public class GetPowerBIWorkspace : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserId, IUserFirstSkip
+    public class GetPowerBIWorkspace : GetCmdlet, IUserScope, IUserFilter, IUserId, IUserFirstSkip
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Get;
@@ -25,7 +25,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string IdParameterSetName = "Id";
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
-        private const string AllParameterSetName = "WithAll";
 
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
         private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
@@ -67,7 +66,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
-        public SwitchParameter All { get; set; }
+        public new SwitchParameter All { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]
