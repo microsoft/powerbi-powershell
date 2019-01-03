@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
-                        { nameof(GetPowerBIWorkspace.All), new SwitchParameter(true) }
+                        { nameof(GetPowerBIWorkspace.All), true }
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
                     .AddParameters(parameters);
@@ -100,7 +100,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
-                        { nameof(GetPowerBIWorkspace.All), new SwitchParameter(true) },
+                        { nameof(GetPowerBIWorkspace.All), true },
                         { nameof(GetPowerBIWorkspace.User), userEmailAddress }
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
@@ -370,7 +370,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
-                        { nameof(GetPowerBIWorkspace.Deleted), new SwitchParameter(true) }
+                        { nameof(GetPowerBIWorkspace.Deleted), true }
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
@@ -614,7 +614,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Organization,
-                Deleted = new SwitchParameter(true),
+                Deleted = true,
             };
 
             // Act
@@ -636,7 +636,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Organization,
-                Orphaned = new SwitchParameter(true),
+                Orphaned = true,
             };
 
             // Act
@@ -769,7 +769,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Individual,
-                Deleted = new SwitchParameter(true),
+                Deleted = true,
             };
 
             // Act
@@ -788,7 +788,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Individual,
-                Orphaned = new SwitchParameter(true),
+                Orphaned = true,
             };
 
             // Act
