@@ -10,13 +10,13 @@ using System.Management.Automation;
 
 namespace Microsoft.PowerBI.Common.Client
 {
-    public abstract class GetCmdlet : PowerBIClientCmdlet
+    public abstract class PowerBIGetCmdlet : PowerBIClientCmdlet
     {
         protected const string AllParameterSetName = "WithAll";
 
-        public GetCmdlet(): base() { }
+        public PowerBIGetCmdlet(): base() { }
 
-        public GetCmdlet(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public PowerBIGetCmdlet(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
         public virtual SwitchParameter All { get; set; }

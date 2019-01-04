@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
     [Alias("Get-PowerBIGroup")]
     [OutputType(typeof(IEnumerable<Workspace>))]
-    public class GetPowerBIWorkspace : GetCmdlet, IUserScope, IUserFilter, IUserId, IUserFirstSkip
+    public class GetPowerBIWorkspace : PowerBIGetCmdlet, IUserScope, IUserFilter, IUserId, IUserFirstSkip
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.Get;
@@ -156,10 +156,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             using (var client = this.CreateClient())
             {
-                Func<int, int, IEnumerable<Workspace>> GetWorkspaces =
-                    (top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip);
-
-                var allWorkspaces = this.ExecuteCmdletWithAll(GetWorkspaces);
+                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip));
 
                 if (!string.IsNullOrEmpty(this.User))
                 {
