@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -14,7 +19,7 @@ namespace Microsoft.PowerBI.Common.Client
         public GetCmdlet(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
-        protected SwitchParameter All { get; set; }
+        public virtual SwitchParameter All { get; set; }
 
         protected List<T> ExecuteCmdletWithAll<T>(Func<int, int, IEnumerable<T>> GetData)
         {

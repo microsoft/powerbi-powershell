@@ -66,7 +66,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
-        public new SwitchParameter All { get; set; }
+        public override SwitchParameter All { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]

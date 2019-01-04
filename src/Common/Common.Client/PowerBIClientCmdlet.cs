@@ -3,9 +3,6 @@
  * Licensed under the MIT License.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Api;
 
