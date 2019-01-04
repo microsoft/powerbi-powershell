@@ -20,12 +20,18 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 
 ### Id
 ```
-Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
+```
+
+### WithAll
+```
+Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
+ [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,12 +56,39 @@ Returns a workspace named 'Contoso Sales' (case insensitive with tolower) within
 
 ## PARAMETERS
 
+### -All
+Indicates to show all the workspaces. Only supported when -Scope Organization is specified. -First and -Skip cannot be used with this parameter.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Id, Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: WithAll
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Deleted
 Indicates to show only deleted workspaces. Only supported when -Scope Organization is specified.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: List, WithAll
 Aliases:
 
 Required: False
@@ -70,7 +103,7 @@ OData filter, case-sensitive (element names start lowercase).
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, WithAll
 Aliases:
 
 Required: False
@@ -81,7 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### -First
-First (top) list of results.
+First (top) list of results. This value defaults to 5000.
 
 ```yaml
 Type: Int32
@@ -90,7 +123,7 @@ Aliases: Top
 
 Required: False
 Position: Named
-Default value: None
+Default value: 5000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -130,7 +163,7 @@ Indicates to show only orphaned workspaces. Only supported when -Scope Organizat
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: List, WithAll
 Aliases:
 
 Required: False
@@ -176,7 +209,7 @@ Filter workspaces to show ones which the user is contained within. Only availabl
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, WithAll
 Aliases:
 
 Required: False
