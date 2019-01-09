@@ -4,8 +4,8 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -48,7 +48,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
         public string Filter { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
@@ -64,8 +63,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public SwitchParameter Orphaned { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
         public override SwitchParameter All { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
@@ -111,6 +108,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 return;
             }
 
+            if (this.All.IsPresent && this.Scope == PowerBIUserScope.Organization)
+            {
+                this.ExecuteCmdletWithAll();
+                return;
+            }
+
             if (this.Deleted.IsPresent)
             {
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? DeletedFilterString : $"({this.Filter}) and ({DeletedFilterString})";
@@ -129,12 +132,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             if (this.ParameterSet.Equals(NameParameterSetName))
             {
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
-            }
-
-            if (this.All.IsPresent && this.Scope == PowerBIUserScope.Organization)
-            {
-                this.ExecuteCmdletWithAll();
-                return;
             }
 
             if (!string.IsNullOrEmpty(this.User) && this.Scope == PowerBIUserScope.Organization)
@@ -156,7 +153,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             using (var client = this.CreateClient())
             {
-                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip));
+                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: null, top: top, skip: skip));
+                var filteredWorkspaces = new List<Workspace>();
 
                 if (!string.IsNullOrEmpty(this.User))
                 {
@@ -165,8 +163,34 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                         .ToList();
                 }
 
-                this.Logger.WriteObject(allWorkspaces, true);
+                if (this.Deleted.IsPresent)
+                {
+                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.State.Equals(WorkspaceState.Deleted)));
+                }
+
+                if (this.Orphaned.IsPresent)
+                {
+                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => this.IsOrphanWorkspace(w)));
+                }
+                
+                if(!this.Deleted.IsPresent && !this.Orphaned.IsPresent)
+                {
+                    this.Logger.WriteObject(allWorkspaces, true);
+                    return;
+                }
+
+                this.Logger.WriteObject(filteredWorkspaces, true);
             }
+        }
+
+        private bool IsOrphanWorkspace(Workspace w)
+        {
+            if (w.State.Equals(WorkspaceState.Deleted))
+            {
+                return false;
+            }
+
+            return (w.Users == null || w.Users.Count() == 0) || (!w.Users.Any(u => u.AccessRight.Equals(WorkspaceUserAccessRight.Admin.ToString())));
         }
     }
 }
