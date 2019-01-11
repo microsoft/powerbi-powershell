@@ -48,6 +48,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
         public string Filter { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
@@ -153,27 +154,32 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             using (var client = this.CreateClient())
             {
-                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: null, top: top, skip: skip));
+                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip));
                 var filteredWorkspaces = new List<Workspace>();
 
                 if (!string.IsNullOrEmpty(this.User))
                 {
                     allWorkspaces = allWorkspaces
-                        .Where(w => w.Users.Any(u => u.UserPrincipalName != null && u.UserPrincipalName.Equals(this.User, StringComparison.OrdinalIgnoreCase)))
+                        .Where(w => w.Users != null && w.Users.Any(u => u.UserPrincipalName != null && u.UserPrincipalName.Equals(this.User, StringComparison.OrdinalIgnoreCase)))
                         .ToList();
                 }
 
-                if (this.Deleted.IsPresent)
+                if (this.Deleted.IsPresent && this.Orphaned.IsPresent)
+                {
+                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.State.Equals(WorkspaceState.Deleted) && w.Type.Equals(WorkspaceType.Workspace)));
+                }
+
+                else if (this.Deleted.IsPresent)
                 {
                     filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.State.Equals(WorkspaceState.Deleted)));
                 }
 
-                if (this.Orphaned.IsPresent)
+                else if (this.Orphaned.IsPresent)
                 {
-                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => this.IsOrphanWorkspace(w)));
+                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.IsOrphanedWorkspace()));
                 }
-                
-                if(!this.Deleted.IsPresent && !this.Orphaned.IsPresent)
+
+                else
                 {
                     this.Logger.WriteObject(allWorkspaces, true);
                     return;
@@ -181,16 +187,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
                 this.Logger.WriteObject(filteredWorkspaces, true);
             }
-        }
-
-        private bool IsOrphanWorkspace(Workspace w)
-        {
-            if (w.State.Equals(WorkspaceState.Deleted))
-            {
-                return false;
-            }
-
-            return (w.Users == null || w.Users.Count() == 0) || (!w.Users.Any(u => u.AccessRight.Equals(WorkspaceUserAccessRight.Admin.ToString())));
         }
     }
 }

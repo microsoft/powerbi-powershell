@@ -61,5 +61,15 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                 Users = workspace.Users?.Select(x => (GroupUserAccessRight)x).ToList()
             };
         }
+
+        public bool IsOrphanedWorkspace()
+        {
+            if (this.Type.Equals("Group") || this.Type.Equals("PersonalGroup"))
+            {
+                return false;
+            }
+
+            return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals("Admin")));
+        }
     }
 }

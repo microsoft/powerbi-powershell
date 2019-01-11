@@ -30,8 +30,8 @@ Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParamete
 
 ### All
 ```
-Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-User <String>] [-Deleted] [-Orphaned] [-All]
- [<CommonParameters>]
+Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
+ [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,7 +57,7 @@ Returns a workspace named 'Contoso Sales' (case insensitive with tolower) within
 ## PARAMETERS
 
 ### -All
-Indicates to show all the workspaces. Only supported when -Scope Organization is specified. -First, -Skip and -Filter cannot be used with this parameter.
+Indicates to show all the workspaces. Only supported when -Scope Organization is specified. -First and -Skip cannot be used with this parameter.
 
 ```yaml
 Type: SwitchParameter
@@ -91,7 +91,7 @@ OData filter, case-sensitive (element names start lowercase).
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False
