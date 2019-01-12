@@ -4,8 +4,8 @@
  */
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -27,7 +27,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string ListParameterSetName = "List";
 
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
-        private const string OrphanedFilterString = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
+        private string OrphanedFilterString = string.Format("(state ne '{0}') and ((not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin')))", WorkspaceState.Deleted);
 
         private string DeletedFilterString = string.Format("state eq '{0}'", WorkspaceState.Deleted);
 
@@ -68,7 +68,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]
-        public int? First { get; set; } = 5000;
+        public int? First { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public int? Skip { get; set; }
@@ -92,6 +92,11 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             if (!string.IsNullOrEmpty(this.User) && this.Scope.Equals(PowerBIUserScope.Individual))
             {
                 this.Logger.ThrowTerminatingError($"{nameof(this.User)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+            }
+
+            if (this.Deleted.IsPresent && this.Orphaned.IsPresent)
+            {
+                this.Logger.ThrowTerminatingError($"{nameof(this.Deleted)} & {nameof(this.Orphaned)} cannot be used together.");
             }
         }
 
@@ -141,11 +146,29 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Filter = string.IsNullOrEmpty(this.Filter) ? userFilter : $"({this.Filter}) and ({userFilter})";
             }
 
+            this.GetWorkspaces();
+        }
+
+        private void GetWorkspaces()
+        {
             using (var client = this.CreateClient())
             {
+                bool defaultingFirst = false;
+                if (this.First == default)
+                {
+                    this.First = 100;
+                    defaultingFirst = true;
+                }
+
                 var workspaces = this.Scope == PowerBIUserScope.Individual ?
                     client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) :
                     client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
+
+                if (defaultingFirst && workspaces.Count() == 100)
+                {
+                    this.Logger.WriteWarning("Defaulting to return only the top 100 workspaces. Use -First & -Skip (or) -All to view more.");
+                }
+
                 this.Logger.WriteObject(workspaces, true);
             }
         }
@@ -164,21 +187,14 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                         .ToList();
                 }
 
-                if (this.Deleted.IsPresent && this.Orphaned.IsPresent)
-                {
-                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.State.Equals(WorkspaceState.Deleted) && w.Type.Equals(WorkspaceType.Workspace)));
-                }
-
-                else if (this.Deleted.IsPresent)
+                if (this.Deleted.IsPresent)
                 {
                     filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.State.Equals(WorkspaceState.Deleted)));
                 }
-
                 else if (this.Orphaned.IsPresent)
                 {
-                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.IsOrphanedWorkspace()));
+                    filteredWorkspaces.AddRange(allWorkspaces.Where(w => w.IsOrphaned));
                 }
-
                 else
                 {
                     this.Logger.WriteObject(allWorkspaces, true);

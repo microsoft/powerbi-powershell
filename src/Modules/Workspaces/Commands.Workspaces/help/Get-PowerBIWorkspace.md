@@ -102,7 +102,7 @@ Accept wildcard characters: False
 ```
 
 ### -First
-First (top) list of results. This value defaults to 5000.
+First (top) list of results. This value defaults to 100.
 
 ```yaml
 Type: Int32

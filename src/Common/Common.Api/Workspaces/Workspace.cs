@@ -28,6 +28,19 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         public string State { get; set; }
 
+        public bool IsOrphaned
+        {
+            get
+            {
+                if (this.State == null || this.State.Equals("Deleted") || this.Type.Equals("Group") || this.Type.Equals("PersonalGroup"))
+                {
+                    return false;
+                }
+
+                return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals("Admin")));
+            }
+        }
+
         public IEnumerable<WorkspaceUser> Users { get; set; }
 
         public static implicit operator Workspace(Group group)
@@ -60,16 +73,6 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                 State = workspace.State,
                 Users = workspace.Users?.Select(x => (GroupUserAccessRight)x).ToList()
             };
-        }
-
-        public bool IsOrphanedWorkspace()
-        {
-            if (this.Type.Equals("Group") || this.Type.Equals("PersonalGroup"))
-            {
-                return false;
-            }
-
-            return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals("Admin")));
         }
     }
 }

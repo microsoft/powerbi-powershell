@@ -44,6 +44,10 @@
                 <ScriptBlock>$_.IsReadOnly</ScriptBlock>
               </ListItem>
               <ListItem>
+                <Label>IsOrphaned</Label>
+                <ScriptBlock>$_.IsOrphaned</ScriptBlock>
+              </ListItem>
+              <ListItem>
                 <Label>IsOnDedicatedCapacity</Label>
                 <ScriptBlock>$_.IsOnDedicatedCapacity</ScriptBlock>
               </ListItem>
