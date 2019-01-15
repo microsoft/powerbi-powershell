@@ -27,9 +27,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         private const string ListParameterSetName = "List";
 
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
-        private string OrphanedFilterString = string.Format("(state ne '{0}') and ((not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin')))", WorkspaceState.Deleted);
+        private string OrphanedFilterString = $"(state ne '{WorkspaceState.Deleted}') and ((not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin')))";
 
-        private string DeletedFilterString = string.Format("state eq '{0}'", WorkspaceState.Deleted);
+        private string DeletedFilterString = $"state eq '{WorkspaceState.Deleted}'";
 
         public GetPowerBIWorkspace() : base() { }
 

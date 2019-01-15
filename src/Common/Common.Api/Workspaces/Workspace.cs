@@ -32,12 +32,12 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             get
             {
-                if (this.State == null || this.State.Equals("Deleted") || this.Type.Equals("Group") || this.Type.Equals("PersonalGroup"))
+                if (this.State == null || this.State.Equals(WorkspaceState.Deleted) || this.Type.Equals(WorkspaceType.Group) || this.Type.Equals(WorkspaceType.PersonalGroup))
                 {
                     return false;
                 }
 
-                return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals("Admin")));
+                return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals(WorkspaceUserAccessRight.Admin.ToString())));
             }
         }
 

@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-namespace Microsoft.PowerBI.Commands.Workspaces
+namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
     public static class WorkspaceState
     {
