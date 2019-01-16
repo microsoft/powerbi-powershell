@@ -28,6 +28,19 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         public string State { get; set; }
 
+        public bool IsOrphaned
+        {
+            get
+            {
+                if (this.State == null || this.State.Equals(WorkspaceState.Deleted) || this.Type.Equals(WorkspaceType.Group) || this.Type.Equals(WorkspaceType.PersonalGroup))
+                {
+                    return false;
+                }
+
+                return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals(WorkspaceUserAccessRight.Admin.ToString())));
+            }
+        }
+
         public IEnumerable<WorkspaceUser> Users { get; set; }
 
         public static implicit operator Workspace(Group group)

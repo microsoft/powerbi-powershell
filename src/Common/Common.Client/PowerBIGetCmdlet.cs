@@ -12,7 +12,7 @@ namespace Microsoft.PowerBI.Common.Client
 {
     public abstract class PowerBIGetCmdlet : PowerBIClientCmdlet
     {
-        protected const string AllParameterSetName = "WithAll";
+        protected const string AllParameterSetName = "All";
 
         public PowerBIGetCmdlet(): base() { }
 

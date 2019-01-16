@@ -20,15 +20,15 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 
 ### Id
 ```
-Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
+Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [-All] [<CommonParameters>]
+Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
-### WithAll
+### All
 ```
 Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
  [-All] [<CommonParameters>]
@@ -61,19 +61,7 @@ Indicates to show all the workspaces. Only supported when -Scope Organization is
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Id, Name
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: WithAll
+Parameter Sets: All
 Aliases:
 
 Required: True
@@ -88,7 +76,7 @@ Indicates to show only deleted workspaces. Only supported when -Scope Organizati
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List, WithAll
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -103,7 +91,7 @@ OData filter, case-sensitive (element names start lowercase).
 
 ```yaml
 Type: String
-Parameter Sets: List, WithAll
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -114,7 +102,7 @@ Accept wildcard characters: False
 ```
 
 ### -First
-First (top) list of results. This value defaults to 5000.
+First (top) list of results. This value defaults to 100.
 
 ```yaml
 Type: Int32
@@ -163,7 +151,7 @@ Indicates to show only orphaned workspaces. Only supported when -Scope Organizat
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List, WithAll
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -209,7 +197,7 @@ Filter workspaces to show ones which the user is contained within. Only availabl
 
 ```yaml
 Type: String
-Parameter Sets: List, WithAll
+Parameter Sets: List, All
 Aliases:
 
 Required: False
