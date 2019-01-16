@@ -63,9 +63,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
         public SwitchParameter Orphaned { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = AllParameterSetName)]
-        public override SwitchParameter All { get; set; }
-
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Alias("Top")]
         public int? First { get; set; }
@@ -166,7 +163,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
                 if (defaultingFirst && workspaces.Count() == 100)
                 {
-                    this.Logger.WriteWarning("Defaulting to return only the top 100 workspaces. Use -First & -Skip (or) -All to view more.");
+                    this.Logger.WriteWarning("Defaulted to show top 100 workspaces. Use -First & -Skip or -All to retrieve more results.");
                 }
 
                 this.Logger.WriteObject(workspaces, true);
