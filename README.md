@@ -65,10 +65,16 @@ Connect-PowerBIServiceAccount   # or Login-PowerBIServiceAccount
 
 ### Get Workspaces
 
-Get all workspaces for the user:
+Get workspaces for the user. By default (without [-First](https://github.com/Microsoft/powerbi-powershell/blob/master/src/Modules/Workspaces/Commands.Workspaces/help/Get-PowerBIWorkspace.md#-first)) it returns the first 100 workspaces.:
 
 ```powershell
 Get-PowerBIWorkspace
+```
+
+Introduced [-All](https://github.com/Microsoft/powerbi-powershell/blob/master/src/Modules/Workspaces/Commands.Workspaces/help/Get-PowerBIWorkspace.md#-all) parameter to retrieve all the workspaces for the user.
+
+```powershell
+Get-PowerBIWorkspace -All
 ```
 
 ### Update Workspace

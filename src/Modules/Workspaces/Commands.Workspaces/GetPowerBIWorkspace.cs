@@ -81,11 +81,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 this.Logger.ThrowTerminatingError($"{nameof(this.First)} cannot be greater than 5000.");
             }
 
-            if (this.All.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
-            {
-                this.Logger.ThrowTerminatingError($"{nameof(this.All)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
-            }
-
             if (!string.IsNullOrEmpty(this.User) && this.Scope.Equals(PowerBIUserScope.Individual))
             {
                 this.Logger.ThrowTerminatingError($"{nameof(this.User)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
@@ -111,7 +106,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                 return;
             }
 
-            if (this.All.IsPresent && this.Scope == PowerBIUserScope.Organization)
+            if (this.All.IsPresent)
             {
                 this.ExecuteCmdletWithAll();
                 return;
@@ -174,7 +169,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             using (var client = this.CreateClient())
             {
+                if (this.Scope == PowerBIUserScope.Individual)
+                {
+                    var allWorkspacesOfUser = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspaces(filter: this.Filter, top: top, skip: skip));
+                    this.Logger.WriteObject(allWorkspacesOfUser, true);
+                    return;
+                }
+
                 var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip));
+
                 var filteredWorkspaces = new List<Workspace>();
 
                 if (!string.IsNullOrEmpty(this.User))
