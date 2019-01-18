@@ -36,6 +36,7 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 
 ## DESCRIPTION
 Retrieves a list of Power BI workspaces that match the specified search criteria and scope.
+By default (without -First parameter) it shows the first 100 workspaces assigned to the user. Use -First and -Skip to fetch more workspaces or use -All to return all workspaces.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
@@ -45,9 +46,16 @@ Before you run this command, make sure you log in using Connect-PowerBIServiceAc
 PS C:\> Get-PowerBIWorkspace
 ```
 
-Returns all Power BI workspaces the calling user is assigned to (-Scope Individual).
+Returns the first 100 Power BI workspaces the calling user is assigned to (-Scope Individual).
 
 ### Example 2
+```powershell
+PS C:\> Get-PowerBIWorkspace -All
+```
+
+Returns all Power BI workspaces the calling user is assigned to.
+
+### Example 3
 ```powershell
 PS C:\> Get-PowerBIWorkspace -Scope Organization -Filter "tolower(name) eq 'contoso sales'"
 ```
@@ -57,7 +65,7 @@ Returns a workspace named 'Contoso Sales' (case insensitive with tolower) within
 ## PARAMETERS
 
 ### -All
-Indicates to show all the workspaces. Only supported when -Scope Organization is specified. -First and -Skip cannot be used with this parameter.
+Indicates to show all the workspaces. -First and -Skip cannot be used with this parameter.
 
 ```yaml
 Type: SwitchParameter
@@ -111,7 +119,7 @@ Aliases: Top
 
 Required: False
 Position: Named
-Default value: 5000
+Default value: 100
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
