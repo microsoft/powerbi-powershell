@@ -36,8 +36,7 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 
 ## DESCRIPTION
 Retrieves a list of Power BI workspaces that match the specified search criteria and scope.
-By default (without [-First](https://github.com/Microsoft/powerbi-powershell/blob/master/src/Modules/Workspaces/Commands.Workspaces/help/Get-PowerBIWorkspace.md#-first)) it returns the first 100 workspaces.
-Introduced [-All](https://github.com/Microsoft/powerbi-powershell/blob/master/src/Modules/Workspaces/Commands.Workspaces/help/Get-PowerBIWorkspace.md#-all) parameter to retrieve all the workspaces for the user.
+By default (without -First parameter) it shows the first 100 workspaces assigned to the user. Use -First and -Skip to fetch more workspaces or use -All to return all workspaces.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
