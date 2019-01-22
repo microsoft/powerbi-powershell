@@ -57,24 +57,32 @@ Get-Module MicrosoftPowerBIMgmt* -ListAvailable | Uninstall-Module -Force
 > * Individual is used to access entities that belong to the current user.
 > * Organization is used to access entities across the entire company. Only Power BI tenant admins are allowed to use.
 
+If the `-Scope` parameter doesn't exist on the cmdlet, the entity doesn't support an Administrative API.
+
 ### Log in to Power BI
 
 ```powershell
-Connect-PowerBIServiceAccount   # or Login-PowerBIServiceAccount
+Connect-PowerBIServiceAccount   # or use aliases: Login-PowerBIServiceAccount, Login-PowerBI
 ```
 
 ### Get Workspaces
 
-Get workspaces for the user. By default (without -First parameter) it shows the first 100 workspaces assigned to the user.:
+Get workspaces for the user. By default (without `-First` parameter) it shows the first 100 workspaces assigned to the user:
 
 ```powershell
 Get-PowerBIWorkspace
 ```
 
-Introduced -All parameter to show all workspaces assigned to the user.
+With the `-All` parameter, all workspaces assigned to the user will be shown:
 
 ```powershell
 Get-PowerBIWorkspace -All
+```
+
+If you are a tenant administrator, you can view all workspaces in your tenant by adding `-Scope Organization`:
+
+```powershell
+Get-PowerBIWorkspace -Scope Organization -All
 ```
 
 ### Update Workspace
@@ -103,10 +111,30 @@ Remove-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035
 
 ### Restore Workspace
 
+To view deleted workspaces as a tenant administrator:
+
+```powershell
+Get-PowerBIWorkspace -Scope Organization -Deleted -All
+```
+
 Restores a deleted workspace:
 
 ```powershell
 Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -AdminEmailAddress "john@contoso.com"
+```
+
+### Repair orphaned workspaces
+
+Workspaces can become orphaned when no administrators are assigned to the workspace, to view you must be a tenant administrator:
+
+```powershell
+Get-PowerBIWorkspace -Scope Organization -Orphaned -All
+```
+
+To correct this issue, use:
+
+```powershell
+Add-PowerBIWorkspaceUser -Scope Organization -Id f2a0fae5-1c37-4ee6-97da-c9d31851fe17 -UserPrincipalName 'john@contoso.com' -AccessRight Admin
 ```
 
 ### Get Reports
@@ -117,9 +145,121 @@ Get all reports for the user:
 Get-PowerBIReport
 ```
 
+If you are a tenant administrator, you can view all reports in your tenant by using assigning `-Scope Organization`:
+
+```powershell
+Get-PowerBIReport -Scope Organization
+```
+
+### Get Dashboards
+
+Get dashboards for the user:
+
+```powershell
+Get-PowerBIDashboard
+```
+
+If you are a tenant administrator, you can view all dashboards in your tenant by adding `-Scope Organization`:
+
+```powershell
+Get-PowerBIDashboard -Scope Organization
+```
+
+### Get Tiles
+
+Get tiles within a dashboard:
+
+```powershell
+Get-PowerBITile -DashboardId 9a58d5e5-61bc-447c-86c4-e221128b1c99
+```
+
+### Get Imports
+
+Get Power BI imports:
+
+```powershell
+Get-PowerBIImport
+```
+
+### Create Report
+
+Create a report in Power BI by uploading a *.pbix file:
+
+```powershell
+New-PowerBIReport -Path .\newReport.pbix -Name 'New Report'
+```
+
+By default, the report is placed in the user's My Workspace. To place in a different workspace, use the `-WorkspaceId` or `-Workspace` parameters:
+
+```powershell
+New-PowerBIReport -Path .\newReport.pbix -Name 'New Report' -WorkspaceId f95755a1-950c-46bd-a912-5aab4012a06d
+```
+
+### Export Report
+
+Export a Power BI report to *.pbix file:
+
+```powershell
+Export-PowerBIReport -Id b48c088c-6f4e-4b7a-b015-d844ab534b2a -OutFile .\exportedReport.pbix
+```
+
+If the workspace exists outside the My Workspace, export with the `WorkspaceId` or `-Workspace` parameter:
+
+```powershell
+Export-PowerBIReport -Id b48c088c-6f4e-4b7a-b015-d844ab534b2a -OutFile .\exportedReport.pbix -WorkspaceId 3bdd9735-0ab5-4f21-bd5d-87e7f1d7fb84
+```
+
+### Get Datasets
+
+Get Power BI datasets:
+
+```powershell
+Get-PowerBIDataset
+```
+
+### Get Datasources
+
+Get Power BI datasources for a dataset:
+
+```powershell
+Get-PowerBIDatasource -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
+```
+
+### Get Tables
+
+Get Power BI tables contained within a dataset:
+
+```powershell
+Get-PowerBITable -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
+```
+
+### Call the Power BI Rest API
+
+As the cmdlets haven't been built to handle all the scenarios the [Power BI API](https://docs.microsoft.com/en-us/rest/api/power-bi/) supports, you can reuse the authenticated session from `Connect-PowerBIServiceAccount` to make custom REST requests:
+
+```powershell
+Invoke-PowerBIRestMethod -Url 'reports/4eb4c303-d5ac-4a2d-bf1e-39b35075d983/Clone' -Method Post -Body ([pscustomobject]@{name='Cloned report'; targetModelId='adf823b5-a0de-4b9f-bcce-b17d774d2961'; targetWorkspaceId='45ee15a7-0e8e-45b0-8111-ea304ada8d7d'} | ConvertTo-Json -Depth 2 -Compress)
+```
+
+If you want to use the authenticated session outside of PowerShell, get the access token by using:
+
+```powershell
+Get-PowerBIAccessToken -AsString
+```
+
+### Troubleshooting Errors
+
+To get more information about an error returned back from the cmdlets, use:
+
+```powershell
+Resolve-PowerBIError -Last
+```
+
+This information can be useful for opening support tickets for Power BI.
+
 ## Issues and Feedback
 
-If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for Power BI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues).
+If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for Power BI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues). If the issue is an error returned from the cmdlets, add detail from `Resolve-PowerBIError` to the issue.
 
 If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [Power BI Community](http://community.powerbi.com/) or the official [Power BI Support](https://powerbi.microsoft.com/en-us/support/) site.
 
