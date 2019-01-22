@@ -51,6 +51,114 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesAllAndOrganizationScope()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.All), true }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you have workspaces in your organization.");
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesAllAndIndividualScope()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) and login as a user.
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Individual },
+                        { nameof(GetPowerBIWorkspace.All), true }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify the user has workspaces.");
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesAllAndOrganizationScopeAndUser()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) with the given user and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
+                var userEmailAddress = workspace.Users.FirstOrDefault().UserPrincipalName;
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.All), true },
+                        { nameof(GetPowerBIWorkspace.User), userEmailAddress }
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you have workspaces with the specified user in your organization.");
+                }
+
+                Assert.IsNotNull(results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(w => w.Id == workspace.Id));
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetWorkspacesIndividualScope()
         {
             /*
@@ -296,7 +404,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>()
                     {
                         { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
-                        { nameof(GetPowerBIWorkspace.Deleted), new SwitchParameter(true) }
+                        { nameof(GetPowerBIWorkspace.Deleted), true }
                     };
                 ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
 
@@ -340,7 +448,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
@@ -351,6 +459,256 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
+            AssertExpectedUnitTestResults(expectedWorkspaces, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllDeleted()
+        {
+            // Arrange
+            var expectedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestDeletedWorkspace", State = WorkspaceState.Deleted };
+            var allWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", State = WorkspaceState.Active }, expectedWorkspace};
+            
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                Deleted = true
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { expectedWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllOrphaned()
+        {
+            // Arrange
+            var deletedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestDeletedWorkspace", State = WorkspaceState.Deleted };
+            var user1 = new WorkspaceUser { UserPrincipalName = "randomUser1@pbi.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
+            var user2 = new WorkspaceUser { UserPrincipalName = "randomUser2@pbi.com", AccessRight = WorkspaceUserAccessRight.Contributor.ToString() };
+            var orphanedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestOrphanedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user1, user2 } };
+            var user = new WorkspaceUser { UserPrincipalName = "randomUser@pbi.com", AccessRight = WorkspaceUserAccessRight.Admin.ToString() };
+            var normalWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } };
+
+            var allWorkspaces = new List<Workspace> { normalWorkspace, orphanedWorkspace, deletedWorkspace };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                Orphaned = true
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { orphanedWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllOrphanedWithNullUsers()
+        {
+            // Arrange
+            var expectedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestOrphanedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active };
+            var user = new WorkspaceUser { UserPrincipalName = "randomUser@pbi.com", AccessRight = WorkspaceUserAccessRight.Admin.ToString() };
+            var allWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } }, expectedWorkspace };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                Orphaned = true
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { expectedWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllOrphanedWithEmptyUsers()
+        {
+            // Arrange
+            var expectedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestOrphanedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser>() };
+            var user = new WorkspaceUser { UserPrincipalName = "randomUser@pbi.com", AccessRight = WorkspaceUserAccessRight.Admin.ToString() };
+            var allWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } }, expectedWorkspace };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                Orphaned = true
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { expectedWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllOrphanedWithNonAdminUsers()
+        {
+            // Arrange
+            var user1 = new WorkspaceUser { UserPrincipalName = "randomUser1@pbi.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
+            var user2 = new WorkspaceUser { UserPrincipalName = "randomUser2@pbi.com", AccessRight = WorkspaceUserAccessRight.Contributor.ToString() };
+            var expectedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestOrphanedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user1, user2 } };
+
+            var user = new WorkspaceUser { UserPrincipalName = "randomUser@pbi.com", AccessRight = WorkspaceUserAccessRight.Admin.ToString() };
+            var allWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } }, expectedWorkspace };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                Orphaned = true
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { expectedWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllAndUser()
+        {
+            // Arrange
+            var user = new WorkspaceUser { UserPrincipalName = "randomUser@pbi.com", AccessRight = WorkspaceUserAccessRight.Admin.ToString() };
+            var user1 = new WorkspaceUser { UserPrincipalName = "randomUser1@pbi.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
+            var user2 = new WorkspaceUser { UserPrincipalName = "randomUser2@pbi.com", AccessRight = WorkspaceUserAccessRight.Contributor.ToString() };
+            var orphanedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestOrphanedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user1, user2 } };
+            var deletedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestDeletedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Deleted };
+            var normalWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } };
+
+            var allWorkspaces = new List<Workspace> { normalWorkspace, deletedWorkspace, orphanedWorkspace };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                User = "randomUser@pbi.com",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { normalWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllOrphanedAndUser()
+        {
+            // Arrange
+            var user1 = new WorkspaceUser { UserPrincipalName = "randomUser1@pbi.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
+            var user2 = new WorkspaceUser { UserPrincipalName = "randomUser2@pbi.com", AccessRight = WorkspaceUserAccessRight.Contributor.ToString() };
+            var expectedOrphanedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestOrphanedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user1, user2 } };
+            var expectedDeletedWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestDeletedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Deleted };
+
+            var user = new WorkspaceUser { UserPrincipalName = "randomUser@pbi.com", AccessRight = WorkspaceUserAccessRight.Admin.ToString() };
+            var allWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } }, expectedDeletedWorkspace, expectedOrphanedWorkspace };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                User = "randomUser1@pbi.com",
+                Orphaned = true
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { expectedOrphanedWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllOrphanedWithGroup()
+        {
+            // Arrange
+            var user1 = new WorkspaceUser { UserPrincipalName = "randomUser1@pbi.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
+            var user2 = new WorkspaceUser { UserPrincipalName = "randomUser2@pbi.com", AccessRight = WorkspaceUserAccessRight.Contributor.ToString() };
+            var expectedOrphanedWorkspaceOne = new Workspace { Id = Guid.NewGuid(), Name = "TestOrphanedWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user1, user2 } };
+            var expectedOrphanedWorkspaceTwo = new Workspace { Id = Guid.NewGuid(), Name = "TestDeletedWorkspace", Type = WorkspaceType.Group, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user1 } };
+
+            var user = new WorkspaceUser { UserPrincipalName = "randomUser@pbi.com", AccessRight = WorkspaceUserAccessRight.Admin.ToString() };
+            var allWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } }, expectedOrphanedWorkspaceOne, expectedOrphanedWorkspaceTwo };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                Orphaned = true
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { expectedOrphanedWorkspaceOne }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllParameterLoopTest()
+        {
+            // Arrange
+            var expectedWorkspaces = new List<Workspace>();
+            for (int i=1; i<=10500; i++)
+            {
+                expectedWorkspaces.Add(new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace_" + i });
+            }
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", It.IsAny<string>(), 5000, 0)).Returns(expectedWorkspaces.Take(5000));
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", It.IsAny<string>(), 5000, 5000)).Returns(expectedWorkspaces.GetRange(5000, 5000));
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", It.IsAny<string>(), 5000, 10000)).Returns(expectedWorkspaces.Skip(10000));
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                All = true,
+                Scope = PowerBIUserScope.Organization,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            client.Verify(m => m.Workspaces.GetWorkspacesAsAdmin("users", It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()), Times.Exactly(3));
             AssertExpectedUnitTestResults(expectedWorkspaces, initFactory);
         }
 
@@ -388,7 +746,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var filter = $"id eq '{id}'";
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
@@ -402,16 +760,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Assert
             AssertExpectedUnitTestResults(expectedWorkspaces, initFactory);
         }
-
+       
         [TestMethod]
         public void GetWorkspacesOrganizationScopeSupportsName()
         {
             // Arrange
             var name = "Test";
             var filter = $"tolower(name) eq '{name.ToLower()}'";
-            var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
+            var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = name } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
@@ -419,6 +777,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Name = name,
                 ParameterSet = "Name",
             };
+
             // Act
             cmdlet.InvokePowerBICmdlet();
 
@@ -434,7 +793,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var filter = $"users/any(u: tolower(u/emailAddress) eq '{user.ToLower()}')";
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
@@ -455,12 +814,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var filter = string.Format("state eq '{0}'", WorkspaceState.Deleted);
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Organization,
-                Deleted = new SwitchParameter(true),
+                Deleted = true,
             };
 
             // Act
@@ -474,15 +833,15 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         public void GetWorkspacesOrganizationScopeSupportsOrphaned()
         {
             // Arrange
-            var filter = "(not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin'))";
+            var filter = $"(state ne '{WorkspaceState.Deleted}') and ((not users/any()) or (not users/any(u: u/groupUserAccessRight eq Microsoft.PowerBI.ServiceContracts.Api.GroupUserAccessRight'Admin')))";
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Organization,
-                Orphaned = new SwitchParameter(true),
+                Orphaned = true,
             };
 
             // Act
@@ -498,7 +857,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspaces(null, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspaces(null, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
@@ -546,7 +905,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var filter = $"id eq '{id}'";
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspaces(filter, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspaces(filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
@@ -569,7 +928,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var filter = $"tolower(name) eq '{name.ToLower()}'";
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspaces(filter, null, null)).Returns(expectedWorkspaces);
+            client.Setup(x => x.Workspaces.GetWorkspaces(filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
@@ -615,7 +974,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Individual,
-                Deleted = new SwitchParameter(true),
+                Deleted = true,
             };
 
             // Act
@@ -634,7 +993,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var cmdlet = new GetPowerBIWorkspace(initFactory)
             {
                 Scope = PowerBIUserScope.Individual,
-                Orphaned = new SwitchParameter(true),
+                Orphaned = true,
             };
 
             // Act

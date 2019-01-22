@@ -28,8 +28,15 @@ Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
+### All
+```
+Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
+ [-All] [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Retrieves a list of Power BI workspaces that match the specified search criteria and scope.
+By default (without -First parameter) it shows the first 100 workspaces assigned to the user. Use -First and -Skip to fetch more workspaces or use -All to return all workspaces.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
@@ -39,9 +46,16 @@ Before you run this command, make sure you log in using Connect-PowerBIServiceAc
 PS C:\> Get-PowerBIWorkspace
 ```
 
-Returns all Power BI workspaces the calling user is assigned to (-Scope Individual).
+Returns the first 100 Power BI workspaces the calling user is assigned to (-Scope Individual).
 
 ### Example 2
+```powershell
+PS C:\> Get-PowerBIWorkspace -All
+```
+
+Returns all Power BI workspaces the calling user is assigned to.
+
+### Example 3
 ```powershell
 PS C:\> Get-PowerBIWorkspace -Scope Organization -Filter "tolower(name) eq 'contoso sales'"
 ```
@@ -50,12 +64,27 @@ Returns a workspace named 'Contoso Sales' (case insensitive with tolower) within
 
 ## PARAMETERS
 
+### -All
+Indicates to show all the workspaces. -First and -Skip cannot be used with this parameter.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Deleted
 Indicates to show only deleted workspaces. Only supported when -Scope Organization is specified.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -70,7 +99,7 @@ OData filter, case-sensitive (element names start lowercase).
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -81,7 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -First
-First (top) list of results.
+First (top) list of results. This value defaults to 100.
 
 ```yaml
 Type: Int32
@@ -90,7 +119,7 @@ Aliases: Top
 
 Required: False
 Position: Named
-Default value: None
+Default value: 100
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -130,7 +159,7 @@ Indicates to show only orphaned workspaces. Only supported when -Scope Organizat
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False
@@ -176,7 +205,7 @@ Filter workspaces to show ones which the user is contained within. Only availabl
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: List, All
 Aliases:
 
 Required: False

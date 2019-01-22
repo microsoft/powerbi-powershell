@@ -36,76 +36,98 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         public static Workspace GetWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope, Guid id)
         {
-            var results = InvokeGetPowerBIWorkspace(ps, scope);
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Workspace)x.BaseObject);
-                return workspaces.First(x => x.Id == id);
-            }
-
-            return null;
+            return InvokeGetPowerBIWorkspace(ps, scope, OperationType.GetWorkspaceById, id);
         }
 
         public static Workspace GetFirstWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope)
         {
-            var results = InvokeGetPowerBIWorkspace(ps, scope);
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Workspace)x.BaseObject);
-                return workspaces.First();
-            }
-
-            return null;
+            return InvokeGetPowerBIWorkspace(ps, scope, OperationType.GetFirstWorkspace);
         }
 
         // TODO: Until the non-admin endpoint exposes type, this can only call the cmdlet with Organization scope
         public static Workspace GetFirstWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
         {
-            var results = InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization);
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Workspace)x.BaseObject);
-                return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace);
-            }
-
-            return null;
+            return InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization, OperationType.GetFirstWorkspaceInOrganization);
         }
 
         // TODO: Until the non-admin endpoint supports users, this can only call the cmdlet with Organization scope
         public static Workspace GetFirstWorkspaceWithUsersInOrganization(System.Management.Automation.PowerShell ps)
         {
-            var results = InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization);
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Workspace)x.BaseObject);
-                return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.Users.Any());
-            }
-
-            return null;
+            return InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization, OperationType.GetFirstWorkspaceWithAUserInOrganization);
         }
 
         public static Workspace GetFirstDeletedWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
         {
-            var results = InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization);
-            if (results.Any())
-            {
-                var workspaces = results.Select(x => (Workspace)x.BaseObject);
-                return workspaces.FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.State == WorkspaceState.Deleted);
-            }
+            return InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization, OperationType.GetFirstDeletedWorkspaceInOrganization);
+        }
 
+        private static Workspace InvokeGetPowerBIWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope, OperationType type, Guid? id = null)
+        {
+            var first = 5000;
+            var skip = 0;
+            while (true)
+            {
+                ps.Commands.Clear();
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), scope.ToString() },
+                        { nameof(GetPowerBIWorkspace.First), first },
+                        { nameof(GetPowerBIWorkspace.Skip), skip }
+                    };
+                ps.AddCommand(GetPowerBIWorkspaceCmdletInfo).AddParameters(parameters);
+                var results = ps.Invoke();
+                if (results.Any())
+                {
+                    var workspace = GetWorkspaceForOperationType(results, type, id);
+                    if (workspace != null)
+                    {
+                        ps.Commands.Clear();
+                        return workspace;
+                    }
+                }
+                if (results.Count < first)
+                {
+                    break;
+                }
+                skip += first;
+            }
+            
+            TestUtilities.AssertNoCmdletErrors(ps);
+            ps.Commands.Clear();
             return null;
         }
 
-        private static ICollection<PSObject> InvokeGetPowerBIWorkspace(System.Management.Automation.PowerShell ps, PowerBIUserScope scope)
+        private static Workspace GetWorkspaceForOperationType(ICollection<PSObject> results, OperationType type, Guid? id = null)
         {
-            ps.Commands.Clear();
-            ps.AddCommand(GetPowerBIWorkspaceCmdletInfo).AddParameter(nameof(GetPowerBIWorkspace.Scope), scope.ToString());
+            switch (type)
+            {
+                case OperationType.GetWorkspaceById:
+                    return results.Select(x => (Workspace)x.BaseObject).First(x => x.Id == id);
 
-            var results = ps.Invoke();
+                case OperationType.GetFirstWorkspace:
+                    return results.Select(x => (Workspace)x.BaseObject).First();
 
-            TestUtilities.AssertNoCmdletErrors(ps);
-            ps.Commands.Clear();
-            return results;
+                case OperationType.GetFirstWorkspaceInOrganization:
+                    return results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(x => x.Type == WorkspaceType.Workspace);
+
+                case OperationType.GetFirstWorkspaceWithAUserInOrganization:
+                    return results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.Users.Any());
+
+                case OperationType.GetFirstDeletedWorkspaceInOrganization:
+                    return results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(x => x.Type == WorkspaceType.Workspace && x.State == WorkspaceState.Deleted);
+
+                default:
+                    return null;
+            }
         }
+    }
+
+    enum OperationType
+    {
+        GetWorkspaceById,
+        GetFirstWorkspace,
+        GetFirstWorkspaceInOrganization,
+        GetFirstWorkspaceWithAUserInOrganization,
+        GetFirstDeletedWorkspaceInOrganization
     }
 }
