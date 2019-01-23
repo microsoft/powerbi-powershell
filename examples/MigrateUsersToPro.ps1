@@ -2,20 +2,14 @@
 .Synopsis
     Migrates users to Pro Power BI licenses.
 .Description
-    Migrates standard Power BI licensed users to Power BI Pro licenses.
-    If users witout standard licenses should be migrated, include the -MigrateNonStandardPowerBIUsers switch.
-    
+    Migrates standard\free Power BI licensed users to Power BI Pro licenses.
     This script uses the MSOnline PowerShell module. if this module isn't installed it will be installed into your the current user profile.
 .Parameter Path
     Path to CSV containing users (PUIDs) to migrate to Power BI Pro licenes.
 .Parameter PUIDColumnName
     Name of column in CSV that contains the PUID for the user to migrate. Default is 'Puid'.
-.Parameter LicenseTypeScan
-    License type for the standard user or if you want to only migrate users containing a certain license type. Ignore if -MigrateNonStandardPowerBIUsers is specified. Default is 'POWER_BI_STANDARD'.
 .Parameter ProLicenseName
     Name of Pro Power BI license. Default is 'POWER_BI_PRO'.
-.Parameter MigrateNonStandardPowerBIUsers
-    Indicates to migrate users without Power BI standard licenses. By default only standard Power BI users are migrated to Pro licenses.
 .Parameter NoResultFile
     Indicates to not write result files for the execution of the script. Result still shows in console output.
 .Example
@@ -33,12 +27,7 @@ param
     [string] $PUIDColumnName = 'Puid',
 
     [ValidateNotNullOrEmpty()]
-    [string] $LicenseTypeScan = 'POWER_BI_STANDARD',
-
-    [ValidateNotNullOrEmpty()]
     [string] $ProLicenseName = 'POWER_BI_PRO',
-
-    [switch] $MigrateNonStandardPowerBIUsers,
 
     [switch] $NoResultFile
 )
@@ -77,7 +66,7 @@ $skus = Get-MsolAccountSku
 $skus | Out-Host
 
 # Locate Pro Sku
-$proSku = $skus | where { $_.AccountSkuId.endswith($ProLicenseName) } | select -first 1
+$proSku = $skus | Where-Object { $_.AccountSkuId.endswith($ProLicenseName) } | Select-Object -first 1
 if(!$proSku) {
     throw "Failed to find Power BI Pro SKU"
 }
@@ -91,7 +80,7 @@ if($proSku.ActiveUnits -le $proSku.ConsumedUnits) {
 
 # Indicate some users can't be migrated due to lack of Pro licenses
 $availableProLicenses = $proSku.ActiveUnits - $proSku.ConsumedUnits
-Write-Host "Available pro licenses: $availableProLicenses"
+Write-Host "Number of available pro licenses: $availableProLicenses"
 if($availableProLicenses -lt $userPuids.Count) {
     Write-Warning "Not enough licenses to migrate all users"
 }
@@ -104,24 +93,24 @@ $userPuids | Out-Host
 $enabledUsers = Get-MsolUser -EnabledFilter EnabledOnly
 
 # Look up standard Users to migrate and pro users (already migrated)
-$standardUsers = $enabledUsers | where { $assignedSkus = (($_.LicenseAssignmentDetails).AccountSku).SkuPartNumber; $ProLicenseName -notin $assignedSkus }
-$proUsers = $enabledUsers | where { $assignedSkus = (($_.LicenseAssignmentDetails).AccountSku).SkuPartNumber; 'POWER_BI_PRO' -in $assignedSkus }
+$standardUsers = $enabledUsers | Where-Object { $assignedSkus = (($_.LicenseAssignmentDetails).AccountSku).SkuPartNumber; $ProLicenseName -notin $assignedSkus }
+$proUsers = $enabledUsers | Where-Object { $assignedSkus = (($_.LicenseAssignmentDetails).AccountSku).SkuPartNumber; $ProLicenseName -in $assignedSkus }
 
 $usersMigrated = @()
 $alreadyPro = @()
 $failedToMigrate = @()
 foreach($userPuid in $userPuids) {
-    $isPro = $proUsers | where LiveID -eq $userPuid | select -First 1
+    $isPro = $proUsers | Where-Object LiveID -eq $userPuid | Select-Object -First 1
     if($isPro) {
         Write-Warning "User with PUID '$userPuid' is already a PRO user"
         $alreadyPro += $isPro
         continue
     }
 
-    $isStandard = $standardUsers | where LiveID -eq $userPuid | select -First 1
-    if(!$MigrateNonStandardPowerBIUsers -and !$isStandard) {
+    $isStandard = $standardUsers | Where-Object LiveID -eq $userPuid | Select-Object -First 1
+    if(!$isStandard) {
         Write-Error "User with PUID '$userPuid' is not a standard user which is needed to migrate to pro"
-        $failedToMigrate += ($enabledUsers | where LiveId -eq $userPuid | select -First 1)
+        $failedToMigrate += ($enabledUsers | Where-Object LiveId -eq $userPuid | Select-Object -First 1)
         continue
     }
 
@@ -139,7 +128,7 @@ foreach($userPuid in $userPuids) {
 Write-Host "Finished migrating users to pro licenses"
 
 if($usersMigrated.Count -gt 0) {
-    Write-Host "Users migrated to pro, count: $($usersMigrated.Count)" -ForegroundColor Green
+    Write-Host "$($usersMigrated.Count) users were migrated to pro licenses" -ForegroundColor Green
     $usersMigrated | Out-Host
 
     if(!$NoResultFile) {
@@ -154,7 +143,7 @@ else {
 }
 
 if($alreadyPro.Count -gt 0) {
-    Write-Warning "Users already pro licenses, count: $($alreadyPro.Count)"
+    Write-Warning "$($alreadyPro.Count) users already had pro licenses"
     $alreadyPro | Out-Host
     
     if(!$NoResultFile) {
@@ -165,11 +154,11 @@ if($alreadyPro.Count -gt 0) {
     }
 }
 else {
-    Write-Host "Summary: No users that were previously pro" -ForegroundColor Green
+    Write-Host "Summary: No users found that already had pro licenses" -ForegroundColor Green
 }
 
 if($failedToMigrate.Count -gt 0) {
-    Write-Error "Users failed to migrate, count: $($failedToMigrate.Count)"
+    Write-Error "Failed to migrate $($failedToMigrate.Count) users to pro licenses"
     $failedToMigrate | Out-Host
 
     if(!$NoResultFile) {

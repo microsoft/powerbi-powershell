@@ -67,13 +67,13 @@ Connect-PowerBIServiceAccount   # or use aliases: Login-PowerBIServiceAccount, L
 
 ### Get Workspaces
 
-Get workspaces for the user. By default (without `-First` parameter) it shows the first 100 workspaces assigned to the user:
+Get workspaces for the user. By default (i.e. without `-First` parameter) it shows the first 100 workspaces assigned to the user:
 
 ```powershell
 Get-PowerBIWorkspace
 ```
 
-With the `-All` parameter, all workspaces assigned to the user will be shown:
+Use the `-All` parameter to show all workspaces assigned to the user:
 
 ```powershell
 Get-PowerBIWorkspace -All
@@ -123,9 +123,9 @@ Restores a deleted workspace:
 Restore-PowerBIWorkspace -Id "3244f1c1-01cf-457f-9383-6035e4950fdc" -RestoredName "TestWorkspace" -AdminEmailAddress "john@contoso.com"
 ```
 
-### Repair orphaned workspaces
+### Recover orphaned workspaces
 
-Workspaces can become orphaned when no administrators are assigned to the workspace, to view you must be a tenant administrator:
+A workspace becomes orphaned when it has no assigned administrators. If you are a tenant administrator, run the following to view all orphaned workspaces:
 
 ```powershell
 Get-PowerBIWorkspace -Scope Organization -Orphaned -All
@@ -183,7 +183,7 @@ Get-PowerBIImport
 
 ### Create Report
 
-Create a report in Power BI by uploading a *.pbix file:
+Create a report in Power BI by uploading a \*.pbix file:
 
 ```powershell
 New-PowerBIReport -Path .\newReport.pbix -Name 'New Report'
@@ -197,7 +197,7 @@ New-PowerBIReport -Path .\newReport.pbix -Name 'New Report' -WorkspaceId f95755a
 
 ### Export Report
 
-Export a Power BI report to *.pbix file:
+Export a Power BI report to \*.pbix file:
 
 ```powershell
 Export-PowerBIReport -Id b48c088c-6f4e-4b7a-b015-d844ab534b2a -OutFile .\exportedReport.pbix
@@ -235,7 +235,7 @@ Get-PowerBITable -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
 
 ### Call the Power BI Rest API
 
-As the cmdlets haven't been built to handle all the scenarios the [Power BI API](https://docs.microsoft.com/en-us/rest/api/power-bi/) supports, you can reuse the authenticated session from `Connect-PowerBIServiceAccount` to make custom REST requests:
+For [Power BI API](https://docs.microsoft.com/en-us/rest/api/power-bi/) that lacks corresponding cmdlets, you can reuse the authenticated session from `Connect-PowerBIServiceAccount` to make custom REST requests:
 
 ```powershell
 Invoke-PowerBIRestMethod -Url 'reports/4eb4c303-d5ac-4a2d-bf1e-39b35075d983/Clone' -Method Post -Body ([pscustomobject]@{name='Cloned report'; targetModelId='adf823b5-a0de-4b9f-bcce-b17d774d2961'; targetWorkspaceId='45ee15a7-0e8e-45b0-8111-ea304ada8d7d'} | ConvertTo-Json -Depth 2 -Compress)
