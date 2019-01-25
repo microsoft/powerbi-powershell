@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 15.0.26124.0
@@ -81,6 +81,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.Data", "Modules\Data\Commands.Data\Commands.Data.csproj", "{F591C74E-F4AD-4F12-ABC2-83780A6B4960}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.Data.Test", "Modules\Data\Commands.Data.Test\Commands.Data.Test.csproj", "{EE3CEC0A-2D69-438F-8883-3B2D420D4D4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{A44BA953-00A8-4883-9B2C-85B4DE722992}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.Admin", "Modules\Admin\Commands.Admin\Commands.Admin.csproj", "{45A20EF7-4A34-4646-A865-60EA6CF92097}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.Admin.Test", "Modules\Admin\Commands.Admin.Test\Commands.Admin.Test.csproj", "{63795307-8B48-4DC4-964E-CC7D37011EC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -284,6 +290,30 @@ Global
 		{EE3CEC0A-2D69-438F-8883-3B2D420D4D4F}.Release|x64.Build.0 = Release|Any CPU
 		{EE3CEC0A-2D69-438F-8883-3B2D420D4D4F}.Release|x86.ActiveCfg = Release|Any CPU
 		{EE3CEC0A-2D69-438F-8883-3B2D420D4D4F}.Release|x86.Build.0 = Release|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Debug|x64.Build.0 = Debug|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Debug|x86.Build.0 = Debug|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Release|x64.ActiveCfg = Release|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Release|x64.Build.0 = Release|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Release|x86.ActiveCfg = Release|Any CPU
+		{45A20EF7-4A34-4646-A865-60EA6CF92097}.Release|x86.Build.0 = Release|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Debug|x64.Build.0 = Debug|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Debug|x86.Build.0 = Debug|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Release|x64.ActiveCfg = Release|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Release|x64.Build.0 = Release|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Release|x86.ActiveCfg = Release|Any CPU
+		{63795307-8B48-4DC4-964E-CC7D37011EC3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -312,6 +342,9 @@ Global
 		{AAD21810-2E21-41C1-845A-802BFCE007C6} = {6E7F95B7-62EF-4D9F-A9CA-5A3F975AD509}
 		{F591C74E-F4AD-4F12-ABC2-83780A6B4960} = {AAD21810-2E21-41C1-845A-802BFCE007C6}
 		{EE3CEC0A-2D69-438F-8883-3B2D420D4D4F} = {AAD21810-2E21-41C1-845A-802BFCE007C6}
+		{A44BA953-00A8-4883-9B2C-85B4DE722992} = {6E7F95B7-62EF-4D9F-A9CA-5A3F975AD509}
+		{45A20EF7-4A34-4646-A865-60EA6CF92097} = {A44BA953-00A8-4883-9B2C-85B4DE722992}
+		{63795307-8B48-4DC4-964E-CC7D37011EC3} = {A44BA953-00A8-4883-9B2C-85B4DE722992}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1236038E-0111-422D-93F2-3AB891876F53}

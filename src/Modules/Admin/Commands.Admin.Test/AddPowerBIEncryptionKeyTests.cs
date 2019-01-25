@@ -1,0 +1,148 @@
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System;
+using System.Linq;
+using System.Management.Automation;
+using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Commands.Common.Test;
+using Microsoft.PowerBI.Commands.Profile.Test;
+using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace Microsoft.PowerBI.Commands.Admin.Test
+{
+    [TestClass]
+    public class AddPowerBIEncryptionKeyTests
+    {
+        private static CmdletInfo AddPowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{AddPowerBIEncryptionKey.CmdletVerb}-{AddPowerBIEncryptionKey.CmdletName}", typeof(AddPowerBIEncryptionKey));
+
+        private static string MockName = "KeyName";
+        private static string MockKeyVaultKeyUri = "KeyVaultUri";
+        private static bool MockDefault = true;
+        private static bool MockActivate = true;
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndAddPowerBIEncryptionKey()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ps.AddCommand(AddPowerBIEncryptionKeyCmdletInfo)
+                        .AddParameter(nameof(AddPowerBIEncryptionKey.Name), MockName)
+                        .AddParameter(nameof(AddPowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri)
+                        .AddParameter(nameof(AddPowerBIEncryptionKey.Default), MockDefault)
+                        .AddParameter(nameof(AddPowerBIEncryptionKey.Activate), MockActivate);
+
+                // Act
+                var result = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+            }
+        }
+
+        [TestMethod]
+        public void AddPowerBIEncryptionKey_WithAllValidParameters()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
+            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(encryptionKey);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIEncryptionKey(initFactory)
+            {
+                Name = MockName,
+                KeyVaultKeyUri = MockKeyVaultKeyUri,
+                Default = MockDefault,
+                Activate = MockActivate
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, MockDefault, MockActivate), Times.Once());
+        }
+
+        [TestMethod]
+        public void AddPowerBIEncryptionKey_WithDefaultAsFalse()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
+            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(encryptionKey);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIEncryptionKey(initFactory)
+            {
+                Name = MockName,
+                KeyVaultKeyUri = MockKeyVaultKeyUri,
+                Default = false,
+                Activate = MockActivate
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
+            Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw NotSupportedException");
+            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Default value False is not yet supported");
+        }
+
+        [TestMethod]
+        public void AddPowerBIEncryptionKey_WithActivateNotPresent()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
+            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(encryptionKey);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIEncryptionKey(initFactory)
+            {
+                Name = MockName,
+                KeyVaultKeyUri = MockKeyVaultKeyUri,
+                Default = MockDefault
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
+            Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw NotSupportedException");
+            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Activate value False is not yet supported");
+        }
+
+        [TestMethod]
+        public void AddPowerBIEncryptionKey_WithApiThrowingException()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Throws(new Exception("Some exception"));
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIEncryptionKey(initFactory)
+            {
+                Name = MockName,
+                KeyVaultKeyUri = MockKeyVaultKeyUri,
+                Default = MockDefault,
+                Activate = MockActivate
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
+            Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw Exception");
+            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Some exception");
+        }
+    }
+}
