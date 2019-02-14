@@ -85,7 +85,13 @@ function Get-VSBuildFolder
 
     $msbuildPath = Join-Path -Path $vsInstance.installationPath -ChildPath 'MSBuild\15.0\Bin\MSBuild.exe'
     if(!(Test-Path -Path $msbuildPath)) {
-        throw "Unable to find MSBuild: $msbuildPath"
+        $msbuildPath2 = Join-Path -Path $vsInstance.installationPath -ChildPath 'MSBuild\Current\Bin\MSBuild.exe'
+        if(Test-Path -Path $msbuildPath2) {
+            $msbuildPath = $msbuildPath2
+        }
+        else {
+            throw "Unable to find MSBuild at: `n`t$msbuildPath`n`t$msbuildPath2"
+        }
     }
 
     return $msbuildPath
