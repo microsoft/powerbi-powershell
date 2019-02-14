@@ -52,9 +52,11 @@ namespace Microsoft.PowerBI.Commands.Reports
                 {
                     if (reportStream != null)
                     {
+                        reportStream.Seek(0, SeekOrigin.Begin);
                         using (var fileStream = new FileStream(this.OutFile, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                         {
                             reportStream.CopyTo(fileStream);
+                            fileStream.Flush();
                         }
 
                         this.Logger.WriteVerbose($"OutFile '{this.OutFile}' created");
