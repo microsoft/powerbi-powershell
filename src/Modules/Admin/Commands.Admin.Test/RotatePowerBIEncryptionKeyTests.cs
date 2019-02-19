@@ -7,13 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
-using Microsoft.PowerBI.Common.Api.Admin;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -36,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.OneBox);
                 ps.AddCommand(RotatePowerBIEncryptionKeyCmdletInfo)
                         .AddParameter(nameof(RotatePowerBIEncryptionKey.Name), MockName)
                         .AddParameter(nameof(RotatePowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri);
@@ -53,15 +51,39 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         public void RotatePowerBIEncryptionKey_WithAllValidParameters()
         {
             // Arrange
-            var encryptionKey1 = new EncryptionKey(Guid.NewGuid(), "KeyName1", "KeyVaultUri1", true, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            var encryptionKey2 = new EncryptionKey(Guid.NewGuid(), "KeyName2", "KeyVaultUri2", false, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            var rotatedEncryptionKey = new EncryptionKey(encryptionKey1.Id, "KeyName1", "KeyVaultUri3", true, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            var encryptionKeys = new List<EncryptionKey>();
-            encryptionKeys.Add(encryptionKey1);
-            encryptionKeys.Add(encryptionKey2);
+            var tenantKey1 = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = "KeyName1",
+                KeyVaultKeyIdentifier = "KeyVaultUri1",
+                IsDefault = true,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            var tenantKey2 = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = "KeyName2",
+                KeyVaultKeyIdentifier = "KeyVaultUri2",
+                IsDefault = false,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            var rotatedTenantKey = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = "KeyName1",
+                KeyVaultKeyIdentifier = "KeyVaultUri3",
+                IsDefault = true,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            var tenantKeys = new List<TenantKey>();
+            tenantKeys.Add(tenantKey1);
+            tenantKeys.Add(tenantKey2);
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(encryptionKeys);
-            client.Setup(x => x.Admin.RotatePowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>())).Returns(rotatedEncryptionKey);
+            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(tenantKeys);
+            client.Setup(x => x.Admin.RotatePowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>())).Returns(rotatedTenantKey);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RotatePowerBIEncryptionKey(initFactory)
             {
@@ -74,8 +96,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
 
             // Assert
             client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.RotatePowerBIEncryptionKey(encryptionKey1.Id.ToString(), "KeyVaultUri3"), Times.Once());
-            AssertExpectedUnitTestResults(rotatedEncryptionKey, initFactory);
+            client.Verify(x => x.Admin.RotatePowerBIEncryptionKey(tenantKey1.Id.ToString(), "KeyVaultUri3"), Times.Once());
+            AssertExpectedUnitTestResults(rotatedTenantKey, initFactory);
         }
 
         [TestMethod]
@@ -83,7 +105,15 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
+            var tenantKey = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = MockName,
+                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                IsDefault = MockDefault,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Throws(new Exception("Some exception"));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RotatePowerBIEncryptionKey(initFactory)
@@ -106,8 +136,16 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(new List<EncryptionKey>());
+            var tenantKey = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = MockName,
+                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                IsDefault = MockDefault,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(new List<TenantKey>());
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RotatePowerBIEncryptionKey(initFactory)
             {
@@ -124,13 +162,13 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching encryption keys found");
         }
 
-        private static void AssertExpectedUnitTestResults(EncryptionKey expectedEncryptionKey, TestPowerBICmdletInitFactory initFactory)
+        private static void AssertExpectedUnitTestResults(TenantKey expectedTenantKey, TestPowerBICmdletInitFactory initFactory)
         {
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
-            var encryptionKeys = results.Cast<EncryptionKey>().ToList();
+            var encryptionKeys = results.Cast<TenantKey>().ToList();
             Assert.AreEqual(encryptionKeys.Count, 1);
-            Assert.AreEqual(expectedEncryptionKey, encryptionKeys[0]);
+            Assert.AreEqual(expectedTenantKey, encryptionKeys[0]);
         }
     }
 }

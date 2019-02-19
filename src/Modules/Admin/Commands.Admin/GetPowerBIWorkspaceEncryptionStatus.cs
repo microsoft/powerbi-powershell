@@ -38,7 +38,7 @@ namespace Microsoft.PowerBI.Commands.Admin
                 {
                     var workspaces = this.GetWorkspaces(client);
                     var matchedWorkspace = this.GetMatchingWorkspace(workspaces);
-                    var response = client.Admin.GetPowerBIWorkspaceEncryptionStatusInGroup(matchedWorkspace.Id.ToString());
+                    var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(matchedWorkspace.Id.ToString());
 
                     this.Logger.WriteObject(response);
                 }

@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
@@ -13,33 +14,37 @@ namespace Microsoft.PowerBI.Common.Api.Admin
     {
         public AdminClient(IPowerBIClient client): base(client) { }
 
-        public EncryptionKey AddPowerBIEncryptionKey(string name, string keyVaultKeyUri, bool defaultProperty = false, bool activate = false)
+        public TenantKey AddPowerBIEncryptionKey(string name, string keyVaultKeyIdentifier, bool? isDefault = null, bool? activate = null)
         {
-            var tenentKeysRequest = new TenentKeysRequest()
+            var tenantKeyCreationRequest = new TenantKeyCreationRequest()
             {
                 Name = name,
-                KeyVaultKeyUri = keyVaultKeyUri,
-                DefaultProperty = defaultProperty,
+                KeyVaultKeyIdentifier = keyVaultKeyIdentifier,
+                IsDefault = isDefault,
                 Activate = activate
             };
 
-            return this.Client.Admin.AddPowerBIEncryptionKey(tenentKeysRequest);
+            return this.Client.Admin.AddPowerBIEncryptionKey(tenantKeyCreationRequest);
         }
 
-        public IEnumerable<EncryptionKey> GetPowerBIEncryptionKeys()
+        public IEnumerable<TenantKey> GetPowerBIEncryptionKeys()
         {
             return this.Client.Admin.GetPowerBIEncryptionKeys()?.Value;
         }
 
-        public EncryptionKey RotatePowerBIEncryptionKey(string keyObjectId, string keyVaultKeyUri)
+        public IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string groupId)
         {
-            var rotateKeyRequest = new RotateKeysRequest(keyVaultKeyUri);
-            return this.Client.Admin.RotatePowerBIEncryptionKey(keyObjectId, rotateKeyRequest);
+            return this.Client.Datasets.GetDatasetsInGroupAsAdmin(groupId, expand: "encryption")?.Value;
         }
 
-        public IEnumerable<DatasetEncryptionStatus> GetPowerBIWorkspaceEncryptionStatusInGroup(string groupId)
+        public TenantKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier)
         {
-            return this.Client.Admin.GetPowerBIWorkspaceEncryptionStatusInGroup(groupId)?.Value;
+            var tenantKeyRotationRequest = new TenantKeyRotationRequest()
+            {
+                KeyVaultKeyIdentifier = keyVaultKeyIdentifier
+            };
+
+            return this.Client.Admin.RotatePowerBIEncryptionKey(Guid.Parse(tenantKeyId), tenantKeyRotationRequest);
         }
     }
 }

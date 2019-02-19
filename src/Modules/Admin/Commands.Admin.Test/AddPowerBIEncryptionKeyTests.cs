@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.OneBox);
                 ps.AddCommand(AddPowerBIEncryptionKeyCmdletInfo)
                         .AddParameter(nameof(AddPowerBIEncryptionKey.Name), MockName)
                         .AddParameter(nameof(AddPowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri)
@@ -54,8 +54,16 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(encryptionKey);
+            var tenantKey = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = MockName,
+                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                IsDefault = MockDefault,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(tenantKey);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIEncryptionKey(initFactory)
             {
@@ -77,8 +85,16 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(encryptionKey);
+            var tenantKey = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = MockName,
+                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                IsDefault = MockDefault,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(tenantKey);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIEncryptionKey(initFactory)
             {
@@ -102,8 +118,16 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var encryptionKey = new EncryptionKey(Guid.NewGuid(), MockName, MockKeyVaultKeyUri, MockDefault, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(encryptionKey);
+            var tenantKey = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = MockName,
+                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                IsDefault = MockDefault,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(tenantKey);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIEncryptionKey(initFactory)
             {

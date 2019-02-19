@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.PowerBI.Commands.Admin</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Admin</RootNamespace>
     <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
-    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
@@ -13,9 +13,6 @@
     <PackageId>MicrosoftPowerBIMgmt.Admin</PackageId>
     <Description>Microsoft Power BI PowerShell - Admin cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Admin</PackageTags>
-    <ApplicationIcon />
-    <OutputType>Library</OutputType>
-    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.PowerBI.Api" Version="0.0.0.3" />
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

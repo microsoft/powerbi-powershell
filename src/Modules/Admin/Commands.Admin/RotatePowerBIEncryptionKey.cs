@@ -52,22 +52,22 @@ namespace Microsoft.PowerBI.Commands.Admin
             }
         }
 
-        private IEnumerable<EncryptionKey> GetEncryptionKeys(IPowerBIApiClient client)
+        private IEnumerable<TenantKey> GetEncryptionKeys(IPowerBIApiClient client)
         {
             var tenantKeys = client.Admin.GetPowerBIEncryptionKeys();
             if (tenantKeys == null)
             {
-                throw new Exception("No encryption keys are set");
+                throw new Exception("No encryption keys is set");
             }
 
             return tenantKeys;
         }
 
-        private EncryptionKey GetMatchingEncryptionKey(IEnumerable<EncryptionKey> encryptionKeys)
+        private TenantKey GetMatchingEncryptionKey(IEnumerable<TenantKey> encryptionKeys)
         {
             var matchedencryptionKey = encryptionKeys.FirstOrDefault(
                     (encryptionKey) => encryptionKey.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-            if (matchedencryptionKey == default(EncryptionKey))
+            if (matchedencryptionKey == default(TenantKey))
             {
                 throw new Exception("No matching encryption keys found");
             }

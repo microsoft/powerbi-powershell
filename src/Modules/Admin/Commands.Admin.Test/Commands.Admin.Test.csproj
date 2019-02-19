@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
-    <PackageReference Include="Microsoft.PowerBI.Api" Version="0.0.0.3" />
     <PackageReference Include="Microsoft.PowerShell.Commands.Diagnostics" Version="6.0.1" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.0.1" />
     <PackageReference Include="Microsoft.WSMan.Management" Version="6.0.1" />

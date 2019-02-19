@@ -10,12 +10,12 @@ namespace Microsoft.PowerBI.Common.Api.Admin
 {
     public interface IAdminClient
     {
-        EncryptionKey AddPowerBIEncryptionKey(string name, string keyVaultKeyUri, bool defaultProperty = false, bool activate = false);
+        TenantKey AddPowerBIEncryptionKey(string name, string keyVaultKeyIdentifier, bool? isDefault = null, bool? activate = null);
 
-        IEnumerable<EncryptionKey> GetPowerBIEncryptionKeys();
+        IEnumerable<TenantKey> GetPowerBIEncryptionKeys();
 
-        EncryptionKey RotatePowerBIEncryptionKey(string keyObjectId, string keyVaultKeyUri);
+        IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string groupId);
 
-        IEnumerable<DatasetEncryptionStatus> GetPowerBIWorkspaceEncryptionStatusInGroup(string groupId);
+        TenantKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier);
     }
 }

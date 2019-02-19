@@ -54,14 +54,21 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var workspaces = new List<Workspace>();
             workspaces.Add(workspace1);
             workspaces.Add(workspace2);
-            var datasetEncryptionStatus1 = new DatasetEncryptionStatus("Id1", "Dataset1", true);
-            var datasetEncryptionStatus2 = new DatasetEncryptionStatus("Id1", "Dataset1", true);
-            var datasetEncryptionStatus = new List<DatasetEncryptionStatus>();
+            var datasetEncryptionStatus1 = new Dataset() {
+                Id = "Dataset1",
+                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.InSyncWithWorkspace }
+            };
+            var datasetEncryptionStatus2 = new Dataset()
+            {
+                Id = "Dataset2",
+                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace }
+            };
+            var datasetEncryptionStatus = new List<Dataset>();
             datasetEncryptionStatus.Add(datasetEncryptionStatus1);
             datasetEncryptionStatus.Add(datasetEncryptionStatus2);
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin(default, "name eq 'Workspace1'", 1, default)).Returns(workspaces);
-            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatusInGroup(It.IsAny<string>())).Returns(datasetEncryptionStatus);
+            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<string>())).Returns(datasetEncryptionStatus);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
             {
@@ -73,7 +80,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
 
             // Assert
             client.Verify(x => x.Workspaces.GetWorkspacesAsAdmin(default, "name eq 'Workspace1'", 1, default), Times.Once());
-            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatusInGroup(workspace1.Id.ToString()), Times.Once());
+            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace1.Id.ToString()), Times.Once());
             AssertExpectedUnitTestResults(datasetEncryptionStatus, initFactory);
         }
 
@@ -119,11 +126,11 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching workspaces are found");
         }
 
-        private static void AssertExpectedUnitTestResults(IEnumerable<DatasetEncryptionStatus> datasetEncryptionStatuses, TestPowerBICmdletInitFactory initFactory)
+        private static void AssertExpectedUnitTestResults(IEnumerable<Dataset> datasetEncryptionStatuses, TestPowerBICmdletInitFactory initFactory)
         {
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
-            var datasetEncryptionStatus = results.Cast<IEnumerable<DatasetEncryptionStatus>>().ToList();
+            var datasetEncryptionStatus = results.Cast<IEnumerable<Dataset>>().ToList();
             Assert.AreEqual(datasetEncryptionStatus.Count, 1);
             Assert.AreEqual(datasetEncryptionStatuses, datasetEncryptionStatus[0]);
         }

@@ -30,7 +30,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.OneBox);
                 ps.AddCommand(GetPowerBIEncryptionKeysCmdletInfo);
 
                 // Act
@@ -45,13 +45,29 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         public void GetPowerBIEncryptionKeys_WithValidResponse()
         {
             // Arrange
-            var encryptionKey1 = new EncryptionKey(Guid.NewGuid(), "KeyName1", "KeyVaultUri1", true, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            var encryptionKey2 = new EncryptionKey(Guid.NewGuid(), "KeyName2", "KeyVaultUri2", true, new DateTime(1995, 1, 1), new DateTime(1995, 1, 1));
-            var encryptionKeys = new List<EncryptionKey>();
-            encryptionKeys.Add(encryptionKey1);
-            encryptionKeys.Add(encryptionKey2);
+            var tenantKey1 = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = "KeyName1",
+                KeyVaultKeyIdentifier = "KeyVaultUri1",
+                IsDefault = true,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            var tenantKey2 = new TenantKey()
+            {
+                Id = Guid.NewGuid(),
+                Name = "KeyName2",
+                KeyVaultKeyIdentifier = "KeyVaultUri2",
+                IsDefault = true,
+                CreatedAt = new DateTime(1995, 1, 1),
+                UpdatedAt = new DateTime(1995, 1, 1)
+            };
+            var tenantKeys = new List<TenantKey>();
+            tenantKeys.Add(tenantKey1);
+            tenantKeys.Add(tenantKey2);
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(encryptionKeys);
+            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(tenantKeys);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIEncryptionKeys(initFactory);
 
