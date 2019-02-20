@@ -8,11 +8,11 @@ Locale: en-US
 
 # MicrosoftPowerBIMgmt.Admin Module
 ## Description
-{{Manually Enter Description Here}}
+PowerShell cmdlets for managing and interacting with Power BI admin services.
 
 ## MicrosoftPowerBIMgmt.Admin Cmdlets
 ### [Add-PowerBIEncryptionKey](Add-PowerBIEncryptionKey.md)
-Adds an encryption key
+Adds an encryption key for powerbi workspaces in Capacity 
 
 ### [Get-PowerBIEncryptionKey](Get-PowerBIEncryptionKey.md)
 Retrieves the encryption keys

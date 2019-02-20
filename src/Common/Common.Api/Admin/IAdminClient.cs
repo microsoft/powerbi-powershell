@@ -14,7 +14,7 @@ namespace Microsoft.PowerBI.Common.Api.Admin
 
         IEnumerable<TenantKey> GetPowerBIEncryptionKeys();
 
-        IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string groupId);
+        IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string workspaceId);
 
         TenantKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier);
     }

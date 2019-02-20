@@ -32,9 +32,9 @@ namespace Microsoft.PowerBI.Common.Api.Admin
             return this.Client.Admin.GetPowerBIEncryptionKeys()?.Value;
         }
 
-        public IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string groupId)
+        public IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string workspaceId)
         {
-            return this.Client.Datasets.GetDatasetsInGroupAsAdmin(groupId, expand: "encryption")?.Value;
+            return this.Client.Datasets.GetDatasetsInGroupAsAdmin(workspaceId, expand: "encryption")?.Value;
         }
 
         public TenantKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier)

@@ -34,6 +34,12 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         #endregion
 
+        protected override void BeginProcessing()
+        {
+            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
+            base.BeginProcessing();
+        }
+
         public override void ExecuteCmdlet()
         {
             using (var client = this.CreateClient())
@@ -59,7 +65,7 @@ namespace Microsoft.PowerBI.Commands.Admin
         private IEnumerable<TenantKey> GetEncryptionKeys(IPowerBIApiClient client)
         {
             var tenantKeys = client.Admin.GetPowerBIEncryptionKeys();
-            if (tenantKeys == null || tenantKeys.Count() == 0)
+            if (tenantKeys == null || !tenantKeys.Any())
             {
                 this.Logger.ThrowTerminatingError("No encryption keys are set");
                 return null;

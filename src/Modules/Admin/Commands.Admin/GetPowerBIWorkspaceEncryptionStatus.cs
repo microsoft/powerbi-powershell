@@ -30,6 +30,12 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         #endregion
 
+        protected override void BeginProcessing()
+        {
+            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
+            base.BeginProcessing();
+        }
+
         public override void ExecuteCmdlet()
         {
             using (var client = this.CreateClient())
@@ -50,7 +56,7 @@ namespace Microsoft.PowerBI.Commands.Admin
         {
             string nameFilter = $"name eq '{this.Name}'";
             var workspaces = client.Workspaces.GetWorkspacesAsAdmin(default, nameFilter, 1, default);
-            if (workspaces == null || workspaces.Count() == 0)
+            if (workspaces == null || !workspaces.Any())
             {
                 this.Logger.ThrowTerminatingError("No matching workspace is found");
                 return null;

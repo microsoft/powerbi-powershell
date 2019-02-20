@@ -43,8 +43,4 @@
     <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="help\" />
-  </ItemGroup>
-
 </Project>

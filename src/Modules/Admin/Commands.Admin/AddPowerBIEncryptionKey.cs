@@ -45,6 +45,7 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         protected override void BeginProcessing()
         {
+            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
             base.BeginProcessing();
 
             if (this.Default == false)

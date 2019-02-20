@@ -18,6 +18,12 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         public GetPowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init): base(init) { }
 
+        protected override void BeginProcessing()
+        {
+            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
+            base.BeginProcessing();
+        }
+
         public override void ExecuteCmdlet()
         {
             using (var client = this.CreateClient())

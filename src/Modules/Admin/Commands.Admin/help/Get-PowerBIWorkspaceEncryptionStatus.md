@@ -17,7 +17,8 @@ Get-PowerBIWorkspaceEncryptionStatus -Name <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Retrives the encryotion status of dataset for a given workspace name
+Retrives the encryption status of dataset for a given workspace name. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
+Requires TenantReadAll or TenantReadWriteAll permission
 
 ## EXAMPLES
 

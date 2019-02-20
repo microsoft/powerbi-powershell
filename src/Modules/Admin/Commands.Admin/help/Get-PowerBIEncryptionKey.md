@@ -17,7 +17,8 @@ Get-PowerBIEncryptionKey [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Retrieves the encryption keys for the organization
+Retrieves the encryption keys for the organization. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
+Requires TenantReadAll or TenantReadWriteAll permission
 
 ## EXAMPLES
 

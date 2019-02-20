@@ -17,7 +17,8 @@ Set-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [<CommonParamet
 ```
 
 ## DESCRIPTION
-The commandlet will rotate the customer owned key (COK)
+The commandlet will rotate the customer owned key. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
+Requires TenantReadWriteAll permission
 
 ## EXAMPLES
 
@@ -29,7 +30,7 @@ PS C:\> Set-PowerBIEncryptionKey -Name 'testName' -KeyVaultKeyUri 'Uri'
 ## PARAMETERS
 
 ### -KeyVaultKeyUri
-The uri of the KeyVaultKeyUri parameter is an Uri to the version of the AKV key to be used.
+The uri of the KeyVaultKeyUri parameter is an Uri to the version of the AzureKeyVault key to be used.
 
 ```yaml
 Type: String

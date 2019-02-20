@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIEncryptionKey
 
 ## SYNOPSIS
-Adds an encryption key
+Adds an encryption key for powerbi workspaces in Capacity 
 
 ## SYNTAX
 
@@ -28,7 +28,8 @@ Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [<C
 ```
 
 ## DESCRIPTION
-The commandlet will add an encryption key.
+Adds an encryption key for powerbi workspaces in Capacity. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
+Requires TenantReadWriteAll permission
 
 ## EXAMPLES
 
@@ -40,7 +41,7 @@ PS C:\> Add-PowerBIEncryptionKey -Name 'testName' -KeyVaultKeyUri 'Uri' -Default
 ## PARAMETERS
 
 ### -Activate
-If the Activate flag is $true, all of the capacities that don't have activated the BYOK functionality will immediately use this key
+Indicates that all of the capacities that don't have activated the BringYourOwnKey functionality will immediately use this key
 
 ```yaml
 Type: SwitchParameter
@@ -55,7 +56,7 @@ Accept wildcard characters: False
 ```
 
 ### -Default
-If the Default flag is $true, this key is set as the default for the whole tenant (i.e. any new capacity creation will inherit this key upon creation)
+Indicates that this key is set as the default for the whole tenant (i.e. any new capacity creation will inherit this key upon creation)
 
 ```yaml
 Type: SwitchParameter
@@ -71,7 +72,7 @@ Accept wildcard characters: False
 
 ### -KeyVaultKeyUri
 The uri of the KeyVaultKeyUri parameter is an Uri to the version of the AzureKeyVault key to be used.
-The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for BYOK
+The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for BringYourOwnKey
 
 ```yaml
 Type: String
