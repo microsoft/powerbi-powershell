@@ -16,15 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="MicrosoftPowerBIMgmt.Admin.psd1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MicrosoftPowerBIMgmt.Admin.psd1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
