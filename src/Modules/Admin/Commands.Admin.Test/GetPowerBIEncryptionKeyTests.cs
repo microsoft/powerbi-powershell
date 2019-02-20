@@ -5,12 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
-using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,20 +16,20 @@ using Moq;
 namespace Microsoft.PowerBI.Commands.Admin.Test
 {
     [TestClass]
-    public class GetPowerBIEncryptionKeysTests
+    public class GetPowerBIEncryptionKeyTests
     {
-        private static CmdletInfo GetPowerBIEncryptionKeysCmdletInfo => new CmdletInfo($"{GetPowerBIEncryptionKeys.CmdletVerb}-{GetPowerBIEncryptionKeys.CmdletName}", typeof(GetPowerBIEncryptionKeys));
+        private static CmdletInfo GetPowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{GetPowerBIEncryptionKey.CmdletVerb}-{GetPowerBIEncryptionKey.CmdletName}", typeof(GetPowerBIEncryptionKey));
 
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetPowerBIEncryptionKeys()
+        public void EndToEndGetPowerBIEncryptionKey()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.OneBox);
-                ps.AddCommand(GetPowerBIEncryptionKeysCmdletInfo);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ps.AddCommand(GetPowerBIEncryptionKeyCmdletInfo);
 
                 // Act
                 var result = ps.Invoke();
@@ -42,7 +40,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         }
 
         [TestMethod]
-        public void GetPowerBIEncryptionKeys_WithValidResponse()
+        public void GetPowerBIEncryptionKey_WithValidResponse()
         {
             // Arrange
             var tenantKey1 = new TenantKey()
@@ -69,7 +67,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(tenantKeys);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIEncryptionKeys(initFactory);
+            var cmdlet = new GetPowerBIEncryptionKey(initFactory);
 
             // Act
             cmdlet.InvokePowerBICmdlet();
@@ -79,21 +77,17 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         }
 
         [TestMethod]
-        public void GetPowerBIEncryptionKeys_WithApiThrowingException()
+        [ExpectedException(typeof(Exception))]
+        public void GetPowerBIEncryptionKey_WithApiThrowingException()
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Throws(new Exception("Some exception"));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIEncryptionKeys(initFactory);
+            var cmdlet = new GetPowerBIEncryptionKey(initFactory);
 
             // Act
             cmdlet.InvokePowerBICmdlet();
-
-            // Assert
-            var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
-            Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw Exception");
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Some exception");
         }
     }
 }

@@ -12,8 +12,14 @@ Locale: en-US
 
 ## MicrosoftPowerBIMgmt.Admin Cmdlets
 ### [Add-PowerBIEncryptionKey](Add-PowerBIEncryptionKey.md)
-{{Fill in the Synopsis}}
+Adds an encryption key
 
-### [Get-PowerBIEncryptionKeys](Get-PowerBIEncryptionKeys.md)
-{{Fill in the Synopsis}}
+### [Get-PowerBIEncryptionKey](Get-PowerBIEncryptionKey.md)
+Retrieves the encryption keys
+
+### [Get-PowerBIWorkspaceEncryptionStatus](Get-PowerBIWorkspaceEncryptionStatus.md)
+List workspace encryption status
+
+### [Set-PowerBIEncryptionKey](Set-PowerBIEncryptionKey.md)
+Rotate the encryption key
 

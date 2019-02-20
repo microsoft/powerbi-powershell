@@ -8,61 +8,70 @@ schema: 2.0.0
 # Add-PowerBIEncryptionKey
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Adds an encryption key
 
 ## SYNTAX
 
+### Default (Default)
 ```
-Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default <Boolean>] [-Activate <Boolean>]
- [<CommonParameters>]
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [<CommonParameters>]
+```
+
+### DefaultAndActivate
+```
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [-Activate] [<CommonParameters>]
+```
+
+### Activate
+```
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+The commandlet will add an encryption key.
 
 ## EXAMPLES
 
 ### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
 ```
-
-{{ Add example description here }}
+PS C:\> Add-PowerBIEncryptionKey -Name 'testName' -KeyVaultKeyUri 'Uri' -Default -Activate
+```
 
 ## PARAMETERS
 
 ### -Activate
-{{Fill Activate Description}}
+If the Activate flag is $true, all of the capacities that don't have activated the BYOK functionality will immediately use this key
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
+Type: SwitchParameter
+Parameter Sets: DefaultAndActivate, Activate
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Default
-{{Fill Default Description}}
+If the Default flag is $true, this key is set as the default for the whole tenant (i.e. any new capacity creation will inherit this key upon creation)
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
+Type: SwitchParameter
+Parameter Sets: Default, DefaultAndActivate
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -KeyVaultKeyUri
-{{Fill KeyVaultKeyUri Description}}
+The uri of the KeyVaultKeyUri parameter is an Uri to the version of the AzureKeyVault key to be used.
+The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for BYOK
 
 ```yaml
 Type: String
@@ -77,7 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{Fill Name Description}}
+The name of the encryption key
 
 ```yaml
 Type: String

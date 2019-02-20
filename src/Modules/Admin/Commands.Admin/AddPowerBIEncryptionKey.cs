@@ -9,7 +9,7 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
-    [Cmdlet(CmdletVerb, CmdletName)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DefaultParameterSet)]
     public class AddPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
@@ -19,6 +19,12 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         public AddPowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
+        #region Parameter set names
+        public const string DefaultParameterSet = "Default";
+        public const string ActivateParameterSet = "Activate";
+        public const string DefaultAndActivateParameterSet = "DefaultAndActivate";
+        #endregion
+
         #region Parameters
 
         [Parameter(Mandatory = true)]
@@ -27,11 +33,13 @@ namespace Microsoft.PowerBI.Commands.Admin
         [Parameter(Mandatory = true)]
         public string KeyVaultKeyUri { get; set; }
 
-        [Parameter(Mandatory = false)]
-        public bool Default { get; set; } = false;
+        [Parameter(ParameterSetName = DefaultParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = false)]
+        public SwitchParameter Default { get; set; }
 
-        [Parameter(Mandatory = false)]
-        public bool Activate { get; set; } = false;
+        [Parameter(ParameterSetName = ActivateParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = false)]
+        public SwitchParameter Activate { get; set; }
 
         #endregion
 
@@ -54,21 +62,14 @@ namespace Microsoft.PowerBI.Commands.Admin
         {
             using (var client = this.CreateClient())
             {
-                try
-                {
-                    var response = client.Admin.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, Default, Activate);
-                    this.Logger.WriteObject(response);
-                }
-                catch (Exception ex)
-                {
-                    this.Logger.ThrowTerminatingError(ex);
-                }
+                var response = client.Admin.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, Default, Activate);
+                this.Logger.WriteObject(response);
             }
         }
 
         private void ThrowNotSupportedException(string parameterName, object parameterValue)
         {
-            var notSupportedException = new NotSupportedException($"{parameterName} value {parameterValue} is not yet supported");
+            var notSupportedException = new NotSupportedException($"Parameter {parameterName} with value {parameterValue} is not supported");
             this.Logger.ThrowTerminatingError(notSupportedException, ErrorCategory.InvalidArgument);
         }
     }

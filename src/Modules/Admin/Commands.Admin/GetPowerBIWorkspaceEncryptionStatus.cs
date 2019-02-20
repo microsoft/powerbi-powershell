@@ -34,43 +34,29 @@ namespace Microsoft.PowerBI.Commands.Admin
         {
             using (var client = this.CreateClient())
             {
-                try
+                var workspace = this.GetWorkspace(client);
+                if (workspace == null)
                 {
-                    var workspaces = this.GetWorkspaces(client);
-                    var matchedWorkspace = this.GetMatchingWorkspace(workspaces);
-                    var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(matchedWorkspace.Id.ToString());
+                    return;
+                }
 
-                    this.Logger.WriteObject(response);
-                }
-                catch (Exception ex)
-                {
-                    this.Logger.ThrowTerminatingError(ex);
-                }
+                var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString());
+
+                this.Logger.WriteObject(response);
             }
         }
 
-        private IEnumerable<Workspace> GetWorkspaces(IPowerBIApiClient client)
+        private Workspace GetWorkspace(IPowerBIApiClient client)
         {
             string nameFilter = $"name eq '{this.Name}'";
             var workspaces = client.Workspaces.GetWorkspacesAsAdmin(default, nameFilter, 1, default);
-            if (workspaces == null)
+            if (workspaces == null || workspaces.Count() == 0)
             {
-                throw new Exception("No workspaces are found");
+                this.Logger.ThrowTerminatingError("No matching workspace is found");
+                return null;
             }
 
-            return workspaces;
-        }
-
-        private Workspace GetMatchingWorkspace(IEnumerable<Workspace> workspaces)
-        {
-            var matchedWorkspace = workspaces.FirstOrDefault(
-                    (workspace) => workspace.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-            if (matchedWorkspace == default(Workspace))
-            {
-                throw new Exception("No matching workspaces are found");
-            }
-
-            return matchedWorkspace;
+            return workspaces.Single();
         }
     }
 }

@@ -14,10 +14,11 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
+    [Alias("Rotate-PowerBIEncryptionKey")]
     public class RotatePowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
-        public const string CmdletVerb = "Rotate";
+        public const string CmdletVerb = VerbsCommon.Set;
 
         public RotatePowerBIEncryptionKey() : base() { }
 
@@ -37,27 +38,31 @@ namespace Microsoft.PowerBI.Commands.Admin
         {
             using (var client = this.CreateClient())
             {
-                try
+                var tenantKeys = this.GetEncryptionKeys(client);
+                if (tenantKeys == null)
                 {
-                    var tenantKeys = this.GetEncryptionKeys(client);
-                    var matchedencryptionKey = this.GetMatchingEncryptionKey(tenantKeys);
-                    var response = client.Admin.RotatePowerBIEncryptionKey(matchedencryptionKey.Id.ToString(), KeyVaultKeyUri);
+                    return;
+                }
 
-                    this.Logger.WriteObject(response);
-                }
-                catch (Exception ex)
+                var matchedencryptionKey = this.GetMatchingEncryptionKey(tenantKeys);
+                if (matchedencryptionKey == null)
                 {
-                    this.Logger.ThrowTerminatingError(ex);
+                    return;
                 }
+
+                var response = client.Admin.RotatePowerBIEncryptionKey(matchedencryptionKey.Id.ToString(), KeyVaultKeyUri);
+
+                this.Logger.WriteObject(response);
             }
         }
 
         private IEnumerable<TenantKey> GetEncryptionKeys(IPowerBIApiClient client)
         {
             var tenantKeys = client.Admin.GetPowerBIEncryptionKeys();
-            if (tenantKeys == null)
+            if (tenantKeys == null || tenantKeys.Count() == 0)
             {
-                throw new Exception("No encryption keys is set");
+                this.Logger.ThrowTerminatingError("No encryption keys are set");
+                return null;
             }
 
             return tenantKeys;
@@ -69,7 +74,8 @@ namespace Microsoft.PowerBI.Commands.Admin
                     (encryptionKey) => encryptionKey.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
             if (matchedencryptionKey == default(TenantKey))
             {
-                throw new Exception("No matching encryption keys found");
+                this.Logger.ThrowTerminatingError("No matching encryption keys found");
+                return null;
             }
 
             return matchedencryptionKey;

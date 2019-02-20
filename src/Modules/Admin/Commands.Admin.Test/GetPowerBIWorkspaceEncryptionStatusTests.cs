@@ -33,7 +33,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.EDog);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(GetPowerBIWorkspaceEncryptionStatusCmdletInfo)
                         .AddParameter(nameof(GetPowerBIWorkspaceEncryptionStatus.Name), MockName);
 
@@ -50,10 +50,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var workspace1 = new Workspace { Id = Guid.NewGuid(), Name = "Workspace1" };
-            var workspace2 = new Workspace { Id = Guid.NewGuid(), Name = "Workspace2" };
             var workspaces = new List<Workspace>();
             workspaces.Add(workspace1);
-            workspaces.Add(workspace2);
             var datasetEncryptionStatus1 = new Dataset() {
                 Id = "Dataset1",
                 Encryption = new Encryption { EncryptionStatus = EncryptionStatus.InSyncWithWorkspace }
@@ -85,6 +83,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void GetPowerBIWorkspaceEncryptionStatus_WithApiThrowingException()
         {
             // Arrange
@@ -98,11 +97,6 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
 
             // Act
             cmdlet.InvokePowerBICmdlet();
-
-            // Assert
-            var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
-            Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw Exception");
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Some exception");
         }
 
         [TestMethod]
@@ -123,7 +117,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Assert
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw Exception");
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching workspaces are found");
+            Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching workspace is found");
         }
 
         private static void AssertExpectedUnitTestResults(IEnumerable<Dataset> datasetEncryptionStatuses, TestPowerBICmdletInitFactory initFactory)

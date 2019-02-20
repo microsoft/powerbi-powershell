@@ -10,7 +10,6 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
-using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -34,7 +33,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.OneBox);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(RotatePowerBIEncryptionKeyCmdletInfo)
                         .AddParameter(nameof(RotatePowerBIEncryptionKey.Name), MockName)
                         .AddParameter(nameof(RotatePowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri);
@@ -101,6 +100,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void RotatePowerBIEncryptionKey_WithApiThrowingException()
         {
             // Arrange
@@ -159,7 +159,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Assert
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw Exception");
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching encryption keys found");
+            Assert.AreEqual(throwingErrorRecords.First().ToString(), "No encryption keys are set");
         }
 
         private static void AssertExpectedUnitTestResults(TenantKey expectedTenantKey, TestPowerBICmdletInitFactory initFactory)
