@@ -16,7 +16,7 @@ Licensed under the MIT License.
     <PowerShellExe Condition="'$(PowerShellExe)' == ''">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
     <PowerShellCommonArgs>-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted</PowerShellCommonArgs>
     <LangName Condition="'$(LangName)' == ''">en-US</LangName>
-    <NoWarn>NU1605</NoWarn>
+    <NoWarn>NU1605</NoWarn> <!-- TODO: Add Comment -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
