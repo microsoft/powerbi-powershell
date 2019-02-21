@@ -23,7 +23,7 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         protected override void BeginProcessing()
         {
-            this.Logger.WriteWarning(Constants.PRIVATE_PREVIEW_WARNING);
+            this.Logger.WriteWarning(Constants.PrivatePreviewWarning);
             base.BeginProcessing();
         }
 

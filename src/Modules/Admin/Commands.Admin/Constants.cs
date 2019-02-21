@@ -7,6 +7,6 @@ namespace Microsoft.PowerBI.Commands.Admin
 {
     public static class Constants
     {
-        public const string PRIVATE_PREVIEW_WARNING = "This cmdlet is in private preview and may not work without activation in your tenant";
+        public const string PrivatePreviewWarning = "This cmdlet is in private preview and may not work without activation in your tenant";
     }
 }

@@ -17,9 +17,9 @@ using Moq;
 namespace Microsoft.PowerBI.Commands.Admin.Test
 {
     [TestClass]
-    public class RotatePowerBIEncryptionKeyTests
+    public class SetPowerBIEncryptionKeyTests
     {
-        private static CmdletInfo RotatePowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{SetPowerBIEncryptionKey.CmdletVerb}-{SetPowerBIEncryptionKey.CmdletName}", typeof(SetPowerBIEncryptionKey));
+        private static CmdletInfo SetPowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{SetPowerBIEncryptionKey.CmdletVerb}-{SetPowerBIEncryptionKey.CmdletName}", typeof(SetPowerBIEncryptionKey));
 
         private static string MockName = "KeyName";
         private static string MockKeyVaultKeyUri = "KeyVaultUri";
@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(RotatePowerBIEncryptionKeyCmdletInfo)
+                ps.AddCommand(SetPowerBIEncryptionKeyCmdletInfo)
                         .AddParameter(nameof(SetPowerBIEncryptionKey.Name), MockName)
                         .AddParameter(nameof(SetPowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri);
 

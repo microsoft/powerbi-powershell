@@ -29,7 +29,7 @@ CompanyName = 'Microsoft Corporation'
 Copyright = 'Microsoft Corporation. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Microsoft Power BI PowerShell - Admin cmdlets for Microsoft Power BI'
+Description = 'Microsoft Power BI PowerShell - Administration cmdlets for Microsoft Power BI'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
