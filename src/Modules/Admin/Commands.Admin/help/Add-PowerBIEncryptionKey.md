@@ -1,0 +1,117 @@
+---
+external help file: Microsoft.PowerBI.Commands.Admin.dll-Help.xml
+Module Name: MicrosoftPowerBIMgmt.Admin
+online version:
+schema: 2.0.0
+---
+
+# Add-PowerBIEncryptionKey
+
+## SYNOPSIS
+Adds an encryption key for Power BI workspaces assigned to a capacity.
+
+## SYNTAX
+
+### Default (Default)
+```
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [<CommonParameters>]
+```
+
+### DefaultAndActivate
+```
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [-Activate] [<CommonParameters>]
+```
+
+### Activate
+```
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [<CommonParameters>]
+```
+
+## DESCRIPTION
+Associates an encryption key for Power BI workspaces that is assigned to a premium capacity. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
+This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
+
+## EXAMPLES
+
+### Example 1
+```
+PS C:\> Add-PowerBIEncryptionKey -Name 'Contoso Sales' -KeyVaultKeyUri 'https://contoso-vault2.vault.azure.net' -Default -Activate
+```
+
+## PARAMETERS
+
+### -Activate
+Indicates to activate any inactivated capacities to use this key for its encryption
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: DefaultAndActivate, Activate
+Aliases:
+
+Required: True
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Default
+Indicates that this key is set as the default for the entire tenant (i.e. any new capacity creation will inherit this key upon creation)
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Default, DefaultAndActivate
+Aliases:
+
+Required: True
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KeyVaultKeyUri
+Uri to the version of the "Azure Key Vault" key to be used.
+The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for bringing your own key
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the encryption key
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
+## INPUTS
+
+### None
+
+## OUTPUTS
+
+### System.Object
+
+## NOTES
+
+## RELATED LINKS
