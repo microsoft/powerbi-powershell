@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIEncryptionKey
 
 ## SYNOPSIS
-Adds an encryption key for powerbi workspaces in Capacity 
+Adds an encryption key for Power BI workspaces assigned to a capacity.
 
 ## SYNTAX
 
@@ -28,27 +28,27 @@ Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [<C
 ```
 
 ## DESCRIPTION
-Adds an encryption key for powerbi workspaces in Capacity. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
-Requires TenantReadWriteAll permission
+Associates an encryption key for Power BI workspaces that is assigned to a premium capacity. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
+This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 
 ## EXAMPLES
 
 ### Example 1
 ```
-PS C:\> Add-PowerBIEncryptionKey -Name 'testName' -KeyVaultKeyUri 'Uri' -Default -Activate
+PS C:\> Add-PowerBIEncryptionKey -Name 'Contoso Sales' -KeyVaultKeyUri 'https://contoso-vault2.vault.azure.net' -Default -Activate
 ```
 
 ## PARAMETERS
 
 ### -Activate
-Indicates that all of the capacities that don't have activated the BringYourOwnKey functionality will immediately use this key
+Indicates to activate any inactivated capacities to use this key for its encryption
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: DefaultAndActivate, Activate
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: False
 Accept pipeline input: False
@@ -56,14 +56,14 @@ Accept wildcard characters: False
 ```
 
 ### -Default
-Indicates that this key is set as the default for the whole tenant (i.e. any new capacity creation will inherit this key upon creation)
+Indicates that this key is set as the default for the entire tenant (i.e. any new capacity creation will inherit this key upon creation)
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: Default, DefaultAndActivate
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: False
 Accept pipeline input: False
@@ -71,8 +71,8 @@ Accept wildcard characters: False
 ```
 
 ### -KeyVaultKeyUri
-The uri of the KeyVaultKeyUri parameter is an Uri to the version of the AzureKeyVault key to be used.
-The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for BringYourOwnKey
+Uri to the version of the "Azure Key Vault" key to be used.
+The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for bringing your own key
 
 ```yaml
 Type: String

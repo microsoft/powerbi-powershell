@@ -3,12 +3,15 @@
  * Licensed under the MIT License.
  */
 
+using System.Collections.Generic;
 using System.Management.Automation;
+using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
+    [OutputType(typeof(IEnumerable<TenantKey>))]
     public class GetPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
@@ -20,7 +23,7 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         protected override void BeginProcessing()
         {
-            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
+            this.Logger.WriteWarning(Constants.PRIVATE_PREVIEW_WARNING);
             base.BeginProcessing();
         }
 

@@ -15,14 +15,15 @@ namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [Alias("Rotate-PowerBIEncryptionKey")]
-    public class RotatePowerBIEncryptionKey : PowerBIClientCmdlet
+    [OutputType(typeof(TenantKey))]
+    public class SetPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
         public const string CmdletVerb = VerbsCommon.Set;
 
-        public RotatePowerBIEncryptionKey() : base() { }
+        public SetPowerBIEncryptionKey() : base() { }
 
-        public RotatePowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public SetPowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         #region Parameters
 
@@ -36,7 +37,7 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         protected override void BeginProcessing()
         {
-            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
+            this.Logger.WriteWarning(Constants.PRIVATE_PREVIEW_WARNING);
             base.BeginProcessing();
         }
 
@@ -47,12 +48,14 @@ namespace Microsoft.PowerBI.Commands.Admin
                 var tenantKeys = this.GetEncryptionKeys(client);
                 if (tenantKeys == null)
                 {
+                    // Return for test cases where no tenant keys are found
                     return;
                 }
 
                 var matchedencryptionKey = this.GetMatchingEncryptionKey(tenantKeys);
                 if (matchedencryptionKey == null)
                 {
+                    // Return for test cases where no matching encryption keys are found
                     return;
                 }
 

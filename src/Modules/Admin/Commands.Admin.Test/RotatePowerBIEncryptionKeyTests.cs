@@ -19,7 +19,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
     [TestClass]
     public class RotatePowerBIEncryptionKeyTests
     {
-        private static CmdletInfo RotatePowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{RotatePowerBIEncryptionKey.CmdletVerb}-{RotatePowerBIEncryptionKey.CmdletName}", typeof(RotatePowerBIEncryptionKey));
+        private static CmdletInfo RotatePowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{SetPowerBIEncryptionKey.CmdletVerb}-{SetPowerBIEncryptionKey.CmdletName}", typeof(SetPowerBIEncryptionKey));
 
         private static string MockName = "KeyName";
         private static string MockKeyVaultKeyUri = "KeyVaultUri";
@@ -35,8 +35,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(RotatePowerBIEncryptionKeyCmdletInfo)
-                        .AddParameter(nameof(RotatePowerBIEncryptionKey.Name), MockName)
-                        .AddParameter(nameof(RotatePowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri);
+                        .AddParameter(nameof(SetPowerBIEncryptionKey.Name), MockName)
+                        .AddParameter(nameof(SetPowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri);
 
                 // Act
                 var result = ps.Invoke();
@@ -84,7 +84,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(tenantKeys);
             client.Setup(x => x.Admin.RotatePowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>())).Returns(rotatedTenantKey);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new RotatePowerBIEncryptionKey(initFactory)
+            var cmdlet = new SetPowerBIEncryptionKey(initFactory)
             {
                 Name = "KeyName1",
                 KeyVaultKeyUri = "KeyVaultUri3"
@@ -116,7 +116,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             };
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Throws(new Exception("Some exception"));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new RotatePowerBIEncryptionKey(initFactory)
+            var cmdlet = new SetPowerBIEncryptionKey(initFactory)
             {
                 Name = MockName,
                 KeyVaultKeyUri = MockKeyVaultKeyUri
@@ -147,7 +147,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             };
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(new List<TenantKey>());
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new RotatePowerBIEncryptionKey(initFactory)
+            var cmdlet = new SetPowerBIEncryptionKey(initFactory)
             {
                 Name = MockName,
                 KeyVaultKeyUri = MockKeyVaultKeyUri

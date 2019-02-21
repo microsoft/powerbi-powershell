@@ -106,9 +106,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
-            Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw NotSupportedException");
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Parameter Activate with value False is not supported");
+            client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, MockDefault, false), Times.Once());
         }
 
         [TestMethod]
@@ -138,9 +136,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
-            Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw NotSupportedException");
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Parameter Default with value False is not supported");
+            client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, false, MockActivate), Times.Once());
         }
 
         [TestMethod]

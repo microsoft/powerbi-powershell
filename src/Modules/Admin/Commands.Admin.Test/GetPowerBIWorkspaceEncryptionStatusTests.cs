@@ -117,7 +117,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Assert
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.IsTrue(throwingErrorRecords.Count() > 0, "Should throw Exception");
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching workspace is found");
+            Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching workspace was found");
         }
 
         private static void AssertExpectedUnitTestResults(IEnumerable<Dataset> datasetEncryptionStatuses, TestPowerBICmdletInitFactory initFactory)

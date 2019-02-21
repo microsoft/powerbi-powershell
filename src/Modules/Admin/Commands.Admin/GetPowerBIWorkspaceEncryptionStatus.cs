@@ -3,10 +3,10 @@
  * Licensed under the MIT License.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
@@ -14,6 +14,7 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
+    [OutputType(typeof(IEnumerable<Dataset>))]
     public class GetPowerBIWorkspaceEncryptionStatus : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIWorkspaceEncryptionStatus";
@@ -32,7 +33,7 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         protected override void BeginProcessing()
         {
-            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
+            this.Logger.WriteWarning(Constants.PRIVATE_PREVIEW_WARNING);
             base.BeginProcessing();
         }
 
@@ -43,6 +44,7 @@ namespace Microsoft.PowerBI.Commands.Admin
                 var workspace = this.GetWorkspace(client);
                 if (workspace == null)
                 {
+                    // Return for test cases where no matching workspace was found
                     return;
                 }
 
@@ -58,7 +60,7 @@ namespace Microsoft.PowerBI.Commands.Admin
             var workspaces = client.Workspaces.GetWorkspacesAsAdmin(default, nameFilter, 1, default);
             if (workspaces == null || !workspaces.Any())
             {
-                this.Logger.ThrowTerminatingError("No matching workspace is found");
+                this.Logger.ThrowTerminatingError("No matching workspace was found");
                 return null;
             }
 

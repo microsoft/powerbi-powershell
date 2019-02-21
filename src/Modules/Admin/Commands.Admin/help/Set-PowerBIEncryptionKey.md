@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-PowerBIEncryptionKey
 
 ## SYNOPSIS
-Rotate the encryption key
+Set the encryption key
 
 ## SYNTAX
 
@@ -18,19 +18,20 @@ Set-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [<CommonParamet
 
 ## DESCRIPTION
 The commandlet will rotate the customer owned key. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
-Requires TenantReadWriteAll permission
+This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Set-PowerBIEncryptionKey -Name 'testName' -KeyVaultKeyUri 'Uri'
+PS C:\> Set-PowerBIEncryptionKey -Name 'Contoso Sales' -KeyVaultKeyUri 'https://contoso-vault2.vault.azure.net'
 ```
 
 ## PARAMETERS
 
 ### -KeyVaultKeyUri
-The uri of the KeyVaultKeyUri parameter is an Uri to the version of the AzureKeyVault key to be used.
+Uri to the version of the "Azure Key Vault" key to be used.
+The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for bringing your own key
 
 ```yaml
 Type: String

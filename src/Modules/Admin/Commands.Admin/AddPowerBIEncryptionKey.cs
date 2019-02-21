@@ -3,13 +3,14 @@
  * Licensed under the MIT License.
  */
 
-using System;
 using System.Management.Automation;
+using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DefaultParameterSet)]
+    [OutputType(typeof(TenantKey))]
     public class AddPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
@@ -33,30 +34,20 @@ namespace Microsoft.PowerBI.Commands.Admin
         [Parameter(Mandatory = true)]
         public string KeyVaultKeyUri { get; set; }
 
-        [Parameter(ParameterSetName = DefaultParameterSet, Mandatory = false)]
-        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = DefaultParameterSet, Mandatory = true)]
+        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = true)]
         public SwitchParameter Default { get; set; }
 
-        [Parameter(ParameterSetName = ActivateParameterSet, Mandatory = false)]
-        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = ActivateParameterSet, Mandatory = true)]
+        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = true)]
         public SwitchParameter Activate { get; set; }
 
         #endregion
 
         protected override void BeginProcessing()
         {
-            this.Logger.WriteWarning("This cmdlet is in private preview and may not work for your tenant");
+            this.Logger.WriteWarning(Constants.PRIVATE_PREVIEW_WARNING);
             base.BeginProcessing();
-
-            if (this.Default == false)
-            {
-                this.ThrowNotSupportedException(nameof(this.Default), this.Default);
-            }
-
-            if (this.Activate == false)
-            {
-                this.ThrowNotSupportedException(nameof(this.Activate), this.Activate);
-            }
         }
 
         public override void ExecuteCmdlet()
@@ -66,12 +57,6 @@ namespace Microsoft.PowerBI.Commands.Admin
                 var response = client.Admin.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, Default, Activate);
                 this.Logger.WriteObject(response);
             }
-        }
-
-        private void ThrowNotSupportedException(string parameterName, object parameterValue)
-        {
-            var notSupportedException = new NotSupportedException($"Parameter {parameterName} with value {parameterValue} is not supported");
-            this.Logger.ThrowTerminatingError(notSupportedException, ErrorCategory.InvalidArgument);
         }
     }
 }
