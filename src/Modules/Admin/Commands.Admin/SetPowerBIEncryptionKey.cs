@@ -59,9 +59,19 @@ namespace Microsoft.PowerBI.Commands.Admin
                     return;
                 }
 
-                var response = client.Admin.RotatePowerBIEncryptionKey(matchedencryptionKey.Id.ToString(), KeyVaultKeyUri);
-
-                this.Logger.WriteObject(response);
+                try
+                {
+                    var response = client.Admin.RotatePowerBIEncryptionKey(matchedencryptionKey.Id.ToString(), KeyVaultKeyUri);
+                    this.Logger.WriteObject(response);
+                }
+                catch (Rest.HttpOperationException exception)
+                {
+                    // Print the response exception content which contains details on the exception
+                    // E.g. KeyVault is not accesible or key does not exist
+                    this.Logger.WriteWarning(exception.Response.Content);
+                    throw exception;
+                }
+                
             }
         }
 

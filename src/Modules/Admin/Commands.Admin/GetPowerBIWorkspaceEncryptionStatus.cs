@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -48,9 +49,18 @@ namespace Microsoft.PowerBI.Commands.Admin
                     return;
                 }
 
-                var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString());
-
-                this.Logger.WriteObject(response);
+                try
+                {
+                    var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString());
+                    this.Logger.WriteObject(response, enumerateCollection: true);
+                }
+                catch (Rest.HttpOperationException exception)
+                {
+                    // Print the response exception content which contains details on the exception
+                    // E.g. Workspace is not in capacity or capacity is not encrypted
+                    this.Logger.WriteWarning(exception.Response.Content);
+                    throw exception;
+                }
             }
         }
 

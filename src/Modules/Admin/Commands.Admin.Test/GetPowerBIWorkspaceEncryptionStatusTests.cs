@@ -124,9 +124,10 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
-            var datasetEncryptionStatus = results.Cast<IEnumerable<Dataset>>().ToList();
-            Assert.AreEqual(datasetEncryptionStatus.Count, 1);
-            Assert.AreEqual(datasetEncryptionStatuses, datasetEncryptionStatus[0]);
+            Assert.AreEqual(results.Count, 2);
+            var datasetEncryptionStatusesList = datasetEncryptionStatuses.ToList();
+            Assert.AreEqual(datasetEncryptionStatusesList[0], results[0]);
+            Assert.AreEqual(datasetEncryptionStatusesList[1], results[1]);
         }
     }
 }

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <Name>Microsoft.PowerBI.Api.V2.Models.Dataset</Name>
+      <ViewSelectedBy>
+        <TypeName>Microsoft.PowerBI.Api.V2.Models.Dataset</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>Id</Label>
+                <ScriptBlock>$_.Id</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>Name</Label>
+                <ScriptBlock>$_.Name</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>AddRowsAPIEnabled</Label>
+                <ScriptBlock>$_.AddRowsAPIEnabled</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>ConfiguredBy</Label>
+                <ScriptBlock>$_.ConfiguredBy</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>IsRefreshable</Label>
+                <ScriptBlock>$_.IsRefreshable</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>IsEffectiveIdentityRequired</Label>
+                <ScriptBlock>$_.IsEffectiveIdentityRequired</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>IsEffectiveIdentityRolesRequired</Label>
+                <ScriptBlock>$_.IsEffectiveIdentityRolesRequired</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>IsOnPremGatewayRequired</Label>
+                <ScriptBlock>$_.IsOnPremGatewayRequired</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Encryption -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>Encryption</Label>
+                <ScriptBlock>$_.Encryption | Out-String</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

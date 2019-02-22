@@ -16,6 +16,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Microsoft.PowerBI.Commands.Admin.format.ps1xml" />
+    <None Remove="MicrosoftPowerBIMgmt.Admin.psd1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Microsoft.PowerBI.Commands.Admin.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MicrosoftPowerBIMgmt.Admin.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
