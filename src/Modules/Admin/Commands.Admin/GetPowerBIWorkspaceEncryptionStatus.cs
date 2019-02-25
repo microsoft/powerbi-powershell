@@ -48,19 +48,9 @@ namespace Microsoft.PowerBI.Commands.Admin
                     // Return for test cases where no matching workspace was found
                     return;
                 }
-
-                try
-                {
-                    var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString());
-                    this.Logger.WriteObject(response, enumerateCollection: true);
-                }
-                catch (Rest.HttpOperationException exception)
-                {
-                    // Print the response exception content which contains details on the exception
-                    // E.g. Workspace is not in capacity or capacity is not encrypted
-                    this.Logger.WriteWarning(exception.Response.Content);
-                    throw exception;
-                }
+                
+                var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString());
+                this.Logger.WriteObject(response, enumerateCollection: true);
             }
         }
 
