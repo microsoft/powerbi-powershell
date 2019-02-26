@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -52,5 +53,8 @@ namespace Microsoft.PowerBI.Commands.Common
 
         [DataMember(Name = "ShowADALDebugMessages", IsRequired = false)]
         public bool ShowADALDebugMessages { get; set; }
+
+        [DataMember(Name = "HttpTimeout", IsRequired = false, EmitDefaultValue = true)]
+        public TimeSpan? HttpTimeout { get; set; }
     }
 }

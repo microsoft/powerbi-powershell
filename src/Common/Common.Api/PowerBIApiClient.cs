@@ -48,26 +48,44 @@ namespace Microsoft.PowerBI.Common.Api
         private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             var token = authenticator.Authenticate(profile, logger, settings);
+            PowerBIClient client = null;
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
             {
-                return new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
+                client = new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
             }
             else
             {
-                return new PowerBIClient(new TokenCredentials(token.AccessToken));
+                client = new PowerBIClient(new TokenCredentials(token.AccessToken));
             }
+
+            SetTimeoutForClient(client, logger, settings);
+            return client;
         }
 
         private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
             var token = authenticator.Authenticate(profile, logger, settings);
+            PowerBIClient client = null;
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
             {
-                return new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken), httpClientHandler);
+                client = new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken), httpClientHandler);
             }
             else
             {
-                return new PowerBIClient(new TokenCredentials(token.AccessToken), httpClientHandler);
+                client = new PowerBIClient(new TokenCredentials(token.AccessToken), httpClientHandler);
+            }
+
+            SetTimeoutForClient(client, logger, settings);
+            return client;
+        }
+
+        private static void SetTimeoutForClient(PowerBIClient client, IPowerBILogger logger, IPowerBISettings settings)
+        {
+            // Set HttpTimeout if not null to HttpClient that PowerBIClient contains
+            if (settings.Settings.HttpTimeout.HasValue)
+            {
+                logger.WriteVerbose($"Setting HTTP client timeout to {settings.Settings.HttpTimeout.Value}");
+                client.HttpClient.Timeout = settings.Settings.HttpTimeout.Value;
             }
         }
 

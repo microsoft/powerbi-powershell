@@ -3,12 +3,16 @@
  * Licensed under the MIT License.
  */
 
+using System;
+
 namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
 {
     public interface IPowerBIConfigurationSettings
     {
-        bool ForceDeviceCodeAuthentication { get; }
+        bool ForceDeviceCodeAuthentication { get; set; }
 
-        bool ShowADALDebugMessages { get; }
+        bool ShowADALDebugMessages { get; set; }
+
+        TimeSpan? HttpTimeout { get; set; }
     }
 }

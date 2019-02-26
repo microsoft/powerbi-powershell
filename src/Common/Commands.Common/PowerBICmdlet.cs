@@ -249,6 +249,12 @@ namespace Microsoft.PowerBI.Commands.Common
                 AssertProfileExists();
             }
 
+            // If implementing child class implements ITimeout, update the timeout settings
+            if(typeof(ITimeout).IsAssignableFrom(this.GetType()))
+            {
+                this.Settings.Settings.HttpTimeout = ((ITimeout)this).Timeout;
+            }
+
             base.BeginProcessing();
         }
 

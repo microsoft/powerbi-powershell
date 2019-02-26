@@ -6,12 +6,13 @@
 using System;
 using System.IO;
 using System.Management.Automation;
+using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Reports
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    public class ExportPowerBIReport : PowerBIClientCmdlet
+    public class ExportPowerBIReport : PowerBIClientCmdlet, ITimeout
     {
         public const string CmdletVerb = VerbsData.Export;
         public const string CmdletName = "PowerBIReport";
@@ -27,6 +28,9 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         [Parameter(Mandatory = true)]
         public string OutFile { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public TimeSpan? Timeout { get; set; } = null;
         #endregion
 
         #region Constructors
@@ -52,7 +56,6 @@ namespace Microsoft.PowerBI.Commands.Reports
                 {
                     if (reportStream != null)
                     {
-                        reportStream.Seek(0, SeekOrigin.Begin);
                         using (var fileStream = new FileStream(this.OutFile, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                         {
                             reportStream.CopyTo(fileStream);

@@ -14,8 +14,8 @@ Executes a REST call to the Power BI service, with the specified URL and body.
 
 ```
 Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>] [-OutFile <String>]
- [-ContentType <String>] [-Headers <Hashtable>] [-Organization <String>] [-Version <String>]
- [<CommonParameters>]
+ [-ContentType <String>] [-Headers <Hashtable>] [-Timeout <TimeSpan>] [-Organization <String>]
+ [-Version <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -115,6 +115,21 @@ Output file for writing the response content to. File path specified must not ex
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timeout
+{{Fill Timeout Description}}
+
+```yaml
+Type: TimeSpan
 Parameter Sets: (All)
 Aliases:
 

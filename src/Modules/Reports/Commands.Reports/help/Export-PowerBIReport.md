@@ -13,7 +13,8 @@ Exports a Power BI report to the .pbix file format.
 ## SYNTAX
 
 ```
-Export-PowerBIReport [-WorkspaceId <Guid>] -Id <Guid> -OutFile <String> [<CommonParameters>]
+Export-PowerBIReport [-WorkspaceId <Guid>] -Id <Guid> -OutFile <String> [-Timeout <TimeSpan>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,6 +56,21 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timeout
+{{Fill Timeout Description}}
+
+```yaml
+Type: TimeSpan
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

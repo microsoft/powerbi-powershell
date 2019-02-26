@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Commands.Profile
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(string))]
-    public class InvokePowerBIRestMethod : PowerBICmdlet
+    public class InvokePowerBIRestMethod : PowerBICmdlet, ITimeout
     {
         // Similiar to Invoke-RestMethod - https://github.com/PowerShell/PowerShell/blob/master/src/Microsoft.PowerShell.Commands.Utility/commands/utility/WebCmdlet/Common/InvokeRestMethodCommand.Common.cs
 
@@ -55,6 +55,9 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         [Parameter(Mandatory = false)]
         public Hashtable Headers { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public TimeSpan? Timeout { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
@@ -219,6 +222,12 @@ namespace Microsoft.PowerBI.Commands.Profile
                 {
                     client.DefaultRequestHeaders.Add(header.Key.ToString(), header.Value.ToString());
                 }
+            }
+
+            if(this.Settings.Settings.HttpTimeout.HasValue)
+            {
+                this.Logger.WriteVerbose($"Setting HTTP client timeout to {this.Settings.Settings.HttpTimeout.Value}");
+                client.Timeout = this.Settings.Settings.HttpTimeout.Value;
             }
         }
 
