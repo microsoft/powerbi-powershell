@@ -9,7 +9,7 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
-    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DefaultParameterSet)]
+    [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(TenantKey))]
     public class AddPowerBIEncryptionKey : PowerBIClientCmdlet
     {
@@ -20,12 +20,6 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         public AddPowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
-        #region Parameter set names
-        public const string DefaultParameterSet = "Default";
-        public const string ActivateParameterSet = "Activate";
-        public const string DefaultAndActivateParameterSet = "DefaultAndActivate";
-        #endregion
-
         #region Parameters
 
         [Parameter(Mandatory = true)]
@@ -33,14 +27,6 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         [Parameter(Mandatory = true)]
         public string KeyVaultKeyUri { get; set; }
-
-        [Parameter(ParameterSetName = DefaultParameterSet, Mandatory = true)]
-        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = true)]
-        public SwitchParameter Default { get; set; }
-
-        [Parameter(ParameterSetName = ActivateParameterSet, Mandatory = true)]
-        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = true)]
-        public SwitchParameter Activate { get; set; }
 
         #endregion
 
@@ -54,7 +40,7 @@ namespace Microsoft.PowerBI.Commands.Admin
         {
             using (var client = this.CreateClient())
             {
-                var response = client.Admin.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, Default, Activate);
+                var response = client.Admin.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, isDefault: true, activate: true);
                 this.Logger.WriteObject(response);
             }
         }

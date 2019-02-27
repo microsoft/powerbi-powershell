@@ -14,7 +14,7 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
-    [Cmdlet(CmdletVerb, CmdletName)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = IdParameterSet)]
     [OutputType(typeof(IEnumerable<Dataset>))]
     public class GetPowerBIWorkspaceEncryptionStatus : PowerBIClientCmdlet
     {
@@ -25,10 +25,22 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         public GetPowerBIWorkspaceEncryptionStatus(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
+        #region Parameter set names
+        public const string NameParameterSet = "Name";
+        public const string IdParameterSet = "Id";
+        public const string WorkspaceParameterSet = "Workspace";
+        #endregion
+
         #region Parameters
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Mandatory = true, ParameterSetName = NameParameterSet)]
         public string Name { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = IdParameterSet)]
+        public Guid Id { get; set; }
+
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSet, ValueFromPipeline = true)]
+        public Workspace Workspace { get; set; }
 
         #endregion
 
@@ -42,21 +54,32 @@ namespace Microsoft.PowerBI.Commands.Admin
         {
             using (var client = this.CreateClient())
             {
-                var workspace = this.GetWorkspace(client);
-                if (workspace == null)
+                switch (ParameterSet)
                 {
-                    // Return for test cases where no matching workspace was found
-                    return;
+                    case NameParameterSet:
+                        Workspace = this.GetWorkspace(client, Name);
+                        if (Workspace == null)
+                        {
+                            // Return for test cases where no matching workspace was found
+                            return;
+                        }
+                        Id = Workspace.Id;
+                        break;
+                    case IdParameterSet:
+                        break;
+                    case WorkspaceParameterSet:
+                        Id = Workspace.Id;
+                        break;
                 }
-                
-                var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString());
+
+                var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(Id.ToString());
                 this.Logger.WriteObject(response, enumerateCollection: true);
             }
         }
 
-        private Workspace GetWorkspace(IPowerBIApiClient client)
+        private Workspace GetWorkspace(IPowerBIApiClient client, string workspaceName)
         {
-            string nameFilter = $"name eq '{this.Name}'";
+            string nameFilter = $"name eq '{workspaceName}'";
             var workspaces = client.Workspaces.GetWorkspacesAsAdmin(default, nameFilter, 1, default);
             if (workspaces == null || !workspaces.Any())
             {

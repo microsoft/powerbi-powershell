@@ -15,11 +15,11 @@ PowerShell cmdlets for performing administrative duties across the Power BI serv
 Adds an encryption key for Power BI workspaces assigned to a capacity.
 
 ### [Get-PowerBIEncryptionKey](Get-PowerBIEncryptionKey.md)
-Retrieves the encryption keys set for the tenant
+Retrieves the encryption key for the tenant.
 
 ### [Get-PowerBIWorkspaceEncryptionStatus](Get-PowerBIWorkspaceEncryptionStatus.md)
 List Power BI workspace encryption status.
 
-### [Set-PowerBIEncryptionKey](Set-PowerBIEncryptionKey.md)
-Set the encryption key
+### [Switch-PowerBIEncryptionKey](Switch-PowerBIEncryptionKey.md)
+Switch the encryption key for Power BI workspaces assigned to a capacity.
 

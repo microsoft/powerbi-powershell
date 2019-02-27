@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -22,8 +21,6 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
 
         private static string MockName = "KeyName";
         private static string MockKeyVaultKeyUri = "KeyVaultUri";
-        private static bool MockDefault = true;
-        private static bool MockActivate = true;
 
         [TestMethod]
         [TestCategory("Interactive")]
@@ -36,9 +33,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(AddPowerBIEncryptionKeyCmdletInfo)
                         .AddParameter(nameof(AddPowerBIEncryptionKey.Name), MockName)
-                        .AddParameter(nameof(AddPowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri)
-                        .AddParameter(nameof(AddPowerBIEncryptionKey.Default), MockDefault)
-                        .AddParameter(nameof(AddPowerBIEncryptionKey.Activate), MockActivate);
+                        .AddParameter(nameof(AddPowerBIEncryptionKey.KeyVaultKeyUri), MockKeyVaultKeyUri);
 
                 // Act
                 var result = ps.Invoke();
@@ -58,7 +53,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 Id = Guid.NewGuid(),
                 Name = MockName,
                 KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
-                IsDefault = MockDefault,
+                IsDefault = true,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
@@ -67,76 +62,14 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var cmdlet = new AddPowerBIEncryptionKey(initFactory)
             {
                 Name = MockName,
-                KeyVaultKeyUri = MockKeyVaultKeyUri,
-                Default = MockDefault,
-                Activate = MockActivate
+                KeyVaultKeyUri = MockKeyVaultKeyUri
             };
 
             // Act
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, MockDefault, MockActivate), Times.Once());
-        }
-
-        [TestMethod]
-        public void AddPowerBIEncryptionKey_WithDefaultParameterSet()
-        {
-            // Arrange
-            var client = new Mock<IPowerBIApiClient>();
-            var tenantKey = new TenantKey()
-            {
-                Id = Guid.NewGuid(),
-                Name = MockName,
-                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
-                IsDefault = MockDefault,
-                CreatedAt = new DateTime(1995, 1, 1),
-                UpdatedAt = new DateTime(1995, 1, 1)
-            };
-            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(tenantKey);
-            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new AddPowerBIEncryptionKey(initFactory)
-            {
-                Name = MockName,
-                KeyVaultKeyUri = MockKeyVaultKeyUri,
-                Default = MockDefault
-            };
-
-            // Act
-            cmdlet.InvokePowerBICmdlet();
-
-            // Assert
-            client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, MockDefault, false), Times.Once());
-        }
-
-        [TestMethod]
-        public void AddPowerBIEncryptionKey_WithActivateParameterSet()
-        {
-            // Arrange
-            var client = new Mock<IPowerBIApiClient>();
-            var tenantKey = new TenantKey()
-            {
-                Id = Guid.NewGuid(),
-                Name = MockName,
-                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
-                IsDefault = MockDefault,
-                CreatedAt = new DateTime(1995, 1, 1),
-                UpdatedAt = new DateTime(1995, 1, 1)
-            };
-            client.Setup(x => x.Admin.AddPowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>())).Returns(tenantKey);
-            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new AddPowerBIEncryptionKey(initFactory)
-            {
-                Name = MockName,
-                KeyVaultKeyUri = MockKeyVaultKeyUri,
-                Activate = MockActivate
-            };
-
-            // Act
-            cmdlet.InvokePowerBICmdlet();
-
-            // Assert
-            client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, false, MockActivate), Times.Once());
+            client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, true, true), Times.Once());
         }
 
         [TestMethod]
@@ -150,9 +83,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var cmdlet = new AddPowerBIEncryptionKey(initFactory)
             {
                 Name = MockName,
-                KeyVaultKeyUri = MockKeyVaultKeyUri,
-                Default = MockDefault,
-                Activate = MockActivate
+                KeyVaultKeyUri = MockKeyVaultKeyUri
             };
 
             // Act

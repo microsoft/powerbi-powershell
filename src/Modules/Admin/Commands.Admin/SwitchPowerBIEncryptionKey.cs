@@ -16,14 +16,14 @@ namespace Microsoft.PowerBI.Commands.Admin
     [Cmdlet(CmdletVerb, CmdletName)]
     [Alias("Rotate-PowerBIEncryptionKey")]
     [OutputType(typeof(TenantKey))]
-    public class SetPowerBIEncryptionKey : PowerBIClientCmdlet
+    public class SwitchPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
-        public const string CmdletVerb = VerbsCommon.Set;
+        public const string CmdletVerb = VerbsCommon.Switch;
 
-        public SetPowerBIEncryptionKey() : base() { }
+        public SwitchPowerBIEncryptionKey() : base() { }
 
-        public SetPowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public SwitchPowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         #region Parameters
 
@@ -61,7 +61,6 @@ namespace Microsoft.PowerBI.Commands.Admin
 
                 var response = client.Admin.RotatePowerBIEncryptionKey(matchedencryptionKey.Id.ToString(), KeyVaultKeyUri);
                 this.Logger.WriteObject(response);
-                
             }
         }
 

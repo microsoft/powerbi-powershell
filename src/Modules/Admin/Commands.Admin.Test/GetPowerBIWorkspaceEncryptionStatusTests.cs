@@ -10,7 +10,6 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
-using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -46,7 +45,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         }
 
         [TestMethod]
-        public void GetPowerBIWorkspaceEncryptionStatus_WithAllValidParameters()
+        public void GetPowerBIWorkspaceEncryptionStatus_WithNameParameterSet()
         {
             // Arrange
             var workspace1 = new Workspace { Id = Guid.NewGuid(), Name = "Workspace1" };
@@ -70,7 +69,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
             {
-                Name = "Workspace1"
+                Name = "Workspace1",
+                ParameterSet = GetPowerBIWorkspaceEncryptionStatus.NameParameterSet
             };
 
             // Act
@@ -79,6 +79,76 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Assert
             client.Verify(x => x.Workspaces.GetWorkspacesAsAdmin(default, "name eq 'Workspace1'", 1, default), Times.Once());
             client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace1.Id.ToString()), Times.Once());
+            AssertExpectedUnitTestResults(datasetEncryptionStatus, initFactory);
+        }
+
+        [TestMethod]
+        public void GetPowerBIWorkspaceEncryptionStatus_WithIdParameterSet()
+        {
+            // Arrange
+            var datasetEncryptionStatus1 = new Dataset()
+            {
+                Id = "Dataset1",
+                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.InSyncWithWorkspace }
+            };
+            var datasetEncryptionStatus2 = new Dataset()
+            {
+                Id = "Dataset2",
+                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace }
+            };
+            var datasetEncryptionStatus = new List<Dataset>();
+            datasetEncryptionStatus.Add(datasetEncryptionStatus1);
+            datasetEncryptionStatus.Add(datasetEncryptionStatus2);
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<string>())).Returns(datasetEncryptionStatus);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var workspaceId = Guid.NewGuid();
+            var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
+            {
+                Id = workspaceId,
+                ParameterSet = GetPowerBIWorkspaceEncryptionStatus.IdParameterSet
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspaceId.ToString()), Times.Once());
+            AssertExpectedUnitTestResults(datasetEncryptionStatus, initFactory);
+        }
+
+        [TestMethod]
+        public void GetPowerBIWorkspaceEncryptionStatus_WithWorkspaceParameterSet()
+        {
+            // Arrange
+            var datasetEncryptionStatus1 = new Dataset()
+            {
+                Id = "Dataset1",
+                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.InSyncWithWorkspace }
+            };
+            var datasetEncryptionStatus2 = new Dataset()
+            {
+                Id = "Dataset2",
+                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace }
+            };
+            var datasetEncryptionStatus = new List<Dataset>();
+            datasetEncryptionStatus.Add(datasetEncryptionStatus1);
+            datasetEncryptionStatus.Add(datasetEncryptionStatus2);
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<string>())).Returns(datasetEncryptionStatus);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var workspace = new Workspace { Id = Guid.NewGuid() };
+            var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
+            {
+                Workspace = workspace,
+                ParameterSet = GetPowerBIWorkspaceEncryptionStatus.WorkspaceParameterSet
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString()), Times.Once());
             AssertExpectedUnitTestResults(datasetEncryptionStatus, initFactory);
         }
 
@@ -92,7 +162,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
             {
-                Name = MockName
+                Name = MockName,
+                ParameterSet = GetPowerBIWorkspaceEncryptionStatus.NameParameterSet
             };
 
             // Act
@@ -108,7 +179,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
             {
-                Name = "Workspace1"
+                Name = "Workspace1",
+                ParameterSet = GetPowerBIWorkspaceEncryptionStatus.NameParameterSet
             };
 
             // Act
