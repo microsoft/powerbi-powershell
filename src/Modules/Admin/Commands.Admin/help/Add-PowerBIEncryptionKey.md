@@ -12,8 +12,19 @@ Adds an encryption key for Power BI workspaces assigned to a capacity.
 
 ## SYNTAX
 
+### DefaultAndActivate (Default)
 ```
-Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [<CommonParameters>]
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [-Activate] [<CommonParameters>]
+```
+
+### Default
+```
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [<CommonParameters>]
+```
+
+### Activate
+```
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,10 +43,40 @@ PS C:\> Add-PowerBIEncryptionKey -Name 'Contoso Sales' -KeyVaultKeyUri 'https://
 
 ## PARAMETERS
 
+### -Activate
+Indicates to activate any inactivated capacities to use this key for its encryption
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: DefaultAndActivate, Activate
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Default
+Indicates that this key is set as default for the entire tenant.
+Any new capacity creation will inherit this key upon creation.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: DefaultAndActivate, Default
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -KeyVaultKeyUri
 Uri to the version of the "Azure Key Vault" key to be used.
 The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for bringing your own key.
-
 
 ```yaml
 Type: String
