@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Microsoft.PowerBI.Commands.OnPremisesDataGateway</AssemblyName>
+    <RootNamespace>Microsoft.PowerBI.Commands.OnPremisesDataGateway</RootNamespace>
+    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- NuGet Package Properties -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>MicrosoftPowerBIMgmt.OnPremisesDataGateway</PackageId>
+    <Description>Microsoft Power BI PowerShell - On-premises Data Gateway cmdlets for Microsoft Power BI</Description>
+    <PackageTags>PowerBI;Gateway;DataGateway;OnPremisesDataGateway</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="MicrosoftPowerBIMgmt.OnPremisesDataGateway.psd1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MicrosoftPowerBIMgmt.OnPremisesDataGateway.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Commands.Common\Commands.Common.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Common.Client\Common.Client.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
+  </ItemGroup>
+
+</Project>
