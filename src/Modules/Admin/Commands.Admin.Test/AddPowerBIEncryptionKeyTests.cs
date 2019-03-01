@@ -81,7 +81,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         [TestMethod]
         public void AddPowerBIEncryptionKey_WithDefaultParameterSet()
         {
-            // Arrange	
+            // Arrange
             var client = new Mock<IPowerBIApiClient>();
             var tenantKey = new TenantKey()
             {
@@ -101,17 +101,17 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 Default = MockDefault
             };
 
-            // Act	
+            // Act
             cmdlet.InvokePowerBICmdlet();
 
-            // Assert	
+            // Assert
             client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, MockDefault, false), Times.Once());
         }
 
         [TestMethod]
         public void AddPowerBIEncryptionKey_WithActivateParameterSet()
         {
-            // Arrange	
+            // Arrange
             var client = new Mock<IPowerBIApiClient>();
             var tenantKey = new TenantKey()
             {
@@ -131,10 +131,10 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 Activate = MockActivate
             };
 
-            // Act	
+            // Act
             cmdlet.InvokePowerBICmdlet();
 
-            // Assert	
+            // Assert
             client.Verify(x => x.Admin.AddPowerBIEncryptionKey(MockName, MockKeyVaultKeyUri, false, MockActivate), Times.Once());
         }
 

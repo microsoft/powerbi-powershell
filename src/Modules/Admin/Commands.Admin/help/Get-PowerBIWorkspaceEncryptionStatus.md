@@ -12,14 +12,14 @@ List Power BI workspace encryption status.
 
 ## SYNTAX
 
-### Id (Default)
-```
-Get-PowerBIWorkspaceEncryptionStatus -Id <Guid> [<CommonParameters>]
-```
-
-### Name
+### Name (Default)
 ```
 Get-PowerBIWorkspaceEncryptionStatus -Name <String> [<CommonParameters>]
+```
+
+### Id
+```
+Get-PowerBIWorkspaceEncryptionStatus -Id <Guid> [<CommonParameters>]
 ```
 
 ### Workspace

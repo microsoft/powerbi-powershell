@@ -19,7 +19,7 @@ Switch-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [<CommonPara
 ## DESCRIPTION
 Rotate the customer owned key for the tenant.
 Make sure the current encryption key and new version of key is valid.
-Grant wrap and unwrap key permissions for Power BI service in the "Azure Key Vault".
+Grant wrap and unwrap key permissions for Power BI service in the Azure Key Vault.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 

@@ -14,7 +14,7 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
-    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = IdParameterSet)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = NameParameterSet)]
     [OutputType(typeof(IEnumerable<Dataset>))]
     public class GetPowerBIWorkspaceEncryptionStatus : PowerBIClientCmdlet
     {
