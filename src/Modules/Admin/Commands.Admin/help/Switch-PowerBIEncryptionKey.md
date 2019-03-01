@@ -5,33 +5,36 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-PowerBIEncryptionKey
+# Switch-PowerBIEncryptionKey
 
 ## SYNOPSIS
-Set the encryption key
+Switch the encryption key for Power BI workspaces assigned to a capacity.
 
 ## SYNTAX
 
 ```
-Set-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [<CommonParameters>]
+Switch-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The commandlet will rotate the customer owned key. Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
+Rotate the customer owned key for the tenant.
+Make sure the current encryption key and new version of key is valid.
+Grant wrap and unwrap key permissions for Power BI service in the Azure Key Vault.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 
 ## EXAMPLES
 
 ### Example 1
-```powershell
-PS C:\> Set-PowerBIEncryptionKey -Name 'Contoso Sales' -KeyVaultKeyUri 'https://contoso-vault2.vault.azure.net'
+```
+PS C:\> Switch-PowerBIEncryptionKey -Name 'Contoso Sales' -KeyVaultKeyUri 'https://contoso-vault2.vault.azure.net/keys/ContosoKeyVault/b2ab4ba1c7b341eea5ecaaa2wb54c4d2'
 ```
 
 ## PARAMETERS
 
 ### -KeyVaultKeyUri
 Uri to the version of the "Azure Key Vault" key to be used.
-The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for bringing your own key
+The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for bringing your own key.
 
 ```yaml
 Type: String
@@ -46,7 +49,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the key to be rotated
+The name of the encryption key.
 
 ```yaml
 Type: String
@@ -69,7 +72,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
+### Microsoft.PowerBI.Api.V2.Models.TenantKey
 
 ## NOTES
 

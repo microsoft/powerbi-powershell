@@ -9,7 +9,7 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
-    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DefaultParameterSet)]
+    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DefaultAndActivateParameterSet)]
     [OutputType(typeof(TenantKey))]
     public class AddPowerBIEncryptionKey : PowerBIClientCmdlet
     {
