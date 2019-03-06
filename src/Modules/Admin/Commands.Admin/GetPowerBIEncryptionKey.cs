@@ -5,13 +5,13 @@
 
 using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(IEnumerable<TenantKey>))]
+    [OutputType(typeof(IEnumerable<EncryptionKey>))]
     public class GetPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
@@ -20,12 +20,6 @@ namespace Microsoft.PowerBI.Commands.Admin
         public GetPowerBIEncryptionKey() : base() { }
 
         public GetPowerBIEncryptionKey(IPowerBIClientCmdletInitFactory init): base(init) { }
-
-        protected override void BeginProcessing()
-        {
-            this.Logger.WriteWarning(Constants.PrivatePreviewWarning);
-            base.BeginProcessing();
-        }
 
         public override void ExecuteCmdlet()
         {

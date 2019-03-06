@@ -7,8 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
 
@@ -43,12 +43,6 @@ namespace Microsoft.PowerBI.Commands.Admin
         public Workspace Workspace { get; set; }
 
         #endregion
-
-        protected override void BeginProcessing()
-        {
-            this.Logger.WriteWarning(Constants.PrivatePreviewWarning);
-            base.BeginProcessing();
-        }
 
         public override void ExecuteCmdlet()
         {

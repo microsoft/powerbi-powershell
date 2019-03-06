@@ -7,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -22,7 +22,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         private static CmdletInfo SwitchPowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{SwitchPowerBIEncryptionKey.CmdletVerb}-{SwitchPowerBIEncryptionKey.CmdletName}", typeof(SwitchPowerBIEncryptionKey));
 
         private static string MockName = "KeyName";
-        private static string MockKeyVaultKeyUri = "KeyVaultUri";
+        private static string MockKeyVaultKeyUri = "http://www.contoso.com/";
         private static bool MockDefault = true;
 
         [TestMethod]
@@ -50,34 +50,34 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         public void RotatePowerBIEncryptionKey_WithAllValidParameters()
         {
             // Arrange
-            var tenantKey1 = new TenantKey()
+            var tenantKey1 = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = "KeyName1",
-                KeyVaultKeyIdentifier = "KeyVaultUri1",
+                KeyVaultKeyIdentifier = new Uri("http://www.contoso1.com/"),
                 IsDefault = true,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var tenantKey2 = new TenantKey()
+            var tenantKey2 = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = "KeyName2",
-                KeyVaultKeyIdentifier = "KeyVaultUri2",
+                KeyVaultKeyIdentifier = new Uri("http://www.contoso2.com/"),
                 IsDefault = false,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var rotatedTenantKey = new TenantKey()
+            var rotatedTenantKey = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = "KeyName1",
-                KeyVaultKeyIdentifier = "KeyVaultUri3",
+                KeyVaultKeyIdentifier = new Uri("http://www.contoso3.com/"),
                 IsDefault = true,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var tenantKeys = new List<TenantKey>();
+            var tenantKeys = new List<EncryptionKey>();
             tenantKeys.Add(tenantKey1);
             tenantKeys.Add(tenantKey2);
             var client = new Mock<IPowerBIApiClient>();
@@ -87,7 +87,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var cmdlet = new SwitchPowerBIEncryptionKey(initFactory)
             {
                 Name = "KeyName1",
-                KeyVaultKeyUri = "KeyVaultUri3"
+                KeyVaultKeyUri = "http://www.contoso3.com/"
             };
 
             // Act
@@ -95,7 +95,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
 
             // Assert
             client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.RotatePowerBIEncryptionKey(tenantKey1.Id.ToString(), "KeyVaultUri3"), Times.Once());
+            client.Verify(x => x.Admin.RotatePowerBIEncryptionKey(tenantKey1.Id.ToString(), "http://www.contoso3.com/"), Times.Once());
             AssertExpectedUnitTestResults(rotatedTenantKey, initFactory);
         }
 
@@ -105,11 +105,11 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var tenantKey = new TenantKey()
+            var tenantKey = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = MockName,
-                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                KeyVaultKeyIdentifier = new Uri(MockKeyVaultKeyUri),
                 IsDefault = MockDefault,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
@@ -136,16 +136,16 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var tenantKey = new TenantKey()
+            var tenantKey = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = MockName,
-                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                KeyVaultKeyIdentifier = new Uri(MockKeyVaultKeyUri),
                 IsDefault = MockDefault,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(new List<TenantKey>());
+            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(new List<EncryptionKey>());
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SwitchPowerBIEncryptionKey(initFactory)
             {
@@ -162,11 +162,11 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             Assert.AreEqual(throwingErrorRecords.First().ToString(), "No encryption keys are set");
         }
 
-        private static void AssertExpectedUnitTestResults(TenantKey expectedTenantKey, TestPowerBICmdletInitFactory initFactory)
+        private static void AssertExpectedUnitTestResults(EncryptionKey expectedTenantKey, TestPowerBICmdletInitFactory initFactory)
         {
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
-            var encryptionKeys = results.Cast<TenantKey>().ToList();
+            var encryptionKeys = results.Cast<EncryptionKey>().ToList();
             Assert.AreEqual(encryptionKeys.Count, 1);
             Assert.AreEqual(expectedTenantKey, encryptionKeys[0]);
         }

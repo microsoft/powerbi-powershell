@@ -30,6 +30,14 @@ Get-PowerBIWorkspaceEncryptionStatus -Workspace <Workspace> [<CommonParameters>]
 ## DESCRIPTION
 Retrieves the encryption status of datasets for a given workspace.
 Operates against all workspaces within a tenant (Organization scope) that is encrypted by customer owned key.
+
+The encryption status enumeration represents the following situation:
+
+* unknown - Unable to determine state due to dataset corruption.
+* notSupported - Encryption is not supported for this dataset.
+* inSyncWithWorkspace - Encryption is supported and is in sync with the encryption settings.
+* notInSyncWithWorkspace - Encryption is supported and not in sync with the encryption settings.
+
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 
@@ -111,7 +119,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
+### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Encryption.Dataset, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
 
 ## NOTES
 

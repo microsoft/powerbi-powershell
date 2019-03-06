@@ -6,10 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -43,25 +43,25 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         public void GetPowerBIEncryptionKey_WithValidResponse()
         {
             // Arrange
-            var tenantKey1 = new TenantKey()
+            var tenantKey1 = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = "KeyName1",
-                KeyVaultKeyIdentifier = "KeyVaultUri1",
+                KeyVaultKeyIdentifier = new Uri("http://www.contoso1.com/"),
                 IsDefault = true,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var tenantKey2 = new TenantKey()
+            var tenantKey2 = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = "KeyName2",
-                KeyVaultKeyIdentifier = "KeyVaultUri2",
+                KeyVaultKeyIdentifier = new Uri("http://www.contoso2.com/"),
                 IsDefault = true,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var tenantKeys = new List<TenantKey>();
+            var tenantKeys = new List<EncryptionKey>();
             tenantKeys.Add(tenantKey1);
             tenantKeys.Add(tenantKey2);
             var client = new Mock<IPowerBIApiClient>();

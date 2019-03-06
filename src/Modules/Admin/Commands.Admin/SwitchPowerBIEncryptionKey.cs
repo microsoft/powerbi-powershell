@@ -7,15 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [Alias("Rotate-PowerBIEncryptionKey")]
-    [OutputType(typeof(TenantKey))]
+    [OutputType(typeof(EncryptionKey))]
     public class SwitchPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
@@ -34,12 +34,6 @@ namespace Microsoft.PowerBI.Commands.Admin
         public string KeyVaultKeyUri { get; set; }
 
         #endregion
-
-        protected override void BeginProcessing()
-        {
-            this.Logger.WriteWarning(Constants.PrivatePreviewWarning);
-            base.BeginProcessing();
-        }
 
         public override void ExecuteCmdlet()
         {
@@ -64,7 +58,7 @@ namespace Microsoft.PowerBI.Commands.Admin
             }
         }
 
-        private IEnumerable<TenantKey> GetEncryptionKeys(IPowerBIApiClient client)
+        private IEnumerable<EncryptionKey> GetEncryptionKeys(IPowerBIApiClient client)
         {
             var tenantKeys = client.Admin.GetPowerBIEncryptionKeys();
             if (tenantKeys == null || !tenantKeys.Any())
@@ -76,11 +70,11 @@ namespace Microsoft.PowerBI.Commands.Admin
             return tenantKeys;
         }
 
-        private TenantKey GetMatchingEncryptionKey(IEnumerable<TenantKey> encryptionKeys)
+        private EncryptionKey GetMatchingEncryptionKey(IEnumerable<EncryptionKey> encryptionKeys)
         {
             var matchedencryptionKey = encryptionKeys.FirstOrDefault(
                     (encryptionKey) => encryptionKey.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-            if (matchedencryptionKey == default(TenantKey))
+            if (matchedencryptionKey == default(EncryptionKey))
             {
                 this.Logger.ThrowTerminatingError("No matching encryption keys found");
                 return null;

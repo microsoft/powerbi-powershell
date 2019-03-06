@@ -7,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -52,13 +52,15 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var workspaces = new List<Workspace>();
             workspaces.Add(workspace1);
             var datasetEncryptionStatus1 = new Dataset() {
-                Id = "Dataset1",
-                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.InSyncWithWorkspace }
+                Id = Guid.NewGuid(),
+                Name = "Dataset1",
+                EncryptionStatus = EncryptionStatus.InSyncWithWorkspace
             };
             var datasetEncryptionStatus2 = new Dataset()
             {
-                Id = "Dataset2",
-                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace }
+                Id = Guid.NewGuid(),
+                Name = "Dataset2",
+                EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace
             };
             var datasetEncryptionStatus = new List<Dataset>();
             datasetEncryptionStatus.Add(datasetEncryptionStatus1);
@@ -88,13 +90,15 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Arrange
             var datasetEncryptionStatus1 = new Dataset()
             {
-                Id = "Dataset1",
-                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.InSyncWithWorkspace }
+                Id = Guid.NewGuid(),
+                Name = "Dataset1",
+                EncryptionStatus = EncryptionStatus.InSyncWithWorkspace
             };
             var datasetEncryptionStatus2 = new Dataset()
             {
-                Id = "Dataset2",
-                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace }
+                Id = Guid.NewGuid(),
+                Name = "Dataset2",
+                EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace
             };
             var datasetEncryptionStatus = new List<Dataset>();
             datasetEncryptionStatus.Add(datasetEncryptionStatus1);
@@ -123,13 +127,15 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Arrange
             var datasetEncryptionStatus1 = new Dataset()
             {
-                Id = "Dataset1",
-                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.InSyncWithWorkspace }
+                Id = Guid.NewGuid(),
+                Name = "Dataset1",
+                EncryptionStatus = EncryptionStatus.InSyncWithWorkspace
             };
             var datasetEncryptionStatus2 = new Dataset()
             {
-                Id = "Dataset2",
-                Encryption = new Encryption { EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace }
+                Id = Guid.NewGuid(),
+                Name = "Dataset2",
+                EncryptionStatus = EncryptionStatus.NotInSyncWithWorkspace
             };
             var datasetEncryptionStatus = new List<Dataset>();
             datasetEncryptionStatus.Add(datasetEncryptionStatus1);

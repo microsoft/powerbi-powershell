@@ -5,8 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Common.Api.Encryption;
+using Dataset = Microsoft.PowerBI.Common.Api.Encryption.Dataset;
 
 namespace Microsoft.PowerBI.Common.Api.Admin
 {
@@ -14,7 +17,7 @@ namespace Microsoft.PowerBI.Common.Api.Admin
     {
         public AdminClient(IPowerBIClient client): base(client) { }
 
-        public TenantKey AddPowerBIEncryptionKey(string name, string keyVaultKeyIdentifier, bool? isDefault = null, bool? activate = null)
+        public EncryptionKey AddPowerBIEncryptionKey(string name, string keyVaultKeyIdentifier, bool? isDefault = null, bool? activate = null)
         {
             var tenantKeyCreationRequest = new TenantKeyCreationRequest()
             {
@@ -27,17 +30,19 @@ namespace Microsoft.PowerBI.Common.Api.Admin
             return this.Client.Admin.AddPowerBIEncryptionKey(tenantKeyCreationRequest);
         }
 
-        public IEnumerable<TenantKey> GetPowerBIEncryptionKeys()
+        public IEnumerable<EncryptionKey> GetPowerBIEncryptionKeys()
         {
-            return this.Client.Admin.GetPowerBIEncryptionKeys()?.Value;
+            return this.Client.Admin.GetPowerBIEncryptionKeys()?.Value
+                    .Select(key => (EncryptionKey)key);
         }
 
         public IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string workspaceId)
         {
-            return this.Client.Datasets.GetDatasetsInGroupAsAdmin(workspaceId, expand: "encryption")?.Value;
+            return this.Client.Datasets.GetDatasetsInGroupAsAdmin(workspaceId, expand: "encryption")?.Value
+                    .Select(dataset => (Dataset)dataset);
         }
 
-        public TenantKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier)
+        public EncryptionKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier)
         {
             var tenantKeyRotationRequest = new TenantKeyRotationRequest()
             {

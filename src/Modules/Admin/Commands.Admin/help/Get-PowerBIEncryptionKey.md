@@ -18,6 +18,7 @@ Get-PowerBIEncryptionKey [<CommonParameters>]
 
 ## DESCRIPTION
 Retrieves the encryption key that is added by the tenant administrator for the organization.
+
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 
@@ -39,7 +40,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
+### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Encryption.EncryptionKey, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
 
 ## NOTES
 

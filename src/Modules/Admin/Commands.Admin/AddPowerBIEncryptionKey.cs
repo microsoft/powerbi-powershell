@@ -4,13 +4,13 @@
  */
 
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = DefaultAndActivateParameterSet)]
-    [OutputType(typeof(TenantKey))]
+    [OutputType(typeof(EncryptionKey))]
     public class AddPowerBIEncryptionKey : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIEncryptionKey";
@@ -43,12 +43,6 @@ namespace Microsoft.PowerBI.Commands.Admin
         public SwitchParameter Activate { get; set; }
 
         #endregion
-
-        protected override void BeginProcessing()
-        {
-            this.Logger.WriteWarning(Constants.PrivatePreviewWarning);
-            base.BeginProcessing();
-        }
 
         public override void ExecuteCmdlet()
         {
