@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
 {
