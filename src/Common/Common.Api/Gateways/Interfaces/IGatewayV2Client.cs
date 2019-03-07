@@ -6,6 +6,6 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
 {
     public interface IGatewayV2Client
     {
-        Task<IEnumerable<GatewayCluster>> GetGatewayClusters();
+        Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual);
     }
 }
