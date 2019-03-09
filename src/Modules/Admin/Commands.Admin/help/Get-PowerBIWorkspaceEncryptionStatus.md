@@ -33,10 +33,10 @@ Operates against all workspaces within a tenant (Organization scope) that is enc
 
 The encryption status enumeration represents the following situation:
 
-* unknown - Unable to determine state due to dataset corruption.
-* notSupported - Encryption is not supported for this dataset.
-* inSyncWithWorkspace - Encryption is supported and is in sync with the encryption settings.
-* notInSyncWithWorkspace - Encryption is supported and not in sync with the encryption settings.
+* Unknown - Unable to determine state due to dataset corruption.
+* NotSupported - Encryption is not supported for this dataset.
+* InSyncWithWorkspace - Encryption is supported and is in sync with the encryption settings.
+* NotInSyncWithWorkspace - Encryption is supported and not in sync with the encryption settings.
 
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 This cmdlet requires the calling user to be a tenant administrator of the Power BI service.

@@ -20,7 +20,7 @@
               </ListItem>
               <ListItem>
                 <Label>EncryptionStatus</Label>
-                <ScriptBlock>$_.EncryptionStatus.ToString().substring(0, 1).tolower() + $_.EncryptionStatus.ToString().substring(1)</ScriptBlock>
+                <ScriptBlock>$_.EncryptionStatus</ScriptBlock>
               </ListItem>
             </ListItems>
           </ListEntry>
