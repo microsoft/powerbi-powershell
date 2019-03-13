@@ -2,9 +2,9 @@
 <Configuration>
   <ViewDefinitions>
     <View>
-      <Name>Microsoft.PowerBI.Api.V2.Models.Dataset</Name>
+      <Name>Microsoft.PowerBI.Common.Api.Encryption.Dataset</Name>
       <ViewSelectedBy>
-        <TypeName>Microsoft.PowerBI.Api.V2.Models.Dataset</TypeName>
+        <TypeName>Microsoft.PowerBI.Common.Api.Encryption.Dataset</TypeName>
       </ViewSelectedBy>
       <ListControl>
         <ListEntries>
@@ -19,35 +19,8 @@
                 <ScriptBlock>$_.Name</ScriptBlock>
               </ListItem>
               <ListItem>
-                <Label>AddRowsAPIEnabled</Label>
-                <ScriptBlock>$_.AddRowsAPIEnabled</ScriptBlock>
-              </ListItem>
-              <ListItem>
-                <Label>ConfiguredBy</Label>
-                <ScriptBlock>$_.ConfiguredBy</ScriptBlock>
-              </ListItem>
-              <ListItem>
-                <Label>IsRefreshable</Label>
-                <ScriptBlock>$_.IsRefreshable</ScriptBlock>
-              </ListItem>
-              <ListItem>
-                <Label>IsEffectiveIdentityRequired</Label>
-                <ScriptBlock>$_.IsEffectiveIdentityRequired</ScriptBlock>
-              </ListItem>
-              <ListItem>
-                <Label>IsEffectiveIdentityRolesRequired</Label>
-                <ScriptBlock>$_.IsEffectiveIdentityRolesRequired</ScriptBlock>
-              </ListItem>
-              <ListItem>
-                <Label>IsOnPremGatewayRequired</Label>
-                <ScriptBlock>$_.IsOnPremGatewayRequired</ScriptBlock>
-              </ListItem>
-              <ListItem>
-                <ItemSelectionCondition>
-                  <ScriptBlock>$_.Encryption -ne $null</ScriptBlock>
-                </ItemSelectionCondition>
-                <Label>Encryption</Label>
-                <ScriptBlock>$_.Encryption | Out-String</ScriptBlock>
+                <Label>EncryptionStatus</Label>
+                <ScriptBlock>$_.EncryptionStatus</ScriptBlock>
               </ListItem>
             </ListItems>
           </ListEntry>

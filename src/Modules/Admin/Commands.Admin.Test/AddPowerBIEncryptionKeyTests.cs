@@ -5,10 +5,10 @@
 
 using System;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         private static CmdletInfo AddPowerBIEncryptionKeyCmdletInfo => new CmdletInfo($"{AddPowerBIEncryptionKey.CmdletVerb}-{AddPowerBIEncryptionKey.CmdletName}", typeof(AddPowerBIEncryptionKey));
 
         private static string MockName = "KeyName";
-        private static string MockKeyVaultKeyUri = "KeyVaultUri";
+        private static string MockKeyVaultKeyUri = "http://www.contoso.com/";
         private static bool MockDefault = true;
         private static bool MockActivate = true;
 
@@ -52,11 +52,11 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var tenantKey = new TenantKey()
+            var tenantKey = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = MockName,
-                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                KeyVaultKeyIdentifier = new Uri(MockKeyVaultKeyUri),
                 IsDefault = MockDefault,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
@@ -83,11 +83,11 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var tenantKey = new TenantKey()
+            var tenantKey = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = MockName,
-                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                KeyVaultKeyIdentifier = new Uri(MockKeyVaultKeyUri),
                 IsDefault = MockDefault,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
@@ -113,11 +113,11 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            var tenantKey = new TenantKey()
+            var tenantKey = new EncryptionKey()
             {
                 Id = Guid.NewGuid(),
                 Name = MockName,
-                KeyVaultKeyIdentifier = MockKeyVaultKeyUri,
+                KeyVaultKeyIdentifier = new Uri(MockKeyVaultKeyUri),
                 IsDefault = MockDefault,
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
