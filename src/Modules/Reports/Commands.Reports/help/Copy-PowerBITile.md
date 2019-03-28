@@ -42,10 +42,10 @@ If target report id and target dataset id are not specified, the following can o
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Copy-PowerBITile -DashboardId cff24b2e-faa8-4683-8ecb-2c50e7d2cc7a -TileId e297e105-be30-4482-8531-152cdf289ac6 -TargetDashboardId 8f88d7ab-49e7-41e0-979b-28f063056daa -targetWorkspaceId 166bc04e-da57-426b-b7b4-d24d0e3e5587 -TargetReportId 1fb4359e-9356-4193-9965-a9472a0051b8 -TargetDatasetId a96cd411-4562-4eba-ba2a-42fee8425a87
 ```
 
-{{ Add example description here }}
+Creates a copy of the tile with the id "e297e105-be30-4482-8531-152cdf289ac6" from a dashboard with id "cff24b2e-faa8-4683-8ecb-2c50e7d2cc7a" and adds it to the dashboard with id "8f88d7ab-49e7-41e0-979b-28f063056daa" in the workspace with id "166bc04e-da57-426b-b7b4-d24d0e3e5587" and links it to the report with the id "1fb4359e-9356-4193-9965-a9472a0051b8" and the dataset with id "a96cd411-4562-4eba-ba2a-42fee8425a87" in the target workspace.
 
 ## PARAMETERS
 
