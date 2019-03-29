@@ -19,10 +19,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces
     {
         public const string CmdletName = "PowerBIWorkspace";
         public const string CmdletVerb = VerbsCommon.New;
+
+        #region Constructors
         public NewPowerBIWorkspace() : base() { }
 
         public NewPowerBIWorkspace(IPowerBIClientCmdletInitFactory init) : base(init) { }
-        
+        #endregion
+
         #region Parameters
 
         [Parameter(Mandatory = true)]

@@ -206,16 +206,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return import.Reports.Single();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="reportName">The new report name.</param>
-        /// <param name="sourceWorkspaceId">The ID of the workspace where the original report is located. If empty, source workspace is 'My Workspace'.</param>
-        /// <param name="sourceReportId">The ID of the original report.</param>
-        /// <param name="targetWorkspaceId">The ID of the target workspace. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. Empty string indicates new report will be copied within the same workspace as the source report.</param>
-        /// <param name="targetDatasetId">Optional parameter for specifying the target associated dataset id. If empty, the new report will be associated with the same dataset as the source report.</param>
-        /// <returns></returns>
-        public Report CopyReport(string reportName, string sourceWorkspaceId, string sourceReportId, string targetWorkspaceId, string targetDatasetId)
+         public Report CopyReport(string reportName, string sourceWorkspaceId, string sourceReportId, string targetWorkspaceId, string targetDatasetId)
         {
             var requestBody = new CloneReportRequest()
             {
@@ -229,12 +220,6 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 this.Client.Reports.CloneReport(sourceWorkspaceId, sourceReportId, requestBody);
         }
 
-        /// <summary>
-        /// Creates a new empty dashboard on the specified workspace.
-        /// </summary>
-        /// <param name="dashboardName">The name of the new dashboard.</param>
-        /// <param name="workspaceId">The workspace where the new dashboard will be created. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'.</param>
-        /// <returns></returns>
         public Dashboard AddDashboard(string dashboardName, Guid workspaceId)
         {
             var requestBody = new AddDashboardRequest()
@@ -247,19 +232,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 this.Client.Dashboards.AddDashboard(workspaceId.ToString(), requestBody);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="workspaceId">The id of the workspace where the source dashboard is located. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'.</param>
-        /// <param name="dashboardKey">The id of the dashboard where source tile is located.</param>
-        /// <param name="tileKey">The id of the tile that should be copied</param>
-        /// <param name="targetDashboardId">The id of the dashboard where tile copy should be added.</param>
-        /// <param name="targetWorkspaceId">Optional parameter for specifying the target workspace id. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. Empty string indicates tile will be copied within the same workspace.</param>
-        /// <param name="targetReportId">Optional parameter when cloning a tile linked to a report, to rebind the new tile to a different report.</param>
-        /// <param name="targetModelId">Optional parameter when cloning a tile linked to a dataset, to rebind the new tile to a different dataset.</param>
-        /// <param name="positionConflictAction">Optional parameter for specifying the action in case of position conflict. The default is 'Tail'.</param>
-        /// <returns></returns>
-        public Tile CopyTile(Guid workspaceId, string dashboardKey, string tileKey, string targetDashboardId, string targetWorkspaceId, string targetReportId, string targetModelId, string positionConflictAction)
+         public Tile CopyTile(Guid workspaceId, string dashboardKey, string tileKey, string targetDashboardId, string targetWorkspaceId, string targetReportId, string targetModelId, string positionConflictAction)
         {
             var requestParameters = new CloneTileRequest()
             {

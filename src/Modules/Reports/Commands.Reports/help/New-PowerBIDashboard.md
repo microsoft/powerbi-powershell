@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PowerBIDashboard
 
 ## SYNOPSIS
-Creates a new empty dashboard.
+Creates a new empty Power BI dashboard.
 
 ## SYNTAX
 

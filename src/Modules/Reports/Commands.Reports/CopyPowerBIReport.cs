@@ -28,11 +28,13 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         public CopyPowerBIReport(IPowerBIClientCmdletInitFactory init) : base(init) { }
         #endregion
+
         #region ParameterSets
         private const string IdParameterSetName = "Id";
         private const string ObjectParameterSetName = "WorkspaceObject";
         private const string NameAndObjectParameterSetName = "NameAndWorkspaceObject";
         #endregion
+
         #region Parameters
         // Required. Unless a Report object is passed in, in which case the name of the original report can be used.
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
@@ -68,8 +70,8 @@ namespace Microsoft.PowerBI.Commands.Reports
         [Alias("TargetModelId")]
         [Parameter(Mandatory = false)]
         public string TargetDatasetId { get; set; }
-
         #endregion
+
         public override void ExecuteCmdlet()
         {
             if (this.Report != null)

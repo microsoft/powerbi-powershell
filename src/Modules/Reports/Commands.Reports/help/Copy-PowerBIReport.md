@@ -8,7 +8,7 @@ schema: 2.0.0
 # Copy-PowerBIReport
 
 ## SYNOPSIS
-Creates a copy of the specified report.
+Creates a copy of the specified Power BI report.
 
 ## SYNTAX
 
@@ -25,7 +25,7 @@ Copy-PowerBIReport [-Name <String>] -Report <Report> [-WorkspaceId <String>] [-W
 ```
 
 ## DESCRIPTION
-Creates a copy of the specified report in the same workspace or in a different workspace and rebinds the report to a referenced dataset in the target workspace.
+Creates a copy of the specified Power BI report in the same Power BI workspace or in a different workspace and rebinds the report to a referenced dataset in the target workspace.
 
 ## EXAMPLES
 
@@ -34,27 +34,26 @@ Creates a copy of the specified report in the same workspace or in a different w
 PS C:\> Copy-PowerBIReport -Name "Report Copy" -Id "30ca8f24-f628-45f7-a5ac-540c95e9b5e6" -WorkspaceId "00000000-0000-0000-0000-000000000000" -TargetWorkspaceId "6439d4d4-18c4-4762-b755-1f957d55383e" -TargetDatasetId "74f6adb5-93eb-49d8-918c-6df248cb73dd"
 ```
 
-Creates a copy of the report with id "30ca8f24-f628-45f7-a5ac-540c95e9b5e6" from 'My Workspace' in the target workspace with id "6439d4d4-18c4-4762-b755-1f957d55383e", assigns the report copy the name "Report Copy", and binds it to the dataset with the id "74f6adb5-93eb-49d8-918c-6df248cb73dd".
+Creates a copy of the report with ID "30ca8f24-f628-45f7-a5ac-540c95e9b5e6" from 'My Workspace' in the target workspace with ID "6439d4d4-18c4-4762-b755-1f957d55383e", assigns the report copy the name "Report Copy", and binds it to the dataset with the ID "74f6adb5-93eb-49d8-918c-6df248cb73dd".
 
 ### Example 2
 ```powershell
 PS C:\> Copy-PowerBIReport -Name "Report Copy" -Id "bd200f64-46f1-4f82-b09f-c7fd6818d67c" -WorkspaceId "6439d4d4-18c4-4762-b755-1f957d55383e" -TargetWorkspaceId "00000000-0000-0000-0000-000000000000" -TargetDatasetId "1b46e4dc-1299-425b-97aa-c10d51f82a06"
 ```
 
-Creates a copy of the report with id "bd200f64-46f1-4f82-b09f-c7fd6818d67c"" from the workspace with the id "6439d4d4-18c4-4762-b755-1f957d55383e" in 'My Workspace' as the target workspace, assigns the report copy the name "Report Copy", and binds it to the dataset with the id "1b46e4dc-1299-425b-97aa-c10d51f82a06".
+Creates a copy of the report with ID "bd200f64-46f1-4f82-b09f-c7fd6818d67c"" from the workspace with the ID "6439d4d4-18c4-4762-b755-1f957d55383e" in 'My Workspace' as the target workspace, assigns the report copy the name "Report Copy", and binds it to the dataset with the ID "1b46e4dc-1299-425b-97aa-c10d51f82a06".
 
 ### Example 1
 ```powershell
 PS C:\> Copy-PowerBIReport -Name "Report Copy" -Id "30ca8f24-f628-45f7-a5ac-540c95e9b5e6"
 ```
 
-Creates a copy of the report with id "30ca8f24-f628-45f7-a5ac-540c95e9b5e6" in the same workspace, assigns the report copy the name "Report Copy", and binds it to the dataset that the original report is associated with.
-
+Creates a copy of the report with ID "30ca8f24-f628-45f7-a5ac-540c95e9b5e6" in the same workspace, assigns the report copy the name "Report Copy", and binds it to the dataset that the original report is associated with.
 
 ## PARAMETERS
 
 ### -Id
-The ID of the original report.
+The ID of the original report to copy.
 
 ```yaml
 Type: Guid
@@ -69,7 +68,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The new report name that will be assigned to the report copy.
+The new report name that will be assigned to the copied report.
 
 ```yaml
 Type: String
@@ -111,7 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -TargetDatasetId
-Optional parameter for specifying the target associated dataset id. If empty, the new report will be associated with the same dataset as the source report.
+Optional parameter for specifying the target associated dataset ID. If empty, the new report will be associated with the same dataset as the source report.
 
 ```yaml
 Type: String

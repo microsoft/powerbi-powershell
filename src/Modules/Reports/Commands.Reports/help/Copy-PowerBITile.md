@@ -8,7 +8,7 @@ schema: 2.0.0
 # Copy-PowerBITile
 
 ## SYNOPSIS
-Creates a copy of the specified tile and adds it to a dashboard.
+Creates a copy of the specified Power BI tile and adds it to a Power BI dashboard.
 
 ## SYNTAX
 
@@ -35,9 +35,10 @@ Copy-PowerBITile -Workspace <Workspace> -DashboardId <String> -TileId <String> -
 
 ## DESCRIPTION
 Creates a copy of the specified tile and adds it to a dashboard.
-If target report id and target dataset id are not specified, the following can occur:
+If target report ID and target dataset ID are not specified, the following can occur:
 * When a tile copy is created within the same workspace, the report and dataset links will be copied from the source tile.
 * When copying a tile to a different workspace, the report and dataset links will be rested, and the tile will be broken.
+
 ## EXAMPLES
 
 ### Example 1
@@ -45,12 +46,12 @@ If target report id and target dataset id are not specified, the following can o
 PS C:\> Copy-PowerBITile -DashboardId cff24b2e-faa8-4683-8ecb-2c50e7d2cc7a -TileId e297e105-be30-4482-8531-152cdf289ac6 -TargetDashboardId 8f88d7ab-49e7-41e0-979b-28f063056daa -targetWorkspaceId 166bc04e-da57-426b-b7b4-d24d0e3e5587 -TargetReportId 1fb4359e-9356-4193-9965-a9472a0051b8 -TargetDatasetId a96cd411-4562-4eba-ba2a-42fee8425a87
 ```
 
-Creates a copy of the tile with the id "e297e105-be30-4482-8531-152cdf289ac6" from a dashboard with id "cff24b2e-faa8-4683-8ecb-2c50e7d2cc7a" and adds it to the dashboard with id "8f88d7ab-49e7-41e0-979b-28f063056daa" in the workspace with id "166bc04e-da57-426b-b7b4-d24d0e3e5587" and links it to the report with the id "1fb4359e-9356-4193-9965-a9472a0051b8" and the dataset with id "a96cd411-4562-4eba-ba2a-42fee8425a87" in the target workspace.
+Creates a copy of the tile with the ID "e297e105-be30-4482-8531-152cdf289ac6" from a dashboard with ID "cff24b2e-faa8-4683-8ecb-2c50e7d2cc7a" and adds it to the dashboard with ID "8f88d7ab-49e7-41e0-979b-28f063056daa" in the workspace with ID "166bc04e-da57-426b-b7b4-d24d0e3e5587" and links it to the report with the ID "1fb4359e-9356-4193-9965-a9472a0051b8" and the dataset with ID "a96cd411-4562-4eba-ba2a-42fee8425a87" in the target workspace.
 
 ## PARAMETERS
 
 ### -DashboardId
-The id of the dashboard where source tile is located.
+The ID of the dashboard where source tile is located.
 
 ```yaml
 Type: String
@@ -80,7 +81,7 @@ Accept wildcard characters: False
 ```
 
 ### -TargetDashboardId
-The id of the dashboard where tile copy should be added.
+The ID of the dashboard where tile copy should be added.
 
 ```yaml
 Type: String
@@ -95,7 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -TargetDatasetId
-Optional parameter to rebind the tile copy to a different dataset.
+Optional parameter to rebind the copied tile to a different dataset.
 
 ```yaml
 Type: String
@@ -110,7 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -TargetReportId
-Optional parameter to rebind the tile copy to a different report.
+Optional parameter to rebind the copied tile to a different report.
 
 ```yaml
 Type: String
@@ -125,7 +126,7 @@ Accept wildcard characters: False
 ```
 
 ### -TargetWorkspaceId
-Optional parameter for specifying the target workspace id. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. Empty string indicates tile will be copied within the same workspace.
+Optional parameter for specifying the target workspace ID. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. Empty string indicates tile will be copied within the same workspace.
 
 ```yaml
 Type: String
@@ -140,7 +141,7 @@ Accept wildcard characters: False
 ```
 
 ### -TileId
-The id of the tile that should be copied
+The ID of the tile that should be copied
 
 ```yaml
 Type: String
@@ -170,7 +171,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-The id of the workspace where the source dashboard is located. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'.
+The ID of the workspace where the source dashboard is located. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'.
 
 ```yaml
 Type: Guid

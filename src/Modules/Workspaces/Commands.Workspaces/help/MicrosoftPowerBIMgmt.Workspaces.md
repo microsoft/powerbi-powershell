@@ -18,7 +18,7 @@ Gives permissions to a specified user to access a Power BI workspace.
 Returns a list of Power BI workspaces.
 
 ### [New-PowerBIWorkspace](New-PowerBIWorkspace.md)
-{{Fill in the Synopsis}}
+Creates a new Power BI workspace.
 
 ### [Remove-PowerBIWorkspaceUser](Remove-PowerBIWorkspaceUser.md)
 Removes permissions to a Power BI workspace for the specified user.

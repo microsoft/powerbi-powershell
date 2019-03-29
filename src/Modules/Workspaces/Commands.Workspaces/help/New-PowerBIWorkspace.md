@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PowerBIWorkspace
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Creates a new Power BI workspace.
 
 ## SYNTAX
 
@@ -17,21 +17,21 @@ New-PowerBIWorkspace -Name <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Creates a new Power BI workspace with the current user as the workspace administrator.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> New-PowerBIWorkspace -Name "New Workspace"
 ```
 
-{{ Add example description here }}
+Creates a new Power BI workspace called "New Workspace" and adds the current user as the workspace administrator.
 
 ## PARAMETERS
 
 ### -Name
-{{Fill Name Description}}
+The name to give to the new workspace. If the name matches another workspace in the organization, the operation will fail.
 
 ```yaml
 Type: String

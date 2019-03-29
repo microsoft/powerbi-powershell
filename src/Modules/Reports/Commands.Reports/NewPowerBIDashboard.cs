@@ -27,11 +27,13 @@ namespace Microsoft.PowerBI.Commands.Reports
 
         public NewPowerBIDashboard(IPowerBIClientCmdletInitFactory init) : base(init) { }
         #endregion
+
         #region ParameterSets
         private const string NameOnlyParameterSetName = "NameOnly";
         private const string NameAndIdsParameterSetName = "NameAndIds";
         private const string NameAndObjectParameterSetName = "NameAndObject";
         #endregion
+
         #region Parameters
         // The name of the new dashboard.
         [Parameter(Mandatory = true, ParameterSetName = NameOnlyParameterSetName)]
@@ -49,6 +51,7 @@ namespace Microsoft.PowerBI.Commands.Reports
         [Parameter(Mandatory = true, ParameterSetName = NameAndObjectParameterSetName)]
         public Workspace Workspace { get; set; }
         #endregion
+
         public override void ExecuteCmdlet()
         {
             if (this.Workspace != null)
