@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Management.Automation;
-using System.Text;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
@@ -21,10 +19,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         public override void ExecuteCmdlet()
         {
-            using (var client = this.CreateClient())
+            using (var client = CreateClient())
             {
                 var gatewayClusters = client.GatewaysV2.GetGatewayClusters(this.Scope == PowerBIUserScope.Individual);
-                this.Logger.WriteObject(gatewayClusters, true);
+                Logger.WriteObject(gatewayClusters, true);
             }
         }
     }

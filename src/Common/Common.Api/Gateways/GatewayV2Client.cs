@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
         {
-            string url = "v2.0/myorg";
+            var url = "v2.0/myorg";
             if(asIndividual)
             {
                 url += "/me";
