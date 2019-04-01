@@ -11,6 +11,12 @@ Locale: en-US
 PowerShell cmdlets for managing and interacting with Power BI reports.
 
 ## MicrosoftPowerBIMgmt.Reports Cmdlets
+### [Copy-PowerBIReport](Copy-PowerBIReport.md)
+Creates a copy of the specified report.
+
+### [Copy-PowerBITile](Copy-PowerBITile.md)
+Creates a copy of the specified tile and adds it to a dashboard.
+
 ### [Export-PowerBIReport](Export-PowerBIReport.md)
 Exports a Power BI report to the .pbix file format.
 
@@ -25,6 +31,9 @@ Returns a list of Power BI reports.
 
 ### [Get-PowerBITile](Get-PowerBITile.md)
 Returns a list of Power BI tiles for a dashboard.
+
+### [New-PowerBIDashboard](New-PowerBIDashboard.md)
+Creates a new empty dashboard.
 
 ### [New-PowerBIReport](New-PowerBIReport.md)
 Creates a Power BI report.

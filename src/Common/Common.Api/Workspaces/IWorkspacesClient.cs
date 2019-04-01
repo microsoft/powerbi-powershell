@@ -25,5 +25,8 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         object RemoveWorkspaceUser(Guid workspaceId, string userPrincipalName);
 
         object RemoveWorkspaceUserAsAdmin(Guid workspaceId, string userPrincipalName);
+
+        object NewWorkspaceAsUser(string workspaceName);
+
     }
 }
