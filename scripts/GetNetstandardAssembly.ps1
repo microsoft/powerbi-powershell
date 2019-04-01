@@ -30,7 +30,7 @@ param
 # .NET CORE 2.1 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.1
 
 $versionCheck = [version]$MajorMinorSDKVersionCheck
-$sdkVersions = Get-ChildItem $SdkInstallDir -Directory | Where-Object Name -Match '\d\.\d\.\d' | ForEach-Object { 
+$sdkVersions = Get-ChildItem $SdkInstallDir -Directory | Where-Object Name -Match '\d+\.\d+\.\d+$' | ForEach-Object { 
     $version = [version]$_.BaseName
     $_ | Add-Member -Name SDKVersion -MemberType NoteProperty -Value $version
     $_ 
