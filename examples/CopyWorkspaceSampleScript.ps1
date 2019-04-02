@@ -79,7 +79,7 @@ while (!$target_workspace_ID) {
 	
     $target_workspace = Get-PowerBIWorkspace -Name $target_workspace_name -ErrorAction SilentlyContinue
 
-    if(!$target_workspace -and $CreateTargetWorkspaceIfNotExists = $true) {
+    if(!$target_workspace -and $CreateTargetWorkspaceIfNotExists -eq $true) {
         $target_workspace = New-PowerBIWorkspace -Name $target_workspace_name -ErrorAction SilentlyContinue
     }
 
