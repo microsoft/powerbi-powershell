@@ -23,21 +23,22 @@ param
 	
 	# The installed .NET SDK must have the same major and minor number and a lower build\patch number.
 	[ValidateNotNullOrEmpty()]
-	[string] $MajorMinorSDKVersionCheck = '2.1.300'
+	[string] $MajorMinorSDKVersionCheck = '2.1.499'
 )
 
 # .NET CORE 2.0 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.0
 # .NET CORE 2.1 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.1
 
 $versionCheck = [version]$MajorMinorSDKVersionCheck
-$sdkDir = Get-ChildItem $SdkInstallDir -Directory | Where-Object Name -Match '\d\.\d\.\d' | ForEach-Object { 
+$sdkVersions = Get-ChildItem $SdkInstallDir -Directory | Where-Object Name -Match '\d+\.\d+\.\d+$' | ForEach-Object { 
     $version = [version]$_.BaseName
     $_ | Add-Member -Name SDKVersion -MemberType NoteProperty -Value $version
     $_ 
-} | Where-Object { $_.SDKVersion.Major -eq $versionCheck.Major -and $_.SDKVersion.Minor -eq $versionCheck.Minor -and $_.SDKVersion.Build -lt $versionCheck.Build } | Sort-Object SDKVersion -Descending | Select-Object -First 1
+}
+$sdkDir = $sdkVersions | Where-Object { $_.SDKVersion.Major -eq $versionCheck.Major -and $_.SDKVersion.Minor -eq $versionCheck.Minor -and $_.SDKVersion.Build -lt $versionCheck.Build } | Sort-Object SDKVersion -Descending | Select-Object -First 1
 
 if(!$sdkDir) {
-	throw "Unable to find SDK version (less than $MajorMinorSDKVersionCheck) under: $SdkInstallDir"
+	throw "Unable to find SDK version (less than $MajorMinorSDKVersionCheck) under: $SdkInstallDir`nVersions available: $(($sdkVersions | % { $_.BaseName }) -join ', ' )"
 }
 
 Write-Verbose "Using SDK: $($sdkDir.FullName)"
