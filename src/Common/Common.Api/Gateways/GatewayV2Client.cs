@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
-using Microsoft.Rest;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways
 {
     public class GatewayV2Client : IGatewayV2Client
     {
-        private Uri BaseUri { get; set; }
-        private IAccessToken Token { get; set; }
+        private Uri BaseUri { get; }
+        private IAccessToken Token { get; }
+        private HttpClient HttpClientInstance { get; }
 
-
-        public GatewayV2Client(Uri baseUri, IAccessToken tokenCredentials)
+        public GatewayV2Client(Uri baseUri, IAccessToken tokenCredentials) : this(baseUri, tokenCredentials, new HttpClientHandler())
         {
-            this.BaseUri = baseUri;
-            this.Token = tokenCredentials;
         }
 
-        public GatewayV2Client(Uri baseUri, IAccessToken tokenCredentials, HttpClientHandler clientHandler) : this(baseUri, tokenCredentials)
+        public GatewayV2Client(Uri baseUri, IAccessToken tokenCredentials, HttpMessageHandler messageHandler)
         {
-            // implement clientHandler
+            this.BaseUri = baseUri;
+            this.Token   = tokenCredentials;
+
+            HttpClientInstance = new HttpClient(messageHandler);
+            PopulateClient(HttpClientInstance);
         }
 
         public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
@@ -37,11 +36,10 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 url += "/me";
             }
 
-            url += "/gatewayclusters$expand=permissions,memberGateways";
-            using (var client = new HttpClient())
+            url += "/gatewayclusters?$expand=permissions,memberGateways";
+            using (HttpClientInstance)
             {
-                PopulateClient(client);
-                var response = await client.GetAsync(url);
+                var response = await HttpClientInstance.GetAsync(url);
                 var serializer = new DataContractJsonSerializer(typeof(ODataGatewayResponseList<GatewayCluster>));
 
                 var gatewayClusters = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataGatewayResponseList<GatewayCluster>;
