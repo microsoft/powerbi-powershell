@@ -23,17 +23,22 @@ param
 
     [string] $TargetWorkspaceName,
 
-    [switch] $CreateTargetWorkspaceIfNotExists = $true
+    [bool] $CreateTargetWorkspaceIfNotExists = $true
 )
 
 #region Helper Functions 
 
 function Assert-ModuleExists([string]$ModuleName) {
-    $msonlineModule = Get-Module $ModuleName -ListAvailable -ErrorAction SilentlyContinue
-    if(!$msonlineModule) {
+    $module = Get-Module $ModuleName -ListAvailable -ErrorAction SilentlyContinue
+    if(!$module) {
         Write-Host "Installing module $ModuleName ..."
         Install-Module -Name $ModuleName -Force -Scope CurrentUser
         Write-Host "Module installed"
+    }
+    elseif($module.Version -ne '1.0.0' -and $module.Version -le '1.0.410') {
+        Write-Host "Updating module $ModuleName ..."
+        Update-Module -Name $ModuleName -Force -ErrorAction Stop
+        Write-Host "Module updated"
     }
 }
 
@@ -211,8 +216,21 @@ Foreach ($dashboard in $dashboards) {
     Foreach ($tile in $tiles) {
         try {
             $tile_id = $tile.id
-            $tile_report_Id = [GUID]($tile.reportId)
-            $tile_dataset_Id = [GUID]($tile.datasetId)
+            if($tile.reportId) {
+                $tile_report_Id = [GUID]($tile.reportId)
+            }
+            else {
+                $tile_report_Id = $null
+            }
+
+            if(!$tile.datasetId) {
+                Write-Warning "= Skipping tile $tile_id, no dataset id..."
+                continue
+            }
+            else {
+                $tile_dataset_Id = [GUID]($tile.datasetId)
+            }
+
             if ($tile_report_id) { $tile_target_report_id = $report_id_mapping[$tile_report_id] }
             if ($tile_dataset_id) { $tile_target_dataset_id = $dataset_id_mapping[$tile_dataset_id] }
 
