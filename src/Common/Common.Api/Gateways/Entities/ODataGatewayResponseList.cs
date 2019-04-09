@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
+    [DataContract]
     public class ODataGatewayResponseList<T>
     {
-        [JsonProperty]
-        public string Odatacontext { get; set; }
+        [DataMember(Name = "@odata.context")]
+        public string OdataContext { get; set; }
 
-        [JsonProperty]
-        public IList<T> Value { get; set; }
-
-        public ODataGatewayResponseList()
-        {
-        }
-
-        public ODataGatewayResponseList(string odatacontext = null, IList<T> value = null)
-        {
-            Odatacontext = odatacontext;
-            Value = value;
-        }
+        [DataMember(Name = "value")]
+        public IEnumerable<T> Value { get; set; }
     }
 }

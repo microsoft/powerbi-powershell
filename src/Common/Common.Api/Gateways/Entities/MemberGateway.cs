@@ -1,14 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
+    [DataContract]
     public sealed class MemberGateway
     {
-        public string Id { get; set; }
-        public string PrincipalType { get; set; }
-        public string TenantId { get; set; }
-        public string Role { get; set; }
-        public IEnumerable<string> AllowedDataSources { get; set; }
-        public string ClusterId { get; set; }
+        [DataMember(Name = "id")]
+        public Guid Id { get; set; }
+
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
+
+        [DataMember(Name = "status")]
+        public string Status { get; set; }
+
+        [DataMember(Name = "region")]
+        public string Region { get; set; }
+
+        [DataMember(Name = "type")]
+        public string Type { get; set; }
+
+        [DataMember(Name = "version")]
+        public string Version { get; set; }
+
+        [DataMember(Name = "annotation")]
+        public string Annotation { get; set; }
+
+        [DataMember(Name = "clusterId")]
+        public Guid? ClusterId { get; set; }
     }
 }
