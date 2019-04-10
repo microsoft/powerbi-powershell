@@ -4,7 +4,7 @@
     <AssemblyName>Microsoft.PowerBI.Commands.Data</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Data</RootNamespace>
     <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
