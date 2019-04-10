@@ -42,8 +42,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 var response = await HttpClientInstance.GetAsync(url);
                 var serializer = new DataContractJsonSerializer(typeof(ODataResponseList<GatewayCluster>));
 
-                var gatewayClusters = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseList<GatewayCluster>;
-                return gatewayClusters?.Value;
+                var clusters = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseList<GatewayCluster>;
+                return clusters?.Value;
             }
         }
 
@@ -61,8 +61,27 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 var response = await HttpClientInstance.GetAsync(url);
                 var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayCluster));
 
-                var gatewayCluster = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseGatewayCluster;
-                return gatewayCluster;
+                var cluster = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseGatewayCluster;
+                return cluster;
+            }
+        }
+
+        public async Task<GatewayClusterStatusResponse> GetGatewayClusterStatus(Guid gatewayClusterId, bool asIndividual)
+        {
+            var url = "v2.0/myorg";
+            if (asIndividual)
+            {
+                url += "/me";
+            }
+
+            url += $"/gatewayclusters({gatewayClusterId})/status?$expand=permissions,memberGateways";
+            using (HttpClientInstance)
+            {
+                var response = await HttpClientInstance.GetAsync(url);
+                var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayClusterStatusResponse));
+
+                var clusterStatus = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseGatewayClusterStatusResponse;
+                return clusterStatus;
             }
         }
 
