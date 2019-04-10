@@ -271,9 +271,9 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
-            var odataResponse = new ODataGatewayClusterResponse
+            var odataResponse = new ODataResponseGatewayCluster
             {
-                OdataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/$entity",
+                ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/$entity",
                 Id = clusterId,
                 Name = "the cluster name",
                 Description = "the cluster description",
