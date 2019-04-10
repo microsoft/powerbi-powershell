@@ -40,9 +40,9 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             using (HttpClientInstance)
             {
                 var response = await HttpClientInstance.GetAsync(url);
-                var serializer = new DataContractJsonSerializer(typeof(ODataGatewayResponseList<GatewayCluster>));
+                var serializer = new DataContractJsonSerializer(typeof(ODataResponseList<GatewayCluster>));
 
-                var gatewayClusters = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataGatewayResponseList<GatewayCluster>;
+                var gatewayClusters = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseList<GatewayCluster>;
                 return gatewayClusters?.Value;
             }
         }

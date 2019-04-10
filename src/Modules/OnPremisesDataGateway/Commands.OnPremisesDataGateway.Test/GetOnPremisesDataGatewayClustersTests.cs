@@ -177,9 +177,9 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 }
             };
 
-            var odataResponse = new ODataGatewayResponseList<GatewayCluster>
+            var odataResponse = new ODataResponseList<GatewayCluster>
             {
-                OdataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters",
+                ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters",
                 Value = new GatewayCluster[]
                 {
                     gatewayClusterObject

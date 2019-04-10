@@ -3,9 +3,9 @@
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
     [DataContract]
-    public class ODataGatewayClusterResponse :  GatewayCluster
+    public class ODataResponseGatewayCluster :  GatewayCluster
     {
         [DataMember(Name = "@odata.context")]
-        public string OdataContext { get; set; }
+        public string ODataContext { get; set; }
     }
 }

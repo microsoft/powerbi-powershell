@@ -4,10 +4,10 @@ using System.Runtime.Serialization;
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
     [DataContract]
-    public class ODataGatewayResponseList<T>
+    public class ODataResponseList<T>
     {
         [DataMember(Name = "@odata.context")]
-        public string OdataContext { get; set; }
+        public string ODataContext { get; set; }
 
         [DataMember(Name = "value")]
         public IEnumerable<T> Value { get; set; }
