@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] [-GatewayClusterId <Guid>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,6 +29,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -GatewayClusterId
+{{Fill GatewayClusterId Description}}
+
+```yaml
+Type: Guid
+Parameter Sets: (All)
+Aliases: Cluster
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Scope
 {{Fill Scope Description}}

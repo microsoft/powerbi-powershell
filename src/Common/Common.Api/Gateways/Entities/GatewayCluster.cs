@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
     [DataContract]
-    public sealed class GatewayCluster
+    public class GatewayCluster
     {
         [DataMember(Name = "id")]
         public Guid Id { get; set; }

@@ -47,6 +47,25 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             }
         }
 
+        public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
+        {
+            var url = "v2.0/myorg";
+            if (asIndividual)
+            {
+                url += "/me";
+            }
+
+            url += $"/gatewayclusters({gatewayClusterId})?$expand=permissions,memberGateways";
+            using (HttpClientInstance)
+            {
+                var response = await HttpClientInstance.GetAsync(url);
+                var serializer = new DataContractJsonSerializer(typeof(ODataGatewayClusterResponse));
+
+                var gatewayCluster = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataGatewayClusterResponse;
+                return gatewayCluster;
+            }
+        }
+
         private void PopulateClient(HttpClient client)
         {
             client.BaseAddress = this.BaseUri;
