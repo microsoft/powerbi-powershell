@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Common.Api.Gateways;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Newtonsoft.Json;
 
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
@@ -22,29 +16,15 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 
             // Arrange
             var clusterStatus = "the cluster status";
-            var client = new GatewayV2Client(
-                new Uri("https://bing.com"),
-                new Mock<IAccessToken>().Object,
-                new MockHttpMessageHandler
-                {
-                    SendAsyncMockHandler = (httpMessageRequest, cancellationToken) =>
-                    {
-                        var content = $@"{{
+            var serializedODataRepsonse = $@"{{
   ""@odata.context"":""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/status/$entity"",
   ""clusterStatus"":""{clusterStatus}"",
   ""gatewayStaticCapabilities"":""the static capabilities"",
   ""gatewayVersion"":""3000.0.0.0+gabcdef0"",
   ""gatewayUpgradeState"":""the upgrade state""
-}}
-";
-                        var response = httpMessageRequest.CreateResponse(HttpStatusCode.OK);
-                        response.Content = new StringContent(
-                            content,
-                            Encoding.UTF8,
-                            "application/json");
-                        return response;
-                    }
-                });
+}}";
+
+            var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
             var result = await client.GetGatewayClusterStatus(new Guid(), true);
@@ -58,7 +38,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var clusterStatus = "the cluster status";
-            var odataResponse = new ODataResponseGatewayClusterStatusResponse
+            var oDataResponse = new ODataResponseGatewayClusterStatusResponse
             {
                 ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/status/$entity",
                 ClusterStatus = clusterStatus,
@@ -67,30 +47,14 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 GatewayUpgradeState = "the upgrade state"
             };
 
-            var serializedOdataRepsonse = JsonConvert.SerializeObject(odataResponse);
-
-            var client = new GatewayV2Client(
-                new Uri("https://bing.com"),
-                new Mock<IAccessToken>().Object,
-                new MockHttpMessageHandler
-                {
-                    SendAsyncMockHandler = (httpMessageRequest, cancellationToken) =>
-                    {
-                        var content = serializedOdataRepsonse;
-                        var response = httpMessageRequest.CreateResponse(HttpStatusCode.OK);
-                        response.Content = new StringContent(
-                            content,
-                            Encoding.UTF8,
-                            "application/json");
-                        return response;
-                    }
-                });
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
+            var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
             var result = await client.GetGatewayClusterStatus(new Guid(), true);
 
             // Assert
-            odataResponse.Should().BeEquivalentTo(result);
+            oDataResponse.Should().BeEquivalentTo(result);
         }
     }
 }

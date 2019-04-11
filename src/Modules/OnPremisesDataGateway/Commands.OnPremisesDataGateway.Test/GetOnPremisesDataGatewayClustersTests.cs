@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Common.Api.Gateways;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Newtonsoft.Json;
 
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
@@ -72,15 +65,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
-
-            var client = new GatewayV2Client(
-                new Uri("https://bing.com"),
-                new Mock<IAccessToken>().Object,
-                new MockHttpMessageHandler
-                {
-                    SendAsyncMockHandler = (httpMessageRequest, cancellationToken) =>
-                                           {
-                                               var content = $@"{{
+            var serializedODataRepsonse = $@"{{
     ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters"",
     ""value"": [
         {{
@@ -109,14 +94,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         }}
     ]
 }}";
-                                               var response = httpMessageRequest.CreateResponse(HttpStatusCode.OK);
-                                               response.Content = new StringContent(
-                                                   content,
-                                                   Encoding.UTF8,
-                                                   "application/json");
-                                               return response;
-                                           }
-                });
+            var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
             var result = await client.GetGatewayClusters(true);
@@ -177,7 +155,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 }
             };
 
-            var odataResponse = new ODataResponseList<GatewayCluster>
+            var oDataResponse = new ODataResponseList<GatewayCluster>
             {
                 ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters",
                 Value = new GatewayCluster[]
@@ -186,24 +164,8 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 }
             };
 
-            var serializedOdataRepsonse = JsonConvert.SerializeObject(odataResponse);
-
-            var client = new GatewayV2Client(
-                new Uri("https://bing.com"),
-                new Mock<IAccessToken>().Object,
-                new MockHttpMessageHandler
-                {
-                    SendAsyncMockHandler = (httpMessageRequest, cancellationToken) =>
-                    {
-                        var content = serializedOdataRepsonse;
-                        var response = httpMessageRequest.CreateResponse(HttpStatusCode.OK);
-                        response.Content = new StringContent(
-                            content,
-                            Encoding.UTF8,
-                            "application/json");
-                        return response;
-                    }
-                });
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
+            var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
             var result = await client.GetGatewayClusters(true);
@@ -218,14 +180,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 
             // Arrange
             var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
-            var client = new GatewayV2Client(
-                new Uri("https://bing.com"),
-                new Mock<IAccessToken>().Object,
-                new MockHttpMessageHandler
-                {
-                    SendAsyncMockHandler = (httpMessageRequest, cancellationToken) =>
-                    {
-                        var content = $@"{{
+            var serializedOdataRepsonse = $@"{{
     ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/$entity"",
     ""id"": ""{clusterId}"",
     ""name"": ""cluster"",
@@ -250,14 +205,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         }}
     ]
 }}";
-                        var response = httpMessageRequest.CreateResponse(HttpStatusCode.OK);
-                        response.Content = new StringContent(
-                            content,
-                            Encoding.UTF8,
-                            "application/json");
-                        return response;
-                    }
-                });
+            var client = Utilities.GetTestClient(serializedOdataRepsonse);
 
             // Act
             var result = await client.GetGatewayClusters(clusterId, true);
@@ -271,7 +219,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
-            var odataResponse = new ODataResponseGatewayCluster
+            var oDataResponse = new ODataResponseGatewayCluster
             {
                 ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/$entity",
                 Id = clusterId,
@@ -316,30 +264,14 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 }
             };
 
-            var serializedOdataRepsonse = JsonConvert.SerializeObject(odataResponse);
-
-            var client = new GatewayV2Client(
-                new Uri("https://bing.com"),
-                new Mock<IAccessToken>().Object,
-                new MockHttpMessageHandler
-                {
-                    SendAsyncMockHandler = (httpMessageRequest, cancellationToken) =>
-                    {
-                        var content = serializedOdataRepsonse;
-                        var response = httpMessageRequest.CreateResponse(HttpStatusCode.OK);
-                        response.Content = new StringContent(
-                            content,
-                            Encoding.UTF8,
-                            "application/json");
-                        return response;
-                    }
-                });
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
+            var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
             var result = await client.GetGatewayClusters(clusterId, true);
 
             // Assert
-            odataResponse.Should().BeEquivalentTo(result);
+            oDataResponse.Should().BeEquivalentTo(result);
         }
     }
 }

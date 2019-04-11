@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
+using Newtonsoft.Json;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways
 {
@@ -26,6 +28,15 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
             HttpClientInstance = new HttpClient(messageHandler);
             PopulateClient(HttpClientInstance);
+        }
+
+        private void PopulateClient(HttpClient client)
+        {
+            client.BaseAddress = this.BaseUri;
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", this.Token.AccessToken);
+            client.DefaultRequestHeaders.UserAgent.Clear();
+            //client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-InvokeRest", PowerBICmdlet.CmdletVersion));
         }
 
         public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
@@ -85,13 +96,20 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             }
         }
 
-        private void PopulateClient(HttpClient client)
+        public async Task<HttpResponseMessage> PatchGatewayCluster(Guid gatewayClusterId, PatchGatewayClusterRequest patchGatewayClusterRequest, bool asIndividual)
         {
-            client.BaseAddress = this.BaseUri;
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", this.Token.AccessToken);
-            client.DefaultRequestHeaders.UserAgent.Clear();
-            //client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-InvokeRest", PowerBICmdlet.CmdletVersion));
+            var url = "v2.0/myorg";
+            if (asIndividual)
+            {
+                url += "/me";
+            }
+
+            url += $"/gatewayclusters({gatewayClusterId})";
+            using (HttpClientInstance)
+            {
+                var httpContent = new StringContent(JsonConvert.SerializeObject(patchGatewayClusterRequest));
+                return await HttpClientInstance.PatchAsync(url, httpContent);
+            }
         }
     }
 }
