@@ -187,5 +187,16 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 return tenantPolicy;
             }
         }
+
+        public async Task<HttpResponseMessage> UpdateTenantPolicy(UpdateGatewayPolicyRequest request)
+        {
+            var url = "v2.0/myorg/gatewayPolicy";
+
+            using (HttpClientInstance)
+            {
+                var httpContent = new StringContent(JsonConvert.SerializeObject(request));
+                return await HttpClientInstance.PostAsync(url, httpContent);
+            }
+        }
     }
 }
