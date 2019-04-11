@@ -173,5 +173,19 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 return await HttpClientInstance.DeleteAsync(url);
             }
         }
+
+        public async Task<GatewayTenant> GetTenantPolicy()
+        {
+            var url = "v2.0/myorg/gatewayPolicy";
+
+            using (HttpClientInstance)
+            {
+                var response = await HttpClientInstance.GetAsync(url);
+                var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayTenant));
+
+                var tenantPolicy = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseGatewayTenant;
+                return tenantPolicy;
+            }
+        }
     }
 }
