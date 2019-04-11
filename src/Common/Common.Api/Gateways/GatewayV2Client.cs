@@ -15,6 +15,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
     {
         private Uri BaseUri { get; }
         private IAccessToken Token { get; }
+
         private HttpClient HttpClientInstance { get; }
 
         public GatewayV2Client(Uri baseUri, IAccessToken tokenCredentials) : this(baseUri, tokenCredentials, new HttpClientHandler())
@@ -121,6 +122,21 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             }
 
             url += $"/gatewayclusters({gatewayClusterId})";
+            using (HttpClientInstance)
+            {
+                return await HttpClientInstance.DeleteAsync(url);
+            }
+        }
+
+        public async Task<HttpResponseMessage> DeleteGatewayClusterMember(Guid gatewayClusterId, Guid memberGatewayId, bool asIndividual)
+        {
+            var url = "v2.0/myorg";
+            if (asIndividual)
+            {
+                url += "/me";
+            }
+
+            url += $"/gatewayclusters({gatewayClusterId})/memberGateways({memberGatewayId})";
             using (HttpClientInstance)
             {
                 return await HttpClientInstance.DeleteAsync(url);
