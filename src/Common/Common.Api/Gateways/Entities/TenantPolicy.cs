@@ -1,12 +1,19 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
     [DataContract]
+    [Flags]
     public enum TenantPolicy
     {
-        [EnumMember] None = 0,
-        [EnumMember] PersonalInstallRestricted = 1,
-        [EnumMember] EnterpriseInstallRestricted = 2,
+        [EnumMember]
+        None = 0x0,
+
+        [EnumMember]
+        PersonalInstallRestricted = 0x1,
+
+        [EnumMember]
+        EnterpriseInstallRestricted = 0x2
     }
 }

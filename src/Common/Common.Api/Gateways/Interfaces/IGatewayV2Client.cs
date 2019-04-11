@@ -19,5 +19,6 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
         Task<HttpResponseMessage> DeleteUserOnGatewayCluster(Guid gatewayClusterId, Guid permissionId, bool asIndividual);
         Task<GatewayTenant> GetTenantPolicy();
         Task<HttpResponseMessage> UpdateTenantPolicy(UpdateGatewayPolicyRequest request);
+        Task<IEnumerable<InstallerPrincipal>> GetInstallerPrincipals(GatewayType? type);
     }
 }

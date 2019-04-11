@@ -59,6 +59,24 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             }
         }
 
+        public async Task<IEnumerable<InstallerPrincipal>> GetInstallerPrincipals(GatewayType? type)
+        {
+            var url = $"v2.0/myorg/gatewayInstallers";
+            if(type != null)
+            {
+                url += $"?type={type.ToString()}";
+            }
+
+            using (HttpClientInstance)
+            {
+                var response = await HttpClientInstance.GetAsync(url);
+                var serializer = new DataContractJsonSerializer(typeof(IEnumerable<InstallerPrincipal>));
+
+                var installerPrinciple = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as IEnumerable<InstallerPrincipal>;
+                return installerPrinciple;
+            }
+        }
+
         public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
         {
             var url = "v2.0/myorg";
