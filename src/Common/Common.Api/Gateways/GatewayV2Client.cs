@@ -142,5 +142,21 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 return await HttpClientInstance.DeleteAsync(url);
             }
         }
+
+        public async Task<HttpResponseMessage> AddUsersToGatewayCluster(Guid gatewayClusterId, GatewayClusterAddPrincipalRequest addPrincipalRequest, bool asIndividual)
+        {
+            var url = "v2.0/myorg";
+            if (asIndividual)
+            {
+                url += "/me";
+            }
+
+            url += $"/gatewayclusters({gatewayClusterId})/permissions";
+            using (HttpClientInstance)
+            {
+                var httpContent = new StringContent(JsonConvert.SerializeObject(addPrincipalRequest));
+                return await HttpClientInstance.PostAsync(url, httpContent);
+            }
+        }
     }
 }

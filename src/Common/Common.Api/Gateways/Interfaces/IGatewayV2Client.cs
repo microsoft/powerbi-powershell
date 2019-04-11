@@ -15,5 +15,6 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
         Task<HttpResponseMessage> PatchGatewayCluster(Guid gatewayClusterId, PatchGatewayClusterRequest patchGatewayClusterRequest, bool asIndividual);
         Task<HttpResponseMessage> DeleteGatewayCluster(Guid gatewayClusterId, bool asIndividual);
         Task<HttpResponseMessage> DeleteGatewayClusterMember(Guid gatewayClusterId, Guid memberGatewayId, bool asIndividual);
+        Task<HttpResponseMessage> AddUsersToGatewayCluster(Guid gatewayClusterId, GatewayClusterAddPrincipalRequest addPrincipalRequest, bool asIndividual);
     }
 }
