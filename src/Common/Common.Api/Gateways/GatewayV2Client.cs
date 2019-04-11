@@ -158,5 +158,20 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 return await HttpClientInstance.PostAsync(url, httpContent);
             }
         }
+
+        public async Task<HttpResponseMessage> DeleteUserOnGatewayCluster(Guid gatewayClusterId, Guid permissionId, bool asIndividual)
+        {
+            var url = "v2.0/myorg";
+            if (asIndividual)
+            {
+                url += "/me";
+            }
+
+            url += $"/gatewayClusters({gatewayClusterId})/permissions({permissionId})";
+            using (HttpClientInstance)
+            {
+                return await HttpClientInstance.DeleteAsync(url);
+            }
+        }
     }
 }
