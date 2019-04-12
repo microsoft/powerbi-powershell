@@ -123,7 +123,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
             url += $"/gatewayclusters({gatewayClusterId})";
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(patchGatewayClusterRequest));
+            var httpContent = new StringContent(JsonConvert.SerializeObject(patchGatewayClusterRequest), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PatchAsync(url, httpContent);
         }
 
@@ -164,7 +164,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
             url += $"/gatewayclusters({gatewayClusterId})/permissions";
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(addPrincipalRequest));
+            var httpContent = new StringContent(JsonConvert.SerializeObject(addPrincipalRequest), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PostAsync(url, httpContent);
         }
 
@@ -196,7 +196,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         {
             var url = "v2.0/myorg/gatewayPolicy";
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(request));
+            var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PostAsync(url, httpContent);
         }
 
@@ -204,7 +204,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         {
             var url = "v2.0/myorg/gatewayInstallers";
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(request));
+            var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PostAsync(url, httpContent);
         }
     }
