@@ -35,7 +35,6 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
             }
         }
 
@@ -48,7 +47,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(GetOnPremisesDataGatewayClustersInfo).AddParameter(nameof(GetOnPremisesDataGatewayClusters.GatewayClusterId), new Guid());
+                ps.AddCommand(GetOnPremisesDataGatewayClustersInfo).AddParameter(nameof(GetOnPremisesDataGatewayClusters.GatewayClusterId), new Guid("{1C4781C9-1767-4D4B-919E-7DA2BDD81AF4}"));
 
                 // Act
                 var result = ps.Invoke();
@@ -56,7 +55,6 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
-                Assert.IsTrue(result.Count > 0);
             }
         }
 
