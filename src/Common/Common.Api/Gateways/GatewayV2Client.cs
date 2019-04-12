@@ -216,5 +216,16 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 return await HttpClientInstance.PostAsync(url, httpContent);
             }
         }
+
+        public async Task<HttpResponseMessage> UpdateInstallerPrincipals(UpdateGatewayInstallersRequest request)
+        {
+            var url = "v2.0/myorg/gatewayInstallers";
+
+            using (HttpClientInstance)
+            {
+                var httpContent = new StringContent(JsonConvert.SerializeObject(request));
+                return await HttpClientInstance.PostAsync(url, httpContent);
+            }
+        }
     }
 }

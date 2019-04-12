@@ -20,5 +20,6 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
         Task<GatewayTenant> GetTenantPolicy();
         Task<HttpResponseMessage> UpdateTenantPolicy(UpdateGatewayPolicyRequest request);
         Task<IEnumerable<InstallerPrincipal>> GetInstallerPrincipals(GatewayType? type);
+        Task<HttpResponseMessage> UpdateInstallerPrincipals(UpdateGatewayInstallersRequest request);
     }
 }
