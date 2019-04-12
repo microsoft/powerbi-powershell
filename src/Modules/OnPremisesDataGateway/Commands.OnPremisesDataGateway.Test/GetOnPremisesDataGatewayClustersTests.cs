@@ -14,7 +14,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
     [TestClass]
     public class GetOnPremisesDataGatewayClustersTests
     {
-        public static CmdletInfo GetOnPremisesDataGatewayClustersInfo { get; } = new CmdletInfo(
+        private static CmdletInfo GetOnPremisesDataGatewayClustersInfo { get; } = new CmdletInfo(
             $"{GetOnPremisesDataGatewayClusters.CmdletVerb}-{GetOnPremisesDataGatewayClusters.CmdletName}",
             typeof(GetOnPremisesDataGatewayClusters));
 

@@ -12,7 +12,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
     [TestClass]
     public class AddOnPremisesDataGatewayClusterUserTests
     {
-        public static CmdletInfo AddOnPremisesDataGatewayClusterUserInfo { get; } = new CmdletInfo(
+        private static CmdletInfo AddOnPremisesDataGatewayClusterUserInfo { get; } = new CmdletInfo(
             $"{AddOnPremisesDataGatewayClusterUser.CmdletVerb}-{AddOnPremisesDataGatewayClusterUser.CmdletName}",
             typeof(AddOnPremisesDataGatewayClusterUser));
 
