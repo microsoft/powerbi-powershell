@@ -9,7 +9,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
     {
         [Required]
         [DataMember(Name = "ids")]
-        public IList<string> Ids { get; set; } = new List<string>();
+        public IEnumerable<string> Ids { get; set; } = new string[0];
 
         [Required]
         [DataMember(Name = "operation")]
