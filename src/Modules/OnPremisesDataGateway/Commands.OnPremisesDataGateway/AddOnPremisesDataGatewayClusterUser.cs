@@ -42,7 +42,8 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                     Role = Role
                 };
 
-                var result = client.GatewaysV2.AddUsersToGatewayCluster(GatewayClusterId, request, this.Scope == PowerBIUserScope.Individual);
+                var result = client.GatewaysV2.AddUsersToGatewayCluster(GatewayClusterId, request, this.Scope == PowerBIUserScope.Individual).Result;
+                Logger.WriteObject(result, true);
             }
         }
     }
