@@ -75,8 +75,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var response = await HttpClientInstance.GetAsync(url);
             var serializer = new DataContractJsonSerializer(typeof(IEnumerable<InstallerPrincipal>));
 
-            var installerPrinciple = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as IEnumerable<InstallerPrincipal>;
-            return installerPrinciple;
+            var installerPrincipal = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as IEnumerable<InstallerPrincipal>;
+            return installerPrincipal;
         }
 
         public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
