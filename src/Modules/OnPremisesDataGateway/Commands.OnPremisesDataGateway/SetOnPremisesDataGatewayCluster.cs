@@ -43,10 +43,6 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter(Mandatory = false)]
         public string LoadBalancingSelectorType { get; set; }
 
-
-        [Parameter()]
-        public string Role { get; set; }
-
         public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())
