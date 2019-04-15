@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Management.Automation;
-using Microsoft.PowerBI.Common.Abstractions;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+﻿using System.Management.Automation;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Client;
 
@@ -30,14 +26,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
             {
                 var request = new UpdateGatewayInstallersRequest
                 {
+                    Ids = PrincipalObjectIds,
                     Operation = Operation,
                     GatewayType = GatewayType
                 };
-
-                if (PrincipalObjectIds != default)
-                {
-                    request.Ids = PrincipalObjectIds;
-                }
 
                 var result = client.GatewaysV2.UpdateInstallerPrincipals(request).Result;
                 Logger.WriteObject(result, true);
