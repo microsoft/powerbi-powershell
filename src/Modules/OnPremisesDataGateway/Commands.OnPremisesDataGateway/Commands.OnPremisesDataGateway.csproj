@@ -4,7 +4,7 @@
     <AssemblyName>Microsoft.PowerBI.Commands.OnPremisesDataGateway</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.OnPremisesDataGateway</RootNamespace>
     <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->

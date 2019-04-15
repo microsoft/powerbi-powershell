@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.PowerBI.Common.Api</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Common.Api</RootNamespace>
     <IsPackable>false</IsPackable>

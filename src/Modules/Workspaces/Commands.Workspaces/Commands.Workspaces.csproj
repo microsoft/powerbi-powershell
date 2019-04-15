@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.PowerBI.Commands.Workspaces</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Workspaces</RootNamespace>
     <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
