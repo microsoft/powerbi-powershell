@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetOnPremisesDataGatewayClusters()
+        public void EndToEndGetOnPremisesDataGatewayInstallers()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {

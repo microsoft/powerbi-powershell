@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Management.Automation;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.PowerBI.Commands.Common.Test;
+using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -10,6 +13,30 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
     [TestClass]
     public class GetOnPremisesDataGatewayTenantPolicyTests
     {
+        private static CmdletInfo GetOnPremisesDataGatewayTenantPolicyInfo { get; } = new CmdletInfo(
+            $"{GetOnPremisesDataGatewayTenantPolicy.CmdletVerb}-{GetOnPremisesDataGatewayTenantPolicy.CmdletName}",
+            typeof(GetOnPremisesDataGatewayTenantPolicy));
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetOnPremisesDataGatewayTenantPolicy()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ps.AddCommand(GetOnPremisesDataGatewayTenantPolicyInfo);
+
+                // Act
+                var result = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(result);
+            }
+        }
+
         [TestMethod]
         public async Task GetOnPremisesDataGatewayTenantPolicyJsonResponseCanBeDeSerialized()
         {
