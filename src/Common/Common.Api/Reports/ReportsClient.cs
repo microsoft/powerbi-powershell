@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.PowerBI.Api.V2;
+using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Reports
 {
@@ -136,7 +137,8 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             var importId = this.PostImport(reportName, filePath, nameConflict);
 
             Nullable<DateTime> timeoutAt = null;
-            if (timeout > 0) {
+            if (timeout > 0)
+            {
                 timeoutAt = DateTime.Now.AddSeconds(timeout);
             }
 
@@ -147,9 +149,12 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
                 if (import.ImportState != "Succeeded")
                 {
-                    if (timeoutAt != null && DateTime.Now > timeoutAt) {
+                    if (timeoutAt != null && DateTime.Now > timeoutAt)
+                    {
                         throw new TimeoutException();
-                    } else {
+                    }
+                    else
+                    {
                         System.Threading.Thread.Sleep(500);
                     }
                 }
@@ -169,7 +174,8 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             var importId = this.PostImportForWorkspace(workspaceId, reportName, filePath, nameConflict);
 
             Nullable<DateTime> timeoutAt = null;
-            if (timeout > 0) {
+            if (timeout > 0)
+            {
                 timeoutAt = DateTime.Now.AddSeconds(timeout);
             }
 
@@ -177,12 +183,15 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             do
             {
                 import = this.GetImportForWorkspace(workspaceId: workspaceId, importId: importId);
-             
+
                 if (import.ImportState != "Succeeded")
                 {
-                    if (timeoutAt != null && DateTime.Now > timeoutAt) {
+                    if (timeoutAt != null && DateTime.Now > timeoutAt)
+                    {
                         throw new TimeoutException();
-                    } else {
+                    }
+                    else
+                    {
                         System.Threading.Thread.Sleep(500);
                     }
                 }
@@ -195,6 +204,48 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             }
 
             return import.Reports.Single();
+        }
+
+         public Report CopyReport(string reportName, string sourceWorkspaceId, string sourceReportId, string targetWorkspaceId, string targetDatasetId)
+        {
+            var requestBody = new CloneReportRequest()
+            {
+                Name = reportName,
+                TargetModelId = targetDatasetId,
+                TargetWorkspaceId = targetWorkspaceId
+            };
+
+            return string.IsNullOrWhiteSpace(sourceWorkspaceId) ?
+                this.Client.Reports.CloneReport(sourceReportId, requestBody) :
+                this.Client.Reports.CloneReport(sourceWorkspaceId, sourceReportId, requestBody);
+        }
+
+        public Dashboard AddDashboard(string dashboardName, Guid workspaceId)
+        {
+            var requestBody = new AddDashboardRequest()
+            {
+                Name = dashboardName
+            };
+
+            return workspaceId.Equals(Guid.Empty) ?
+                this.Client.Dashboards.AddDashboard(requestBody) :
+                this.Client.Dashboards.AddDashboard(workspaceId.ToString(), requestBody);
+        }
+
+         public Tile CopyTile(Guid workspaceId, string dashboardKey, string tileKey, string targetDashboardId, string targetWorkspaceId, string targetReportId, string targetModelId, string positionConflictAction)
+        {
+            var requestParameters = new CloneTileRequest()
+            {
+                PositionConflictAction = positionConflictAction,
+                TargetDashboardId = targetDashboardId,
+                TargetModelId = targetModelId,
+                TargetReportId = targetReportId,
+                TargetWorkspaceId = targetWorkspaceId
+            };
+
+            return workspaceId.Equals(Guid.Empty) ?
+                this.Client.Dashboards.CloneTile(dashboardKey, tileKey, requestParameters) :
+                this.Client.Dashboards.CloneTile(workspaceId.ToString(), dashboardKey, tileKey, requestParameters);
         }
     }
 }
