@@ -11,6 +11,12 @@ Locale: en-US
 {{Manually Enter Description Here}}
 
 ## MicrosoftPowerBIMgmt.OnPremisesDataGateway Cmdlets
+### [Add-OnPremisesDataGatewayClusterUser](Add-OnPremisesDataGatewayClusterUser.md)
+{{Fill in the Synopsis}}
+
 ### [Get-OnPremisesDataGatewayCluster](Get-OnPremisesDataGatewayCluster.md)
+{{Fill in the Synopsis}}
+
+### [Get-OnPremisesDataGatewayClusterStatus](Get-OnPremisesDataGatewayClusterStatus.md)
 {{Fill in the Synopsis}}
 
