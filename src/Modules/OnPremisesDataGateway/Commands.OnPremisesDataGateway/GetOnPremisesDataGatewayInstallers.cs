@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Client;
