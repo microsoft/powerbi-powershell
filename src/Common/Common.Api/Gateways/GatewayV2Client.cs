@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 {
     public class GatewayV2Client : IGatewayV2Client
     {
+        private static readonly string CmdletVersion = typeof(GatewayV2Client).Assembly.GetName().Version.ToString();
+
         private Uri BaseUri { get; }
         private IAccessToken Token { get; }
 
@@ -48,7 +51,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", this.Token.AccessToken);
             client.DefaultRequestHeaders.UserAgent.Clear();
-            //client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-InvokeRest", PowerBICmdlet.CmdletVersion));
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-Gw-InvokeRest", CmdletVersion));
         }
 
         public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
