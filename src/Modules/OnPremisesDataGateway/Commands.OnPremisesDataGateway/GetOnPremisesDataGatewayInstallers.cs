@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public const string CmdletName = "OnPremisesDataGatewayInstallers";
         public const string CmdletVerb = VerbsCommon.Get;
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public GatewayType? GatewayTypeParameter { get; set; } = null;
 
         public override void ExecuteCmdlet()

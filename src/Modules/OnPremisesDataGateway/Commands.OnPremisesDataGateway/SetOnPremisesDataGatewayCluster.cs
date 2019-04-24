@@ -24,28 +24,28 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Alias("Cluster")]
-        [Parameter()]
+        [Parameter(Mandatory = true)]
         public Guid GatewayClusterId { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public string Name { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public string Department { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public string Description { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public string ContactInformation { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public bool? AllowCloudDatasourceRefresh { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public bool? AllowCustomConnectors { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public string LoadBalancingSelectorType { get; set; }
 
         public override void ExecuteCmdlet()

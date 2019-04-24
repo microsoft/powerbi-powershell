@@ -20,3 +20,24 @@ Locale: en-US
 ### [Get-OnPremisesDataGatewayClusterStatus](Get-OnPremisesDataGatewayClusterStatus.md)
 {{Fill in the Synopsis}}
 
+### [Get-OnPremisesDataGatewayInstallers](Get-OnPremisesDataGatewayInstallers.md)
+{{Fill in the Synopsis}}
+
+### [Get-OnPremisesDataGatewayTenantPolicy](Get-OnPremisesDataGatewayTenantPolicy.md)
+{{Fill in the Synopsis}}
+
+### [Remove-OnPremisesDataGatewayCluster](Remove-OnPremisesDataGatewayCluster.md)
+{{Fill in the Synopsis}}
+
+### [Remove-OnPremisesDataGatewayClusterMember](Remove-OnPremisesDataGatewayClusterMember.md)
+{{Fill in the Synopsis}}
+
+### [Set-OnPremisesDataGatewayCluster](Set-OnPremisesDataGatewayCluster.md)
+{{Fill in the Synopsis}}
+
+### [Set-OnPremisesDataGatewayInstallers](Set-OnPremisesDataGatewayInstallers.md)
+{{Fill in the Synopsis}}
+
+### [Set-OnPremisesDataGatewayTenantPolicy](Set-OnPremisesDataGatewayTenantPolicy.md)
+{{Fill in the Synopsis}}
+

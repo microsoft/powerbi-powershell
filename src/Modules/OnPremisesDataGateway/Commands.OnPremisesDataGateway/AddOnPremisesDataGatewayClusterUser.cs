@@ -20,20 +20,21 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public const string CmdletName = "OnPremisesDataGatewayClusterUser";
         public const string CmdletVerb = VerbsCommon.Add;
 
-        [Parameter()]
+        [Parameter(Mandatory = true)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Alias("Cluster")]
-        [Parameter()]
+        [Parameter(Mandatory = true)]
         public Guid GatewayClusterId { get; set; }
 
-        [Parameter()]
+        [Alias("User")]
+        [Parameter(Mandatory = true)]
         public Guid PrincipalObjectId { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter()]
         public IEnumerable<DatasourceType> AllowedDataSourceTypes { get; set; }
 
-        [Parameter()]
+        [Parameter(Mandatory = true)]
         public string Role { get; set; }
 
         public override void ExecuteCmdlet()

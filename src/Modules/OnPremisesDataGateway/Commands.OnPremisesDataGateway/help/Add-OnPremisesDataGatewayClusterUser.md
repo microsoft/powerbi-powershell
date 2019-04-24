@@ -13,10 +13,10 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Add-OnPremisesDataGatewayClusterUser [-Scope <PowerBIUserScope>] [-GatewayClusterId <Guid>]
- [-PrincipalObjectId <Guid>]
+Add-OnPremisesDataGatewayClusterUser -Scope <PowerBIUserScope> -GatewayClusterId <Guid>
+ -PrincipalObjectId <Guid>
  [-AllowedDataSourceTypes <System.Collections.Generic.IEnumerable`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]>]
- [-Role <String>] [<CommonParameters>]
+ -Role <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,7 +57,7 @@ Type: Guid
 Parameter Sets: (All)
 Aliases: Cluster
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -70,9 +70,9 @@ Accept wildcard characters: False
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases:
+Aliases: User
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -87,7 +87,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -103,7 +103,7 @@ Parameter Sets: (All)
 Aliases:
 Accepted values: Individual, Organization
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
