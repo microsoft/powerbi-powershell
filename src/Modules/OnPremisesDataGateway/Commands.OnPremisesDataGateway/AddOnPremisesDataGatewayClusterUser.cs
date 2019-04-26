@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
+using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
@@ -20,7 +21,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public const string CmdletName = "OnPremisesDataGatewayClusterUser";
         public const string CmdletVerb = VerbsCommon.Add;
 
-        [Parameter(Mandatory = true)]
+        [Parameter()]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Alias("Cluster")]
@@ -36,6 +37,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         [Parameter(Mandatory = true)]
         public string Role { get; set; }
+
+        public AddOnPremisesDataGatewayClusterUser() : base() { }
+
+        public AddOnPremisesDataGatewayClusterUser(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         public override void ExecuteCmdlet()
         {

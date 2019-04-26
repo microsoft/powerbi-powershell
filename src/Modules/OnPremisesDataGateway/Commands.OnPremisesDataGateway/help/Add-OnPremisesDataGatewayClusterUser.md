@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Add-OnPremisesDataGatewayClusterUser -Scope <PowerBIUserScope> -GatewayClusterId <Guid>
+Add-OnPremisesDataGatewayClusterUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
  -PrincipalObjectId <Guid>
  [-AllowedDataSourceTypes <System.Collections.Generic.IEnumerable`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]>]
  -Role <String> [<CommonParameters>]
@@ -103,7 +103,7 @@ Parameter Sets: (All)
 Aliases:
 Accepted values: Individual, Organization
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
