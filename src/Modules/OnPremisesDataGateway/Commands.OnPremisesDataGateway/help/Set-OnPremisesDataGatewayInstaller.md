@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-OnPremisesDataGatewayInstallers
+# Set-OnPremisesDataGatewayInstaller
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
@@ -13,7 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-OnPremisesDataGatewayInstallers [-GatewayTypeParameter <GatewayType>] [<CommonParameters>]
+Set-OnPremisesDataGatewayInstaller [-PrincipalObjectIds <String[]>] -Operation <OperationType>
+ -GatewayType <GatewayType> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,14 +31,45 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -GatewayTypeParameter
-{{Fill GatewayTypeParameter Description}}
+### -GatewayType
+{{Fill GatewayType Description}}
 
 ```yaml
 Type: GatewayType
 Parameter Sets: (All)
 Aliases:
 Accepted values: Resource, Personal
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Operation
+{{Fill Operation Description}}
+
+```yaml
+Type: OperationType
+Parameter Sets: (All)
+Aliases:
+Accepted values: None, Add, Remove
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PrincipalObjectIds
+{{Fill PrincipalObjectIds Description}}
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: Users
 
 Required: False
 Position: Named
@@ -55,7 +87,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Collections.Generic.IEnumerable`1[[Microsoft.PowerBI.Common.Api.Gateways.Entities.InstallerPrincipal, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+### System.Void
 
 ## NOTES
 
