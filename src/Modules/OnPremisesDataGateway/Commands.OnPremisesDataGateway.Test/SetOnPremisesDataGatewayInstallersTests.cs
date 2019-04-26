@@ -5,10 +5,13 @@
 
 using System;
 using System.Management.Automation;
+using System.Net.Http;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
+using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 {
@@ -40,6 +43,35 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
             }
+        }
+
+        [TestMethod]
+        public void SetOnPremisesDataGatewayInstallersReturnsExpectedResults()
+        {
+            // Arrange
+            var expectedResponse = new HttpResponseMessage();
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Gateways
+                .UpdateInstallerPrincipals(It.IsAny<UpdateGatewayInstallersRequest>()))
+                .ReturnsAsync(expectedResponse);
+
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new SetOnPremisesDataGatewayInstaller(initFactory)
+            {
+                PrincipalObjectIds = new string[]
+                {
+                    "id"
+                },
+                Operation = OperationType.None,
+                GatewayType = GatewayType.Personal
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
         }
     }
 }
