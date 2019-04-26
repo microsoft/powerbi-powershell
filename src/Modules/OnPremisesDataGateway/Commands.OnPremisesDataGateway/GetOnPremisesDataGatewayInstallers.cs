@@ -11,7 +11,7 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(IEnumerable<InstallerPrincipal>))]
+    [OutputType(typeof(InstallerPrincipal))]
     public class GetOnPremisesDataGatewayInstallers : PowerBIClientCmdlet
     {
         public const string CmdletName = "OnPremisesDataGatewayInstallers";
@@ -24,7 +24,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         public GetOnPremisesDataGatewayInstallers(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
-public override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())
             {
