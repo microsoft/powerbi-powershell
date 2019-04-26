@@ -33,8 +33,8 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(AddOnPremisesDataGatewayClusterUserInfo)
-                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterUser.GatewayClusterId), new Guid())
-                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterUser.PrincipalObjectId), new Guid("{F31FEA72-8435-4871-BF75-E94168C71A6D}"))
+                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterUser.GatewayClusterId), Guid.NewGuid())
+                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterUser.PrincipalObjectId), Guid.NewGuid())
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterUser.AllowedDataSourceTypes), new DatasourceType[] { DatasourceType.Sql })
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterUser.Role), "ConnectionCreator");
 

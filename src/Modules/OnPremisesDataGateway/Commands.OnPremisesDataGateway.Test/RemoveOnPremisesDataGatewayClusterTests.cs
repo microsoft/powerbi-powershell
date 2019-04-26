@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(RemoveOnPremisesDataGatewayClusterInfo)
-                    .AddParameter(nameof(RemoveOnPremisesDataGatewayCluster.GatewayClusterId), new Guid());
+                    .AddParameter(nameof(RemoveOnPremisesDataGatewayCluster.GatewayClusterId), Guid.NewGuid());
 
                 // Act
                 var result = ps.Invoke();

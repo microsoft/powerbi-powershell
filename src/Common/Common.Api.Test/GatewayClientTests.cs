@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient("");
             var request = new GatewayClusterAddPrincipalRequest()
             {
-                PrincipalObjectId = new Guid(),
+                PrincipalObjectId = Guid.NewGuid(),
                 AllowedDataSourceTypes = new DatasourceType[]
                 {
                     DatasourceType.Sql
@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             };
 
             // Act
-            var result = await client.AddUsersToGatewayCluster(new Guid(), request, true);
+            var result = await client.AddUsersToGatewayCluster(Guid.NewGuid(), request, true);
 
             // Assert
             result.IsSuccessStatusCode.Should().Be(true);
@@ -50,7 +50,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
-            var result = await client.GetGatewayClusterStatus(new Guid(), true);
+            var result = await client.GetGatewayClusterStatus(Guid.NewGuid(), true);
 
             // Assert
             result.ClusterStatus.Should().Be(clusterStatus);
@@ -74,7 +74,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
-            var result = await client.GetGatewayClusterStatus(new Guid(), true);
+            var result = await client.GetGatewayClusterStatus(Guid.NewGuid(), true);
 
             // Assert
             oDataResponse.Should().BeEquivalentTo(result);
@@ -84,7 +84,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         public async Task GetOnPremisesDataGatewayClustersJsonResponseCanBeDeSerialized()
         {
             // Arrange
-            var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
+            var clusterId = Guid.NewGuid();
             var serializedODataRepsonse = $@"{{
     ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters"",
     ""value"": [
@@ -94,9 +94,9 @@ namespace Microsoft.PowerBI.Common.Api.Test
             ""dataSourceIds"": [],
             ""permissions"": [
                 {{
-                    ""id"": ""490F8A04-ABB8-4015-ABE6-7D361B9135B3"",
+                    ""id"": ""{Guid.NewGuid()}"",
                     ""principalType"": ""User"",
-                    ""tenantId"": ""7552F012-6C5E-4E5B-8EA2-260215EB8236"",
+                    ""tenantId"": ""{Guid.NewGuid()}"",
                     ""role"": ""Admin"",
                     ""allowedDataSources"": [],
                     ""clusterId"": ""{clusterId}""
@@ -130,7 +130,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         public async Task GetOnPremisesDataGatewayClustersCanBeSerializedAndDeSerialized()
         {
             // Arrange
-            var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
+            var clusterId = Guid.NewGuid();
             var gatewayClusterObject = new GatewayCluster
             {
                 Id = clusterId,
@@ -142,20 +142,20 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 {
                     new Permission
                     {
-                        Id = "490F8A04-ABB8-4015-ABE6-7D361B9135B3",
+                        Id = Guid.NewGuid().ToString(),
                         PrincipalType = "User",
-                        TenantId = "7552F012-6C5E-4E5B-8EA2-260215EB8236",
+                        TenantId = Guid.NewGuid().ToString(),
                         Role = "Admin",
                         AllowedDataSources = new string[]
                         {
-                            "EFD4D249-519D-4CE5-BC2D-F7607C30EC02"
+                            Guid.NewGuid().ToString()
                         },
                         ClusterId = clusterId.ToString()
                     }
                 },
                 DataSourceIds = new Guid[]
                 {
-                    new Guid("EFD4D249-519D-4CE5-BC2D-F7607C30EC02")
+                    Guid.NewGuid()
                 },
                 Type = "the type",
                 MemberGateways = new MemberGateway[]
@@ -199,7 +199,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
 
             // Arrange
-            var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
+            var clusterId = Guid.NewGuid();
             var serializedOdataRepsonse = $@"{{
     ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/$entity"",
     ""id"": ""{clusterId}"",
@@ -207,9 +207,9 @@ namespace Microsoft.PowerBI.Common.Api.Test
     ""dataSourceIds"": [],
     ""permissions"": [
         {{
-            ""id"": ""490F8A04-ABB8-4015-ABE6-7D361B9135B3"",
+            ""id"": ""{Guid.NewGuid()}"",
             ""principalType"": ""User"",
-            ""tenantId"": ""7552F012-6C5E-4E5B-8EA2-260215EB8236"",
+            ""tenantId"": ""{Guid.NewGuid()}"",
             ""role"": ""Admin"",
             ""allowedDataSources"": [],
             ""clusterId"": ""{clusterId}""
@@ -238,7 +238,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         public async Task GetOnPremisesDataGatewayClustersWithClusterIdCanBeSerializedAndDeSerialized()
         {
             // Arrange
-            var clusterId = new Guid("B3497368-4FC0-409F-A338-827B3B7A6F1C");
+            var clusterId = Guid.NewGuid();
             var oDataResponse = new ODataResponseGatewayCluster
             {
                 ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/$entity",
@@ -251,20 +251,20 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 {
                     new Permission
                     {
-                        Id = "490F8A04-ABB8-4015-ABE6-7D361B9135B3",
+                        Id = Guid.NewGuid().ToString(),
                         PrincipalType = "User",
-                        TenantId = "7552F012-6C5E-4E5B-8EA2-260215EB8236",
+                        TenantId = Guid.NewGuid().ToString(),
                         Role = "Admin",
                         AllowedDataSources = new string[]
                         {
-                            "EFD4D249-519D-4CE5-BC2D-F7607C30EC02"
+                            Guid.NewGuid().ToString()
                         },
                         ClusterId = clusterId.ToString()
                     }
                 },
                 DataSourceIds = new Guid[]
                 {
-                    new Guid("EFD4D249-519D-4CE5-BC2D-F7607C30EC02")
+                    Guid.NewGuid()
                 },
                 Type = "the type",
                 MemberGateways = new MemberGateway[]
@@ -299,7 +299,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
 
             // Arrange
-            var tenantId = "69BFBD2A-1901-48BA-9CAF-0D9190BEE34A";
+            var tenantId = Guid.NewGuid().ToString();
             var serializedODataRepsonse = $@"{{
   ""@odata.context"":""http://example.net/v2.0/myorg/gatewayPolicy"",
   ""id"":""{tenantId}"",
@@ -320,7 +320,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
 
             // Arrange
-            var principalObjectId = "836083DE-E806-44E0-9C0D-53BCFD3800CB";
+            var principalObjectId = Guid.NewGuid().ToString();
             var serializedODataRepsonse = $@"[
   {{
     ""id"":""{principalObjectId}"",
@@ -341,7 +341,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         public async Task GetOnPremisesDataGatewayInstallersCanBeSerializedAndDeSerialized()
         {
             // Arrange
-            var principalObjectId = "836083DE-E806-44E0-9C0D-53BCFD3800CB";
+            var principalObjectId = Guid.NewGuid().ToString();
             var oDataResponse = new InstallerPrincipal[]
             {
                 new InstallerPrincipal{
@@ -364,7 +364,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         public async Task GetOnPremisesDataGatewayTenantPolicyCanBeSerializedAndDeSerialized()
         {
             // Arrange
-            var tenantId = "69BFBD2A-1901-48BA-9CAF-0D9190BEE34A";
+            var tenantId = Guid.NewGuid().ToString();
             var oDataResponse = new ODataResponseGatewayTenant
             {
                 ODataContext = "http://example.net/v2.0/myorg/gatewayPolicy",
@@ -389,7 +389,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient("");
 
             // Act
-            var result = await client.DeleteGatewayClusterMember(new Guid(), new Guid(), true);
+            var result = await client.DeleteGatewayClusterMember(Guid.NewGuid(), Guid.NewGuid(), true);
 
             // Assert
             result.IsSuccessStatusCode.Should().Be(true);
@@ -402,7 +402,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient("");
 
             // Act
-            var result = await client.DeleteGatewayCluster(new Guid(), true);
+            var result = await client.DeleteGatewayCluster(Guid.NewGuid(), true);
 
             // Assert
             result.IsSuccessStatusCode.Should().Be(true);
@@ -415,7 +415,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient("");
 
             // Act
-            var result = await client.DeleteUserOnGatewayCluster(new Guid(), new Guid(), true);
+            var result = await client.DeleteUserOnGatewayCluster(Guid.NewGuid(), Guid.NewGuid(), true);
 
             // Assert
             result.IsSuccessStatusCode.Should().Be(true);
@@ -438,7 +438,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             };
 
             // Act
-            var result = await client.PatchGatewayCluster(new Guid(), request, true);
+            var result = await client.PatchGatewayCluster(Guid.NewGuid(), request, true);
 
             // Assert
             result.IsSuccessStatusCode.Should().Be(true);

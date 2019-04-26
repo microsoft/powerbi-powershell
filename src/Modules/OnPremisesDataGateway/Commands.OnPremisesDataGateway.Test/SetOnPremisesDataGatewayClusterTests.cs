@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(SetOnPremisesDataGatewayClusterInfo)
-                    .AddParameter(nameof(SetOnPremisesDataGatewayCluster.GatewayClusterId), new Guid())
+                    .AddParameter(nameof(SetOnPremisesDataGatewayCluster.GatewayClusterId), Guid.NewGuid())
                     .AddParameter(nameof(SetOnPremisesDataGatewayCluster.Name), "name")
                     .AddParameter(nameof(SetOnPremisesDataGatewayCluster.AllowCloudDatasourceRefresh), false);
 

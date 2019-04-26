@@ -29,7 +29,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(SetOnPremisesDataGatewayInstallersInfo)
-                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.PrincipalObjectIds), new string[] { new Guid().ToString(), new Guid().ToString()})
+                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.PrincipalObjectIds), new string[] { Guid.NewGuid().ToString(), Guid.NewGuid().ToString()})
                     .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.Operation), OperationType.None)
                     .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.GatewayType), GatewayType.Resource);
 
