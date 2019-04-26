@@ -67,14 +67,24 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             return url;
         }
 
+        private static StringContent SerializeObject(object objectToSerialize)
+        {
+            return new StringContent(JsonConvert.SerializeObject(objectToSerialize), Encoding.UTF8, "application/json");
+        }
+
+        private async Task<T> DeserializeResponseContent<T>(HttpResponseMessage response)
+        {
+            var serializer = new DataContractJsonSerializer(typeof(T));
+            return (T)serializer.ReadObject(await response.Content.ReadAsStreamAsync());
+        }
+
         public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
-            var serializer = new DataContractJsonSerializer(typeof(ODataResponseList<GatewayCluster>));
+            var clusters = await DeserializeResponseContent<ODataResponseList<GatewayCluster>>(response);
 
-            var clusters = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseList<GatewayCluster>;
             return clusters?.Value;
         }
 
@@ -87,9 +97,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             }
 
             var response = await HttpClientInstance.GetAsync(url);
-            var serializer = new DataContractJsonSerializer(typeof(IEnumerable<InstallerPrincipal>));
+            var installerPrincipal = await DeserializeResponseContent<IEnumerable<InstallerPrincipal>>(response);
 
-            var installerPrincipal = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as IEnumerable<InstallerPrincipal>;
             return installerPrincipal;
         }
 
@@ -98,9 +107,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
-            var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayCluster));
+            var cluster = await DeserializeResponseContent<ODataResponseGatewayCluster>(response);
 
-            var cluster = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseGatewayCluster;
             return cluster;
         }
 
@@ -109,9 +117,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/status?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
-            var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayClusterStatusResponse));
+            var clusterStatus = await DeserializeResponseContent<ODataResponseGatewayClusterStatusResponse>(response);
 
-            var clusterStatus = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseGatewayClusterStatusResponse;
             return clusterStatus;
         }
 
@@ -119,7 +126,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})");
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(patchGatewayClusterRequest), Encoding.UTF8, "application/json");
+            var httpContent = SerializeObject(patchGatewayClusterRequest);
             return await HttpClientInstance.PatchAsync(url, httpContent);
         }
 
@@ -135,14 +142,13 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/memberGateways({memberGatewayId})");
 
             return await HttpClientInstance.DeleteAsync(url);
-
         }
 
         public async Task<HttpResponseMessage> AddUsersToGatewayCluster(Guid gatewayClusterId, GatewayClusterAddPrincipalRequest addPrincipalRequest, bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/permissions");
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(addPrincipalRequest), Encoding.UTF8, "application/json");
+            var httpContent = SerializeObject(addPrincipalRequest);
             return await HttpClientInstance.PostAsync(url, httpContent);
         }
 
@@ -158,9 +164,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayPolicy");
 
             var response = await HttpClientInstance.GetAsync(url);
-            var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayTenant));
+            var tenantPolicy = await DeserializeResponseContent<ODataResponseGatewayTenant>(response);
 
-            var tenantPolicy = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as ODataResponseGatewayTenant;
             return tenantPolicy;
         }
 
@@ -168,7 +173,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayPolicy");
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            var httpContent = SerializeObject(request);
             return await HttpClientInstance.PostAsync(url, httpContent);
         }
 
@@ -176,7 +181,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayInstallers");
 
-            var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            var httpContent = SerializeObject(request);
             return await HttpClientInstance.PostAsync(url, httpContent);
         }
     }
