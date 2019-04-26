@@ -7,9 +7,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.PowerBI.Common.Api.Gateways
+namespace Microsoft.PowerBI.Common.Abstractions.Utilities
 {
-    internal static class HttpClientExtensions
+    public static class HttpClientExtensions
     {
         // TODO: DELETE THIS once we target > .NET (standard|core) 2.0 
         public static async Task<HttpResponseMessage> PatchAsync(this HttpClient client, string requestUri, HttpContent content)
