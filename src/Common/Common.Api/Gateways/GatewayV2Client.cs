@@ -83,7 +83,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayInstallers");
             if (type != null)
             {
-                url += $"?type={type.ToString()}";
+                url += Invariant($"?type={type.ToString()}");
             }
 
             var response = await HttpClientInstance.GetAsync(url);
