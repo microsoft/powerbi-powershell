@@ -5,8 +5,6 @@
 
 using System;
 using System.Management.Automation;
-using System.Threading.Tasks;
-using FluentAssertions;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
@@ -42,28 +40,6 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
             }
-        }
-
-        [TestMethod]
-        public async Task SetOnPremisesDataGatewayInstallersCanBeSerialized()
-        {
-            // Arrange
-            var client = Utilities.GetTestClient("");
-            var request = new UpdateGatewayInstallersRequest
-            {
-                Ids = new string[]
-                {
-                    "id"
-                },
-                Operation = OperationType.None,
-                GatewayType = GatewayType.Personal
-            };
-
-            // Act
-            var result = await client.UpdateInstallerPrincipals(request);
-
-            // Assert
-            result.IsSuccessStatusCode.Should().Be(true);
         }
     }
 }

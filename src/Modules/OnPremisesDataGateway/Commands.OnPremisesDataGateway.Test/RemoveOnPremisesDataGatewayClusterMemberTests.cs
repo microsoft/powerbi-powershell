@@ -5,8 +5,6 @@
 
 using System;
 using System.Management.Automation;
-using System.Threading.Tasks;
-using FluentAssertions;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,19 +38,6 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
             }
-        }
-
-        [TestMethod]
-        public async Task RemoveOnPremisesDataGatewayClusterMemberCanBeSerialized()
-        {
-            // Arrange
-            var client = Utilities.GetTestClient("");
-
-            // Act
-            var result = await client.DeleteGatewayClusterMember(new Guid(), new Guid(), true);
-
-            // Assert
-            result.IsSuccessStatusCode.Should().Be(true);
         }
     }
 }

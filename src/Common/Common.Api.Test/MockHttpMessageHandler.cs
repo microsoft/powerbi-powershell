@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
+namespace Microsoft.PowerBI.Common.Api.Test
 {
     public sealed class MockHttpMessageHandler : HttpMessageHandler
     {

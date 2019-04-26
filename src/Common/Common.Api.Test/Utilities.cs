@@ -11,7 +11,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Gateways;
 using Moq;
 
-namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
+namespace Microsoft.PowerBI.Common.Api.Test
 {
     internal class Utilities
     {

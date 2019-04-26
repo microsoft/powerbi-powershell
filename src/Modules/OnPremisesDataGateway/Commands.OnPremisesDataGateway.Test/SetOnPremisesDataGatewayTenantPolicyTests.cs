@@ -4,11 +4,8 @@
  */
 
 using System.Management.Automation;
-using System.Threading.Tasks;
-using FluentAssertions;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
-using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
@@ -38,24 +35,6 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
             }
-        }
-
-        [TestMethod]
-        public async Task SetOnPremisesDataGatewayTenantPolicyCanBeSerialized()
-        {
-            // Arrange
-            var client = Utilities.GetTestClient("");
-            var request = new UpdateGatewayPolicyRequest()
-            {
-                ResourceGatewayInstallPolicy = PolicyType.Restricted,
-                PersonalGatewayInstallPolicy = PolicyType.None
-            };
-
-            // Act
-            var result = await client.UpdateTenantPolicy(request);
-
-            // Assert
-            result.IsSuccessStatusCode.Should().Be(true);
         }
     }
 }
