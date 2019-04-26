@@ -56,7 +56,11 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new RemoveOnPremisesDataGatewayClusterMember(initFactory);
+            var cmdlet = new RemoveOnPremisesDataGatewayClusterMember(initFactory)
+            {
+                GatewayClusterId = Guid.NewGuid(),
+                MemberGatewayId = Guid.NewGuid()
+            };
 
             // Act
             cmdlet.InvokePowerBICmdlet();
