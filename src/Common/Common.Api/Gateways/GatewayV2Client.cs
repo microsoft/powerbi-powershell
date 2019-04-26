@@ -15,6 +15,8 @@ using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
 using Newtonsoft.Json;
 
+using static System.FormattableString;
+
 namespace Microsoft.PowerBI.Common.Api.Gateways
 {
     public class GatewayV2Client : IGatewayV2Client
@@ -49,12 +51,12 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         {
             client.BaseAddress = this.BaseUri;
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", this.Token.AccessToken);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token.AccessToken);
             client.DefaultRequestHeaders.UserAgent.Clear();
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-Gw-InvokeRest", CmdletVersion));
         }
 
-        public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
+        private static string GetODataUrlStart(bool asIndividual)
         {
             var url = "v2.0/myorg";
             if (asIndividual)
@@ -62,7 +64,12 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
                 url += "/me";
             }
 
-            url += "/gatewayclusters?$expand=permissions,memberGateways";
+            return url;
+        }
+
+        public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
+        {
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
             var serializer = new DataContractJsonSerializer(typeof(ODataResponseList<GatewayCluster>));
@@ -73,7 +80,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<IEnumerable<InstallerPrincipal>> GetInstallerPrincipals(GatewayType? type)
         {
-            var url = $"v2.0/myorg/gatewayInstallers";
+            var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayInstallers");
             if (type != null)
             {
                 url += $"?type={type.ToString()}";
@@ -88,13 +95,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            url += $"/gatewayclusters({gatewayClusterId})?$expand=permissions,memberGateways";
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
             var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayCluster));
@@ -105,13 +106,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<GatewayClusterStatusResponse> GetGatewayClusterStatus(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            url += $"/gatewayclusters({gatewayClusterId})/status?$expand=permissions,memberGateways";
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/status?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
             var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayClusterStatusResponse));
@@ -122,13 +117,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> PatchGatewayCluster(Guid gatewayClusterId, PatchGatewayClusterRequest patchGatewayClusterRequest, bool asIndividual)
         {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            url += $"/gatewayclusters({gatewayClusterId})";
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})");
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(patchGatewayClusterRequest), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PatchAsync(url, httpContent);
@@ -136,26 +125,14 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> DeleteGatewayCluster(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            url += $"/gatewayclusters({gatewayClusterId})";
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})");
 
             return await HttpClientInstance.DeleteAsync(url);
         }
 
         public async Task<HttpResponseMessage> DeleteGatewayClusterMember(Guid gatewayClusterId, Guid memberGatewayId, bool asIndividual)
         {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            url += $"/gatewayclusters({gatewayClusterId})/memberGateways({memberGatewayId})";
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/memberGateways({memberGatewayId})");
 
             return await HttpClientInstance.DeleteAsync(url);
 
@@ -163,13 +140,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> AddUsersToGatewayCluster(Guid gatewayClusterId, GatewayClusterAddPrincipalRequest addPrincipalRequest, bool asIndividual)
         {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            url += $"/gatewayclusters({gatewayClusterId})/permissions";
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/permissions");
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(addPrincipalRequest), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PostAsync(url, httpContent);
@@ -177,20 +148,14 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> DeleteUserOnGatewayCluster(Guid gatewayClusterId, Guid permissionId, bool asIndividual)
         {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            url += $"/gatewayClusters({gatewayClusterId})/permissions({permissionId})";
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters({gatewayClusterId})/permissions({permissionId})");
 
             return await HttpClientInstance.DeleteAsync(url);
         }
 
         public async Task<GatewayTenant> GetTenantPolicy()
         {
-            var url = "v2.0/myorg/gatewayPolicy";
+            var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayPolicy");
 
             var response = await HttpClientInstance.GetAsync(url);
             var serializer = new DataContractJsonSerializer(typeof(ODataResponseGatewayTenant));
@@ -201,7 +166,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> UpdateTenantPolicy(UpdateGatewayPolicyRequest request)
         {
-            var url = "v2.0/myorg/gatewayPolicy";
+            var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayPolicy");
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PostAsync(url, httpContent);
@@ -209,7 +174,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> UpdateInstallerPrincipals(UpdateGatewayInstallersRequest request)
         {
-            var url = "v2.0/myorg/gatewayInstallers";
+            var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayInstallers");
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
             return await HttpClientInstance.PostAsync(url, httpContent);
