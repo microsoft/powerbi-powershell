@@ -18,8 +18,8 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
     public class SetOnPremisesDataGatewayInstallersTests
     {
         private static CmdletInfo SetOnPremisesDataGatewayInstallersInfo { get; } = new CmdletInfo(
-            $"{SetOnPremisesDataGatewayInstallers.CmdletVerb}-{SetOnPremisesDataGatewayInstallers.CmdletName}",
-            typeof(SetOnPremisesDataGatewayInstallers));
+            $"{SetOnPremisesDataGatewayInstaller.CmdletVerb}-{SetOnPremisesDataGatewayInstaller.CmdletName}",
+            typeof(SetOnPremisesDataGatewayInstaller));
 
         [TestMethod]
         [TestCategory("Interactive")]
@@ -31,9 +31,9 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(SetOnPremisesDataGatewayInstallersInfo)
-                    .AddParameter(nameof(SetOnPremisesDataGatewayInstallers.PrincipalObjectIds), new string[] { new Guid().ToString(), new Guid().ToString()})
-                    .AddParameter(nameof(SetOnPremisesDataGatewayInstallers.Operation), OperationType.None)
-                    .AddParameter(nameof(SetOnPremisesDataGatewayInstallers.GatewayType), GatewayType.Resource);
+                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.PrincipalObjectIds), new string[] { new Guid().ToString(), new Guid().ToString()})
+                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.Operation), OperationType.None)
+                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.GatewayType), GatewayType.Resource);
 
                 // Act
                 var result = ps.Invoke();

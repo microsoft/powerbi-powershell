@@ -11,7 +11,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(void))]
-    public class SetOnPremisesDataGatewayInstallers : PowerBIClientCmdlet
+    public class SetOnPremisesDataGatewayInstaller : PowerBIClientCmdlet
     {
         public const string CmdletName = "OnPremisesDataGatewayInstallers";
         public const string CmdletVerb = VerbsCommon.Set;
