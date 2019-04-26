@@ -33,12 +33,12 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
             {
                 if (this.GatewayClusterId != default)
                 {
-                    var gatewayCluster = client.GatewaysV2.GetGatewayClusters(this.GatewayClusterId, this.Scope == PowerBIUserScope.Individual).Result;
+                    var gatewayCluster = client.Gateways.GetGatewayClusters(this.GatewayClusterId, this.Scope == PowerBIUserScope.Individual).Result;
                     Logger.WriteObject(gatewayCluster, true);
                 }
                 else
                 {
-                    var gatewayClusters = client.GatewaysV2.GetGatewayClusters(this.Scope == PowerBIUserScope.Individual).Result;
+                    var gatewayClusters = client.Gateways.GetGatewayClusters(this.Scope == PowerBIUserScope.Individual).Result;
                     Logger.WriteObject(gatewayClusters, true);
                 }
             }

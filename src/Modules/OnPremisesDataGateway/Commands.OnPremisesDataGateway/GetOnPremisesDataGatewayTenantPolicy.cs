@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var gatewayTenantPolicy = client.GatewaysV2.GetTenantPolicy().Result;
+                var gatewayTenantPolicy = client.Gateways.GetTenantPolicy().Result;
                 Logger.WriteObject(gatewayTenantPolicy, true);
             }
         }

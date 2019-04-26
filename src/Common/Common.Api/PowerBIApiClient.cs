@@ -28,19 +28,19 @@ namespace Microsoft.PowerBI.Common.Api
 
         public IDatasetsClient Datasets { get; set; }
 
-        public IGatewayV2Client GatewaysV2 { get; set; }
+        public IGatewayClient Gateways { get; set; }
 
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings);
-            this.GatewaysV2 = CreateGatewaysV2Client(authenticator, profile, logger, settings);
+            this.Gateways = CreateGatewaysClient(authenticator, profile, logger, settings);
             InitializeClients();
         }
 
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings, httpClientHandler);
-            this.GatewaysV2 = CreateGatewaysV2Client(authenticator, profile, logger, settings, httpClientHandler);
+            this.Gateways = CreateGatewaysV2Client(authenticator, profile, logger, settings, httpClientHandler);
             InitializeClients();
         }
 
@@ -77,23 +77,23 @@ namespace Microsoft.PowerBI.Common.Api
             }
         }
 
-        private static IGatewayV2Client CreateGatewaysV2Client(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
+        private static IGatewayClient CreateGatewaysClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             var token = authenticator.Authenticate(profile, logger, settings);
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
             {
-                return new GatewayV2Client(baseUri, token);
+                return new GatewayClient(baseUri, token);
             }
 
             throw new ArgumentNullException(nameof(IPowerBIEnvironment.GlobalServiceEndpoint));
         }
 
-        private static IGatewayV2Client CreateGatewaysV2Client(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
+        private static IGatewayClient CreateGatewaysV2Client(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
             var token = authenticator.Authenticate(profile, logger, settings);
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
             {
-                return new GatewayV2Client(baseUri, token, httpClientHandler);
+                return new GatewayClient(baseUri, token, httpClientHandler);
             }
 
             throw new ArgumentNullException(nameof(IPowerBIEnvironment.GlobalServiceEndpoint));
@@ -128,9 +128,9 @@ namespace Microsoft.PowerBI.Common.Api
                     this.Client = null;
                 }
 
-                if(this.GatewaysV2 != null)
+                if(this.Gateways != null)
                 {
-                    this.GatewaysV2 = null;
+                    this.Gateways = null;
                 }
 
                 if (this.Reports != null)

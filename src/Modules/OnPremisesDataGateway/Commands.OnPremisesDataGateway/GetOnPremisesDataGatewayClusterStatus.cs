@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var gatewayCluster = client.GatewaysV2.GetGatewayClusterStatus(this.GatewayClusterId, this.Scope == PowerBIUserScope.Individual).Result;
+                var gatewayCluster = client.Gateways.GetGatewayClusterStatus(this.GatewayClusterId, this.Scope == PowerBIUserScope.Individual).Result;
                 Logger.WriteObject(gatewayCluster, true);
             }
         }

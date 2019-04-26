@@ -19,6 +19,6 @@ namespace Microsoft.PowerBI.Common.Api
 
         IDatasetsClient Datasets { get; set; }
 
-        IGatewayV2Client GatewaysV2 { get; set; }
+        IGatewayClient Gateways { get; set; }
     }
 }

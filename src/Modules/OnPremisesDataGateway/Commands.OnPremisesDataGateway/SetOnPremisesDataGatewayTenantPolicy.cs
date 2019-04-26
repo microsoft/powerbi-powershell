@@ -32,7 +32,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                     PersonalGatewayInstallPolicy = PersonalGatewayInstallPolicy
                 };
 
-                var result = client.GatewaysV2.UpdateTenantPolicy(request).Result;
+                var result = client.Gateways.UpdateTenantPolicy(request).Result;
                 Logger.WriteObject(result, true);
             }
         }

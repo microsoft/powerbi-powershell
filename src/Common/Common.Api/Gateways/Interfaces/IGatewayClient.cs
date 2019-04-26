@@ -11,7 +11,7 @@ using System.Net.Http;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
 {
-    public interface IGatewayV2Client
+    public interface IGatewayClient
     {
         Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual);
         Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual);

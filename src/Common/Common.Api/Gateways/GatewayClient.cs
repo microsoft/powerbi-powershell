@@ -19,20 +19,20 @@ using static System.FormattableString;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways
 {
-    public class GatewayV2Client : IGatewayV2Client
+    public class GatewayClient : IGatewayClient
     {
-        private static readonly string CmdletVersion = typeof(GatewayV2Client).Assembly.GetName().Version.ToString();
+        private static readonly string CmdletVersion = typeof(GatewayClient).Assembly.GetName().Version.ToString();
 
         private Uri BaseUri { get; }
         private IAccessToken Token { get; }
 
         private HttpClient HttpClientInstance { get; }
 
-        public GatewayV2Client(Uri baseUri, IAccessToken tokenCredentials) : this(baseUri, tokenCredentials, new HttpClientHandler())
+        public GatewayClient(Uri baseUri, IAccessToken tokenCredentials) : this(baseUri, tokenCredentials, new HttpClientHandler())
         {
         }
 
-        public GatewayV2Client(Uri baseUri, IAccessToken tokenCredentials, HttpMessageHandler messageHandler)
+        public GatewayClient(Uri baseUri, IAccessToken tokenCredentials, HttpMessageHandler messageHandler)
         {
             this.BaseUri = baseUri;
             this.Token = tokenCredentials;
@@ -41,7 +41,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             PopulateClient(HttpClientInstance);
         }
 
-        ~GatewayV2Client()
+        ~GatewayClient()
         {
             HttpClientInstance.Dispose();
         }

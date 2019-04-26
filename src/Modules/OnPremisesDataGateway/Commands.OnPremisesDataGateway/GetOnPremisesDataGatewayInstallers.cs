@@ -24,7 +24,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var gatewayInstallerPrincipals = client.GatewaysV2.GetInstallerPrincipals(GatewayTypeParameter).Result;
+                var gatewayInstallerPrincipals = client.Gateways.GetInstallerPrincipals(GatewayTypeParameter).Result;
                 Logger.WriteObject(gatewayInstallerPrincipals, true);
             }
         }

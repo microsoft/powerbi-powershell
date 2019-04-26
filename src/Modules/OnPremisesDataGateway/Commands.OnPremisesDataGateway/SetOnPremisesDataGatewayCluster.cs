@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                     LoadBalancingSelectorType = LoadBalancingSelectorType
                 };
 
-                var result = client.GatewaysV2.PatchGatewayCluster(GatewayClusterId, request, this.Scope == PowerBIUserScope.Individual).Result;
+                var result = client.Gateways.PatchGatewayCluster(GatewayClusterId, request, this.Scope == PowerBIUserScope.Individual).Result;
                 Logger.WriteObject(result, true);
             }
         }

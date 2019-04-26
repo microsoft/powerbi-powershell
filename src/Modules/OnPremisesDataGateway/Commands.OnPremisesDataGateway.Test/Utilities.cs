@@ -15,9 +15,9 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 {
     internal class Utilities
     {
-        internal static GatewayV2Client GetTestClient(string serializedOdataRepsonse)
+        internal static GatewayClient GetTestClient(string serializedOdataRepsonse)
         {
-            return new GatewayV2Client(
+            return new GatewayClient(
                 new Uri("https://bing.com"),
                 new Mock<IAccessToken>().Object,
                 new MockHttpMessageHandler

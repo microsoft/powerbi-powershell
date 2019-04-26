@@ -37,7 +37,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                     GatewayType = GatewayType
                 };
 
-                var result = client.GatewaysV2.UpdateInstallerPrincipals(request).Result;
+                var result = client.Gateways.UpdateInstallerPrincipals(request).Result;
                 Logger.WriteObject(result, true);
             }
         }
