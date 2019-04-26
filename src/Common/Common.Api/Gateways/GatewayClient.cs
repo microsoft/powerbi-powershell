@@ -84,6 +84,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
             var clusters = await DeserializeResponseContent<ODataResponseList<GatewayCluster>>(response);
 
             return clusters?.Value;
@@ -98,6 +100,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             }
 
             var response = await HttpClientInstance.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
             var installerPrincipal = await DeserializeResponseContent<IEnumerable<InstallerPrincipal>>(response);
 
             return installerPrincipal;
@@ -108,6 +112,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
             var cluster = await DeserializeResponseContent<ODataResponseGatewayCluster>(response);
 
             return cluster;
@@ -118,6 +124,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/status?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
             var clusterStatus = await DeserializeResponseContent<ODataResponseGatewayClusterStatusResponse>(response);
 
             return clusterStatus;
@@ -128,21 +136,30 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})");
 
             var httpContent = SerializeObject(patchGatewayClusterRequest);
-            return await HttpClientInstance.PatchAsync(url, httpContent);
+            var response = await HttpClientInstance.PatchAsync(url, httpContent);
+            response.EnsureSuccessStatusCode();
+
+            return response;
         }
 
         public async Task<HttpResponseMessage> DeleteGatewayCluster(Guid gatewayClusterId, bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})");
 
-            return await HttpClientInstance.DeleteAsync(url);
+            var response = await HttpClientInstance.DeleteAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            return response;
         }
 
         public async Task<HttpResponseMessage> DeleteGatewayClusterMember(Guid gatewayClusterId, Guid memberGatewayId, bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/memberGateways({memberGatewayId})");
 
-            return await HttpClientInstance.DeleteAsync(url);
+            var response = await HttpClientInstance.DeleteAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            return response;
         }
 
         public async Task<HttpResponseMessage> AddUsersToGatewayCluster(Guid gatewayClusterId, GatewayClusterAddPrincipalRequest addPrincipalRequest, bool asIndividual)
@@ -150,14 +167,20 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/permissions");
 
             var httpContent = SerializeObject(addPrincipalRequest);
-            return await HttpClientInstance.PostAsync(url, httpContent);
+            var response =  await HttpClientInstance.PostAsync(url, httpContent);
+            response.EnsureSuccessStatusCode();
+
+            return response;
         }
 
         public async Task<HttpResponseMessage> DeleteUserOnGatewayCluster(Guid gatewayClusterId, Guid permissionId, bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters({gatewayClusterId})/permissions({permissionId})");
 
-            return await HttpClientInstance.DeleteAsync(url);
+            var response = await HttpClientInstance.DeleteAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            return response;
         }
 
         public async Task<GatewayTenant> GetTenantPolicy()
@@ -165,6 +188,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayPolicy");
 
             var response = await HttpClientInstance.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
             var tenantPolicy = await DeserializeResponseContent<ODataResponseGatewayTenant>(response);
 
             return tenantPolicy;
@@ -175,7 +200,10 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayPolicy");
 
             var httpContent = SerializeObject(request);
-            return await HttpClientInstance.PostAsync(url, httpContent);
+            var response = await HttpClientInstance.PostAsync(url, httpContent);
+            response.EnsureSuccessStatusCode();
+
+            return response;
         }
 
         public async Task<HttpResponseMessage> UpdateInstallerPrincipals(UpdateGatewayInstallersRequest request)
@@ -183,7 +211,10 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayInstallers");
 
             var httpContent = SerializeObject(request);
-            return await HttpClientInstance.PostAsync(url, httpContent);
+            var response = await HttpClientInstance.PostAsync(url, httpContent);
+            response.EnsureSuccessStatusCode();
+
+            return response;
         }
     }
 }
