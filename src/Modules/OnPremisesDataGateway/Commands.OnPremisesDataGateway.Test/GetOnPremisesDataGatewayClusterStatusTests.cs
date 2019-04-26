@@ -7,7 +7,10 @@ using System;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
+using Microsoft.PowerBI.Common.Api;
+using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 {
@@ -36,6 +39,37 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 Assert.IsNotNull(result);
             }
+        }
+
+        [TestMethod]
+        public void GetOnPremisesDataGatewayClusterStatusReturnsExpectedResults()
+        {
+            // Arrange
+            var clusterStatus = "the cluster status";
+            var expectedResponse = new GatewayClusterStatusResponse
+            {
+                ClusterStatus = clusterStatus,
+                GatewayStaticCapabilities = "the static capabilities",
+                GatewayVersion = "3000.0.0.0+gabcdef0",
+                GatewayUpgradeState = "the upgrade state"
+            };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Gateways
+                .GetGatewayClusterStatus(It.IsAny<Guid>(), true))
+                .ReturnsAsync(expectedResponse);
+
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetOnPremisesDataGatewayClusterStatus(initFactory)
+            {
+                GatewayClusterId = Guid.NewGuid()
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
         }
     }
 }
