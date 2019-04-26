@@ -29,6 +29,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter(Mandatory = true)]
         public Guid PrincipalObjectId { get; set; }
 
+        public RemoveOnPremisesDataGatewayClusterUser() : base() { }
+
+        public RemoveOnPremisesDataGatewayClusterUser(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())

@@ -22,6 +22,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter()]
         public PolicyType PersonalGatewayInstallPolicy { get; set; }
 
+        public SetOnPremisesDataGatewayTenantPolicy() : base() { }
+
+        public SetOnPremisesDataGatewayTenantPolicy(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())

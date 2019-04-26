@@ -48,6 +48,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter()]
         public string LoadBalancingSelectorType { get; set; }
 
+        public SetOnPremisesDataGatewayCluster() : base() { }
+
+        public SetOnPremisesDataGatewayCluster(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())

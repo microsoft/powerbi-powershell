@@ -27,6 +27,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter()]
         public Guid GatewayClusterId { get; set; }
 
+        public GetOnPremisesDataGatewayClusters() : base() { }
+
+        public GetOnPremisesDataGatewayClusters(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())

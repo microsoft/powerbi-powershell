@@ -20,7 +20,11 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter()]
         public GatewayType? GatewayTypeParameter { get; set; } = null;
 
-        public override void ExecuteCmdlet()
+        public GetOnPremisesDataGatewayInstallers() : base() { }
+
+        public GetOnPremisesDataGatewayInstallers(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
+public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())
             {

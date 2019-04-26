@@ -16,6 +16,10 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public const string CmdletName = "OnPremisesDataGatewayTenantPolicy";
         public const string CmdletVerb = VerbsCommon.Get;
 
+        public GetOnPremisesDataGatewayTenantPolicy() : base() { }
+
+        public GetOnPremisesDataGatewayTenantPolicy(IPowerBIClientCmdletInitFactory init) : base(init) { }
+
         public override void ExecuteCmdlet()
         {
             using (var client = CreateClient())
