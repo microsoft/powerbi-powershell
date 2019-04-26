@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
-using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;

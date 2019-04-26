@@ -5,7 +5,6 @@
 
 using System;
 using System.Management.Automation;
-using System.Net.Http;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api;
@@ -16,25 +15,22 @@ using Moq;
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 {
     [TestClass]
-    public class SetOnPremisesDataGatewayInstallersTests
+    public class GetOnPremisesDataGatewayInstallerTests
     {
-        private static CmdletInfo SetOnPremisesDataGatewayInstallersInfo { get; } = new CmdletInfo(
-            $"{SetOnPremisesDataGatewayInstaller.CmdletVerb}-{SetOnPremisesDataGatewayInstaller.CmdletName}",
-            typeof(SetOnPremisesDataGatewayInstaller));
+        private static CmdletInfo GetOnPremisesDataGatewayInstallerInfo { get; } = new CmdletInfo(
+            $"{GetOnPremisesDataGatewayInstaller.CmdletVerb}-{GetOnPremisesDataGatewayInstaller.CmdletName}",
+            typeof(GetOnPremisesDataGatewayInstaller));
 
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndSetOnPremisesDataGatewayInstallers()
+        public void EndToEndGetOnPremisesDataGatewayInstaller()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(SetOnPremisesDataGatewayInstallersInfo)
-                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.PrincipalObjectIds), new string[] { Guid.NewGuid().ToString(), Guid.NewGuid().ToString()})
-                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.Operation), OperationType.None)
-                    .AddParameter(nameof(SetOnPremisesDataGatewayInstaller.GatewayType), GatewayType.Resource);
+                ps.AddCommand(GetOnPremisesDataGatewayInstallerInfo);
 
                 // Act
                 var result = ps.Invoke();
@@ -46,25 +42,25 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         }
 
         [TestMethod]
-        public void SetOnPremisesDataGatewayInstallersReturnsExpectedResults()
+        public void GetOnPremisesDataGatewayInstallerReturnsExpectedResults()
         {
             // Arrange
-            var expectedResponse = new HttpResponseMessage();
+            var principalObjectId = Guid.NewGuid().ToString();
+            var expectedResponse = new InstallerPrincipal {
+                PrincipalObjectId = principalObjectId,
+                GatewayType = GatewayType.Personal.ToString()
+            };
+
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .UpdateInstallerPrincipals(It.IsAny<UpdateGatewayInstallersRequest>()))
-                .ReturnsAsync(expectedResponse);
+                .GetInstallerPrincipals(It.IsAny<GatewayType>()))
+                .ReturnsAsync(new[] { expectedResponse });
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new SetOnPremisesDataGatewayInstaller(initFactory)
+            var cmdlet = new GetOnPremisesDataGatewayInstaller(initFactory)
             {
-                PrincipalObjectIds = new string[]
-                {
-                    "id"
-                },
-                Operation = OperationType.None,
-                GatewayType = GatewayType.Personal
+                GatewayTypeParameter = GatewayType.Personal
             };
 
             // Act
@@ -75,3 +71,4 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         }
     }
 }
+

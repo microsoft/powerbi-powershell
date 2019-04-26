@@ -3,7 +3,6 @@
  * Licensed under the MIT License.
  */
 
-using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Client;
@@ -12,17 +11,17 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(InstallerPrincipal))]
-    public class GetOnPremisesDataGatewayInstallers : PowerBIClientCmdlet
+    public class GetOnPremisesDataGatewayInstaller : PowerBIClientCmdlet
     {
-        public const string CmdletName = "OnPremisesDataGatewayInstallers";
+        public const string CmdletName = "OnPremisesDataGatewayInstaller";
         public const string CmdletVerb = VerbsCommon.Get;
 
         [Parameter()]
         public GatewayType? GatewayTypeParameter { get; set; } = null;
 
-        public GetOnPremisesDataGatewayInstallers() : base() { }
+        public GetOnPremisesDataGatewayInstaller() : base() { }
 
-        public GetOnPremisesDataGatewayInstallers(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public GetOnPremisesDataGatewayInstaller(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         public override void ExecuteCmdlet()
         {

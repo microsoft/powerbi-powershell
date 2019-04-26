@@ -6,7 +6,6 @@
 using System;
 using System.Management.Automation;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api;

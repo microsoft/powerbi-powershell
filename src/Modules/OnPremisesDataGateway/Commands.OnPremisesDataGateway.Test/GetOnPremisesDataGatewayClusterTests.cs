@@ -15,22 +15,22 @@ using Moq;
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 {
     [TestClass]
-    public class GetOnPremisesDataGatewayClustersTests
+    public class GetOnPremisesDataGatewayClusterTests
     {
-        private static CmdletInfo GetOnPremisesDataGatewayClustersInfo { get; } = new CmdletInfo(
-            $"{GetOnPremisesDataGatewayClusters.CmdletVerb}-{GetOnPremisesDataGatewayClusters.CmdletName}",
-            typeof(GetOnPremisesDataGatewayClusters));
+        private static CmdletInfo GetOnPremisesDataGatewayClusterInfo { get; } = new CmdletInfo(
+            $"{GetOnPremisesDataGatewayCluster.CmdletVerb}-{GetOnPremisesDataGatewayCluster.CmdletName}",
+            typeof(GetOnPremisesDataGatewayCluster));
 
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetOnPremisesDataGatewayClusters()
+        public void EndToEndGetOnPremisesDataGatewayCluster()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(GetOnPremisesDataGatewayClustersInfo);
+                ps.AddCommand(GetOnPremisesDataGatewayClusterInfo);
 
                 // Act
                 var result = ps.Invoke();
@@ -44,13 +44,13 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetOnPremisesDataGatewayClustersWithGatewayClusterId()
+        public void EndToEndGetOnPremisesDataGatewayClusterWithGatewayClusterId()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(GetOnPremisesDataGatewayClustersInfo).AddParameter(nameof(GetOnPremisesDataGatewayClusters.GatewayClusterId), Guid.NewGuid());
+                ps.AddCommand(GetOnPremisesDataGatewayClusterInfo).AddParameter(nameof(GetOnPremisesDataGatewayCluster.GatewayClusterId), Guid.NewGuid());
 
                 // Act
                 var result = ps.Invoke();
@@ -116,7 +116,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetOnPremisesDataGatewayClusters(initFactory)
+            var cmdlet = new GetOnPremisesDataGatewayCluster(initFactory)
             {
                 GatewayClusterId = clusterId
             };
@@ -129,7 +129,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         }
 
         [TestMethod]
-        public void GetOnPremisesDataGatewayClusterSingleClusterReturnsExpectedResults()
+        public void GetOnPremisesDataGatewayClusteringleClusterReturnsExpectedResults()
         {
             // Arrange
             var clusterId = Guid.NewGuid();
@@ -183,7 +183,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 .ReturnsAsync(new[] { expectedResponse });
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetOnPremisesDataGatewayClusters(initFactory);
+            var cmdlet = new GetOnPremisesDataGatewayCluster(initFactory);
 
             // Act
             cmdlet.InvokePowerBICmdlet();

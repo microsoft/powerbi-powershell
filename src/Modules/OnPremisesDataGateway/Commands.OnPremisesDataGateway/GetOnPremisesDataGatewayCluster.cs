@@ -4,7 +4,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -15,7 +14,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 {
     [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(GatewayCluster))]
-    public class GetOnPremisesDataGatewayClusters : PowerBIClientCmdlet, IUserScope
+    public class GetOnPremisesDataGatewayCluster : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "OnPremisesDataGatewayCluster";
         public const string CmdletVerb = VerbsCommon.Get;
@@ -27,9 +26,9 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter()]
         public Guid GatewayClusterId { get; set; }
 
-        public GetOnPremisesDataGatewayClusters() : base() { }
+        public GetOnPremisesDataGatewayCluster() : base() { }
 
-        public GetOnPremisesDataGatewayClusters(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public GetOnPremisesDataGatewayCluster(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         public override void ExecuteCmdlet()
         {
