@@ -40,7 +40,7 @@ namespace Microsoft.PowerBI.Common.Api
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings, httpClientHandler);
-            this.Gateways = CreateGatewaysV2Client(authenticator, profile, logger, settings, httpClientHandler);
+            this.Gateways = CreateGatewaysClient(authenticator, profile, logger, settings, httpClientHandler);
             InitializeClients();
         }
 
@@ -88,7 +88,7 @@ namespace Microsoft.PowerBI.Common.Api
             throw new ArgumentNullException(nameof(IPowerBIEnvironment.GlobalServiceEndpoint));
         }
 
-        private static IGatewayClient CreateGatewaysV2Client(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
+        private static IGatewayClient CreateGatewaysClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
             var token = authenticator.Authenticate(profile, logger, settings);
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))

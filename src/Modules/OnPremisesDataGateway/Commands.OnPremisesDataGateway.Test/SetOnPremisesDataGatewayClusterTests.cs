@@ -50,16 +50,16 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var expectedResponse = new HttpResponseMessage();
-
+            var gatewayClusterId = Guid.NewGuid();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .PatchGatewayCluster(It.IsAny<Guid>(), It.IsAny<PatchGatewayClusterRequest>(), true))
+                .PatchGatewayCluster(gatewayClusterId, It.IsAny<PatchGatewayClusterRequest>(), true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetOnPremisesDataGatewayCluster(initFactory)
             {
-                GatewayClusterId = Guid.NewGuid(),
+                GatewayClusterId = gatewayClusterId,
                 Name = "name",
                 Department = "department",
                 Description = "description",

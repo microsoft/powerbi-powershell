@@ -112,7 +112,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .GetGatewayClusters(It.IsAny<Guid>(), true))
+                .GetGatewayClusters(clusterId, true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
@@ -129,7 +129,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         }
 
         [TestMethod]
-        public void GetOnPremisesDataGatewayClusteringleClusterReturnsExpectedResults()
+        public void GetOnPremisesDataGatewayClusterSingleClusterReturnsExpectedResults()
         {
             // Arrange
             var clusterId = Guid.NewGuid();

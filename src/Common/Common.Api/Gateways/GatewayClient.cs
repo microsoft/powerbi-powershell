@@ -47,38 +47,6 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             HttpClientInstance.Dispose();
         }
 
-
-        private void PopulateClient(HttpClient client)
-        {
-            client.BaseAddress = this.BaseUri;
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token.AccessToken);
-            client.DefaultRequestHeaders.UserAgent.Clear();
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-Gw-InvokeRest", CmdletVersion));
-        }
-
-        private static string GetODataUrlStart(bool asIndividual)
-        {
-            var url = "v2.0/myorg";
-            if (asIndividual)
-            {
-                url += "/me";
-            }
-
-            return url;
-        }
-
-        private static StringContent SerializeObject(object objectToSerialize)
-        {
-            return new StringContent(JsonConvert.SerializeObject(objectToSerialize), Encoding.UTF8, "application/json");
-        }
-
-        private async Task<T> DeserializeResponseContent<T>(HttpResponseMessage response)
-        {
-            var serializer = new DataContractJsonSerializer(typeof(T));
-            return (T)serializer.ReadObject(await response.Content.ReadAsStreamAsync());
-        }
-
         public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters?$expand=permissions,memberGateways");
@@ -215,6 +183,37 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             response.EnsureSuccessStatusCode();
 
             return response;
+        }
+
+        private void PopulateClient(HttpClient client)
+        {
+            client.BaseAddress = this.BaseUri;
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token.AccessToken);
+            client.DefaultRequestHeaders.UserAgent.Clear();
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-Gw-InvokeRest", CmdletVersion));
+        }
+
+        private static string GetODataUrlStart(bool asIndividual)
+        {
+            var url = "v2.0/myorg";
+            if (asIndividual)
+            {
+                url += "/me";
+            }
+
+            return url;
+        }
+
+        private static StringContent SerializeObject(object objectToSerialize)
+        {
+            return new StringContent(JsonConvert.SerializeObject(objectToSerialize), Encoding.UTF8, "application/json");
+        }
+
+        private async Task<T> DeserializeResponseContent<T>(HttpResponseMessage response)
+        {
+            var serializer = new DataContractJsonSerializer(typeof(T));
+            return (T)serializer.ReadObject(await response.Content.ReadAsStreamAsync());
         }
     }
 }

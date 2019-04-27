@@ -46,21 +46,22 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var principalObjectId = Guid.NewGuid().ToString();
+            var gatewayTypeParameter = GatewayType.Personal;
             var expectedResponse = new InstallerPrincipal {
                 PrincipalObjectId = principalObjectId,
-                GatewayType = GatewayType.Personal.ToString()
+                GatewayType = gatewayTypeParameter.ToString()
             };
 
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .GetInstallerPrincipals(It.IsAny<GatewayType>()))
+                .GetInstallerPrincipals(gatewayTypeParameter))
                 .ReturnsAsync(new[] { expectedResponse });
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetOnPremisesDataGatewayInstaller(initFactory)
             {
-                GatewayTypeParameter = GatewayType.Personal
+                GatewayTypeParameter = gatewayTypeParameter
             };
 
             // Act

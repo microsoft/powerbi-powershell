@@ -65,13 +65,13 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             var expectedResponse = new HttpResponseMessage();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .AddUsersToGatewayCluster(It.IsAny<Guid>(), It.IsAny<GatewayClusterAddPrincipalRequest>(), true))
+                .AddUsersToGatewayCluster(gatewayClusterId, It.IsAny<GatewayClusterAddPrincipalRequest>(), true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddOnPremisesDataGatewayClusterUser(initFactory)
             {
-                GatewayClusterId = Guid.NewGuid(),
+                GatewayClusterId = gatewayClusterId,
                 PrincipalObjectId = request.PrincipalObjectId,
                 AllowedDataSourceTypes = request.AllowedDataSourceTypes,
                 Role = request.Role

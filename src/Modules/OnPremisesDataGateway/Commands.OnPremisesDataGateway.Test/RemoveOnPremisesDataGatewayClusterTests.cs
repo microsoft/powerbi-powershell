@@ -47,16 +47,17 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var expectedResponse = new HttpResponseMessage();
+            var gatewayClusterId = Guid.NewGuid();
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .DeleteGatewayCluster(It.IsAny<Guid>(), true))
+                .DeleteGatewayCluster(gatewayClusterId, true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemoveOnPremisesDataGatewayCluster(initFactory)
             {
-                GatewayClusterId = Guid.NewGuid(),
+                GatewayClusterId = gatewayClusterId,
             };
 
             // Act

@@ -45,6 +45,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         public void GetOnPremisesDataGatewayClusterStatusReturnsExpectedResults()
         {
             // Arrange
+            var gatewayClusterId = Guid.NewGuid();
             var clusterStatus = "the cluster status";
             var expectedResponse = new GatewayClusterStatusResponse
             {
@@ -56,13 +57,13 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .GetGatewayClusterStatus(It.IsAny<Guid>(), true))
+                .GetGatewayClusterStatus(gatewayClusterId, true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetOnPremisesDataGatewayClusterStatus(initFactory)
             {
-                GatewayClusterId = Guid.NewGuid()
+                GatewayClusterId = gatewayClusterId
             };
 
             // Act
