@@ -32,7 +32,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public Guid PrincipalObjectId { get; set; }
 
         [Parameter()]
-        public IEnumerable<DatasourceType> AllowedDataSourceTypes { get; set; }
+        public List<DatasourceType> AllowedDataSourceTypes { get; set; }
 
         [Parameter(Mandatory = true)]
         public string Role { get; set; }

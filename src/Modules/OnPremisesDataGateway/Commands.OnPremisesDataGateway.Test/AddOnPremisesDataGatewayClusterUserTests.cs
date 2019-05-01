@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 using System.Net.Http;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -50,14 +51,15 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         public void AddOnPremisesDataGatewayClusterUserReturnsExpectedResults()
         {
             // Arrange
+            var allowedDatasourceTypes = new List<DatasourceType>()
+            {
+                DatasourceType.Sql
+            };
             var gatewayClusterId = Guid.NewGuid();
             var request = new GatewayClusterAddPrincipalRequest()
             {
                 PrincipalObjectId = Guid.NewGuid(),
-                AllowedDataSourceTypes = new DatasourceType[]
-                {
-                                DatasourceType.Sql
-                },
+                AllowedDataSourceTypes = allowedDatasourceTypes,
                 Role = "the role"
 
             };
@@ -73,7 +75,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             {
                 GatewayClusterId = gatewayClusterId,
                 PrincipalObjectId = request.PrincipalObjectId,
-                AllowedDataSourceTypes = request.AllowedDataSourceTypes,
+                AllowedDataSourceTypes = allowedDatasourceTypes,
                 Role = request.Role
             };
 

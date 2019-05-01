@@ -37,7 +37,7 @@ PS C:\> {{ Add example code here }}
 {{Fill AllowedDataSourceTypes Description}}
 
 ```yaml
-Type: System.Collections.Generic.IEnumerable`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]
+Type: System.Collections.Generic.List`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]
 Parameter Sets: (All)
 Aliases:
 Accepted values: Sql, AnalysisServices, SAPHana, File, Folder, Oracle, Teradata, SharePointList, Web, OData, DB2, MySql, PostgreSql, Sybase, Extension, SAPBW, AzureTables, AzureBlobs, Informix, ODBC, Excel, SharePoint, PubNub, MQ, BizTalk, GoogleAnalytics, CustomHttpApi, Exchange, Facebook, HDInsight, AzureMarketplace, ActiveDirectory, Hdfs, SharePointDocLib, PowerQueryMashup, OleDb, AdoDotNet, R, LOB, Salesforce, CustomConnector, SAPBWMessageServer, AdobeAnalytics, Essbase, Unknown
