@@ -21,7 +21,7 @@ Get clusters for the current user.
 Get cluster status
 
 ### [Get-OnPremisesDataGatewayInstaller](Get-OnPremisesDataGatewayInstaller.md)
-{{Fill in the Synopsis}}
+Get users authorized to create gateways on the tenant.
 
 ### [Get-OnPremisesDataGatewayTenantPolicy](Get-OnPremisesDataGatewayTenantPolicy.md)
 {{Fill in the Synopsis}}

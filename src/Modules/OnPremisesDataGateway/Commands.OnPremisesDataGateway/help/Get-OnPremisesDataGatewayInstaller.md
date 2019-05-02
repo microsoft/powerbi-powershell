@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayInstaller
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Get users authorized to create gateways on the tenant.
 
 ## SYNTAX
 
@@ -17,21 +17,21 @@ Get-OnPremisesDataGatewayInstaller [-GatewayTypeParameter <GatewayType>] [<Commo
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Get users authorized to create gateways on the current user's tenant.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-OnPremisesDataGatewayInstaller
 ```
 
-{{ Add example description here }}
+Get a list of users authorized to create gateways on the tenant.
 
 ## PARAMETERS
 
 ### -GatewayTypeParameter
-{{Fill GatewayTypeParameter Description}}
+Filter the authorized user list by gateway type.
 
 ```yaml
 Type: GatewayType
