@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-OnPremisesDataGatewayInstaller
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Modify list of users who can create new gateways on the tenant.
 
 ## SYNTAX
 
@@ -18,21 +18,21 @@ Set-OnPremisesDataGatewayInstaller [-PrincipalObjectIds <String[]>] -Operation <
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Set which users can create new gateways on the tenant.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 -Operation Add -GatewayType Personal
 ```
 
-{{ Add example description here }}
+Allow user B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 to create personal gateway.
 
 ## PARAMETERS
 
 ### -GatewayType
-{{Fill GatewayType Description}}
+Gateway type the command takes effect on.
 
 ```yaml
 Type: GatewayType
@@ -48,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -Operation
-{{Fill Operation Description}}
+The operation to preform on the permission list.
 
 ```yaml
 Type: OperationType
@@ -64,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -PrincipalObjectIds
-{{Fill PrincipalObjectIds Description}}
+List of users to modify permissions.
 
 ```yaml
 Type: String[]
