@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayCluster
 
 ## SYNOPSIS
-Get clusters that match the cluster ID for the current user.
+Get clusters for the current user.
 
 ## SYNTAX
 

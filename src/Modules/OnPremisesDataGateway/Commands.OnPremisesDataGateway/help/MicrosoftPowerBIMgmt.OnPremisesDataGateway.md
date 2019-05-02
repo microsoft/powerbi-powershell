@@ -18,7 +18,7 @@ Add user and associated permissions to cluster.
 Get clusters for the current user.
 
 ### [Get-OnPremisesDataGatewayClusterStatus](Get-OnPremisesDataGatewayClusterStatus.md)
-{{Fill in the Synopsis}}
+Get cluster status
 
 ### [Get-OnPremisesDataGatewayInstaller](Get-OnPremisesDataGatewayInstaller.md)
 {{Fill in the Synopsis}}
