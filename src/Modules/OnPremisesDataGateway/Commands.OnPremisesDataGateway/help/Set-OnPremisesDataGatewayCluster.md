@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-OnPremisesDataGatewayCluster
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Set attributes of an existing gateway cluster
 
 ## SYNTAX
 
@@ -26,15 +26,15 @@ Set-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] -GatewayClusterId <
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -AllowCloudDatasourceRefresh true
 ```
 
-{{ Add example description here }}
+Allow cloud datasource refresh on the cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
 
 ## PARAMETERS
 
 ### -AllowCloudDatasourceRefresh
-{{Fill AllowCloudDatasourceRefresh Description}}
+If set to true, cloud datasource refresh is allowed on this cluster.
 
 ```yaml
 Type: Boolean
@@ -49,7 +49,7 @@ Accept wildcard characters: False
 ```
 
 ### -AllowCustomConnectors
-{{Fill AllowCustomConnectors Description}}
+If set to true, custom connector based refreshes are allowed on this cluster.
 
 ```yaml
 Type: Boolean
@@ -64,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -ContactInformation
-{{Fill ContactInformation Description}}
+Contact information for this cluster.
 
 ```yaml
 Type: String
@@ -79,7 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -Department
-{{Fill Department Description}}
+Department information for this cluster
 
 ```yaml
 Type: String
@@ -94,7 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -Description
-{{Fill Description Description}}
+Description of this cluster.
 
 ```yaml
 Type: String
@@ -109,7 +109,7 @@ Accept wildcard characters: False
 ```
 
 ### -GatewayClusterId
-{{Fill GatewayClusterId Description}}
+Gateway cluster to update
 
 ```yaml
 Type: Guid
@@ -124,7 +124,7 @@ Accept wildcard characters: False
 ```
 
 ### -LoadBalancingSelectorType
-{{Fill LoadBalancingSelectorType Description}}
+Load-balancing type for this cluster.
 
 ```yaml
 Type: String
@@ -139,7 +139,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{Fill Name Description}}
+Name of this cluster.
 
 ```yaml
 Type: String
@@ -154,7 +154,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Power BI scope to run the command
 
 ```yaml
 Type: PowerBIUserScope

@@ -33,7 +33,7 @@ Remove a gateway cluster
 Remove gateway from gateway cluster
 
 ### [Set-OnPremisesDataGatewayCluster](Set-OnPremisesDataGatewayCluster.md)
-{{Fill in the Synopsis}}
+Set attributes of an existing gateway cluster
 
 ### [Set-OnPremisesDataGatewayInstaller](Set-OnPremisesDataGatewayInstaller.md)
 {{Fill in the Synopsis}}
