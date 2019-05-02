@@ -27,7 +27,7 @@ Get users authorized to create gateways on the tenant.
 Get gateway tenant policy
 
 ### [Remove-OnPremisesDataGatewayCluster](Remove-OnPremisesDataGatewayCluster.md)
-{{Fill in the Synopsis}}
+Remove a gateway cluster
 
 ### [Remove-OnPremisesDataGatewayClusterMember](Remove-OnPremisesDataGatewayClusterMember.md)
 {{Fill in the Synopsis}}

@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-OnPremisesDataGatewayCluster
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Remove a gateway cluster
 
 ## SYNTAX
 
@@ -17,21 +17,21 @@ Remove-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] -GatewayClusterI
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Remove a gateway cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
 ```
 
-{{ Add example description here }}
+Remove the cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
 
 ## PARAMETERS
 
 ### -GatewayClusterId
-{{Fill GatewayClusterId Description}}
+The cluster ID of the gateway to remove
 
 ```yaml
 Type: Guid
@@ -46,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Power BI scope to run the command
 
 ```yaml
 Type: PowerBIUserScope
