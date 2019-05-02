@@ -8,11 +8,11 @@ Locale: en-US
 
 # MicrosoftPowerBIMgmt.OnPremisesDataGateway Module
 ## Description
-{{Manually Enter Description Here}}
+Cmdlets to configure on-premises data gateway related items.
 
 ## MicrosoftPowerBIMgmt.OnPremisesDataGateway Cmdlets
 ### [Add-OnPremisesDataGatewayClusterUser](Add-OnPremisesDataGatewayClusterUser.md)
-{{Fill in the Synopsis}}
+Add user and associated permissions to cluster.
 
 ### [Get-OnPremisesDataGatewayCluster](Get-OnPremisesDataGatewayCluster.md)
 {{Fill in the Synopsis}}
