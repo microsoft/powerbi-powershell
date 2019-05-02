@@ -8,33 +8,35 @@ schema: 2.0.0
 # Add-OnPremisesDataGatewayClusterUser
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Add user and associated permissions to cluster.
 
 ## SYNTAX
 
 ```
 Add-OnPremisesDataGatewayClusterUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
  -PrincipalObjectId <Guid>
- [-AllowedDataSourceTypes <System.Collections.Generic.IEnumerable`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]>]
+ [-AllowedDataSourceTypes <System.Collections.Generic.List`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]>]
  -Role <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Add user and associated permissions to cluster.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $dsTypes = New-Object 'System.Collections.Generic.List[Microsoft.PowerBI.Common.Api.Gateways.Entities.DataSourceType]'
+PS C:\> $dsTypes.Add([Microsoft.PowerBI.Common.Api.Gateways.Entities.DataSourceType]::Sql)
+PS C:\> Add-OnPremisesDataGatewayClusterUser -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -PrincipalObjectId B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 -AllowedDataSourceTypes $dsTypes -Role Admin
 ```
 
-{{ Add example description here }}
+This example adds the user to the admin role for the gateway cluster on SQL datasource types.
 
 ## PARAMETERS
 
 ### -AllowedDataSourceTypes
-{{Fill AllowedDataSourceTypes Description}}
+Datasource types that are allowed for this user/role combination
 
 ```yaml
 Type: System.Collections.Generic.List`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]
@@ -50,7 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### -GatewayClusterId
-{{Fill GatewayClusterId Description}}
+Gateway cluster where the user should be added
 
 ```yaml
 Type: Guid
@@ -65,7 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -PrincipalObjectId
-{{Fill PrincipalObjectId Description}}
+User ID to add to the gateway cluster
 
 ```yaml
 Type: Guid
@@ -80,7 +82,7 @@ Accept wildcard characters: False
 ```
 
 ### -Role
-{{Fill Role Description}}
+Role to apply to this user on the cluster
 
 ```yaml
 Type: String
@@ -95,7 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Power BI scope to run the command
 
 ```yaml
 Type: PowerBIUserScope
