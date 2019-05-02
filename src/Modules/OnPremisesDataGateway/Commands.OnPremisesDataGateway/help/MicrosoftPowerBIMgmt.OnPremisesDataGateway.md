@@ -15,7 +15,7 @@ Cmdlets to configure on-premises data gateway related items.
 Add user and associated permissions to cluster.
 
 ### [Get-OnPremisesDataGatewayCluster](Get-OnPremisesDataGatewayCluster.md)
-{{Fill in the Synopsis}}
+Get clusters for the current user.
 
 ### [Get-OnPremisesDataGatewayClusterStatus](Get-OnPremisesDataGatewayClusterStatus.md)
 {{Fill in the Synopsis}}

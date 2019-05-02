@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayCluster
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Get clusters that match the cluster ID for the current user.
 
 ## SYNTAX
 
@@ -17,21 +17,22 @@ Get-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] [-GatewayClusterId 
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Get clusters that match the cluster ID for the current user. If no cluster ID
+is specified, all clusters will be returned.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-OnPremisesDataGatewayCluster
 ```
 
-{{ Add example description here }}
+Get all clusters for the current user.
 
 ## PARAMETERS
 
 ### -GatewayClusterId
-{{Fill GatewayClusterId Description}}
+Get a specific cluster
 
 ```yaml
 Type: Guid
@@ -46,7 +47,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Power BI scope to run the command
 
 ```yaml
 Type: PowerBIUserScope
