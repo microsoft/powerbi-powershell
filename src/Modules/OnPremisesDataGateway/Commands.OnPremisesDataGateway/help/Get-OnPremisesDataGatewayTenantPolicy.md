@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayTenantPolicy
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Get gateway tenant policy
 
 ## SYNTAX
 
@@ -17,16 +17,16 @@ Get-OnPremisesDataGatewayTenantPolicy [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Get gateway tenant policy
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-OnPremisesDataGatewayTenantPolicy
 ```
 
-{{ Add example description here }}
+Get the tenant policy for the current user
 
 ## PARAMETERS
 

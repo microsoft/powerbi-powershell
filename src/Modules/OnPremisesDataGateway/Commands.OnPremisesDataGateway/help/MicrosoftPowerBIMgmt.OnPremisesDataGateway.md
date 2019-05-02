@@ -24,7 +24,7 @@ Get cluster status
 Get users authorized to create gateways on the tenant.
 
 ### [Get-OnPremisesDataGatewayTenantPolicy](Get-OnPremisesDataGatewayTenantPolicy.md)
-{{Fill in the Synopsis}}
+Get gateway tenant policy
 
 ### [Remove-OnPremisesDataGatewayCluster](Remove-OnPremisesDataGatewayCluster.md)
 {{Fill in the Synopsis}}
