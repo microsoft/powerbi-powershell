@@ -39,5 +39,5 @@ Set attributes of an existing gateway cluster
 Modify list of users who can create new gateways on the tenant.
 
 ### [Set-OnPremisesDataGatewayTenantPolicy](Set-OnPremisesDataGatewayTenantPolicy.md)
-{{Fill in the Synopsis}}
+Set the gateway creation policy for the tenant
 

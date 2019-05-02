@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-OnPremisesDataGatewayTenantPolicy
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Set the gateway creation policy for the tenant
 
 ## SYNTAX
 
@@ -18,21 +18,22 @@ Set-OnPremisesDataGatewayTenantPolicy [-ResourceGatewayInstallPolicy <PolicyType
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Set the gateway creation policy for the tenant
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-OnPremisesDataGatewayTenantPolicy -ResourceGatewayInstallPolicy
+Open
 ```
 
-{{ Add example description here }}
+Allow users to create on-premises data gateways on the current user's tenant.
 
 ## PARAMETERS
 
 ### -PersonalGatewayInstallPolicy
-{{Fill PersonalGatewayInstallPolicy Description}}
+The personal gateway creation tenant policy
 
 ```yaml
 Type: PolicyType
@@ -48,7 +49,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceGatewayInstallPolicy
-{{Fill ResourceGatewayInstallPolicy Description}}
+The on-premises data gateway creation tenant policy
 
 ```yaml
 Type: PolicyType
