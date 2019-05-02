@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-OnPremisesDataGatewayClusterMember
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Remove gateway from gateway cluster
 
 ## SYNTAX
 
@@ -18,21 +18,22 @@ Remove-OnPremisesDataGatewayClusterMember [-Scope <PowerBIUserScope>] -GatewayCl
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Remove gateway from gateway cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-OnPremisesDataGatewayClusterMember -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -MemberGatewayId E407A364-3A89-4E21-8791-C108DB41E75A
 ```
 
-{{ Add example description here }}
+Remove the gateway with ID E407A364-3A89-4E21-8791-C108DB41E75A from the
+cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
 
 ## PARAMETERS
 
 ### -GatewayClusterId
-{{Fill GatewayClusterId Description}}
+The cluster where the gateway to be removed is a member
 
 ```yaml
 Type: Guid
@@ -47,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -MemberGatewayId
-{{Fill MemberGatewayId Description}}
+The gateway to remove from the cluster
 
 ```yaml
 Type: Guid
@@ -62,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Power BI scope to run the command
 
 ```yaml
 Type: PowerBIUserScope

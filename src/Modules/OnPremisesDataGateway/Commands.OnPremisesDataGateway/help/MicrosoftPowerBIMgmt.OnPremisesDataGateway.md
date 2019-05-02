@@ -30,7 +30,7 @@ Get gateway tenant policy
 Remove a gateway cluster
 
 ### [Remove-OnPremisesDataGatewayClusterMember](Remove-OnPremisesDataGatewayClusterMember.md)
-{{Fill in the Synopsis}}
+Remove gateway from gateway cluster
 
 ### [Set-OnPremisesDataGatewayCluster](Set-OnPremisesDataGatewayCluster.md)
 {{Fill in the Synopsis}}
