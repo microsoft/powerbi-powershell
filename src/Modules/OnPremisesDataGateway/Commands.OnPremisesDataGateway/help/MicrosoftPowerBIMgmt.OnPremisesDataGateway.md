@@ -17,23 +17,11 @@ Add user and associated permissions to cluster.
 ### [Get-OnPremisesDataGatewayCluster](Get-OnPremisesDataGatewayCluster.md)
 Get clusters for the current user.
 
-### [Get-OnPremisesDataGatewayClusterStatus](Get-OnPremisesDataGatewayClusterStatus.md)
-Get cluster status
-
 ### [Get-OnPremisesDataGatewayInstaller](Get-OnPremisesDataGatewayInstaller.md)
 Get users authorized to create gateways on the tenant.
 
 ### [Get-OnPremisesDataGatewayTenantPolicy](Get-OnPremisesDataGatewayTenantPolicy.md)
 Get gateway tenant policy
-
-### [Remove-OnPremisesDataGatewayCluster](Remove-OnPremisesDataGatewayCluster.md)
-Remove a gateway cluster
-
-### [Remove-OnPremisesDataGatewayClusterMember](Remove-OnPremisesDataGatewayClusterMember.md)
-Remove gateway from gateway cluster
-
-### [Set-OnPremisesDataGatewayCluster](Set-OnPremisesDataGatewayCluster.md)
-Set attributes of an existing gateway cluster
 
 ### [Set-OnPremisesDataGatewayInstaller](Set-OnPremisesDataGatewayInstaller.md)
 Modify list of users who can create new gateways on the tenant.

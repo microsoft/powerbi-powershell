@@ -71,7 +71,9 @@ PowerShellVersion = '3.0'
 FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'Add-OnPremisesDataGatewayClusterUser', 'Get-OnPremisesDataGatewayCluster', 'Get-OnPremisesDataGatewayClusterStatus', 'Get-OnPremisesDataGatewayInstaller', 'Get-OnPremisesDataGatewayTenantPolicy', 'Remove-OnPremisesDataGatewayCluster', 'Remove-OnPremisesDataGatewayClusterMember','Remove-OnPremisesDataGatewayClusterMember', 'Set-OnPremisesDataGatewayCluster', 'Set-OnPremisesDataGatewayInstaller', 'Set-OnPremisesDataGatewayTenantPolicy'
+# TODO: All APIs are not avaliable yet
+#CmdletsToExport = 'Add-OnPremisesDataGatewayClusterUser', 'Get-OnPremisesDataGatewayCluster', 'Get-OnPremisesDataGatewayClusterStatus', 'Get-OnPremisesDataGatewayInstaller', 'Get-OnPremisesDataGatewayTenantPolicy', 'Remove-OnPremisesDataGatewayCluster', 'Remove-OnPremisesDataGatewayClusterMember','Remove-OnPremisesDataGatewayClusterMember', 'Set-OnPremisesDataGatewayCluster', 'Set-OnPremisesDataGatewayInstaller', 'Set-OnPremisesDataGatewayTenantPolicy'
+CmdletsToExport = 'Add-OnPremisesDataGatewayClusterUser', 'Get-OnPremisesDataGatewayCluster', 'Get-OnPremisesDataGatewayInstaller', 'Get-OnPremisesDataGatewayTenantPolicy', 'Set-OnPremisesDataGatewayInstaller', 'Set-OnPremisesDataGatewayTenantPolicy'
 
 # Variables to export from this module
 VariablesToExport = '*'
