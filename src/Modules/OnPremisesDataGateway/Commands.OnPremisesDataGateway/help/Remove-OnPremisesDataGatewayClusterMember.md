@@ -38,7 +38,7 @@ The cluster where the gateway to be removed is a member
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases: Cluster
+Aliases: Cluster, Id
 
 Required: True
 Position: Named

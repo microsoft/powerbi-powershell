@@ -57,7 +57,7 @@ Gateway cluster where the user should be added
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases: Cluster
+Aliases: Cluster, Id
 
 Required: True
 Position: Named

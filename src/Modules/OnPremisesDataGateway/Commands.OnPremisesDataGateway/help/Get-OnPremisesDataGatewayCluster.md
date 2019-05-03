@@ -37,7 +37,7 @@ Get a specific cluster
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases: Cluster
+Aliases: Cluster, Id
 
 Required: False
 Position: Named
