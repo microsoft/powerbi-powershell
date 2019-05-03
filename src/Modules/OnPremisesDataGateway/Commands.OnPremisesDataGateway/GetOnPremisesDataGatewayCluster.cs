@@ -22,7 +22,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter()]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
-        [Alias("Cluster")]
+        [Alias("Cluster", "Id")]
         [Parameter()]
         public Guid GatewayClusterId { get; set; }
 
