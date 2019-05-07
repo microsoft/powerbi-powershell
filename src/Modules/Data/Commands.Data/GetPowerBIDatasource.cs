@@ -77,7 +77,7 @@ namespace Microsoft.PowerBI.Commands.Data
 
         public override void ExecuteCmdlet()
         {
-            if(this.Dataset != null)
+            if (this.Dataset != null)
             {
                 this.DatasetId = this.Dataset.Id;
             }
@@ -97,12 +97,12 @@ namespace Microsoft.PowerBI.Commands.Data
                 }
             }
 
-            if(this.Id != default)
+            if (this.Id != default)
             {
-                datasources = datasources.Where(d => this.Id == new Guid(d.DatasourceId));
+                datasources = datasources.Where(d => this.Id == d.DatasourceId);
             }
 
-            if(!string.IsNullOrEmpty(this.Name))
+            if (!string.IsNullOrEmpty(this.Name))
             {
                 datasources = datasources.Where(d => d.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase));
             }

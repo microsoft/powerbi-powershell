@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         Table UpdateTable(Table table, Guid datasetId, Guid? workspaceId = default);
 
-        object AddRows(string datasetId, string tableName, List<PSObject> rows, Guid? workspaceId = default);
-        object DeleteRows(string datasetId, string tableName, Guid? workspaceId = default);
+        void AddRows(Guid datasetId, string tableName, List<PSObject> rows, Guid? workspaceId = default);
+        void DeleteRows(Guid datasetId, string tableName, Guid? workspaceId = default);
     }
 }

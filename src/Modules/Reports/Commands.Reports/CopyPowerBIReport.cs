@@ -53,7 +53,7 @@ namespace Microsoft.PowerBI.Commands.Reports
         // Optional. If omitted, the report is copied from 'My Workspace'. 
         [Alias("GroupId")]
         [Parameter(Mandatory = false)]
-        public string WorkspaceId { get; set; }
+        public Guid? WorkspaceId { get; set; }
 
         // Optional. If omitted, the report is copied from 'My Workspace'. 
         [Alias("Group")]
@@ -64,12 +64,12 @@ namespace Microsoft.PowerBI.Commands.Reports
         // Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. 
         [Alias("TargetGroupId")]
         [Parameter(Mandatory = false)]
-        public string TargetWorkspaceId { get; set; }
+        public Guid? TargetWorkspaceId { get; set; }
 
         // Optional. If omitted, the new report will be associated with the same dataset as the source report.
         [Alias("TargetModelId")]
         [Parameter(Mandatory = false)]
-        public string TargetDatasetId { get; set; }
+        public Guid? TargetDatasetId { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
@@ -85,7 +85,7 @@ namespace Microsoft.PowerBI.Commands.Reports
 
             if (this.Workspace != null)
             {
-                this.WorkspaceId = this.Workspace.Id.ToString();
+                this.WorkspaceId = this.Workspace.Id;
             }
 
             using (var client = this.CreateClient())
@@ -93,7 +93,7 @@ namespace Microsoft.PowerBI.Commands.Reports
                 var result = client.Reports.CopyReport(
                     this.Name,
                     this.WorkspaceId,
-                    this.Id.ToString(),
+                    this.Id,
                     this.TargetWorkspaceId,
                     this.TargetDatasetId);
                 this.Logger.WriteObject(result, true);

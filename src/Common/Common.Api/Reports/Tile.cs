@@ -15,14 +15,14 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         public int? ColumnSpan { get; set; }
         public string EmbedUrl { get; set; }
         public string EmbedData { get; set; }
-        public string ReportId { get; set; }
-        public string DatasetId { get; set; }
+        public Guid? ReportId { get; set; }
+        public Guid? DatasetId { get; set; }
 
         public static implicit operator Tile(PowerBI.Api.V2.Models.Tile tile)
         {
             return new Tile()
             {
-                Id = new Guid(tile.Id),
+                Id = tile.Id,
                 Title = tile.Title,
                 RowSpan = tile.RowSpan,
                 ColumnSpan = tile.ColSpan,

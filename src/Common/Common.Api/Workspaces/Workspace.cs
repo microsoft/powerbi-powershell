@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         public bool? IsOnDedicatedCapacity { get; set; }
 
-        public string CapacityId { get; set; }
+        public Guid? CapacityId { get; set; }
 
         public string Description { get; set; }
 
@@ -47,7 +47,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             return new Workspace
             {
-                Id = new Guid(group.Id),
+                Id = group.Id,
                 Name = group.Name,
                 IsReadOnly = group.IsReadOnly,
                 IsOnDedicatedCapacity = group.IsOnDedicatedCapacity,
@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             return new Group
             {
-                Id = workspace.Id.ToString(),
+                Id = workspace.Id,
                 Name = workspace.Name,
                 IsReadOnly = workspace.IsReadOnly,
                 IsOnDedicatedCapacity = workspace.IsOnDedicatedCapacity,
@@ -71,7 +71,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                 Description = workspace.Description,
                 Type = workspace.Type,
                 State = workspace.State,
-                Users = workspace.Users?.Select(x => (GroupUserAccessRight)x).ToList()
+                Users = workspace.Users?.Select(x => (Microsoft.PowerBI.Api.V2.Models.GroupUser)x).ToList()
             };
         }
     }

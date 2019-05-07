@@ -17,13 +17,13 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public string EmbedUrl { get; set; }
 
-        public string DatasetId { get; set; }
+        public Guid? DatasetId { get; set; }
 
         public static implicit operator Report(PowerBI.Api.V2.Models.Report report)
         {
             return new Report
             {
-                Id = new Guid(report.Id),
+                Id = report.Id,
                 Name = report.Name,
                 WebUrl = report.WebUrl,
                 EmbedUrl = report.EmbedUrl,

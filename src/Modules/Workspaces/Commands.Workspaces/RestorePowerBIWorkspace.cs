@@ -60,7 +60,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             if (this.Scope == PowerBIUserScope.Organization)
             {
-                this.Logger.WriteWarning($"Only preview workspaces are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
+                this.Logger.WriteWarning($"Only workspaces created in the new workspace experience are supported when -{nameof(this.Scope)} {nameof(PowerBIUserScope.Organization)} is specified");
             }
         }
 
@@ -71,8 +71,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             using (var client = this.CreateClient())
             {
-                var result = client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
-                this.Logger.WriteObject(result, true);
+                client.Workspaces.RestoreDeletedWorkspaceAsAdmin(workspaceId, restoreRequest);
             }
         }
     }

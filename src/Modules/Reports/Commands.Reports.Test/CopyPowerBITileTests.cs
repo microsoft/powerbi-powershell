@@ -77,9 +77,9 @@ namespace Commands.Reports.Test
         public void CopyPowerBITileTest()
         {
             // Arrange 
-            var dashboardId = Guid.NewGuid().ToString();
-            var targetDashboardId = Guid.NewGuid().ToString();
-            var tileId = Guid.NewGuid().ToString();
+            var dashboardId = Guid.NewGuid();
+            var targetDashboardId = Guid.NewGuid();
+            var tileId = Guid.NewGuid();
             var expectedResponse = new Tile();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Reports

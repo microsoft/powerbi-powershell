@@ -24,7 +24,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         {
             return new Import
             {
-                Id = new Guid(import.Id),
+                Id = import.Id,
                 Name = import.Name,
                 ImportState = import.ImportState,
                 Reports = import.Reports?.Select(x => (Report)x),

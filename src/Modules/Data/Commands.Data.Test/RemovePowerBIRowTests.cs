@@ -64,7 +64,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             var table = new Table { Name = "TestTable" };
     
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.DeleteRows(datasetId.ToString(), table.Name, null)).Returns(null);
+            client.Setup(x => x.Datasets.DeleteRows(datasetId, table.Name, null));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemovePowerBIRow(initFactory);
 
@@ -75,7 +75,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(null, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
     }
 }

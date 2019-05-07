@@ -16,14 +16,14 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
         }
 
-        public object AddWorkspaceUser(Guid workspaceId, WorkspaceUser userAccessRight)
+        public void AddWorkspaceUser(Guid workspaceId, WorkspaceUser userAccessRight)
         {
-            return this.Client.Groups.AddGroupUser(workspaceId.ToString(), userAccessRight);
+            this.Client.Groups.AddGroupUser(workspaceId, userAccessRight);
         }
 
-        public object AddWorkspaceUserAsAdmin(Guid workspaceId, WorkspaceUser userAccessRight)
+        public void AddWorkspaceUserAsAdmin(Guid workspaceId, WorkspaceUser userAccessRight)
         {
-            return this.Client.Groups.AddUserAsAdmin(workspaceId.ToString(), userAccessRight);
+            this.Client.Groups.AddUserAsAdmin(workspaceId, userAccessRight);
         }
 
         public IEnumerable<Workspace> GetWorkspaces(string filter = null, int? top = null, int? skip = null)
@@ -31,29 +31,29 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
             return this.Client.Groups.GetGroups(filter, top, skip).Value.Select(x => (Workspace)x);
         }
 
-        public IEnumerable<Workspace> GetWorkspacesAsAdmin(string expand = null, string filter = null, int? top = null, int? skip = null)
+        public IEnumerable<Workspace> GetWorkspacesAsAdmin(int top, string expand = null, string filter = null, int? skip = null)
         {
-            return this.Client.Groups.GetGroupsAsAdmin(expand, filter, top, skip).Value.Select(x => (Workspace)x);
+            return this.Client.Groups.GetGroupsAsAdmin(top, expand, filter, skip).Value.Select(x => (Workspace)x);
         }
 
-        public object RemoveWorkspaceUser(Guid workspaceId, string userPrincipalName)
+        public void RemoveWorkspaceUser(Guid workspaceId, string userPrincipalName)
         {
-            return this.Client.Groups.DeleteUserInGroup(workspaceId.ToString(), userPrincipalName);
+            this.Client.Groups.DeleteUserInGroup(workspaceId, userPrincipalName);
         }
 
-        public object RemoveWorkspaceUserAsAdmin(Guid workspaceId, string userPrincipalName)
+        public void RemoveWorkspaceUserAsAdmin(Guid workspaceId, string userPrincipalName)
         {
-            return this.Client.Groups.DeleteUserAsAdmin(workspaceId.ToString(), userPrincipalName);
+            this.Client.Groups.DeleteUserAsAdmin(workspaceId, userPrincipalName);
         }
 
-        public object RestoreDeletedWorkspaceAsAdmin(Guid workspaceId, WorkspaceRestoreRequest restoreRequest)
+        public void RestoreDeletedWorkspaceAsAdmin(Guid workspaceId, WorkspaceRestoreRequest restoreRequest)
         {
-            return this.Client.Groups.RestoreDeletedGroupAsAdmin(workspaceId.ToString(), restoreRequest);
+            this.Client.Groups.RestoreDeletedGroupAsAdmin(workspaceId, restoreRequest);
         }
 
-        public object UpdateWorkspaceAsAdmin(Guid workspaceId, Workspace updatedProperties)
+        public void UpdateWorkspaceAsAdmin(Guid workspaceId, Workspace updatedProperties)
         {
-            return this.Client.Groups.UpdateGroupAsAdmin(workspaceId.ToString(), updatedProperties);
+            this.Client.Groups.UpdateGroupAsAdmin(workspaceId, updatedProperties);
         }
 
         public object NewWorkspaceAsUser(string workspaceName)

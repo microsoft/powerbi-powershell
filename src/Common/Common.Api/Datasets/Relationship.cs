@@ -4,13 +4,14 @@
  */
 
 using System;
+using Microsoft.PowerBI.Common.Api.Helpers;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
     public class Relationship
     {
         public string Name { get; set; }
-        public CrossFilteringBehaviorEnum CrossFilteringBehavior { get; set; }
+        public CrossFilteringBehaviorEnum? CrossFilteringBehavior { get; set; }
         public string FromTable { get; set; }
         public string FromColumn { get; set; }
         public string ToTable { get; set; }
@@ -26,7 +27,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return new Relationship
             {
                 Name = relationship.Name,
-                CrossFilteringBehavior = ConvertCrossFilteringBehavior(relationship.CrossFilteringBehavior),
+                CrossFilteringBehavior = EnumTypeConverter.ConvertTo<CrossFilteringBehaviorEnum, PowerBI.Api.V2.Models.CrossFilteringBehavior>(relationship.CrossFilteringBehavior),
                 FromTable = relationship.FromTable,
                 FromColumn = relationship.FromColumn,
                 ToTable = relationship.ToTable,
@@ -44,22 +45,12 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return new PowerBI.Api.V2.Models.Relationship
             {
                 Name = relationship.Name,
-                CrossFilteringBehavior = (PowerBI.Api.V2.Models.CrossFilteringBehaviorEnum)Enum.Parse(typeof(PowerBI.Api.V2.Models.CrossFilteringBehaviorEnum), relationship.CrossFilteringBehavior.ToString(), true),
+                CrossFilteringBehavior = EnumTypeConverter.ConvertTo<PowerBI.Api.V2.Models.CrossFilteringBehavior, CrossFilteringBehaviorEnum>(relationship.CrossFilteringBehavior),
                 FromTable = relationship.FromTable,
                 FromColumn = relationship.FromColumn,
                 ToTable = relationship.ToTable,
                 ToColumn = relationship.ToColumn
             };
-        }
-
-        private static CrossFilteringBehaviorEnum ConvertCrossFilteringBehavior(PowerBI.Api.V2.Models.CrossFilteringBehaviorEnum? crossFilteringBehavior)
-        {
-            if(crossFilteringBehavior == null)
-            {
-                return CrossFilteringBehaviorEnum.NotAvailable;
-            }
-
-            return (CrossFilteringBehaviorEnum)Enum.Parse(typeof(CrossFilteringBehaviorEnum), crossFilteringBehavior.Value.ToString(), true);
         }
     }
 
@@ -67,7 +58,6 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
     {
         OneDirection,
         BothDirections,
-        Automatic,
-        NotAvailable
+        Automatic
     }
 }

@@ -159,7 +159,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             rows.Add(row1);
             rows.Add(row2);
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.AddRows(datasetId.ToString(), table.Name, rows, null)).Returns(null);
+            client.Setup(x => x.Datasets.AddRows(datasetId, table.Name, rows, null));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIRow(initFactory);
 
@@ -171,7 +171,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(null, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
     }
 }

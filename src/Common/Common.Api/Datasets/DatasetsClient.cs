@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
+using Microsoft.PowerBI.Common.Api.Helpers;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
@@ -21,8 +22,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public object AddDataset(Dataset dataset, Guid? workspaceId = default)
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.PostDatasetInGroup(groupId: workspaceId.Value.ToString(), dataset: Dataset.ConvertToDatasetV2Model(dataset)) :
-                this.Client.Datasets.PostDataset(dataset: Dataset.ConvertToDatasetV2Model(dataset));
+                this.Client.Datasets.PostDatasetInGroup(groupId: workspaceId.Value, dataset: Dataset.ConvertToDatasetRequest(dataset), EnumTypeConverter.ConvertTo<Microsoft.PowerBI.Api.V2.Models.DefaultRetentionPolicy, DefaultRetentionPolicy>(dataset.DefaultRetentionPolicy)) :
+                this.Client.Datasets.PostDataset(dataset: Dataset.ConvertToDatasetRequest(dataset), EnumTypeConverter.ConvertTo<Microsoft.PowerBI.Api.V2.Models.DefaultRetentionPolicy, DefaultRetentionPolicy>(dataset.DefaultRetentionPolicy));
 
             return result;
         }
@@ -34,7 +35,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public IEnumerable<Dataset> GetDatasetsForWorkspace(Guid workspaceId)
         {
-            return this.Client.Datasets.GetDatasets(groupId: workspaceId.ToString()).Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasets(groupId: workspaceId).Value?.Select(x => (Dataset)x);
         }
 
         public IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = null, int? top = null, int? skip = null)
@@ -44,40 +45,48 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public IEnumerable<Dataset> GetDatasetsAsAdminForWorkspace(Guid workspaceId, string filter = null, int? top = null, int? skip = null)
         {
-            return this.Client.Datasets.GetDatasetsAsAdmin(groupId: workspaceId.ToString(), filter: filter, top: top, skip: skip).Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasetsAsAdmin(groupId: workspaceId, filter: filter, top: top, skip: skip).Value?.Select(x => (Dataset)x);
         }
 
         public IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default)
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.GetDatasources(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) :
-                this.Client.Datasets.GetDatasources(datasetKey: datasetId.ToString());
+                this.Client.Datasets.GetDatasources(groupId: workspaceId.Value, datasetId: datasetId) :
+                this.Client.Datasets.GetDatasources(datasetId: datasetId);
             return result.Value?.Select(x => (Datasource)x);
 
         }
 
         public IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId)
         {
-            return this.Client.Datasets.GetDatasourcesAsAdmin(datasetId.ToString()).Value?.Select(x => (Datasource)x);
+            return this.Client.Datasets.GetDatasourcesAsAdmin(datasetId).Value?.Select(x => (Datasource)x);
         }
 
         public IEnumerable<Table> GetTables(Guid datasetId, Guid? workspaceId = default)
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.GetTables(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString()) :
-                this.Client.Datasets.GetTables(datasetKey: datasetId.ToString());
+                this.Client.Datasets.GetTables(groupId: workspaceId.Value, datasetId: datasetId) :
+                this.Client.Datasets.GetTables(datasetId: datasetId);
             return result.Value?.Select(x => (Table)x);
         }
 
         public Table UpdateTable(Table table, Guid datasetId, Guid? workspaceId = null)
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.PutTableInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString(), tableName: table.Name, (Microsoft.PowerBI.Api.V2.Models.Table)table) :
-                this.Client.Datasets.PutTable(datasetKey: datasetId.ToString(), tableName: table.Name, (Microsoft.PowerBI.Api.V2.Models.Table)table);
-            return result as Table;
+                this.Client.Datasets.PutTableInGroup(groupId: workspaceId.Value, datasetId: datasetId, tableName: table.Name, (Microsoft.PowerBI.Api.V2.Models.Table)table) :
+                this.Client.Datasets.PutTable(datasetId: datasetId, tableName: table.Name, (Microsoft.PowerBI.Api.V2.Models.Table)table);
+
+            if (result != null)
+            {
+                return (Table)result;
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public object AddRows(string datasetId, string tableName, List<PSObject> rows, Guid? workspaceId = default)
+        public void AddRows(Guid datasetId, string tableName, List<PSObject> rows, Guid? workspaceId = null)
         {
             var hashRows = new List<Hashtable>();
             foreach (var row in rows)
@@ -99,21 +108,27 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 }
                 hashRows.Add(hashtable);
             }
-            var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.PostRowsInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId, tableName: tableName, requestMessage: hashRows) :
-                this.Client.Datasets.PostRows(datasetKey: datasetId, tableName: tableName, requestMessage: hashRows);
 
-            return result;
+            if(workspaceId.HasValue && workspaceId.Value != Guid.Empty)
+            {
+                this.Client.Datasets.PostRowsInGroup(groupId: workspaceId.Value, datasetId: datasetId, tableName: tableName, requestMessage: hashRows);
+            }
+            else
+            {
+                this.Client.Datasets.PostRows(datasetId: datasetId, tableName: tableName, requestMessage: hashRows);
+            } 
         }
 
-        public object DeleteRows(string datasetId, string tableName, Guid? workspaceId = default)
+        public void DeleteRows(Guid datasetId, string tableName, Guid? workspaceId = default)
         {
-
-            var result = workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Datasets.DeleteRowsInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId, tableName: tableName) :
-                this.Client.Datasets.DeleteRows(datasetKey: datasetId, tableName: tableName);
-
-            return result;
+            if(workspaceId.HasValue && workspaceId.Value != default)
+            {
+                this.Client.Datasets.DeleteRowsInGroup(groupId: workspaceId.Value, datasetId: datasetId, tableName: tableName);
+            }
+            else
+            {
+                this.Client.Datasets.DeleteRows(datasetId: datasetId, tableName: tableName);
+            }   
         }
     }
 }

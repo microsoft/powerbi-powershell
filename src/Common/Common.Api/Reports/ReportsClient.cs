@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
+using Microsoft.PowerBI.Common.Api.Helpers;
 
 namespace Microsoft.PowerBI.Common.Api.Reports
 {
@@ -25,24 +26,24 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public IEnumerable<Report> GetReportsAsAdmin(string filter = null, int? top = null, int? skip = null)
         {
-            return this.Client.Reports.GetReportsAsAdmin(filter: filter, top: top, skip: skip).Value?.Select(x => (Report)x);
+            return this.Client.Reports.GetReportsAsAdmin(Guid.Empty, filter: filter, top: top, skip: skip).Value?.Select(x => (Report)x);
         }
 
         public IEnumerable<Report> GetReportsAsAdminForWorkspace(Guid workspaceId, string filter = null, int? top = null, int? skip = null)
         {
-            return this.Client.Reports.GetReportsAsAdmin(groupId: workspaceId.ToString(), filter: filter, top: top, skip: skip).Value?.Select(x => (Report)x);
+            return this.Client.Reports.GetReportsAsAdmin(groupId: workspaceId, filter: filter, top: top, skip: skip).Value?.Select(x => (Report)x);
         }
 
         public IEnumerable<Report> GetReportsForWorkspace(Guid workspaceId)
         {
-            return this.Client.Reports.GetReports(groupId: workspaceId.ToString()).Value?.Select(x => (Report)x);
+            return this.Client.Reports.GetReports(groupId: workspaceId).Value?.Select(x => (Report)x);
         }
 
         public Stream ExportReport(Guid reportId, Guid? workspaceId = default)
         {
             return workspaceId.HasValue && workspaceId.Value != default ?
-                this.Client.Reports.ExportReport(groupId: workspaceId.Value.ToString(), reportKey: reportId.ToString()) :
-                this.Client.Reports.ExportReport(reportKey: reportId.ToString());
+                this.Client.Reports.ExportReport(groupId: workspaceId.Value, reportId: reportId) :
+                this.Client.Reports.ExportReport(reportId: reportId);
         }
 
         public IEnumerable<Dashboard> GetDashboards()
@@ -57,37 +58,37 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public IEnumerable<Dashboard> GetDashboardsForWorkspace(Guid workspaceId)
         {
-            return this.Client.Dashboards.GetDashboards(groupId: workspaceId.ToString()).Value?.Select(x => (Dashboard)x);
+            return this.Client.Dashboards.GetDashboards(groupId: workspaceId).Value?.Select(x => (Dashboard)x);
         }
 
         public IEnumerable<Dashboard> GetDashboardsAsAdminForWorkspace(Guid workspaceId, string filter = default, int? top = default, int? skip = default)
         {
-            return this.Client.Dashboards.GetDashboardsAsAdmin(groupId: workspaceId.ToString(), filter: filter, top: top, skip: skip).Value?.Select(x => (Dashboard)x);
+            return this.Client.Dashboards.GetDashboardsAsAdmin(groupId: workspaceId, filter: filter, top: top, skip: skip).Value?.Select(x => (Dashboard)x);
         }
 
         public IEnumerable<Tile> GetTiles(Guid dashboardId)
         {
-            return this.Client.Dashboards.GetTiles(dashboardKey: dashboardId.ToString()).Value?.Select(x => (Tile)x);
+            return this.Client.Dashboards.GetTiles(dashboardId: dashboardId).Value?.Select(x => (Tile)x);
         }
 
         public IEnumerable<Tile> GetTilesAsAdmin(Guid dashboardId)
         {
-            return this.Client.Dashboards.GetTilesAsAdmin(dashboardKey: dashboardId.ToString()).Value?.Select(x => (Tile)x);
+            return this.Client.Dashboards.GetTilesAsAdmin(dashboardId: dashboardId).Value?.Select(x => (Tile)x);
         }
 
         public IEnumerable<Tile> GetTilesForWorkspace(Guid workspaceId, Guid dashboardId)
         {
-            return this.Client.Dashboards.GetTiles(groupId: workspaceId.ToString(), dashboardKey: dashboardId.ToString()).Value?.Select(x => (Tile)x);
+            return this.Client.Dashboards.GetTiles(groupId: workspaceId, dashboardId: dashboardId).Value?.Select(x => (Tile)x);
         }
 
         public Import GetImport(Guid importId)
         {
-            return this.Client.Imports.GetImportById(importId: importId.ToString());
+            return this.Client.Imports.GetImport(importId: importId);
         }
 
         public Import GetImportForWorkspace(Guid workspaceId, Guid importId)
         {
-            return this.Client.Imports.GetImportByIdInGroup(groupId: workspaceId.ToString(), importId: importId.ToString());
+            return this.Client.Imports.GetImportInGroup(groupId: workspaceId, importId: importId);
         }
 
         public IEnumerable<Import> GetImports()
@@ -102,33 +103,33 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         public IEnumerable<Import> GetImportsForWorkspace(Guid workspaceId)
         {
-            return this.Client.Imports.GetImports(groupId: workspaceId.ToString()).Value?.Select(x => (Import)x);
+            return this.Client.Imports.GetImports(groupId: workspaceId).Value?.Select(x => (Import)x);
         }
 
-        public Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
+        public Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum? nameConflict)
         {
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 var response = this.Client.Imports.PostImportWithFile(
                     fileStream: fileStream,
                     datasetDisplayName: datasetDisplayName,
-                    nameConflict: nameConflict.ToString()
+                    nameConflict: EnumTypeConverter.ConvertTo<Microsoft.PowerBI.Api.V2.Models.ImportConflictHandlerMode, ImportConflictHandlerModeEnum>(nameConflict)
                 );
-                return Guid.Parse(response.Id);
+                return response.Id;
             }
         }
 
-        public Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict)
+        public Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum? nameConflict)
         {
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 var response = this.Client.Imports.PostImportWithFileInGroup(
-                    groupId: workspaceId.ToString(),
+                    groupId: workspaceId,
                     fileStream: fileStream,
                     datasetDisplayName: datasetDisplayName,
-                    nameConflict: nameConflict.ToString()
+                    nameConflict: EnumTypeConverter.ConvertTo<Microsoft.PowerBI.Api.V2.Models.ImportConflictHandlerMode, ImportConflictHandlerModeEnum>(nameConflict)
                 );
-                return Guid.Parse(response.Id);
+                return response.Id;
             }
         }
 
@@ -169,7 +170,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return import.Reports.Single();
         }
 
-        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout)
+        public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum? nameConflict, int timeout)
         {
             var importId = this.PostImportForWorkspace(workspaceId, reportName, filePath, nameConflict);
 
@@ -206,7 +207,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             return import.Reports.Single();
         }
 
-         public Report CopyReport(string reportName, string sourceWorkspaceId, string sourceReportId, string targetWorkspaceId, string targetDatasetId)
+         public Report CopyReport(string reportName, Guid? sourceWorkspaceId, Guid sourceReportId, Guid? targetWorkspaceId, Guid? targetDatasetId)
         {
             var requestBody = new CloneReportRequest()
             {
@@ -215,9 +216,9 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 TargetWorkspaceId = targetWorkspaceId
             };
 
-            return string.IsNullOrWhiteSpace(sourceWorkspaceId) ?
-                this.Client.Reports.CloneReport(sourceReportId, requestBody) :
-                this.Client.Reports.CloneReport(sourceWorkspaceId, sourceReportId, requestBody);
+            return sourceWorkspaceId.HasValue ?
+                this.Client.Reports.CloneReport(reportId: sourceReportId, requestBody) :
+                this.Client.Reports.CloneReport(groupId: sourceWorkspaceId.Value, reportId: sourceReportId, requestBody);
         }
 
         public Dashboard AddDashboard(string dashboardName, Guid workspaceId)
@@ -229,14 +230,14 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
             return workspaceId.Equals(Guid.Empty) ?
                 this.Client.Dashboards.AddDashboard(requestBody) :
-                this.Client.Dashboards.AddDashboard(workspaceId.ToString(), requestBody);
+                this.Client.Dashboards.AddDashboard(groupId: workspaceId, requestBody);
         }
 
-         public Tile CopyTile(Guid workspaceId, string dashboardKey, string tileKey, string targetDashboardId, string targetWorkspaceId, string targetReportId, string targetModelId, string positionConflictAction)
+         public Tile CopyTile(Guid workspaceId, Guid dashboardKey, Guid tileKey, Guid targetDashboardId, Guid? targetWorkspaceId, Guid? targetReportId, Guid? targetModelId, PositionConflictAction? positionConflictAction)
         {
             var requestParameters = new CloneTileRequest()
             {
-                PositionConflictAction = positionConflictAction,
+                PositionConflictAction = EnumTypeConverter.ConvertTo<Microsoft.PowerBI.Api.V2.Models.PositionConflictAction, PositionConflictAction>(positionConflictAction),
                 TargetDashboardId = targetDashboardId,
                 TargetModelId = targetModelId,
                 TargetReportId = targetReportId,
@@ -245,7 +246,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
             return workspaceId.Equals(Guid.Empty) ?
                 this.Client.Dashboards.CloneTile(dashboardKey, tileKey, requestParameters) :
-                this.Client.Dashboards.CloneTile(workspaceId.ToString(), dashboardKey, tileKey, requestParameters);
+                this.Client.Dashboards.CloneTile(groupId: workspaceId, dashboardKey, tileKey, requestParameters);
         }
     }
 }
