@@ -176,7 +176,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                     return;
                 }
 
-                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip));
+                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(top: top, expand: "users", filter: this.Filter, skip: skip));
 
                 var filteredWorkspaces = new List<Workspace>();
 

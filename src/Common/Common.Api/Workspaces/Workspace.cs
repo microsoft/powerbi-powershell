@@ -37,7 +37,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                     return false;
                 }
 
-                return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals(WorkspaceUserAccessRight.Admin.ToString())));
+                return (this.Users == null) || (!this.Users.Any(u => u.AccessRight.Equals(WorkspaceUserAccessRight.Admin)));
             }
         }
 
