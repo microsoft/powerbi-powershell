@@ -124,7 +124,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             if (this.ParameterSet.Equals(IdParameterSetName))
             {
-                this.Filter = $"id eq '{this.Id}'";
+                this.Filter = $"tolower(id) eq '{this.Id}'";
             }
 
             if (this.ParameterSet.Equals(NameParameterSetName))

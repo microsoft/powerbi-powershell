@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Abstractions.Utilities;
+
 
 namespace Microsoft.PowerBI.Commands.Profile
 {
@@ -137,7 +139,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                             response = await client.PutAsync(url, new StringContent(body, Encoding.UTF8, this.ContentType));
                             break;
                         case PowerBIWebRequestMethod.Patch:
-                            response = await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), url) { Content = new StringContent(body, Encoding.UTF8, this.ContentType) });
+                            response = await client.PatchAsync(url, new StringContent(body, Encoding.UTF8, this.ContentType));
                             break;
                         case PowerBIWebRequestMethod.Options:
                             response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Options, url));
