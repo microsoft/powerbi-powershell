@@ -76,7 +76,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .NewWorkspaceAsUser(workspaceName))
+                .NewWorkspaceAsUser(workspaceName, true))
                 .Returns(expectedResponse);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new NewPowerBIWorkspace(initFactory)
