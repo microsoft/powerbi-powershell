@@ -56,9 +56,9 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
             this.Client.Groups.UpdateGroupAsAdmin(workspaceId, updatedProperties);
         }
 
-        public object NewWorkspaceAsUser(string workspaceName)
+        public object NewWorkspaceAsUser(string workspaceName, bool workspaceV2)
         {
-            return (Workspace)this.Client.Groups.CreateGroup(new PowerBI.Api.V2.Models.GroupCreationRequest(name: workspaceName));
+            return (Workspace)this.Client.Groups.CreateGroup(new PowerBI.Api.V2.Models.GroupCreationRequest(name: workspaceName), workspaceV2: workspaceV2);
         }
     }
 }
