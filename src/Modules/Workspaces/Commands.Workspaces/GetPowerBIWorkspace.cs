@@ -154,7 +154,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
                 var workspaces = this.Scope == PowerBIUserScope.Individual ?
                     client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) :
-                    client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
+                    client.Workspaces.GetWorkspacesAsAdmin(top: this.First.GetValueOrDefault(), expand: "users", filter: this.Filter, skip: this.Skip);
 
                 if (defaultingFirst && workspaces.Count() == 100)
                 {
@@ -176,7 +176,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                     return;
                 }
 
-                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip));
+                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(top: top, expand: "users", filter: this.Filter, skip: skip));
 
                 var filteredWorkspaces = new List<Workspace>();
 

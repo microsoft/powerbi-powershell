@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.PowerBI.Common.Api.Helpers;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
@@ -14,7 +15,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string ConfiguredBy { get; set; }
-        public string DefaultRetentionPolicy { get; set; }
+        public DefaultRetentionPolicy? DefaultRetentionPolicy { get; set; }
         public bool AddRowsApiEnabled { get; set; }
         public IEnumerable<Table> Tables { get; set; }
         public string WebUrl { get; set; }
@@ -35,46 +36,40 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
             return new Dataset
             {
-                Id = new Guid(dataset.Id),
+                Id = dataset.Id,
                 Name = dataset.Name,
                 ConfiguredBy = dataset.ConfiguredBy,
-                DefaultRetentionPolicy = dataset.DefaultRetentionPolicy,
                 AddRowsApiEnabled = dataset.AddRowsAPIEnabled.GetValueOrDefault(),
-                Tables = dataset.Tables?.Select(t => (Table)t),
                 WebUrl = dataset.WebUrl,
-                Relationships = dataset.Relationships?.Select(r => (Relationship)r),
-                Datasources = dataset.Datasources?.Select(d => (Datasource)d),
-                DefaultMode = ConvertDefaultMode(dataset.DefaultMode),
                 IsRefreshable = dataset.IsRefreshable.GetValueOrDefault(),
                 IsEffectiveIdentityRequired = dataset.IsEffectiveIdentityRequired.GetValueOrDefault(),
                 IsOnPremGatewayRequired = dataset.IsOnPremGatewayRequired.GetValueOrDefault()
             };
         }
 
-        public static PowerBI.Api.V2.Models.Dataset ConvertToDatasetV2Model(Dataset dataset)
+        public static PowerBI.Api.V2.Models.CreateDatasetRequest ConvertToDatasetRequest(Dataset dataset)
         {
             if (dataset == null)
             {
                 return null;
             }
 
-            return new PowerBI.Api.V2.Models.Dataset
+            return new PowerBI.Api.V2.Models.CreateDatasetRequest
             {
-                Id = dataset.Id == Guid.Empty ? null : dataset.Id.ToString(),
                 Name = dataset.Name,
                 Tables = dataset.Tables?.Select(t => (PowerBI.Api.V2.Models.Table)t).ToList(),
+                Datasources = dataset.Datasources?.Select(d => (PowerBI.Api.V2.Models.Datasource)d).ToList(),
+                Relationships = dataset.Relationships?.Select(r => (PowerBI.Api.V2.Models.Relationship)r).ToList(),
+                DefaultMode = EnumTypeConverter.ConvertTo<PowerBI.Api.V2.Models.DatasetMode, DatasetMode>(dataset.DefaultMode)
             };
         }
 
-        private static DatasetMode? ConvertDefaultMode(string defaultMode)
-        {
-            if(string.IsNullOrEmpty(defaultMode))
-            {
-                return null;
-            }
+    }
 
-            return (DatasetMode)Enum.Parse(typeof(DatasetMode), defaultMode, true);
-        }
+    public enum DefaultRetentionPolicy
+    {
+        None,
+        BasicFIFO
     }
 
     public enum DatasetMode

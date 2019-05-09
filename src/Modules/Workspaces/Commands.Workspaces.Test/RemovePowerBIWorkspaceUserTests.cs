@@ -115,11 +115,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var workspace = new Workspace { Id = Guid.NewGuid() };
             var userPrincipalName = "john@contoso.com";
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .RemoveWorkspaceUserAsAdmin(workspace.Id, userPrincipalName))
-                .Returns(expectedResponse);
+                .RemoveWorkspaceUserAsAdmin(workspace.Id, userPrincipalName));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
             {
@@ -133,7 +131,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -142,11 +140,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var workspaceId = Guid.NewGuid();
             var userPrincipalName = "john@contoso.com";
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .RemoveWorkspaceUserAsAdmin(workspaceId, userPrincipalName))
-                .Returns(expectedResponse);
+                .RemoveWorkspaceUserAsAdmin(workspaceId, userPrincipalName));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
             {
@@ -160,7 +156,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -169,11 +165,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var workspace = new Workspace { Id = Guid.NewGuid() };
             var userPrincipalName = "john@contoso.com";
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .RemoveWorkspaceUser(workspace.Id, userPrincipalName))
-                .Returns(expectedResponse);
+                .RemoveWorkspaceUser(workspace.Id, userPrincipalName));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
             {
@@ -187,7 +181,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -196,11 +190,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var workspaceId = Guid.NewGuid();
             var userPrincipalName = "john@contoso.com";
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .RemoveWorkspaceUser(workspaceId, userPrincipalName))
-                .Returns(expectedResponse);
+                .RemoveWorkspaceUser(workspaceId, userPrincipalName));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemovePowerBIWorkspaceUser(initFactory)
             {
@@ -214,7 +206,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
     }
 }

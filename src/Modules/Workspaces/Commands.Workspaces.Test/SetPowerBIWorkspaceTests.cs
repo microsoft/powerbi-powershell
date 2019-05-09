@@ -189,11 +189,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var workspace = new Workspace { Id = Guid.NewGuid(), Name = "UpdatedName", Description = "UpdatedDescription" };
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .UpdateWorkspaceAsAdmin(workspace.Id, It.Is<Workspace>(w => w.Name == workspace.Name && w.Description == workspace.Description)))
-                .Returns(expectedResponse);
+                .UpdateWorkspaceAsAdmin(workspace.Id, It.Is<Workspace>(w => w.Name == workspace.Name && w.Description == workspace.Description)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBIWorkspace(initFactory)
             {
@@ -208,7 +206,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -216,11 +214,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var workspace = new Workspace { Id = Guid.NewGuid(), Name = "UpdatedName", Description = "UpdatedDescription" };
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .UpdateWorkspaceAsAdmin(workspace.Id, It.Is<Workspace>(w => w.Name == workspace.Name && w.Description == workspace.Description)))
-                .Returns(expectedResponse);
+                .UpdateWorkspaceAsAdmin(workspace.Id, It.Is<Workspace>(w => w.Name == workspace.Name && w.Description == workspace.Description)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBIWorkspace(initFactory)
             {
@@ -233,7 +229,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]

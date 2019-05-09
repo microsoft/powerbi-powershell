@@ -101,16 +101,16 @@ namespace Commands.Reports.Test
             var expectedResponse = new Report();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Reports
-                .CopyReport(reportName, Guid.Empty.ToString(), reportId.ToString(), Guid.Empty.ToString(), Guid.Empty.ToString()))
+                .CopyReport(reportName, Guid.Empty, reportId, Guid.Empty, Guid.Empty))
                 .Returns(expectedResponse);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new CopyPowerBIReport(initFactory)
             {
                 Name = reportName,
                 Id = reportId,
-                WorkspaceId = Guid.Empty.ToString(),
-                TargetWorkspaceId = Guid.Empty.ToString(),
-                TargetDatasetId = Guid.Empty.ToString()
+                WorkspaceId = Guid.Empty,
+                TargetWorkspaceId = Guid.Empty,
+                TargetDatasetId = Guid.Empty
             };
 
             // Act
@@ -130,15 +130,15 @@ namespace Commands.Reports.Test
             var expectedResponse = new Report();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Reports
-                .CopyReport(reportName, Guid.Empty.ToString(), reportId.ToString(), Guid.Empty.ToString(), Guid.Empty.ToString()))
+                .CopyReport(reportName, Guid.Empty, reportId, Guid.Empty, Guid.Empty))
                 .Returns(expectedResponse);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new CopyPowerBIReport(initFactory)
             {
                 Report = report,
-                WorkspaceId = Guid.Empty.ToString(),
-                TargetWorkspaceId = Guid.Empty.ToString(),
-                TargetDatasetId = Guid.Empty.ToString()
+                WorkspaceId = Guid.Empty,
+                TargetWorkspaceId = Guid.Empty,
+                TargetDatasetId = Guid.Empty
             };
 
             // Act

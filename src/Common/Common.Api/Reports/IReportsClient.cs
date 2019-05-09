@@ -45,18 +45,18 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         IEnumerable<Import> GetImportsForWorkspace(Guid workspaceId);
 
-        Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict);
+        Guid PostImport(string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum? nameConflict);
 
-        Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum nameConflict);
+        Guid PostImportForWorkspace(Guid workspaceId, string datasetDisplayName, string filePath, ImportConflictHandlerModeEnum? nameConflict);
 
         Report PostReport(string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout);
 
-        Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout);
+        Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum? nameConflict, int timeout);
 
-        Report CopyReport(string reportName, string sourceWorkspaceId, string sourceReportId, string targetWorkspaceId, string targetDatasetId);
+        Report CopyReport(string reportName, Guid? sourceWorkspaceId, Guid sourceReportId, Guid? targetWorkspaceId, Guid? targetDatasetId);
 
         Dashboard AddDashboard(string dashboardName, Guid workspaceId);
 
-        Tile CopyTile(Guid workspaceId, string dashboardKey, string tileKey, string targetDashboardId, string targetWorkspaceId, string targetReportId, string targetModelId, string positionConflictAction);
+        Tile CopyTile(Guid workspaceId, Guid dashboardKey, Guid tileKey, Guid targetDashboardId, Guid? targetWorkspaceId, Guid? targetReportId, Guid? targetModelId, PositionConflictAction? positionConflictAction);
     }
 }

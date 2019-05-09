@@ -50,39 +50,39 @@ namespace Microsoft.PowerBI.Commands.Reports
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceObjectParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceIdParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = MyWorkspaceParameterSetName)]
-        public string DashboardId { get; set; }
+        public Guid DashboardId { get; set; }
         
         //The id of the tile that should be copied
         [Alias("TileKey")]
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceObjectParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceIdParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = MyWorkspaceParameterSetName)]
-        public string TileId { get; set; }
+        public Guid TileId { get; set; }
 
         //The id of the dashboard where tile copy should be added.
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceObjectParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceIdParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = MyWorkspaceParameterSetName)]
-        public string TargetDashboardId { get; set; }
+        public Guid TargetDashboardId { get; set; }
 
         //Optional parameter for specifying the target workspace id. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. 
         //Empty string indicates tile will be copied within the same workspace.
         [Alias("TargetGroupId")]
         [Parameter(Mandatory = false)]
-        public string TargetWorkspaceId { get; set; }
+        public Guid? TargetWorkspaceId { get; set; }
         
         //Optional parameter when cloning a tile linked to a report, to rebind the new tile to a different report.
         [Parameter(Mandatory = false)]
-        public string TargetReportId { get; set; }
+        public Guid? TargetReportId { get; set; }
 
         //Optional parameter when cloning a tile linked to a dataset, to rebind the new tile to a different dataset.
         [Alias("TargetModelId")]
         [Parameter(Mandatory = false)]
-        public string TargetDatasetId { get; set; }
+        public Guid? TargetDatasetId { get; set; }
 
         //Optional parameter for specifying the action in case of position conflict. The default is 'Tail'.
         [Parameter(Mandatory = false)]
-        public string PositionConflictAction { get; set; }
+        public PositionConflictAction? PositionConflictAction { get; set; }
         #endregion
         public override void ExecuteCmdlet()
         {

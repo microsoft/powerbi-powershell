@@ -30,6 +30,18 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             client.VerifyAll();
         }
 
+        public static void AssertExpectedNoOutputForUnitTestResults(Mock<IPowerBIApiClient> client, TestPowerBICmdletInitFactory initFactory)
+        {
+            Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
+            var results = initFactory.Logger.Output?.ToList();
+            if(results != null)
+            {
+                Assert.AreEqual(0, results.Count, "No output results were expected");
+            }
+
+            client.VerifyAll();
+        }
+
         public static string GetRandomString()
         {
             return Path.GetRandomFileName().Replace(".", "");

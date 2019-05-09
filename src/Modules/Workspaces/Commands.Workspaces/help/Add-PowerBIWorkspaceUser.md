@@ -15,13 +15,14 @@ Gives permissions to a specified user to access a Power BI workspace.
 ### Id (Default)
 ```
 Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
- -AccessRight <WorkspaceUserAccessRight> [<CommonParameters>]
+ -AccessRight <WorkspaceUserAccessRight> [-UserType <PrincipalType>] [<CommonParameters>]
 ```
 
 ### Workspace
 ```
 Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
- -AccessRight <WorkspaceUserAccessRight> -Workspace <Workspace> [<CommonParameters>]
+ -AccessRight <WorkspaceUserAccessRight> [-UserType <PrincipalType>] -Workspace <Workspace>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -93,6 +94,21 @@ Parameter Sets: (All)
 Aliases: UserEmailAddress
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserType
+Type of user to be added.
+
+```yaml
+Type: PrincipalType
+Parameter Sets: (All)
+Aliases: PrincipalType
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

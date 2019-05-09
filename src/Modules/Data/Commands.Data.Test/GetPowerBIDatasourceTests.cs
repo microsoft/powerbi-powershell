@@ -143,7 +143,15 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         {
             // Arrange
             var datasetId = Guid.NewGuid();
-            var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
+            var expectedDatasources = new List<Datasource>
+            {
+                new Datasource
+                {
+                    DatasourceId = Guid.NewGuid(),
+                    Name = "TestDatasource",
+                    GatewayId = Guid.NewGuid()
+                }
+            };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.GetDatasources(datasetId, null)).Returns(expectedDatasources);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
@@ -167,7 +175,15 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             // Arrange
             var datasetId = Guid.NewGuid();
             var workspaceId = Guid.NewGuid();
-            var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
+            var expectedDatasources = new List<Datasource>
+            {
+                new Datasource
+                {
+                    DatasourceId = Guid.NewGuid(),
+                    Name = "TestDatasource",
+                    GatewayId = Guid.NewGuid()
+                }
+            };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.GetDatasources(datasetId, workspaceId)).Returns(expectedDatasources);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
@@ -191,7 +207,15 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         {
             // Arrange
             var datasetId = Guid.NewGuid();
-            var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
+            var expectedDatasources = new List<Datasource>
+            {
+                new Datasource
+                {
+                    DatasourceId = Guid.NewGuid(),
+                    Name = "TestDatasource",
+                    GatewayId = Guid.NewGuid()
+                }
+            };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.GetDatasourcesAsAdmin(datasetId)).Returns(expectedDatasources);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
@@ -214,7 +238,15 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         {
             // Arrange
             var testDataset = new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" };
-            var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
+            var expectedDatasources = new List<Datasource>
+            {
+                new Datasource
+                {
+                    DatasourceId = Guid.NewGuid(),
+                    Name = "TestDatasource",
+                    GatewayId = Guid.NewGuid()
+                }
+            };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Datasets.GetDatasources(testDataset.Id, null)).Returns(expectedDatasources);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);

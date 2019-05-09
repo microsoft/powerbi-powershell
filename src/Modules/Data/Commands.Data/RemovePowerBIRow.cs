@@ -59,30 +59,27 @@ namespace Microsoft.PowerBI.Commands.Data
 
         public override void ExecuteCmdlet()
         {
-            if(this.Workspace != null)
+            if (this.Workspace != null)
             {
                 this.WorkspaceId = this.Workspace.Id;
             }
             
-            if(this.Dataset != null)
+            if (this.Dataset != null)
             {
                 this.DatasetId = this.Dataset.Id;
             }
 
-            object result;
             using (var client = this.CreateClient())
             {
-                if(this.WorkspaceId != default)
+                if (this.WorkspaceId != default)
                 {
-                    result = client.Datasets.DeleteRows(this.DatasetId.ToString(), this.TableName, this.WorkspaceId);
+                    client.Datasets.DeleteRows(this.DatasetId, this.TableName, this.WorkspaceId);
                 }
                 else
                 {
-                    result = client.Datasets.DeleteRows(this.DatasetId.ToString(), this.TableName);
+                    client.Datasets.DeleteRows(this.DatasetId, this.TableName);
                 }
             }
-            
-            this.Logger.WriteObject(result, true);
         }
     }
 }

@@ -43,6 +43,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Alias("UserAccessRight")]
         public WorkspaceUserAccessRight AccessRight { get; set; }
 
+        [Parameter(Mandatory = false)]
+        [Alias("PrincipalType")]
+        public PrincipalType? UserType { get; set; }
+
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
         public Workspace Workspace { get; set; }
@@ -62,14 +66,23 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public override void ExecuteCmdlet()
         {
             var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
-            var userAccessRight = new WorkspaceUser { AccessRight = this.AccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
+            var userAccessRight = new WorkspaceUser
+            {
+                AccessRight = this.AccessRight,
+                UserPrincipalName = this.UserPrincipalName,
+                PrincipalType = this.UserType
+            };
 
             using (var client = this.CreateClient())
             {
-                var result = this.Scope.Equals(PowerBIUserScope.Individual) ?
-                    client.Workspaces.AddWorkspaceUser(workspaceId, userAccessRight) :
+                if(this.Scope.Equals(PowerBIUserScope.Individual))
+                {
+                    client.Workspaces.AddWorkspaceUser(workspaceId, userAccessRight);
+                }
+                else
+                {
                     client.Workspaces.AddWorkspaceUserAsAdmin(workspaceId, userAccessRight);
-                this.Logger.WriteObject(result, true);
+                }
             }
         }
     }
