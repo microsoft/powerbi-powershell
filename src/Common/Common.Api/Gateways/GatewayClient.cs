@@ -5,18 +5,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.PowerBI.Common.Abstractions.Utilities;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Abstractions.Utilities;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.IO;
-
 using static System.FormattableString;
 
 
