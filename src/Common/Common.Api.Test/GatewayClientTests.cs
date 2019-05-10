@@ -75,7 +75,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 GatewayUpgradeState = "the upgrade state"
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
             var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
@@ -189,7 +189,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 }
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
             var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
@@ -289,7 +289,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 }
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
             var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
@@ -308,7 +308,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var serializedODataRepsonse = $@"{{
   ""@odata.context"":""http://example.net/v2.0/myorg/gatewayPolicy"",
   ""id"":""{tenantId}"",
-  ""policy"":0
+  ""policy"":""None""
 }}";
 
             var client = Utilities.GetTestClient(serializedODataRepsonse);
@@ -318,6 +318,29 @@ namespace Microsoft.PowerBI.Common.Api.Test
 
             // Assert
             result.TenantObjectId.Should().Be(tenantId);
+            result.Policy.Should().Be(TenantPolicy.None);
+        }
+
+        [TestMethod]
+        public async Task GetOnPremisesDataGatewayTenantPolicyCanBeSerializedAndDeSerialized()
+        {
+            // Arrange
+            var tenantId = Guid.NewGuid().ToString();
+            var oDataResponse = new ODataResponseGatewayTenant
+            {
+                ODataContext = "http://example.net/v2.0/myorg/gatewayPolicy",
+                TenantObjectId = tenantId,
+                Policy = TenantPolicy.None
+            };
+
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
+            var client = Utilities.GetTestClient(serializedODataRepsonse);
+
+            // Act
+            var result = await client.GetTenantPolicy();
+
+            // Assert
+            oDataResponse.Should().BeEquivalentTo(result);
         }
 
         [TestMethod]
@@ -355,33 +378,11 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 }
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
+            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
             var client = Utilities.GetTestClient(serializedODataRepsonse);
 
             // Act
             var result = await client.GetInstallerPrincipals(GatewayType.Personal);
-
-            // Assert
-            oDataResponse.Should().BeEquivalentTo(result);
-        }
-
-        [TestMethod]
-        public async Task GetOnPremisesDataGatewayTenantPolicyCanBeSerializedAndDeSerialized()
-        {
-            // Arrange
-            var tenantId = Guid.NewGuid().ToString();
-            var oDataResponse = new ODataResponseGatewayTenant
-            {
-                ODataContext = "http://example.net/v2.0/myorg/gatewayPolicy",
-                TenantObjectId = tenantId,
-                Policy = TenantPolicy.None
-            };
-
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse);
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
-
-            // Act
-            var result = await client.GetTenantPolicy();
 
             // Assert
             oDataResponse.Should().BeEquivalentTo(result);
