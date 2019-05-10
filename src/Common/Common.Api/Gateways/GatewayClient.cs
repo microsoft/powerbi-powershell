@@ -5,18 +5,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.PowerBI.Common.Abstractions.Utilities;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Abstractions.Utilities;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
 using Newtonsoft.Json;
-
+using Newtonsoft.Json.Converters;
 using static System.FormattableString;
+
 
 namespace Microsoft.PowerBI.Common.Api.Gateways
 {
@@ -212,8 +213,14 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         private async Task<T> DeserializeResponseContent<T>(HttpResponseMessage response)
         {
-            var serializer = new DataContractJsonSerializer(typeof(T));
-            return (T)serializer.ReadObject(await response.Content.ReadAsStreamAsync());
+            var serializer = new JsonSerializer();
+            serializer.Converters.Add(new StringEnumConverter());
+
+            using (var sr = new StreamReader(await response.Content.ReadAsStreamAsync()))
+            using (var jsonTextReader = new JsonTextReader(sr))
+            {
+                return serializer.Deserialize<T>(jsonTextReader);
+            }
         }
     }
 }
