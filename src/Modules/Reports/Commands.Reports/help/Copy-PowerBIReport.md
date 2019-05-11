@@ -14,14 +14,14 @@ Creates a copy of the specified Power BI report.
 
 ### Id (Default)
 ```
-Copy-PowerBIReport -Name <String> -Id <Guid> [-WorkspaceId <String>] [-Workspace <Workspace>]
- [-TargetWorkspaceId <String>] [-TargetDatasetId <String>] [<CommonParameters>]
+Copy-PowerBIReport -Name <String> -Id <Guid> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+ [-TargetWorkspaceId <Guid>] [-TargetDatasetId <Guid>] [<CommonParameters>]
 ```
 
 ### WorkspaceObject
 ```
-Copy-PowerBIReport [-Name <String>] -Report <Report> [-WorkspaceId <String>] [-Workspace <Workspace>]
- [-TargetWorkspaceId <String>] [-TargetDatasetId <String>] [<CommonParameters>]
+Copy-PowerBIReport [-Name <String>] -Report <Report> [-WorkspaceId <Guid>] [-Workspace <Workspace>]
+ [-TargetWorkspaceId <Guid>] [-TargetDatasetId <Guid>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -113,7 +113,7 @@ Accept wildcard characters: False
 Optional parameter for specifying the target associated dataset ID. If empty, the new report will be associated with the same dataset as the source report.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases: TargetModelId
 
@@ -128,7 +128,7 @@ Accept wildcard characters: False
 The ID of the target workspace. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. Empty string indicates new report will be copied within the same workspace as the source report.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases: TargetGroupId
 
@@ -158,7 +158,7 @@ Accept wildcard characters: False
 The ID of the workspace where the original report is located. If empty, source workspace is 'My Workspace'.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases: GroupId
 

@@ -13,7 +13,7 @@ Creates a new Power BI workspace.
 ## SYNTAX
 
 ```
-New-PowerBIWorkspace -Name <String> [<CommonParameters>]
+New-PowerBIWorkspace -Name <String> [-Type <NewWorkspaceType>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,6 +39,21 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Type
+Type of workspace to be created. Options are Workspace or Group. Default is Workspace.
+
+```yaml
+Type: NewWorkspaceType
+Parameter Sets: (All)
+Aliases: WorkspaceType
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

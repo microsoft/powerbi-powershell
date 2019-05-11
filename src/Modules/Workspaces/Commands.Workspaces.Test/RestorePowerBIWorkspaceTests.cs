@@ -57,7 +57,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.IsTrue(updatedWorkspace.Users
                     .Any(x => x.UserPrincipalName.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)
-                    && x.AccessRight == WorkspaceUserAccessRight.Admin.ToString()));
+                    && x.AccessRight == WorkspaceUserAccessRight.Admin));
             }
         }
 
@@ -96,7 +96,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Assert.AreEqual(updatedName, updatedWorkspace.Name);
                 Assert.IsTrue(updatedWorkspace.Users
                     .Any(x => x.UserPrincipalName.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)
-                    && x.AccessRight == WorkspaceUserAccessRight.Admin.ToString()));
+                    && x.AccessRight == WorkspaceUserAccessRight.Admin));
             }
         }
 
@@ -179,11 +179,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var workspace = new Workspace { Id = Guid.NewGuid() };
             var restoreRequest = new WorkspaceRestoreRequest { RestoredName = "Undeleted", AdminUserPrincipalName = "john@contoso.com" };
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .RestoreDeletedWorkspaceAsAdmin(workspace.Id, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.AdminUserPrincipalName == restoreRequest.AdminUserPrincipalName)))
-                .Returns(expectedResponse);
+                .RestoreDeletedWorkspaceAsAdmin(workspace.Id, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.AdminUserPrincipalName == restoreRequest.AdminUserPrincipalName)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RestorePowerBIWorkspace(initFactory)
             {
@@ -198,7 +196,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -207,11 +205,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var workspaceId = Guid.NewGuid();
             var restoreRequest = new WorkspaceRestoreRequest { RestoredName = "Undeleted", AdminUserPrincipalName = "john@contoso.com" };
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .RestoreDeletedWorkspaceAsAdmin(workspaceId, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.AdminUserPrincipalName == restoreRequest.AdminUserPrincipalName)))
-                .Returns(expectedResponse);
+                .RestoreDeletedWorkspaceAsAdmin(workspaceId, It.Is<WorkspaceRestoreRequest>(r => r.RestoredName == restoreRequest.RestoredName && r.AdminUserPrincipalName == restoreRequest.AdminUserPrincipalName)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RestorePowerBIWorkspace(initFactory)
             {
@@ -226,7 +222,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]

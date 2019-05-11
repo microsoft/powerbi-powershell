@@ -52,7 +52,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var updatedWorkspace = WorkspacesTestUtilities.GetWorkspace(ps, PowerBIUserScope.Organization, workspace.Id);
                 Assert.IsTrue(updatedWorkspace.Users
                     .Any(x => x.UserPrincipalName.Equals(emailAddress, StringComparison.OrdinalIgnoreCase)
-                    && x.AccessRight == WorkspaceUserAccessRight.Member.ToString()));
+                    && x.AccessRight == WorkspaceUserAccessRight.Member));
             }
         }
 
@@ -119,12 +119,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var workspace = new Workspace { Id = Guid.NewGuid() };
-            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
-            var expectedResponse = new object();
+            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .AddWorkspaceUserAsAdmin(workspace.Id, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)))
-                .Returns(expectedResponse);
+                .AddWorkspaceUserAsAdmin(workspace.Id, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
             {
@@ -139,7 +137,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -147,12 +145,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var workspaceId = Guid.NewGuid();
-            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
-            var expectedResponse = new object();
+            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .AddWorkspaceUserAsAdmin(workspaceId, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)))
-                .Returns(expectedResponse);
+                .AddWorkspaceUserAsAdmin(workspaceId, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
             {
@@ -167,7 +163,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -175,12 +171,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var workspace = new Workspace { Id = Guid.NewGuid() };
-            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
-            var expectedResponse = new object();
+            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .AddWorkspaceUser(workspace.Id, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)))
-                .Returns(expectedResponse);
+                .AddWorkspaceUser(workspace.Id, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
             {
@@ -195,7 +189,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
 
         [TestMethod]
@@ -203,12 +197,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var workspaceId = Guid.NewGuid();
-            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member.ToString() };
-            var expectedResponse = new object();
+            var user = new WorkspaceUser { UserPrincipalName = "john@contoso.com", AccessRight = WorkspaceUserAccessRight.Member };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .AddWorkspaceUser(workspaceId, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)))
-                .Returns(expectedResponse);
+                .AddWorkspaceUser(workspaceId, It.Is<WorkspaceUser>(u => u.UserPrincipalName == user.UserPrincipalName && u.AccessRight == user.AccessRight)));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
             {
@@ -223,7 +215,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
         }
     }
 }

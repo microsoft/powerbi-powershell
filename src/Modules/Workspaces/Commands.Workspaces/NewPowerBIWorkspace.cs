@@ -31,15 +31,25 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = true)]
         public string Name { get; set; }
 
+        [Parameter(Mandatory = false)]
+        [Alias("WorkspaceType")]
+        public NewWorkspaceType Type { get; set; } = NewWorkspaceType.Workspace;
+
         #endregion
 
         public override void ExecuteCmdlet()
         {
             using (var client = this.CreateClient())
             {
-                var result = client.Workspaces.NewWorkspaceAsUser(this.Name);
+                var result = client.Workspaces.NewWorkspaceAsUser(this.Name, this.Type == NewWorkspaceType.Workspace);
                 this.Logger.WriteObject(result, true);
             }
         }
+    }
+
+    public enum NewWorkspaceType
+    {
+        Workspace,
+        Group
     }
 }

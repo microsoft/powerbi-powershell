@@ -105,7 +105,9 @@ $testProjects | ForEach-Object {
     $dotnetArgs = @('test', "`"$($_.FullName)`"")
     $dotnetArgs += $commonDotnetArgs
 
-    $logFileName = "$($_.BaseName)_$(Get-Date -Format 'yyyyMMdd_HHmmss').trx"
+	# Due to this issue, timestamp is being auto added by dotnet test which breaks AppVeyor from finding tests -  https://github.com/Microsoft/vstest/issues/1951
+    $logBaseName = $_.BaseName
+	$logFileName = "$($logBaseName).trx"  # Depending how above issue is fixed, may need to add this back in _$(Get-Date -Format 'yyyyMMdd_HHmmss')
     if($Logger) {
         $dotnetArgs += @('--logger', "`"$Logger;LogFileName=$logFileName`"")
     }
@@ -115,9 +117,14 @@ $testProjects | ForEach-Object {
     $exitCode = $LASTEXITCODE # Save exit code in case upload results fails
 
     if($ResultsDirectory -and $Logger -and $UploadResultsToAppVeyor -and $env:APPVEYOR_JOB_ID) {
-        $resultsLog = Join-Path -Path $ResultsDirectory -ChildPath $logFileName
-        if(Test-Path -Path $resultsLog) {
+		Write-Host "Publishing test results..."
+		#Write-Host "ResultsDirectory: $ResultsDirectory"
+		#Write-Host "LogFileName: $logFileName"
+		$resultsFileName = Join-Path -Path $ResultsDirectory -ChildPath "$($logBaseName)*.trx"
+        $resultsLog = Get-ChildItem -Path $resultsFileName | Select-Object -First 1 | % { $_.FullName }
+        if($resultsLog -and (Test-Path -Path $resultsLog)) {
             # https://www.appveyor.com/docs/running-tests/
+			# https://www.appveyor.com/docs/running-tests/#pushing-real-time-test-results-to-build-console
             try {
                 Write-Output "Uploading file to AppVeyor (job ID $($env:APPVEYOR_JOB_ID)): $resultsLog"
                 $wc = New-Object 'System.Net.WebClient'
@@ -128,7 +135,7 @@ $testProjects | ForEach-Object {
             }
         }
         else {
-            Write-Warning "No results file found at: $resultsLog"
+            Write-Warning "No results file found at: $resultsFileName"
         }
     }
 

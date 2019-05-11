@@ -3,6 +3,8 @@
  * Licensed under the MIT License.
  */
 
+using System;
+
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
     public class Datasource
@@ -11,8 +13,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public string ConnectionString { get; set; }
         public string DatasourceType { get; set; }
         public DatasourceConnectionDetails ConnectionDetails { get; set; }
-        public string GatewayId { get; set; }
-        public string DatasourceId { get; set; }
+        public Guid? GatewayId { get; set; }
+        public Guid? DatasourceId { get; set; }
 
         public static implicit operator Datasource(PowerBI.Api.V2.Models.Datasource datasource)
         {

@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         {
             return new Dashboard()
             {
-                Id = new Guid(dashboard.Id),
+                Id = dashboard.Id,
                 Name = dashboard.DisplayName,
                 IsReadOnly = dashboard.IsReadOnly,
                 EmbedUrl = dashboard.EmbedUrl

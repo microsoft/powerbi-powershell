@@ -5,11 +5,10 @@
 
 namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
-    public enum WorkspaceUserAccessRight
+    public enum PrincipalType
     {
-        None,
-        Member,
-        Admin,
-        Contributor
+        User,
+        Group,
+        App
     }
 }

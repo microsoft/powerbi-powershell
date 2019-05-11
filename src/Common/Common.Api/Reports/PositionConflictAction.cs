@@ -5,11 +5,9 @@
 
 namespace Microsoft.PowerBI.Common.Api.Reports
 {
-    public enum ImportConflictHandlerModeEnum
+    public enum PositionConflictAction
     {
-        Ignore,
-        Abort,
-        Overwrite,
-        CreateOrOverwrite
+        Tail,
+        Abort
     }
 }

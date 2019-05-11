@@ -73,8 +73,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
             using (var client = this.CreateClient())
             {
-                var result = client.Workspaces.UpdateWorkspaceAsAdmin(workspaceId, updatedProperties);
-                this.Logger.WriteObject(result, true);
+                client.Workspaces.UpdateWorkspaceAsAdmin(workspaceId, updatedProperties);
             }
         }
     }

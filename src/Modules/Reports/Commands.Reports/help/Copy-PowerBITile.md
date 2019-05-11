@@ -14,23 +14,23 @@ Creates a copy of the specified Power BI tile and adds it to a Power BI dashboar
 
 ### MyWorkspace (Default)
 ```
-Copy-PowerBITile -DashboardId <String> -TileId <String> -TargetDashboardId <String>
- [-TargetWorkspaceId <String>] [-TargetReportId <String>] [-TargetDatasetId <String>]
- [-PositionConflictAction <String>] [<CommonParameters>]
+Copy-PowerBITile -DashboardId <Guid> -TileId <Guid> -TargetDashboardId <Guid> [-TargetWorkspaceId <Guid>]
+ [-TargetReportId <Guid>] [-TargetDatasetId <Guid>] [-PositionConflictAction <PositionConflictAction>]
+ [<CommonParameters>]
 ```
 
 ### WorkspaceId
 ```
-Copy-PowerBITile -WorkspaceId <Guid> -DashboardId <String> -TileId <String> -TargetDashboardId <String>
- [-TargetWorkspaceId <String>] [-TargetReportId <String>] [-TargetDatasetId <String>]
- [-PositionConflictAction <String>] [<CommonParameters>]
+Copy-PowerBITile -WorkspaceId <Guid> -DashboardId <Guid> -TileId <Guid> -TargetDashboardId <Guid>
+ [-TargetWorkspaceId <Guid>] [-TargetReportId <Guid>] [-TargetDatasetId <Guid>]
+ [-PositionConflictAction <PositionConflictAction>] [<CommonParameters>]
 ```
 
 ### WorkspaceObject
 ```
-Copy-PowerBITile -Workspace <Workspace> -DashboardId <String> -TileId <String> -TargetDashboardId <String>
- [-TargetWorkspaceId <String>] [-TargetReportId <String>] [-TargetDatasetId <String>]
- [-PositionConflictAction <String>] [<CommonParameters>]
+Copy-PowerBITile -Workspace <Workspace> -DashboardId <Guid> -TileId <Guid> -TargetDashboardId <Guid>
+ [-TargetWorkspaceId <Guid>] [-TargetReportId <Guid>] [-TargetDatasetId <Guid>]
+ [-PositionConflictAction <PositionConflictAction>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,7 +54,7 @@ Creates a copy of the tile with the ID "e297e105-be30-4482-8531-152cdf289ac6" fr
 The ID of the dashboard where source tile is located.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases: DashboardKey
 
@@ -69,7 +69,7 @@ Accept wildcard characters: False
 Optional parameter for specifying the action in case of position conflict. The default is 'Tail'.
 
 ```yaml
-Type: String
+Type: PositionConflictAction
 Parameter Sets: (All)
 Aliases:
 
@@ -84,7 +84,7 @@ Accept wildcard characters: False
 The ID of the dashboard where tile copy should be added.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases:
 
@@ -99,7 +99,7 @@ Accept wildcard characters: False
 Optional parameter to rebind the copied tile to a different dataset.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases: TargetModelId
 
@@ -114,7 +114,7 @@ Accept wildcard characters: False
 Optional parameter to rebind the copied tile to a different report.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases:
 
@@ -129,7 +129,7 @@ Accept wildcard characters: False
 Optional parameter for specifying the target workspace ID. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'. Empty string indicates tile will be copied within the same workspace.
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases: TargetGroupId
 
@@ -144,7 +144,7 @@ Accept wildcard characters: False
 The ID of the tile that should be copied
 
 ```yaml
-Type: String
+Type: Guid
 Parameter Sets: (All)
 Aliases: TileKey
 
