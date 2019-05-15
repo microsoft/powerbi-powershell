@@ -36,7 +36,7 @@ namespace Microsoft.PowerBI.Common.Api.Admin
                     .Select(key => (EncryptionKey)key);
         }
 
-        public IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string workspaceId)
+        public IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(Guid workspaceId)
         {
             return this.Client.Datasets.GetDatasetsInGroupAsAdmin(workspaceId, expand: "encryption")?.Value
                     .Select(dataset => (Dataset)dataset);

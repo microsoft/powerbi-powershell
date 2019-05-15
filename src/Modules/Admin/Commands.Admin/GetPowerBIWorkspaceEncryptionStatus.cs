@@ -66,7 +66,7 @@ namespace Microsoft.PowerBI.Commands.Admin
                         break;
                 }
 
-                var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(Id.ToString());
+                var response = client.Admin.GetPowerBIWorkspaceEncryptionStatus(Id);
                 this.Logger.WriteObject(response, enumerateCollection: true);
             }
         }
@@ -74,7 +74,7 @@ namespace Microsoft.PowerBI.Commands.Admin
         private Workspace GetWorkspace(IPowerBIApiClient client, string workspaceName)
         {
             string nameFilter = $"name eq '{workspaceName}'";
-            var workspaces = client.Workspaces.GetWorkspacesAsAdmin(default, nameFilter, 1, default);
+            var workspaces = client.Workspaces.GetWorkspacesAsAdmin(top: 1, filter: nameFilter);
             if (workspaces == null || !workspaces.Any())
             {
                 this.Logger.ThrowTerminatingError("No matching workspace was found");

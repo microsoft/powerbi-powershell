@@ -72,6 +72,7 @@ Optional parameter for specifying the action in case of position conflict. The d
 Type: PositionConflictAction
 Parameter Sets: (All)
 Aliases:
+Accepted values: Tail, Abort
 
 Required: False
 Position: Named

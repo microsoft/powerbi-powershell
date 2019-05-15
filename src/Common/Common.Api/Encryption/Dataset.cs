@@ -22,7 +22,7 @@ namespace Microsoft.PowerBI.Common.Api.Encryption
 
             return new Dataset
             {
-                Id = new Guid(dataset.Id),
+                Id = dataset.Id,
                 Name = dataset.Name,
                 EncryptionStatus = (EncryptionStatus)dataset.Encryption.EncryptionStatus
             };

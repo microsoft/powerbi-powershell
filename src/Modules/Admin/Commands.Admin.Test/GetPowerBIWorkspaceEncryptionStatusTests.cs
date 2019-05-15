@@ -66,8 +66,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             datasetEncryptionStatus.Add(datasetEncryptionStatus1);
             datasetEncryptionStatus.Add(datasetEncryptionStatus2);
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin(default, "name eq 'Workspace1'", 1, default)).Returns(workspaces);
-            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<string>())).Returns(datasetEncryptionStatus);
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin(1, default, "name eq 'Workspace1'", default)).Returns(workspaces);
+            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<Guid>())).Returns(datasetEncryptionStatus);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
             {
@@ -79,8 +79,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            client.Verify(x => x.Workspaces.GetWorkspacesAsAdmin(default, "name eq 'Workspace1'", 1, default), Times.Once());
-            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace1.Id.ToString()), Times.Once());
+            client.Verify(x => x.Workspaces.GetWorkspacesAsAdmin(1, default, "name eq 'Workspace1'", default), Times.Once());
+            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace1.Id), Times.Once());
             AssertExpectedUnitTestResults(datasetEncryptionStatus, initFactory);
         }
 
@@ -104,7 +104,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             datasetEncryptionStatus.Add(datasetEncryptionStatus1);
             datasetEncryptionStatus.Add(datasetEncryptionStatus2);
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<string>())).Returns(datasetEncryptionStatus);
+            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<Guid>())).Returns(datasetEncryptionStatus);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var workspaceId = Guid.NewGuid();
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
@@ -117,7 +117,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspaceId.ToString()), Times.Once());
+            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspaceId), Times.Once());
             AssertExpectedUnitTestResults(datasetEncryptionStatus, initFactory);
         }
 
@@ -141,7 +141,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             datasetEncryptionStatus.Add(datasetEncryptionStatus1);
             datasetEncryptionStatus.Add(datasetEncryptionStatus2);
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<string>())).Returns(datasetEncryptionStatus);
+            client.Setup(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(It.IsAny<Guid>())).Returns(datasetEncryptionStatus);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var workspace = new Workspace { Id = Guid.NewGuid() };
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
@@ -154,7 +154,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id.ToString()), Times.Once());
+            client.Verify(x => x.Admin.GetPowerBIWorkspaceEncryptionStatus(workspace.Id), Times.Once());
             AssertExpectedUnitTestResults(datasetEncryptionStatus, initFactory);
         }
 
@@ -164,7 +164,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin(default, $"name eq '{MockName}'", 1, default)).Throws(new Exception("Some exception"));
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin(1, default, $"name eq '{MockName}'", default)).Throws(new Exception("Some exception"));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
             {
@@ -181,7 +181,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin(default, "name eq 'Workspace1'", 1, default)).Returns(new List<Workspace>());
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin(1, default, "name eq 'Workspace1'", default)).Returns(new List<Workspace>());
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIWorkspaceEncryptionStatus(initFactory)
             {
