@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
-using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Encryption;
@@ -26,33 +25,11 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         private static Guid MockCapacityId = Guid.NewGuid();
 
         [TestMethod]
-        [TestCategory("Interactive")]
-        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndSetPowerBICapacityEncryptionKeyCmdletInfo()
-        {
-            using (var ps = System.Management.Automation.PowerShell.Create())
-            {
-                // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(SetPowerBICapacityEncryptionKeyCmdletInfo)
-                        .AddParameter(nameof(SetPowerBICapacityEncryptionKey.KeyName), MockKeyName)
-                        .AddParameter(nameof(SetPowerBICapacityEncryptionKey.CapacityId), MockCapacityId);
-
-                // Act
-                var result = ps.Invoke();
-
-                // Assert
-                TestUtilities.AssertNoCmdletErrors(ps);
-            }
-        }
-
-        [TestMethod]
         public void SetPowerBICapacityEncryptionKey_KeyNameAndCapacityIdParameterSet()
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
             var encryptionKeys = SetupPowerBIEncryptionKeyMock(client);
-            client.Setup(x => x.Admin.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBICapacityEncryptionKey(initFactory)
             {
@@ -75,7 +52,6 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
             var encryptionKeys = SetupPowerBIEncryptionKeyMock(client);
-            client.Setup(x => x.Admin.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBICapacityEncryptionKey(initFactory)
             {
@@ -99,7 +75,6 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
             var encryptionKeys = SetupPowerBIEncryptionKeyMock(client);
-            client.Setup(x => x.Admin.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBICapacityEncryptionKey(initFactory)
             {
@@ -237,11 +212,10 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var encryptionKeys = new List<EncryptionKey>();
-            encryptionKeys.Add(encryptionKey1);
-            encryptionKeys.Add(encryptionKey2);
+            var encryptionKeys = new List<EncryptionKey>() { encryptionKey1, encryptionKey2 };
             
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(encryptionKeys);
+            client.Setup(x => x.Admin.SetPowerBICapacityEncryptionKey(encryptionKey1.Id, MockCapacityId));
 
             return encryptionKeys;
         }

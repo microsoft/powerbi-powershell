@@ -26,7 +26,7 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetPowerBICapacityCmdletInfo()
+        public void EndToEndGetPowerBICapacityIndividualScopeCmdletInfo()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -35,10 +35,40 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
                 ps.AddCommand(GetPowerBICapacityCmdletInfo);
 
                 // Act
-                var result = ps.Invoke();
+                var results = ps.Invoke();
 
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No capacities returned. Verify you have capacity in your organization.");
+                }
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetPowerBICapacityOrganizationScopeCmdletInfo()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ps.AddCommand(GetPowerBICapacityCmdletInfo)
+                    .AddParameter(nameof(GetPowerBICapacity.Scope), PowerBIUserScope.Organization);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No capacities returned. Verify you have capacity in your organization.");
+                }
             }
         }
 
@@ -176,23 +206,16 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
             Assert.AreEqual(results.Count, capacities.Count());
-            var capacitiesList = capacities.ToList();
-
-            for (int capacityIndex = 0; capacityIndex < capacities.Count(); capacityIndex++)
-            {
-                Assert.AreEqual(capacitiesList[capacityIndex], results[capacityIndex]);
-            }
+            CollectionAssert.AreEqual(capacities.ToList(), results.ToList());
         }
 
         private Tuple<List<Capacity>, List<Capacity>> SetupPowerBICapacityMock(Mock<IPowerBIApiClient> client)
         {
-            var capacityAdmin1 = new List<string>();
-            capacityAdmin1.Add("Admin1");
             var capacity1 = new Capacity()
             {
                 Id = Guid.NewGuid(),
                 DisplayName = "Capacity1",
-                Admins = capacityAdmin1,
+                Admins = new List<string> { "Admin1" },
                 Sku = "P1",
                 State = Capacity.CapacityState.Active,
                 UserAccessRight = Capacity.CapacityUserAccessRight.None,
@@ -200,15 +223,12 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
                 EncryptionKeyId = null
             };
 
-            var capacityAdmin2 = new List<string>();
-            capacityAdmin2.Add("Admin1");
-            capacityAdmin2.Add("Admin2");
             var encryptionKeyId = Guid.NewGuid();
             var capacity2 = new Capacity()
             {
                 Id = Guid.NewGuid(),
                 DisplayName = "Capacity2",
-                Admins = capacityAdmin2,
+                Admins = new List<string> { "Admin1", "Admin2" },
                 Sku = "A1",
                 State = Capacity.CapacityState.Invalid,
                 UserAccessRight = Capacity.CapacityUserAccessRight.Admin,
@@ -225,12 +245,8 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
                 }
             };
 
-            var getCapacitiesResponse = new List<Capacity>();
-            getCapacitiesResponse.Add(capacity1);
-
-            var getCapacitiesAsAdminResponse = new List<Capacity>();
-            getCapacitiesAsAdminResponse.Add(capacity1);
-            getCapacitiesAsAdminResponse.Add(capacity2);
+            var getCapacitiesResponse = new List<Capacity>() { capacity1 };
+            var getCapacitiesAsAdminResponse = new List<Capacity>() { capacity1, capacity2 };
 
             client.Setup(x => x.Capacities.GetCapacities()).Returns(getCapacitiesResponse);
             client.Setup(x => x.Capacities.GetCapacitiesAsAdmin(It.IsAny<string>())).Returns(getCapacitiesAsAdminResponse);
