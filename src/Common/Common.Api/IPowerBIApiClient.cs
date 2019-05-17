@@ -5,6 +5,7 @@
 
 using System;
 using Microsoft.PowerBI.Common.Api.Admin;
+using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
@@ -20,5 +21,7 @@ namespace Microsoft.PowerBI.Common.Api
         IDatasetsClient Datasets { get; set; }
 
         IAdminClient Admin { get; set; }
+
+        ICapacityClient Capacities { get; set; }
     }
 }

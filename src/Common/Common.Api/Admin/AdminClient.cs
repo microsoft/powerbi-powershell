@@ -42,14 +42,24 @@ namespace Microsoft.PowerBI.Common.Api.Admin
                     .Select(dataset => (Dataset)dataset);
         }
 
-        public EncryptionKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier)
+        public EncryptionKey RotatePowerBIEncryptionKey(Guid tenantKeyId, string keyVaultKeyIdentifier)
         {
             var tenantKeyRotationRequest = new TenantKeyRotationRequest()
             {
                 KeyVaultKeyIdentifier = keyVaultKeyIdentifier
             };
 
-            return this.Client.Admin.RotatePowerBIEncryptionKey(Guid.Parse(tenantKeyId), tenantKeyRotationRequest);
+            return this.Client.Admin.RotatePowerBIEncryptionKey(tenantKeyId, tenantKeyRotationRequest);
+        }
+
+        public void SetPowerBICapacityEncryptionKey(Guid tenantKeyId, Guid capacityId)
+        {
+            var capacityPatchRequest = new CapacityPatchRequest()
+            {
+                TenantKeyId = tenantKeyId
+            };
+
+            this.Client.Admin.PatchCapacityAsAdmin(capacityId, capacityPatchRequest);
         }
     }
 }

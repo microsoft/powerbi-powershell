@@ -20,6 +20,9 @@ Retrieves the encryption key for the tenant.
 ### [Get-PowerBIWorkspaceEncryptionStatus](Get-PowerBIWorkspaceEncryptionStatus.md)
 List Power BI workspace encryption status.
 
+### [Set-PowerBICapacityEncryptionKey](Set-PowerBICapacityEncryptionKey.md)
+Updates the encryption key for the Power BI capacity.
+
 ### [Switch-PowerBIEncryptionKey](Switch-PowerBIEncryptionKey.md)
 Switch the encryption key for Power BI workspaces assigned to a capacity.
 

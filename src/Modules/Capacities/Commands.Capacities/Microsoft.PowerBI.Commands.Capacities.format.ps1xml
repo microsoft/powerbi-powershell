@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>Microsoft.PowerBI.Common.Api.Capacities.Capacity</Name>
+            <ViewSelectedBy>
+                <TypeName>Microsoft.PowerBI.Common.Api.Capacities.Capacity</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>Id</Label>
+                                <ScriptBlock>$_.Id</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>DisplayName</Label>
+                                <ScriptBlock>$_.DisplayName</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Admins</Label>
+                                <ScriptBlock>$_.Admins</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Sku</Label>
+                                <ScriptBlock>$_.Sku</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>State</Label>
+                                <ScriptBlock>$_.State</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>UserAccessRight</Label>
+                                <ScriptBlock>$_.UserAccessRight</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Region</Label>
+                                <ScriptBlock>$_.Region</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <ItemSelectionCondition>
+                                    <ScriptBlock>$GetPowerBICapacityAdminVariable -eq $true</ScriptBlock>
+                                </ItemSelectionCondition>
+                                <Label>EncryptionKeyId</Label>
+                                <ScriptBlock>$_.EncryptionKeyId</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <ItemSelectionCondition>
+                                    <ScriptBlock>($GetPowerBICapacityAdminVariable -eq $true) -and ($GetPowerBICapacityExpandVariable -eq $true)</ScriptBlock>
+                                </ItemSelectionCondition>
+                                <Label>EncryptionKey</Label>
+                                <ScriptBlock>$_.EncryptionKey | Out-String</ScriptBlock>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>
