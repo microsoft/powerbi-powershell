@@ -47,7 +47,7 @@
                             </ListItem>
                             <ListItem>
                                 <ItemSelectionCondition>
-                                    <ScriptBlock>($GetPowerBICapacityAdminVariable -eq $true) -and ($GetPowerBICapacityExpandVariable -eq $true)</ScriptBlock>
+                                    <ScriptBlock>($GetPowerBICapacityAdminVariable -eq $true) -and ($GetPowerBICapacityShowEncryptionKeyVariable -eq $true)</ScriptBlock>
                                 </ItemSelectionCondition>
                                 <Label>EncryptionKey</Label>
                                 <ScriptBlock>$_.EncryptionKey | Out-String</ScriptBlock>

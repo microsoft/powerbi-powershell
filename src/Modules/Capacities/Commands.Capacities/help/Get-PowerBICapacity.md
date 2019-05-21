@@ -13,7 +13,7 @@ Returns a list of Power BI capacities.
 ## SYNTAX
 
 ```
-Get-PowerBICapacity [-Scope <PowerBIUserScope>] [-Show <PowerBIGetCapacityExpandEnum>] [<CommonParameters>]
+Get-PowerBICapacity [-Scope <PowerBIUserScope>] [-ShowEncryptionKey] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,14 +46,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Show
-Expands related entities inline
+### -ShowEncryptionKey
+Show encryption key details
 
 ```yaml
-Type: PowerBIGetCapacityExpandEnum
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
-Accepted values: None, EncryptionKey
 
 Required: False
 Position: Named

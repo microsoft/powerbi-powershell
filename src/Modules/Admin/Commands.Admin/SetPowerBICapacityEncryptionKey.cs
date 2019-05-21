@@ -12,7 +12,7 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = KeyNameAndCapacityIdParameterSet)]
-    public class SetPowerBICapacityEncryptionKey : PowerBIAdminClientCmdlet
+    public class SetPowerBICapacityEncryptionKey : PowerBIGetEncryptionKeyClientCmdlet 
     {
         public const string CmdletName = "PowerBICapacityEncryptionKey";
         public const string CmdletVerb = VerbsCommon.Set;

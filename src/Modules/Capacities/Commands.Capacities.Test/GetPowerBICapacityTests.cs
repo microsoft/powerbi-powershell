@@ -114,7 +114,7 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
         }
 
         [TestMethod]
-        public void GetPowerBICapacity_OrganizationScope_WithShowOnEncryption()
+        public void GetPowerBICapacity_OrganizationScope_WithShowEncryptionKey()
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
@@ -123,7 +123,7 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
             var cmdlet = new GetPowerBICapacity(initFactory)
             {
                 Scope = PowerBIUserScope.Organization,
-                Show = PowerBIGetCapacityExpandEnum.EncryptionKey
+                ShowEncryptionKey = true
             };
 
             // Act
@@ -137,7 +137,7 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
         }
 
         [TestMethod]
-        public void GetPowerBICapacity_IndividualScope_WithShowOnEncryption()
+        public void GetPowerBICapacity_IndividualScope_WithShowEncryptionKey()
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
@@ -145,7 +145,7 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBICapacity(initFactory)
             {
-                Show = PowerBIGetCapacityExpandEnum.EncryptionKey
+                ShowEncryptionKey = true
             };
 
             // Act
@@ -154,7 +154,7 @@ namespace Microsoft.PowerBI.Commands.Capacities.Test
             // Assert
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.AreEqual(throwingErrorRecords.Count(), 1);
-            Assert.AreEqual(throwingErrorRecords.First().ToString(), "Show on EncryptionKey is only applied when -Scope is set to Organization");
+            Assert.AreEqual(throwingErrorRecords.First().ToString(), "-ShowEncryptionKey is only applied when -Scope is set to Organization");
         }
 
         [TestMethod]

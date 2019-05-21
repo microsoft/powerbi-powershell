@@ -18,7 +18,7 @@ namespace Microsoft.PowerBI.Commands.Capacities
     {
         public const string CmdletName = "PowerBICapacity";
         public const string CmdletVerb = VerbsCommon.Get;
-        private const string ExpandVariable = "GetPowerBICapacityExpandVariable";
+        private const string ShowEncryptionKeyVariable = "GetPowerBICapacityShowEncryptionKeyVariable";
         private const string AdminVariable = "GetPowerBICapacityAdminVariable";
 
         public GetPowerBICapacity() : base() { }
@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Commands.Capacities
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = false)]
-        public PowerBIGetCapacityExpandEnum Show { get; set; } = PowerBIGetCapacityExpandEnum.None;
+        public SwitchParameter ShowEncryptionKey { get; set; }
 
         #endregion
 
@@ -39,12 +39,11 @@ namespace Microsoft.PowerBI.Commands.Capacities
         {
             base.BeginProcessing();
 
-            if (this.Scope == PowerBIUserScope.Individual && this.Show == PowerBIGetCapacityExpandEnum.EncryptionKey)
+            if (this.Scope == PowerBIUserScope.Individual && this.ShowEncryptionKey)
             {
                 this.Logger.ThrowTerminatingError(
-                    string.Format("{0} on {1} is only applied when -{2} is set to {3}",
-                    nameof(this.Show),
-                    Enum.GetName(typeof(PowerBIGetCapacityExpandEnum), this.Show),
+                    string.Format("-{0} is only applied when -{1} is set to {2}",
+                    nameof(this.ShowEncryptionKey),
                     nameof(this.Scope),
                     nameof(PowerBIUserScope.Organization)));
             }
@@ -59,24 +58,18 @@ namespace Microsoft.PowerBI.Commands.Capacities
 
                 if (this.Scope == PowerBIUserScope.Individual)
                 {
-                    SessionState?.PSVariable?.Set(ExpandVariable, false);
+                    SessionState?.PSVariable?.Set(ShowEncryptionKeyVariable, false);
                     capacities = client.Capacities.GetCapacities();
                 }
                 else
                 {
-                    var expand = this.Show == PowerBIGetCapacityExpandEnum.EncryptionKey ? "tenantKey" : null;
-                    SessionState?.PSVariable?.Set(ExpandVariable, this.Show == PowerBIGetCapacityExpandEnum.EncryptionKey);
+                    var expand = this.ShowEncryptionKey ? "tenantKey" : null;
+                    SessionState?.PSVariable?.Set(ShowEncryptionKeyVariable, this.ShowEncryptionKey);
                     capacities = client.Capacities.GetCapacitiesAsAdmin(expand);
                 }
 
                 this.Logger.WriteObject(capacities, enumerateCollection: true);
             }
         }
-    }
-
-    public enum PowerBIGetCapacityExpandEnum
-    {
-        None = 0,
-        EncryptionKey = 1
     }
 }

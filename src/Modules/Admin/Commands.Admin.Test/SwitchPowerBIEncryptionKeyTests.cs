@@ -77,9 +77,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var tenantKeys = new List<EncryptionKey>();
-            tenantKeys.Add(tenantKey1);
-            tenantKeys.Add(tenantKey2);
+            var tenantKeys = new List<EncryptionKey>() { tenantKey1, tenantKey2 };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(tenantKeys);
             client.Setup(x => x.Admin.RotatePowerBIEncryptionKey(It.IsAny<Guid>(), It.IsAny<string>())).Returns(rotatedTenantKey);

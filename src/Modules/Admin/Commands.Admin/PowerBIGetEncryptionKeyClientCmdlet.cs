@@ -12,11 +12,11 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
-    public abstract class PowerBIAdminClientCmdlet : PowerBIClientCmdlet
+    public abstract class PowerBIGetEncryptionKeyClientCmdlet : PowerBIClientCmdlet
     {
-        public PowerBIAdminClientCmdlet() : base() { }
+        public PowerBIGetEncryptionKeyClientCmdlet () : base() { }
 
-        public PowerBIAdminClientCmdlet(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public PowerBIGetEncryptionKeyClientCmdlet (IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         protected EncryptionKey GetEncryptionKey(IPowerBIApiClient client, string keyName)
         {

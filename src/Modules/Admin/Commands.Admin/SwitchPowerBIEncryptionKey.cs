@@ -12,7 +12,7 @@ namespace Microsoft.PowerBI.Commands.Admin
     [Cmdlet(CmdletVerb, CmdletName)]
     [Alias("Rotate-PowerBIEncryptionKey")]
     [OutputType(typeof(EncryptionKey))]
-    public class SwitchPowerBIEncryptionKey : PowerBIAdminClientCmdlet
+    public class SwitchPowerBIEncryptionKey : PowerBIGetEncryptionKeyClientCmdlet 
     {
         public const string CmdletName = "PowerBIEncryptionKey";
         public const string CmdletVerb = VerbsCommon.Switch;
