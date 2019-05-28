@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.PowerBI.Common.Api.Helpers;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
