@@ -14,10 +14,12 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         object AddDataset(Dataset dataset, Guid? workspaceId = default);
 
         IEnumerable<Dataset> GetDatasets();
-        IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = default, int? top = default, int? skip = default);
+        IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = default, int? top = default, int? skip = default, string expand = null);
 
         IEnumerable<Dataset> GetDatasetsForWorkspace(Guid workspaceId);
-        IEnumerable<Dataset> GetDatasetsAsAdminForWorkspace(Guid workspaceId, string filter = null, int? top = null, int? skip = null);
+        IEnumerable<Dataset> GetDatasetsAsAdminForWorkspace(Guid workspaceId, string filter = null, int? top = null, int? skip = null, string expand = null);
+
+        void PatchDataset(Guid datasetId, PatchDatasetRequest patchDatasetRequest, Guid? workspaceId = default);
 
         IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default);
         IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId);

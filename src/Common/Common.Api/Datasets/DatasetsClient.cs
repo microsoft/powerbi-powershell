@@ -37,14 +37,26 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return this.Client.Datasets.GetDatasets(groupId: workspaceId.ToString()).Value?.Select(x => (Dataset)x);
         }
 
-        public IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = null, int? top = null, int? skip = null)
+        public IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = null, int? top = null, int? skip = null, string expand = null)
         {
-            return this.Client.Datasets.GetDatasetsAsAdmin(filter: filter, top: top, skip: skip).Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasetsAsAdmin(filter: filter, top: top, skip: skip, expand: expand).Value?.Select(x => (Dataset)x);
         }
 
-        public IEnumerable<Dataset> GetDatasetsAsAdminForWorkspace(Guid workspaceId, string filter = null, int? top = null, int? skip = null)
+        public IEnumerable<Dataset> GetDatasetsAsAdminForWorkspace(Guid workspaceId, string filter = null, int? top = null, int? skip = null, string expand = null)
         {
-            return this.Client.Datasets.GetDatasetsAsAdmin(groupId: workspaceId.ToString(), filter: filter, top: top, skip: skip).Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasetsAsAdmin(groupId: workspaceId.ToString(), filter: filter, top: top, skip: skip, expand: expand).Value?.Select(x => (Dataset)x);
+        }
+
+        public void PatchDataset(Guid datasetId, PatchDatasetRequest patchDatasetRequest, Guid? workspaceId = default)
+        {
+            if (workspaceId.HasValue && workspaceId.Value != default)
+            {
+                this.Client.Datasets.PatchDatasetByIdInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString(), patchDatasetRequest: patchDatasetRequest);
+            }
+            else
+            {
+                this.Client.Datasets.PatchDatasetById(datasetKey: datasetId.ToString(), patchDatasetRequest: patchDatasetRequest);
+            }
         }
 
         public IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default)
