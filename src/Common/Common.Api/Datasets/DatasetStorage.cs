@@ -3,6 +3,8 @@
  * Licensed under the MIT License.
  */
 
+using Microsoft.PowerBI.Common.Api.Helpers;
+
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
     public class DatasetStorage

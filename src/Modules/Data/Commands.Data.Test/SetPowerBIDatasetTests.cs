@@ -70,7 +70,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedNoOutputForUnitTestResults(client, initFactory);
+            TestUtilities.AssertExpectedUnitTestResults(null, client, initFactory);
         }
     }
 }
