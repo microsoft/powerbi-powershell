@@ -117,13 +117,13 @@ namespace Microsoft.PowerBI.Commands.Data
                 if(this.WorkspaceId != default)
                 {
                     datasets = this.Scope == PowerBIUserScope.Individual ?
-                        client.Datasets.GetDatasetsForWorkspace(this.WorkspaceId) :
+                        client.Datasets.GetDatasetsForWorkspace(this.WorkspaceId, this.Include) :
                         client.Datasets.GetDatasetsAsAdminForWorkspace(this.WorkspaceId, filter: this.Filter, top: this.First, skip: this.Skip, expand: this.Include);
                 }
                 else
                 {
                     datasets = this.Scope == PowerBIUserScope.Individual ?
-                        client.Datasets.GetDatasets() :
+                        client.Datasets.GetDatasets(this.Include) :
                         client.Datasets.GetDatasetsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip, expand: this.Include);
                 }
             }

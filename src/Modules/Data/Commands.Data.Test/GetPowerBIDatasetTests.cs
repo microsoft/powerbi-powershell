@@ -48,7 +48,7 @@ namespace Microsoft.PowerBI.Commands.Data
             // Arrange
             var expectedDatasets = new List<Dataset> { new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.GetDatasets()).Returns(expectedDatasets);
+            client.Setup(x => x.Datasets.GetDatasets(null)).Returns(expectedDatasets);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetPowerBIDataset(initFactory)
             {

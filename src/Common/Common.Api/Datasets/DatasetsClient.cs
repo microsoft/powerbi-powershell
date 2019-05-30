@@ -27,14 +27,14 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             return result;
         }
 
-        public IEnumerable<Dataset> GetDatasets()
+        public IEnumerable<Dataset> GetDatasets(string expand = null)
         {
-            return this.Client.Datasets.GetDatasets().Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasetsWithODataQuery(expand).Value?.Select(x => (Dataset)x);
         }
 
-        public IEnumerable<Dataset> GetDatasetsForWorkspace(Guid workspaceId)
+        public IEnumerable<Dataset> GetDatasetsForWorkspace(Guid workspaceId, string expand = null)
         {
-            return this.Client.Datasets.GetDatasets(groupId: workspaceId.ToString()).Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasetsWithODataQueryInGroup(groupId: workspaceId.ToString(), expand: expand).Value?.Select(x => (Dataset)x);
         }
 
         public IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = null, int? top = null, int? skip = null, string expand = null)
