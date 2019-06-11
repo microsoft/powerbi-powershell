@@ -47,7 +47,7 @@ Accept wildcard characters: False
 ```
 
 ### -ShowEncryptionKey
-Show encryption key details
+Show encryption key details.
 
 ```yaml
 Type: SwitchParameter
