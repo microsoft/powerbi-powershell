@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             this.SendAsyncInvocationCount++;
             return Task.FromResult(this.SendAsyncMockHandler != null ? 
                                        this.SendAsyncMockHandler(request, cancellationToken) 
-                                       : request.CreateResponse(HttpStatusCode.OK));
+                                       : new HttpResponseMessage(HttpStatusCode.OK));
         }
 
         public void Reset()
