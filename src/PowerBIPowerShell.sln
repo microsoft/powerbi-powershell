@@ -82,12 +82,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.Data", "Modules\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.Data.Test", "Modules\Data\Commands.Data.Test\Commands.Data.Test.csproj", "{EE3CEC0A-2D69-438F-8883-3B2D420D4D4F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnPremisesDataGateway", "OnPremisesDataGateway", "{582EDCD7-B138-4615-9CCC-8DCE429D16D4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.OnPremisesDataGateway", "Modules\OnPremisesDataGateway\Commands.OnPremisesDataGateway\Commands.OnPremisesDataGateway.csproj", "{DFC0EBC9-D528-4000-B83A-7F7A277E7C49}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.OnPremisesDataGateway.Test", "Modules\OnPremisesDataGateway\Commands.OnPremisesDataGateway.Test\Commands.OnPremisesDataGateway.Test.csproj", "{06C60F23-370B-496D-921C-EE9AEE58A62C}"
-EndProject
+#Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnPremisesDataGateway", "OnPremisesDataGateway", "{582EDCD7-B138-4615-9CCC-8DCE429D16D4}"
+#EndProject
+#Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.OnPremisesDataGateway", "Modules\OnPremisesDataGateway\Commands.OnPremisesDataGateway\Commands.OnPremisesDataGateway.csproj", "{DFC0EBC9-D528-4000-B83A-7F7A277E7C49}"
+#EndProject
+#Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands.OnPremisesDataGateway.Test", "Modules\OnPremisesDataGateway\Commands.OnPremisesDataGateway.Test\Commands.OnPremisesDataGateway.Test.csproj", "{06C60F23-370B-496D-921C-EE9AEE58A62C}"
+#EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Api.Test", "Common\Common.Api.Test\Common.Api.Test.csproj", "{301130A1-5749-4251-B42C-17DB759E377F}"
 EndProject
 Global
@@ -356,9 +356,6 @@ Global
 		{AAD21810-2E21-41C1-845A-802BFCE007C6} = {6E7F95B7-62EF-4D9F-A9CA-5A3F975AD509}
 		{F591C74E-F4AD-4F12-ABC2-83780A6B4960} = {AAD21810-2E21-41C1-845A-802BFCE007C6}
 		{EE3CEC0A-2D69-438F-8883-3B2D420D4D4F} = {AAD21810-2E21-41C1-845A-802BFCE007C6}
-		{582EDCD7-B138-4615-9CCC-8DCE429D16D4} = {6E7F95B7-62EF-4D9F-A9CA-5A3F975AD509}
-		{DFC0EBC9-D528-4000-B83A-7F7A277E7C49} = {582EDCD7-B138-4615-9CCC-8DCE429D16D4}
-		{06C60F23-370B-496D-921C-EE9AEE58A62C} = {582EDCD7-B138-4615-9CCC-8DCE429D16D4}
 		{301130A1-5749-4251-B42C-17DB759E377F} = {FE0CC6F8-133C-40FF-B6E4-FEDA33769979}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
