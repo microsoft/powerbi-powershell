@@ -77,12 +77,10 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 CreatedAt = new DateTime(1995, 1, 1),
                 UpdatedAt = new DateTime(1995, 1, 1)
             };
-            var tenantKeys = new List<EncryptionKey>();
-            tenantKeys.Add(tenantKey1);
-            tenantKeys.Add(tenantKey2);
+            var tenantKeys = new List<EncryptionKey>() { tenantKey1, tenantKey2 };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(tenantKeys);
-            client.Setup(x => x.Admin.RotatePowerBIEncryptionKey(It.IsAny<string>(), It.IsAny<string>())).Returns(rotatedTenantKey);
+            client.Setup(x => x.Admin.RotatePowerBIEncryptionKey(It.IsAny<Guid>(), It.IsAny<string>())).Returns(rotatedTenantKey);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SwitchPowerBIEncryptionKey(initFactory)
             {
@@ -95,7 +93,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
 
             // Assert
             client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.RotatePowerBIEncryptionKey(tenantKey1.Id.ToString(), "http://www.contoso3.com/"), Times.Once());
+            client.Verify(x => x.Admin.RotatePowerBIEncryptionKey(tenantKey1.Id, "http://www.contoso3.com/"), Times.Once());
             AssertExpectedUnitTestResults(rotatedTenantKey, initFactory);
         }
 

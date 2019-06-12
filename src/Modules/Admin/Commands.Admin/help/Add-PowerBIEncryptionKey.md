@@ -30,7 +30,6 @@ Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [<C
 ## DESCRIPTION
 Associates an encryption key for Power BI workspaces that is assigned to a premium capacity.
 Make sure to grant wrap and unwrap key permissions for Power BI service in the Azure Key Vault.
-Currently supports adding up to one tenant key.
 
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
@@ -52,7 +51,7 @@ Type: SwitchParameter
 Parameter Sets: DefaultAndActivate, Activate
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -68,7 +67,7 @@ Type: SwitchParameter
 Parameter Sets: DefaultAndActivate, Default
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -76,8 +75,7 @@ Accept wildcard characters: False
 ```
 
 ### -KeyVaultKeyUri
-Uri to the version of the "Azure Key Vault" key to be used.
-The keyvault key need to adhere to the requirements and recommendations that SQL Azure has for bringing your own key.
+Uri to the version of the "Azure Key Vault" key to be used. Only supports 4096 bytes key.
 
 ```yaml
 Type: String

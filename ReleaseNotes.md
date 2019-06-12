@@ -1,6 +1,8 @@
-* New cmdlets added:
-    - Copy-PowerBIReport
-    - Copy-PowerBITile
-    - New-PowerBIDashboard
-    - New-PowerBIWorkspace
-    
+* New Admin module added with the following cmdlets:
+    - Add-PowerBIEncryptionKey
+    - Get-PowerBIEncryptionKey
+    - Get-PowerBIWorkspaceEncryptionStatus
+    - Set-PowerBICapacityEncryptionKey
+    - Switch-PowerBIEncryptionKey
+* New Capacities module added with the following cmdlets:
+    - Get-PowerBICapacity
