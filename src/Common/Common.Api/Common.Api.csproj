@@ -6,6 +6,11 @@
     <RootNamespace>Microsoft.PowerBI.Common.Api</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Gateways\Entities\MashupFunctionParameterValues.cs" />
+    <Compile Remove="Gateways\Entities\MashupTestConnectionDetails.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
