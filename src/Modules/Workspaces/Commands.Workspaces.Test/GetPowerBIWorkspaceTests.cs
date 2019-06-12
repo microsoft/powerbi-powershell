@@ -743,7 +743,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var id = Guid.NewGuid();
-            var filter = $"id eq '{id}'";
+            var filter = $"tolower(id) eq '{id}'";
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
@@ -902,7 +902,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var id = Guid.NewGuid();
-            var filter = $"id eq '{id}'";
+            var filter = $"tolower(id) eq '{id}'";
             var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces.GetWorkspaces(filter, It.IsAny<int>(), null)).Returns(expectedWorkspaces);
