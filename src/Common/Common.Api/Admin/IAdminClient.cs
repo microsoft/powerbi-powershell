@@ -3,6 +3,7 @@
 * Licensed under the MIT License.
 */
 
+using System;
 using System.Collections.Generic;
 using Microsoft.PowerBI.Common.Api.Encryption;
 
@@ -16,6 +17,8 @@ namespace Microsoft.PowerBI.Common.Api.Admin
 
         IEnumerable<Dataset> GetPowerBIWorkspaceEncryptionStatus(string workspaceId);
 
-        EncryptionKey RotatePowerBIEncryptionKey(string tenantKeyId, string keyVaultKeyIdentifier);
+        EncryptionKey RotatePowerBIEncryptionKey(Guid tenantKeyId, string keyVaultKeyIdentifier);
+
+        void SetPowerBICapacityEncryptionKey(Guid tenantKeyId, Guid capacityId);
     }
 }

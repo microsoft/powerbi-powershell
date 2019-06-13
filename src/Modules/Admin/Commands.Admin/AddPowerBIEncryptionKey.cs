@@ -34,12 +34,12 @@ namespace Microsoft.PowerBI.Commands.Admin
         [Parameter(Mandatory = true)]
         public string KeyVaultKeyUri { get; set; }
 
-        [Parameter(ParameterSetName = DefaultParameterSet, Mandatory = true)]
-        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = true)]
+        [Parameter(ParameterSetName = DefaultParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = false)]
         public SwitchParameter Default { get; set; }
 
-        [Parameter(ParameterSetName = ActivateParameterSet, Mandatory = true)]
-        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = true)]
+        [Parameter(ParameterSetName = ActivateParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = false)]
         public SwitchParameter Activate { get; set; }
 
         #endregion
