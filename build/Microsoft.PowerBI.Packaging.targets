@@ -12,6 +12,7 @@ Licensed under the MIT License.
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IncludeContentInPack>false</IncludeContentInPack>
     <PackageOutputPath>$(RepoRoot)\PkgOut</PackageOutputPath>
+    <NoWarn>NU5118</NoWarn>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
@@ -49,6 +50,12 @@ Licensed under the MIT License.
       </_PackageFiles>
       
       <_PackageFiles Include="$(OutputPath)\settings.json" Condition="Exists('$(OutputPath)\settings.json') AND '$(NoDependentAssemblies)' != 'true'">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\Newtonsoft.Json.dll" Condition="Exists('$(OutputPath)\Newtonsoft.Json.dll')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>

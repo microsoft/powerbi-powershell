@@ -6,6 +6,13 @@
     <RootNamespace>Microsoft.PowerBI.Common.Api</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="$(NugetPackageRoot)\Newtonsoft.Json\7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Newtonsoft.Json.dll</Link>
+    </Content>
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.PowerBI.Api" Version="2.7.0" />
