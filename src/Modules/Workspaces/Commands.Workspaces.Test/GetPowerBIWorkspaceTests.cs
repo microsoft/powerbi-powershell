@@ -1003,22 +1003,6 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             AssertGetWorkspacesNeverCalled(client, initFactory);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Rest.HttpOperationException))]
-        public void GetWorkspacesIndividualScope_Throttled()
-        {
-            // Arrange
-            var clientHandler = new FakeHttpClientHandler(new System.Net.Http.HttpResponseMessage((System.Net.HttpStatusCode)429));
-            var initFactory = new TestPowerBICmdletInitFactory(clientHandler);
-            var cmdlet = new GetPowerBIWorkspace(initFactory);
-
-            // Act
-            cmdlet.InvokePowerBICmdlet();
-
-            // Assert
-            Assert.Fail("Should not have reached this point");
-        }
-
         private static void AssertExpectedUnitTestResults(List<Workspace> expectedWorkspaces, TestPowerBICmdletInitFactory initFactory)
         {
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());

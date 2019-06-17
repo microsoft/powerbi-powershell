@@ -25,11 +25,13 @@ namespace Microsoft.PowerBI.Common.Api.Test
                     SendAsyncMockHandler = (httpMessageRequest, cancellationToken) =>
                     {
                         var content = serializedOdataRepsonse;
-                        var response = httpMessageRequest.CreateResponse(HttpStatusCode.OK);
-                        response.Content = new StringContent(
+                        var response = new HttpResponseMessage(HttpStatusCode.OK)
+                        {
+                            Content = new StringContent(
                             content,
                             Encoding.UTF8,
-                            "application/json");
+                            "application/json")
+                        };
                         return response;
                     }
                 });
