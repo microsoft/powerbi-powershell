@@ -62,7 +62,7 @@ PowerShellVersion = '3.0'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-# FormatsToProcess = @()
+FormatsToProcess = @('Microsoft.PowerBI.Commands.Data.format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
