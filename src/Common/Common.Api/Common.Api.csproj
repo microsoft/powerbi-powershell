@@ -14,6 +14,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
+    <ProjectReference Include="..\Common.Dependencies\Common.Dependencies.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Microsoft.PowerBI.Common.Dependencies</AssemblyName>
+    <RootNamespace>Microsoft.PowerBI.Common.Dependencies</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Newtonsoft.Json is included to ensure each module loads a newer version than what's required by the Power BI SDK -->
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2">
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
