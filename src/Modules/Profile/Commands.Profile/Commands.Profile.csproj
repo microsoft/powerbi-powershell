@@ -33,8 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Newtonsoft.Json is included to ensure this module loads a newer version than what's required by the Power BI SDK -->
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -48,6 +46,9 @@
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Common.Dependencies\Common.Dependencies.csproj">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
   </ItemGroup>
