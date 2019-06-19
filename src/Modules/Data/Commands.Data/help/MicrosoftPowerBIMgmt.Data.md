@@ -17,6 +17,9 @@ Adds a dataset to a Power BI workspace.
 ### [Add-PowerBIRow](Add-PowerBIRow.md)
 Adds rows to the specified table in a Power BI dataset.
 
+### [Get-PowerBIDataflow](Get-PowerBIDataflow.md)
+Returns a list of Power BI dataflows.
+
 ### [Get-PowerBIDataset](Get-PowerBIDataset.md)
 Returns a list of Power BI datasets.
 

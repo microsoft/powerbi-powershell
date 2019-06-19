@@ -29,7 +29,7 @@ CompanyName = 'Microsoft Corporation'
 Copyright = 'Microsoft Corporation. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Microsoft Power BI PowerShell - Dataset and datasource cmdlets for Microsoft Power BI'
+Description = 'Microsoft Power BI PowerShell - Dataset, Dataflow and datasource cmdlets for Microsoft Power BI'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
@@ -71,7 +71,7 @@ PowerShellVersion = '3.0'
 FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'Add-PowerBIDataset','Set-PowerBITable','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset','Get-PowerBIDatasource','Get-PowerBITable','Add-PowerBIRow','Remove-PowerBIRow'
+CmdletsToExport = 'Add-PowerBIDataset','Set-PowerBITable','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset','Get-PowerBIDatasource','Get-PowerBITable','Add-PowerBIRow','Remove-PowerBIRow','Get-PowerBIDataflow'
 
 # Variables to export from this module
 VariablesToExport = '*'
@@ -94,7 +94,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('PowerBI', 'Dataset', 'Datasource')
+        Tags = @('PowerBI', 'Dataset', 'Datasource', 'Dataflow')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/Microsoft/powerbi-powershell/blob/master/LICENSE'
