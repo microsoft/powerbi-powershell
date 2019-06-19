@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Abstractions.Utilities;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
@@ -65,7 +66,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayInstallers");
             if (type != null)
             {
-                url += Invariant($"?type={type.ToString()}");
+                var encodedOdataFilter = HttpUtility.UrlEncode(Invariant($"type eq '{type.ToString()}'"));
+                url += Invariant($"?$filter={encodedOdataFilter}");
             }
 
             var response = await HttpClientInstance.GetAsync(url);
