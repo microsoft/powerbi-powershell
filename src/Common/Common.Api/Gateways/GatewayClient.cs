@@ -71,9 +71,9 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
-            var installerPrincipal = await DeserializeResponseContent<IEnumerable<InstallerPrincipal>>(response);
+            var odataInstallerPrincipal = await DeserializeResponseContent<ODataResponseList<InstallerPrincipal>>(response);
 
-            return installerPrincipal;
+            return odataInstallerPrincipal.Value;
         }
 
         public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
