@@ -60,5 +60,33 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             return (Workspace)this.Client.Groups.CreateGroup(new PowerBI.Api.V2.Models.GroupCreationRequest(name: workspaceName));
         }
+
+        public object MigrateWorkspaceCapacity(Guid workspaceId, Guid capacityId)
+        {
+            if (capacityId != Guid.Empty)
+            {
+                var assignment = new PowerBI.Api.V2.Models.CapacityMigrationAssignment
+                {
+                    WorkspacesToAssign = new string[] { workspaceId.ToString() },
+                    TargetCapacityObjectId = capacityId.ToString(),
+                };
+
+                var request = new PowerBI.Api.V2.Models.AssignWorkspacesToCapacityRequest
+                {
+                    CapacityMigrationAssignments = { assignment },
+                };
+
+                return this.Client.Capacities.MoveWorkspacesToPremiumCapacity(request);
+            }
+            else
+            {
+                var request = new PowerBI.Api.V2.Models.UnassignWorkspacesCapacityRequest
+                {
+                    WorkspacesToUnassign = new string[] { workspaceId.ToString() },
+                };
+
+                return this.Client.Capacities.MoveWorkspacesToSharedCapacity(request);
+            }
+        }
     }
 }

@@ -237,6 +237,34 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         [TestMethod]
+        public void SetPowerBIWorkspaceOrganizationScope_CapacityParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var capacityGuid = Guid.NewGuid();
+
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .MigrateWorkspaceCapacity(workspaceId, capacityGuid))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new SetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Id = workspaceId,
+                ParameterSet = "Capacity",
+                CapacityId = capacityGuid,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
         public void SetPowerBIWorkspaceIndividualScope()
         {
             // Arrange

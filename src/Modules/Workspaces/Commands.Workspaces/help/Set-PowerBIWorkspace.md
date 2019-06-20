@@ -23,6 +23,11 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-Name <String>] [-D
 Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<CommonParameters>]
 ```
 
+### Capacity
+```
+Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-CapacityId <Guid>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Updates the name or description of a Power BI workspace.
 Only workspaces in the new workspace experiences preview are supported.
@@ -50,6 +55,21 @@ PS C:\> Set-PowerBIWorkspace -Scope Organization -Workspace $workspace
 If the current user is an administrator, this will update the specified workspace object with the specified name and description values for a workspace in the caller's organization.
 
 ## PARAMETERS
+
+### -CapacityId
+{{Fill CapacityId Description}}
+
+```yaml
+Type: Guid
+Parameter Sets: Capacity
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Description
 The new description to give to the workspace to update.
