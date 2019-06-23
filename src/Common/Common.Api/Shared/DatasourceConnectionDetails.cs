@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-namespace Microsoft.PowerBI.Common.Api.Dataflows
+namespace Microsoft.PowerBI.Common.Api.Shared
 {
     public class DatasourceConnectionDetails
     {

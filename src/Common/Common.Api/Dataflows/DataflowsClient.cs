@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 
 using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Common.Api.Helpers;
+using Microsoft.PowerBI.Common.Api.Shared;
 
 namespace Microsoft.PowerBI.Common.Api.Dataflows
 {
@@ -17,16 +17,6 @@ namespace Microsoft.PowerBI.Common.Api.Dataflows
     {
         public DataflowsClient(IPowerBIClient client) : base(client)
         {
-        }
-
-        public Stream GetDataflow(Guid workspaceId, Guid dataflowId)
-        {
-            return this.Client.Dataflows.GetDataflow(workspaceId, dataflowId);
-        }
-
-        public Stream ExportDataflowAsAdmin(Guid dataflowId)
-        {
-            return this.Client.Dataflows.ExportDataflowAsAdmin(dataflowId);
         }
 
         public IEnumerable<Dataflow> GetDataflows(Guid workspaceId)
@@ -44,9 +34,34 @@ namespace Microsoft.PowerBI.Common.Api.Dataflows
             return this.Client.Dataflows.GetDataflowsInGroupAsAdmin(workspaceId, filter, top, skip).Value?.Select(x => (Dataflow)x);
         }
 
-        public IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid dataflowId)
+        public IEnumerable<Datasource> GetDataflowDatasources(Guid workspaceId, Guid dataflowId)
         {
-            return this.Client.Dataflows.GetDatasourcesAsAdmin(dataflowId).Value?.Select(x => (Datasource)x);
+            return this.Client.Dataflows.GetDataflowDataSources(workspaceId, dataflowId).Value?.Select(x => (Datasource)x);
+        }
+
+        public IEnumerable<Datasource> GetDataflowDatasourcesAsAdmin(Guid dataflowId)
+        {
+            return this.Client.Dataflows.GetDataflowDatasourcesAsAdmin(dataflowId).Value?.Select(x => (Datasource)x);
+        }
+
+        public Stream GetDataflow(Guid workspaceId, Guid dataflowId)
+        {
+            return this.Client.Dataflows.GetDataflow(workspaceId, dataflowId);
+        }
+
+        public Stream ExportDataflowAsAdmin(Guid dataflowId)
+        {
+            return this.Client.Dataflows.ExportDataflowAsAdmin(dataflowId);
+        }
+
+        public void DeleteDataflow(Guid workspaceId, Guid dataflowId)
+        {
+            this.Client.Dataflows.DeleteDataflow(workspaceId, dataflowId);
+        }
+
+        public void RefreshDataflow(Guid workspaceId, Guid dataflowId)
+        {
+            this.Client.Dataflows.RefreshDataflow(workspaceId, dataflowId);
         }
     }
 }
