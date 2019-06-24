@@ -20,7 +20,7 @@ Set-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] -GatewayClusterId <
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Set attributes of an existing gateway cluster
 
 ## EXAMPLES
 

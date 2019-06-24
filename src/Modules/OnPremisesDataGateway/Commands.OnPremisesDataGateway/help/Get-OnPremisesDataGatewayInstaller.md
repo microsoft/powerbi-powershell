@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayInstaller
 
 ## SYNOPSIS
-Get users authorized to create gateways on the tenant.
+Get users authorized to create gateways on the tenant
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Get-OnPremisesDataGatewayInstaller [-GatewayTypeParameter <GatewayType>] [<Commo
 ```
 
 ## DESCRIPTION
-Get users authorized to create gateways on the current user's tenant.
+Get users authorized to create gateways on the current user's tenant
 
 ## EXAMPLES
 

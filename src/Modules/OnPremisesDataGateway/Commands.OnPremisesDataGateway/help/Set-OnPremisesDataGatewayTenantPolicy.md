@@ -24,8 +24,7 @@ Set the gateway creation policy for the tenant
 
 ### Example 1
 ```powershell
-PS C:\> Set-OnPremisesDataGatewayTenantPolicy -ResourceGatewayInstallPolicy
-Open
+PS C:\> Set-OnPremisesDataGatewayTenantPolicy -ResourceGatewayInstallPolicy Open
 ```
 
 Allow users to create on-premises data gateways on the current user's tenant.

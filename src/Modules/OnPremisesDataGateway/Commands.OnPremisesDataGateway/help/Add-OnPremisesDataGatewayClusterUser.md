@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-OnPremisesDataGatewayClusterUser
 
 ## SYNOPSIS
-Add user and associated permissions to cluster.
+Add user and associated permissions to cluster
 
 ## SYNTAX
 
@@ -20,23 +20,33 @@ Add-OnPremisesDataGatewayClusterUser [-Scope <PowerBIUserScope>] -GatewayCluster
 ```
 
 ## DESCRIPTION
-Add user and associated permissions to cluster.
+Add user and associated permissions to cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
+PS C:\> $userToAdd = $(Get-AzureADUser -ObjectId "testUpn@tenant.com").ObjectId
 PS C:\> $dsTypes = New-Object 'System.Collections.Generic.List[Microsoft.PowerBI.Common.Api.Gateways.Entities.DataSourceType]'
 PS C:\> $dsTypes.Add([Microsoft.PowerBI.Common.Api.Gateways.Entities.DataSourceType]::Sql)
-PS C:\> Add-OnPremisesDataGatewayClusterUser -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -PrincipalObjectId B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 -AllowedDataSourceTypes $dsTypes -Role Admin
+PS C:\> Add-OnPremisesDataGatewayClusterUser -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -PrincipalObjectId $userToAdd -AllowedDataSourceTypes $dsTypes -Role ConnectionCreatorWithReshare
 ```
 
-This example adds the user to the admin role for the gateway cluster on SQL datasource types.
+This example adds the user "testUpn@tenant.com" in the role of ConnectionCreatorWithReshare to the gateway cluster for SQL datasource types.
+
+### Example 2
+```powershell
+PS C:\> $userToAdd = $(Get-AzureADUser -ObjectId "adminTestUpn@tenant.com").ObjectId
+PS C:\> Add-OnPremisesDataGatewayClusterUser -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -PrincipalObjectId $userToAdd -AllowedDataSourceTypes $null -Role Admin
+```
+
+This example adds the user "adminTestUpn@tenant.com" in the role of Admin to the gateway cluster for all datasource types.
+Note, the AllowedDataSourceTypes must be null when the role is admin (implying all datasource types are allowed).
 
 ## PARAMETERS
 
 ### -AllowedDataSourceTypes
-Datasource types that are allowed for this user/role combination
+Datasource types that are allowed for this user/role combination. This must be null if the role is admin.
 
 ```yaml
 Type: System.Collections.Generic.List`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]
@@ -67,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -PrincipalObjectId
-User ID to add to the gateway cluster
+Azure Active Directory (AAD) principal object ID (i.e. user ID) to add to the gateway cluster
 
 ```yaml
 Type: Guid

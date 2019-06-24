@@ -5,39 +5,55 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-OnPremisesDataGatewayClusterStatus
+# Remove-OnPremisesDataGatewayClusterUser
 
 ## SYNOPSIS
-Get cluster status
+Remove user from gateway cluster
 
 ## SYNTAX
 
 ```
-Get-OnPremisesDataGatewayClusterStatus [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- [<CommonParameters>]
+Remove-OnPremisesDataGatewayClusterUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
+ -PrincipalObjectId <Guid> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get cluster status of a particular cluster. 
+Remove user from gateway cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-OnPremisesDataGatewayClusterStatus -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
+PS C:\> $userToRemove = $(Get-AzureADUser -ObjectId "testUpn@tenant.com").ObjectId
+PS C:\> Remove-OnPremisesDataGatewayClusterUser -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -PrincipalObjectId $userToRemove
 ```
 
-Get the status of the gateway cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77.
+Removes the user "testUpn@tenant.com" from the gateway cluster.
 
 ## PARAMETERS
 
 ### -GatewayClusterId
-Cluster to get status of
+Gateway cluster where the user should be removed
 
 ```yaml
 Type: Guid
 Parameter Sets: (All)
 Aliases: Cluster, Id
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PrincipalObjectId
+Azure Active Directory (AAD) principal object ID (i.e. user ID) to add to the gateway cluster
+
+```yaml
+Type: Guid
+Parameter Sets: (All)
+Aliases: User
 
 Required: True
 Position: Named
@@ -71,7 +87,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [Microsoft.PowerBI.Common.Api.Gateways.Entities.GatewayClusterStatusResponse, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]
+### System.Void
 
 ## NOTES
 

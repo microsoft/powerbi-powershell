@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayCluster
 
 ## SYNOPSIS
-Get clusters for the current user.
+Get clusters for the current user
 
 ## SYNTAX
 
@@ -27,7 +27,14 @@ is specified, all clusters will be returned.
 PS C:\> Get-OnPremisesDataGatewayCluster
 ```
 
-Get all clusters for the current user.
+Get all clusters details for the current user
+
+### Example 2
+```powershell
+PS C:\> Get-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
+```
+
+Get cluster details for the specific cluster "DC8F2C49-5731-4B27-966B-3DB5094C2E77"
 
 ## PARAMETERS
 

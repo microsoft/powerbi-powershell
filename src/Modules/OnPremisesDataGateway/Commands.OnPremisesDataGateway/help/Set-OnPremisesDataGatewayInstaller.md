@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-OnPremisesDataGatewayInstaller
 
 ## SYNOPSIS
-Modify list of users who can create new gateways on the tenant.
+Modify list of users who can create new gateways on the tenant
 
 ## SYNTAX
 
@@ -24,10 +24,21 @@ Set which users can create new gateways on the tenant.
 
 ### Example 1
 ```powershell
-PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 -Operation Add -GatewayType Personal
+PS C:\> $user1 = $(Get-AzureADUser -ObjectId "testUpn1@tenant.com").ObjectId
+PS C:\> $user2 = $(Get-AzureADUser -ObjectId "testUpn2@tenant.com").ObjectId
+PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds $user1,$user2 -Operation Add -GatewayType Personal
 ```
 
-Allow user B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 to create personal gateway.
+Allow users testUpn1@tenant.com, and testUpn2@tenant.com to create a personal gateway.
+
+### Example 2
+```powershell
+PS C:\> $user1 = $(Get-AzureADUser -ObjectId "testUpn1@tenant.com").ObjectId
+PS C:\> $user2 = $(Get-AzureADUser -ObjectId "testUpn2@tenant.com").ObjectId
+PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds $user1,$user2 -Operation Remove -GatewayType Resource
+```
+
+Users testUpn1@tenant.com, and testUpn2@tenant.com are no longer allowed to create enterprise gateways.
 
 ## PARAMETERS
 
@@ -64,7 +75,7 @@ Accept wildcard characters: False
 ```
 
 ### -PrincipalObjectIds
-List of users to modify permissions.
+List of Azure Active Directory (AAD) principal object IDs (i.e. user IDs) that can configure gateways on the tenant.
 
 ```yaml
 Type: String[]
