@@ -4,6 +4,8 @@
  */
 
 using System;
+using Microsoft.PowerBI.Common.Api.Admin;
+using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
 using Microsoft.PowerBI.Common.Api.Reports;
@@ -18,7 +20,12 @@ namespace Microsoft.PowerBI.Common.Api
         IWorkspacesClient Workspaces { get; set; }
 
         IDatasetsClient Datasets { get; set; }
+        
+        IAdminClient Admin { get; set; }
+
+        ICapacityClient Capacities { get; set; }
 
         IGatewayClient Gateways { get; set; }
+
     }
 }

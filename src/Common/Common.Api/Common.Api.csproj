@@ -8,13 +8,12 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
-    <PackageReference Include="Microsoft.PowerBI.Api" Version="2.0.121817003" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.PowerBI.Api" Version="2.7.0" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
+    <ProjectReference Include="..\Common.Dependencies\Common.Dependencies.csproj" />
   </ItemGroup>
 
 </Project>

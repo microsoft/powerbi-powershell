@@ -48,6 +48,9 @@
     <ProjectReference Include="..\..\..\Common\Common.Abstractions\Common.Abstractions.csproj">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Common.Dependencies\Common.Dependencies.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
 
   <!--<Target Name="CopyWindowsAuthenticator" AfterTargets="Build">
