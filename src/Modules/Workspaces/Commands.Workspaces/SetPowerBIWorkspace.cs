@@ -35,6 +35,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = true, ParameterSetName = PropertiesParameterSetName, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = CapacityParameterSetName, ValueFromPipelineByPropertyName = true)]
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
@@ -48,7 +49,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Alias("Group")]
         public Workspace Workspace { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = CapacityParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = CapacityParameterSetName)]
         public Guid CapacityId { get; set; }
 
         #endregion
@@ -72,6 +73,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         {
             if (this.ParameterSet.Equals(CapacityParameterSetName))
             {
+
                 using (var client = this.CreateClient())
                 {
                     var result = client.Workspaces.MigrateWorkspaceCapacity(this.Id, this.CapacityId);

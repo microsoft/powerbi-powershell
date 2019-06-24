@@ -65,15 +65,16 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             if (capacityId != Guid.Empty)
             {
-                var assignment = new PowerBI.Api.V2.Models.CapacityMigrationAssignment
-                {
-                    WorkspacesToAssign = new string[] { workspaceId.ToString() },
-                    TargetCapacityObjectId = capacityId.ToString(),
-                };
-
                 var request = new PowerBI.Api.V2.Models.AssignWorkspacesToCapacityRequest
                 {
-                    CapacityMigrationAssignments = { assignment },
+                    CapacityMigrationAssignments = new List<PowerBI.Api.V2.Models.CapacityMigrationAssignment>
+                    {
+                        new PowerBI.Api.V2.Models.CapacityMigrationAssignment
+                        {
+                            WorkspacesToAssign = new List<string> { workspaceId.ToString() },
+                            TargetCapacityObjectId = capacityId.ToString(),
+                        }
+                    },
                 };
 
                 return this.Client.Capacities.MoveWorkspacesToPremiumCapacity(request);

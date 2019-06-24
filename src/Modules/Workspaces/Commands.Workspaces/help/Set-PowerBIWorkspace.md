@@ -25,7 +25,7 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<Common
 
 ### Capacity
 ```
-Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-CapacityId <Guid>] [<CommonParameters>]
+Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> -CapacityId <Guid> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,14 +57,14 @@ If the current user is an administrator, this will update the specified workspac
 ## PARAMETERS
 
 ### -CapacityId
-{{Fill CapacityId Description}}
+The capacity object id which a workspace will be assigined to 
 
 ```yaml
 Type: Guid
 Parameter Sets: Capacity
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -91,7 +91,7 @@ ID of the workspace to update.
 
 ```yaml
 Type: Guid
-Parameter Sets: Properties
+Parameter Sets: Properties, Capacity
 Aliases: GroupId, WorkspaceId
 
 Required: True

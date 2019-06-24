@@ -7,8 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using Microsoft.PowerBI.Commands.Capacities;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,6 +19,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
     public static class WorkspacesTestUtilities
     {
         public static CmdletInfo GetPowerBIWorkspaceCmdletInfo => new CmdletInfo($"{GetPowerBIWorkspace.CmdletVerb}-{GetPowerBIWorkspace.CmdletName}", typeof(GetPowerBIWorkspace));
+
+        private static CmdletInfo GetPowerBICapacityCmdletInfo => new CmdletInfo($"{GetPowerBICapacity.CmdletVerb}-{GetPowerBICapacity.CmdletName}", typeof(GetPowerBICapacity));
+
 
         public static void AssertShouldContinueOrganizationTest(Workspace workspace)
         {
@@ -48,6 +53,16 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         public static Workspace GetFirstWorkspaceInOrganization(System.Management.Automation.PowerShell ps)
         {
             return InvokeGetPowerBIWorkspace(ps, PowerBIUserScope.Organization, OperationType.GetFirstWorkspaceInOrganization);
+        }
+
+        public static Guid GetFirstCapacityInOrganization(System.Management.Automation.PowerShell ps)
+        {
+            ps.AddCommand(GetPowerBICapacityCmdletInfo).AddParameter(nameof(GetPowerBICapacity.Scope), PowerBIUserScope.Organization); ;
+
+            var results = ps.Invoke();
+            TestUtilities.AssertNoCmdletErrors(ps);
+
+            return results.Select(x => (Capacity)x.BaseObject).First().Id;
         }
 
         // TODO: Until the non-admin endpoint supports users, this can only call the cmdlet with Organization scope
