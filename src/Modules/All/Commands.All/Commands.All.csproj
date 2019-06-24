@@ -29,10 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\Commands.Data\Commands.Data.csproj" />
-    <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
-    <ProjectReference Include="..\..\Reports\Commands.Reports\Commands.Reports.csproj" />
-    <ProjectReference Include="..\..\Workspaces\Commands.Workspaces\Commands.Workspaces.csproj" />
+    <ProjectReference Include="..\..\**\*.csproj" Exclude="..\..\**\$(MSBuildThisFile);..\..\**\*.Test.csproj" />
   </ItemGroup>
 
 </Project>
