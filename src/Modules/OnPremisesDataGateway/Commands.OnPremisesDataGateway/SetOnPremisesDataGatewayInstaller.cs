@@ -42,7 +42,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                 };
 
                 var result = client.Gateways.UpdateInstallerPrincipals(request).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }
