@@ -57,7 +57,7 @@ If the current user is an administrator, this will update the specified workspac
 ## PARAMETERS
 
 ### -CapacityId
-The capacity object id which a workspace will be assigined to 
+The capacity object id which a workspace will be assigined to. If CapacityId is set to "00000000-0000-0000-0000-000000000000", the workspace will be migrated to shared capacity.
 
 ```yaml
 Type: Guid
