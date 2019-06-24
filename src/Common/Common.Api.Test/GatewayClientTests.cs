@@ -349,12 +349,15 @@ namespace Microsoft.PowerBI.Common.Api.Test
 
             // Arrange
             var principalObjectId = Guid.NewGuid().ToString();
-            var serializedODataResponse = $@"[
-  {{
-    ""id"":""{principalObjectId}"",
-    ""type"":""Personal""
-  }}
-]";
+            var serializedODataResponse = $@"{{
+  ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayInstallers"",
+  ""value"": [
+    {{
+      ""id"":""{principalObjectId}"",
+      ""type"":""Personal""
+    }}
+  ]
+}}";
 
             var client = Utilities.GetTestClient(serializedODataResponse);
 
@@ -370,22 +373,29 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
             // Arrange
             var principalObjectId = Guid.NewGuid().ToString();
-            var oDataResponse = new InstallerPrincipal[]
-            {
-                new InstallerPrincipal{
-                    PrincipalObjectId = principalObjectId,
-                    GatewayType = GatewayType.Personal.ToString()
-                }
-            };
+            var oDataResponse = new ODataResponseList<InstallerPrincipal>
+                                {
+                                    ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayInstallers",
+                                    Value = new[]
+                                            {
+                                                new InstallerPrincipal
+                                                {
+                                                    PrincipalObjectId = principalObjectId,
+                                                    GatewayType       = GatewayType.Personal.ToString()
+                                                }
+                                            }
+                                };
 
-            var serializedODataResponse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
+            var serializedODataResponse = JsonConvert.SerializeObject(
+                oDataResponse,
+                new Newtonsoft.Json.Converters.StringEnumConverter());
             var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetInstallerPrincipals(GatewayType.Personal);
 
             // Assert
-            oDataResponse.Should().BeEquivalentTo(result);
+            oDataResponse.Value.Should().BeEquivalentTo(result);
         }
 
         [TestMethod]
