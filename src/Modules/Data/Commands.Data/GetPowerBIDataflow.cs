@@ -83,6 +83,11 @@ namespace Microsoft.PowerBI.Commands.Data
             {
                 this.Logger.ThrowTerminatingError($"{nameof(this.Filter)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
             }
+
+            if (this.Scope == PowerBIUserScope.Individual && this.WorkspaceId == null && this.Workspace == null)
+            {
+                this.Logger.ThrowTerminatingError($"When -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Individual)}, {nameof(this.Workspace)} or {nameof(this.WorkspaceId)} must be applied");
+            }
         }
 
         public override void ExecuteCmdlet()

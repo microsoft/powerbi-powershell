@@ -47,16 +47,16 @@ Get-PowerBIDataflow [-Scope <PowerBIUserScope>] [-First <Int32>] [-Skip <Int32>]
 ## DESCRIPTION
 Retrieves a list of Power BI dataflows that match the specified search criteria and scope.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
-For -Scope Individual, dataflows are returned from only from the specified Workspace, using the given -Workspace or -WorkspaceId parameter.
+For -Scope Individual, dataflows are returned only from the specified Workspace, using the given -Workspace or -WorkspaceId parameter.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-PowerBIDataflow
+PS C:\> Get-PowerBIDataflow -WorkspaceId ed451706-2b02-430c-b25c-20c0842c6375
 ```
 
-Returns a list of all Power BI dataflows a user has access to.
+Returns a list of all Power BI dataflows in workpsace with ID ed451706-2b02-430c-b25c-20c0842c6375 that the user has access to.
 
 ### Example 2
 ```powershell
