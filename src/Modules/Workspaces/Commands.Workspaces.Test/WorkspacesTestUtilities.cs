@@ -57,7 +57,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
         public static Guid GetFirstCapacityInOrganization(System.Management.Automation.PowerShell ps)
         {
-            ps.AddCommand(GetPowerBICapacityCmdletInfo).AddParameter(nameof(GetPowerBICapacity.Scope), PowerBIUserScope.Organization); ;
+            ps.AddCommand(GetPowerBICapacityCmdletInfo).AddParameter(nameof(GetPowerBICapacity.Scope), PowerBIUserScope.Organization);
 
             var results = ps.Invoke();
             TestUtilities.AssertNoCmdletErrors(ps);
