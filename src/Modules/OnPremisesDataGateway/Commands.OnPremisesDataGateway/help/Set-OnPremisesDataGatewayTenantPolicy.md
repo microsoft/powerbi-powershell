@@ -8,17 +8,17 @@ schema: 2.0.0
 # Set-OnPremisesDataGatewayTenantPolicy
 
 ## SYNOPSIS
-Set the gateway creation policy for the tenant
+Set the gateway installation and registration policy for the tenant
 
 ## SYNTAX
 
 ```
 Set-OnPremisesDataGatewayTenantPolicy [-ResourceGatewayInstallPolicy <PolicyType>]
- [-PersonalGatewayInstallPolicy <PolicyType>] [<CommonParameters>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Set the gateway creation policy for the tenant
+Set the gateway installation and registration policy for the tenant. 
 
 ## EXAMPLES
 
@@ -27,28 +27,12 @@ Set the gateway creation policy for the tenant
 PS C:\> Set-OnPremisesDataGatewayTenantPolicy -ResourceGatewayInstallPolicy Open
 ```
 
-Allow users to create on-premises data gateways on the current user's tenant.
+Allow users to install and register on-premises data gateways on the user's tenant.
 
 ## PARAMETERS
-
-### -PersonalGatewayInstallPolicy
-The personal gateway creation tenant policy
-
-```yaml
-Type: PolicyType
-Parameter Sets: (All)
-Aliases:
-Accepted values: None, Open, Restricted
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
 ```
-
 ### -ResourceGatewayInstallPolicy
-The on-premises data gateway creation tenant policy
+The on-premises data gateway in a standard mode installation and registration tenant policy. Setting it to "Open" would enable all users to install and register gateways while setting it to "Restricted" would restrict users.
 
 ```yaml
 Type: PolicyType

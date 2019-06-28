@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-OnPremisesDataGatewayInstaller
 
 ## SYNOPSIS
-Modify list of users who can create new gateways on the tenant
+Modify list of users who can install and register new gateways on the tenant
 
 ## SYNTAX
 
@@ -18,7 +18,7 @@ Set-OnPremisesDataGatewayInstaller [-PrincipalObjectIds <String[]>] -Operation <
 ```
 
 ## DESCRIPTION
-Set which users can create new gateways on the tenant.
+Set which users can install and register new gateways on the tenant.
 
 ## EXAMPLES
 
@@ -26,10 +26,10 @@ Set which users can create new gateways on the tenant.
 ```powershell
 PS C:\> $user1 = $(Get-AzureADUser -ObjectId "testUpn1@tenant.com").ObjectId
 PS C:\> $user2 = $(Get-AzureADUser -ObjectId "testUpn2@tenant.com").ObjectId
-PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds $user1,$user2 -Operation Add -GatewayType Personal
+PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds $user1,$user2 -Operation Add -GatewayType Resource
 ```
 
-Allow users testUpn1@tenant.com, and testUpn2@tenant.com to create a personal gateway.
+Allow users testUpn1@tenant.com, and testUpn2@tenant.com to register and install an On-premises data gateway in a standard mode.
 
 ### Example 2
 ```powershell
@@ -38,18 +38,18 @@ PS C:\> $user2 = $(Get-AzureADUser -ObjectId "testUpn2@tenant.com").ObjectId
 PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds $user1,$user2 -Operation Remove -GatewayType Resource
 ```
 
-Users testUpn1@tenant.com, and testUpn2@tenant.com are no longer allowed to create enterprise gateways.
+Users testUpn1@tenant.com, and testUpn2@tenant.com are no longer allowed to register and install an On-premises data gateway in a standard mode.
 
 ## PARAMETERS
 
 ### -GatewayType
-Gateway type the command takes effect on.
+Gateway type the command takes effect on. The value "Resource" below would mean the On-premises data gateway running in a standard mode.
 
 ```yaml
 Type: GatewayType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Resource, Personal
+Accepted values: Resource
 
 Required: True
 Position: Named

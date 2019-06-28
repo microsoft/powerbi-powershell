@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayInstaller
 
 ## SYNOPSIS
-Get users authorized to create gateways on the tenant
+Get users authorized to install and register gateways on the tenant
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Get-OnPremisesDataGatewayInstaller [-GatewayTypeParameter <GatewayType>] [<Commo
 ```
 
 ## DESCRIPTION
-Get users authorized to create gateways on the current user's tenant
+Get users authorized to install and register gateways on the current user's tenant. This command is availble only for Tenant/service admins.
 
 ## EXAMPLES
 
@@ -26,22 +26,22 @@ Get users authorized to create gateways on the current user's tenant
 PS C:\> Get-OnPremisesDataGatewayInstaller
 ```
 
-Get a list of users authorized to create gateways on the tenant.
+Get a list of users authorized to install and register gateways on the tenant.
 
 ## PARAMETERS
 
 ### -GatewayTypeParameter
-Filter the authorized user list by gateway type.
+Filter the authorized user list by gateway type. The value of "Resource" below would list all On-premises data gateways running in the standard mode.
 
 ```yaml
 Type: GatewayType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Resource, Personal
+Accepted values: Resource
 
 Required: False
 Position: Named
-Default value: None
+Default value: All
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

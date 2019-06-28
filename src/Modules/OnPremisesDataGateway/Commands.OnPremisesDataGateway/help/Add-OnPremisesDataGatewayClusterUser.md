@@ -46,7 +46,9 @@ Note, the AllowedDataSourceTypes must be null when the role is admin (implying a
 ## PARAMETERS
 
 ### -AllowedDataSourceTypes
-Datasource types that are allowed for this user/role combination. This must be null if the role is admin.
+Datasource types that are allowed for this user/role combination. This must be null if the role is admin(implying all datasource types are allowed). 
+The list of data source type may change based on supported data sources. 
+Note: This parameter applies only for PowerApps and Flow.
 
 ```yaml
 Type: System.Collections.Generic.List`1[Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceType]
@@ -62,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -GatewayClusterId
-Gateway cluster where the user should be added
+Gateway cluster to which the user should be added
 
 ```yaml
 Type: Guid
@@ -92,12 +94,15 @@ Accept wildcard characters: False
 ```
 
 ### -Role
-Role to apply to this user on the cluster
+Role to apply to this user on the cluster. Users can be added as admins, connection creators(Can Use)  or Connection Creators with sharing(Can use + Share) capability. 
+Connection creators(Can Use)  and  Connection Creators with sharing(Can use + Share) capability apply only for PowerApps and Flow.
+
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: Admin, ConnectionCreatorWithReshare, ConnectionCreator 
 
 Required: True
 Position: Named
@@ -107,7 +112,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Power BI scope to run the command
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
 Type: PowerBIUserScope
@@ -117,7 +122,7 @@ Accepted values: Individual, Organization
 
 Required: False
 Position: Named
-Default value: None
+Default value: Individual
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

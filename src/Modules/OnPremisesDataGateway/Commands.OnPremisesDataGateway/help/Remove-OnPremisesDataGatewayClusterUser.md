@@ -63,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Power BI scope to run the command
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
 Type: PowerBIUserScope
@@ -73,7 +73,7 @@ Accepted values: Individual, Organization
 
 Required: False
 Position: Named
-Default value: None
+Default value: Individual
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
