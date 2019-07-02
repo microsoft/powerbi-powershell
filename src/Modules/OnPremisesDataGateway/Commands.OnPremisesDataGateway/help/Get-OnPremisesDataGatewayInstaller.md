@@ -37,7 +37,7 @@ Filter the authorized user list by gateway type. The value of "Resource" below w
 Type: GatewayType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Resource
+Accepted values: Resource, Personal
 
 Required: False
 Position: Named

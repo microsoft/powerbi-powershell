@@ -94,15 +94,14 @@ Accept wildcard characters: False
 ```
 
 ### -Role
-Role to apply to this user on the cluster. Users can be added as admins, connection creators(Can Use)  or Connection Creators with sharing(Can use + Share) capability. 
-Connection creators(Can Use)  and  Connection Creators with sharing(Can use + Share) capability apply only for PowerApps and Flow.
+Role to apply to this user on the cluster. Users can be added as admins, connection creators(Can Use) or Connection Creators with sharing(Can use + Share) capability.
+Connection creators(Can Use) and Connection Creators with sharing(Can use + Share) capability apply only for PowerApps and Flow. Accepted values for this paramater include: "Admin", "ConnectionCreatorWithReshare", and "ConnectionCreator"
 
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Admin, ConnectionCreatorWithReshare, ConnectionCreator 
 
 Required: True
 Position: Named

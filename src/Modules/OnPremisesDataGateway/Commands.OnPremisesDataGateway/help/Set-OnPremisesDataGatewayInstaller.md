@@ -49,7 +49,7 @@ Gateway type the command takes effect on. The value "Resource" below would mean 
 Type: GatewayType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Resource
+Accepted values: Resource, Personal
 
 Required: True
 Position: Named

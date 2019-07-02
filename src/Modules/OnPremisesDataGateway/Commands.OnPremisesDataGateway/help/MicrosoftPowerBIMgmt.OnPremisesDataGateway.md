@@ -21,10 +21,10 @@ Get clusters for the current user
 Get cluster status
 
 ### [Get-OnPremisesDataGatewayInstaller](Get-OnPremisesDataGatewayInstaller.md)
-Get users authorized to create gateways on the tenant
+Get users authorized to install and register gateways on the tenant
 
 ### [Get-OnPremisesDataGatewayTenantPolicy](Get-OnPremisesDataGatewayTenantPolicy.md)
-Get gateway tenant policy
+Get the gateway installation and registration policy for the tenant.
 
 ### [Remove-OnPremisesDataGatewayCluster](Remove-OnPremisesDataGatewayCluster.md)
 Remove a gateway cluster
@@ -39,8 +39,8 @@ Remove user from gateway cluster
 Set attributes of an existing gateway cluster
 
 ### [Set-OnPremisesDataGatewayInstaller](Set-OnPremisesDataGatewayInstaller.md)
-Modify list of users who can create new gateways on the tenant
+Modify list of users who can install and register new gateways on the tenant
 
 ### [Set-OnPremisesDataGatewayTenantPolicy](Set-OnPremisesDataGatewayTenantPolicy.md)
-Set the gateway creation policy for the tenant
+Set the gateway installation and registration policy for the tenant
 
