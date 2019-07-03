@@ -2,7 +2,7 @@
 <Configuration>
   <ViewDefinitions>
     <View>
-      <Name>Default</Name>
+      <Name>Microsoft.PowerBI.Common.Api.Gateways.Entities.GatewayTenant</Name>
       <ViewSelectedBy>
         <TypeName>Microsoft.PowerBI.Common.Api.Gateways.Entities.GatewayTenant</TypeName>
       </ViewSelectedBy>
