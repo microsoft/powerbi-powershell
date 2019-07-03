@@ -44,7 +44,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
             // Arrange
             var clusterStatus = "the cluster status";
-            var serializedODataRepsonse = $@"{{
+            var serializedODataResponse = $@"{{
   ""@odata.context"":""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/status/$entity"",
   ""clusterStatus"":""{clusterStatus}"",
   ""gatewayStaticCapabilities"":""the static capabilities"",
@@ -52,7 +52,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
   ""gatewayUpgradeState"":""the upgrade state""
 }}";
 
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetGatewayClusterStatus(Guid.NewGuid(), true);
@@ -75,8 +75,8 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 GatewayUpgradeState = "the upgrade state"
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var serializedODataResponse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetGatewayClusterStatus(Guid.NewGuid(), true);
@@ -90,7 +90,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
             // Arrange
             var clusterId = Guid.NewGuid();
-            var serializedODataRepsonse = $@"{{
+            var serializedODataResponse = $@"{{
     ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters"",
     ""value"": [
         {{
@@ -119,7 +119,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         }}
     ]
 }}";
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetGatewayClusters(true);
@@ -189,8 +189,8 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 }
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var serializedODataResponse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetGatewayClusters(true);
@@ -205,7 +205,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
 
             // Arrange
             var clusterId = Guid.NewGuid();
-            var serializedOdataRepsonse = $@"{{
+            var serializedOdataResponse = $@"{{
     ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayClusters/$entity"",
     ""id"": ""{clusterId}"",
     ""name"": ""cluster"",
@@ -230,7 +230,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
         }}
     ]
 }}";
-            var client = Utilities.GetTestClient(serializedOdataRepsonse);
+            var client = Utilities.GetTestClient(serializedOdataResponse);
 
             // Act
             var result = await client.GetGatewayClusters(clusterId, true);
@@ -289,8 +289,8 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 }
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var serializedODataResponse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetGatewayClusters(clusterId, true);
@@ -305,13 +305,13 @@ namespace Microsoft.PowerBI.Common.Api.Test
 
             // Arrange
             var tenantId = Guid.NewGuid().ToString();
-            var serializedODataRepsonse = $@"{{
+            var serializedODataResponse = $@"{{
   ""@odata.context"":""http://example.net/v2.0/myorg/gatewayPolicy"",
   ""id"":""{tenantId}"",
   ""policy"":""None""
 }}";
 
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetTenantPolicy();
@@ -333,8 +333,8 @@ namespace Microsoft.PowerBI.Common.Api.Test
                 Policy = TenantPolicy.None
             };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var serializedODataResponse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetTenantPolicy();
@@ -349,14 +349,17 @@ namespace Microsoft.PowerBI.Common.Api.Test
 
             // Arrange
             var principalObjectId = Guid.NewGuid().ToString();
-            var serializedODataRepsonse = $@"[
-  {{
-    ""id"":""{principalObjectId}"",
-    ""type"":""Personal""
-  }}
-]";
+            var serializedODataResponse = $@"{{
+  ""@odata.context"": ""http://example.net/v2.0/myorg/me/$metadata#gatewayInstallers"",
+  ""value"": [
+    {{
+      ""id"":""{principalObjectId}"",
+      ""type"":""Personal""
+    }}
+  ]
+}}";
 
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetInstallerPrincipals(GatewayType.Personal);
@@ -370,22 +373,29 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
             // Arrange
             var principalObjectId = Guid.NewGuid().ToString();
-            var oDataResponse = new InstallerPrincipal[]
-            {
-                new InstallerPrincipal{
-                    PrincipalObjectId = principalObjectId,
-                    GatewayType = GatewayType.Personal.ToString()
-                }
-            };
+            var oDataResponse = new ODataResponseList<InstallerPrincipal>
+                                {
+                                    ODataContext = "http://example.net/v2.0/myorg/me/$metadata#gatewayInstallers",
+                                    Value = new[]
+                                            {
+                                                new InstallerPrincipal
+                                                {
+                                                    PrincipalObjectId = principalObjectId,
+                                                    GatewayType       = GatewayType.Personal.ToString()
+                                                }
+                                            }
+                                };
 
-            var serializedODataRepsonse = JsonConvert.SerializeObject(oDataResponse, new Newtonsoft.Json.Converters.StringEnumConverter());
-            var client = Utilities.GetTestClient(serializedODataRepsonse);
+            var serializedODataResponse = JsonConvert.SerializeObject(
+                oDataResponse,
+                new Newtonsoft.Json.Converters.StringEnumConverter());
+            var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
             var result = await client.GetInstallerPrincipals(GatewayType.Personal);
 
             // Assert
-            oDataResponse.Should().BeEquivalentTo(result);
+            oDataResponse.Value.Should().BeEquivalentTo(result);
         }
 
         [TestMethod]

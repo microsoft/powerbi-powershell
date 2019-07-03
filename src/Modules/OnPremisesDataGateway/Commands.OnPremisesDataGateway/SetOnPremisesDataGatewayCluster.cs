@@ -67,7 +67,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                 };
 
                 var result = client.Gateways.PatchGatewayCluster(GatewayClusterId, request, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

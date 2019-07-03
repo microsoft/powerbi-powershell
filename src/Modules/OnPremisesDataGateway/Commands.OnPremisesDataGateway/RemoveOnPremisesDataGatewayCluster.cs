@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
             using (var client = CreateClient())
             {
                 var result = client.Gateways.DeleteGatewayCluster(GatewayClusterId, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

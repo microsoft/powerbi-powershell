@@ -68,10 +68,6 @@ Planned\upcoming cmdlets.
 
 To be defined
 
-## Gateway
-
-If applicable, should reside in https://www.powershellgallery.com/packages/OnPremisesDataGatewayMgmt
-
 
 [1]: https://msdn.microsoft.com/en-us/library/ms714428(v=vs.85).aspx
 [2]: https://msdn.microsoft.com/en-us/library/dd878270(v=vs.85).aspx

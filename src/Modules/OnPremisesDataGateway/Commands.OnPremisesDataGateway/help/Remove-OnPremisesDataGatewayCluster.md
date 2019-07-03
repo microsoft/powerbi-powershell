@@ -5,40 +5,38 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-OnPremisesDataGatewayInstaller
+# Remove-OnPremisesDataGatewayCluster
 
 ## SYNOPSIS
-Modify list of users who can create new gateways on the tenant.
+Remove a gateway cluster
 
 ## SYNTAX
 
 ```
-Set-OnPremisesDataGatewayInstaller [-PrincipalObjectIds <String[]>] -Operation <OperationType>
- -GatewayType <GatewayType> [<CommonParameters>]
+Remove-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Set which users can create new gateways on the tenant.
+Remove a gateway cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 -Operation Add -GatewayType Personal
+PS C:\> Remove-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
 ```
 
-Allow user B9B846A1-BFFC-459C-BF9B-1EE01EED90B6 to create personal gateway.
+Remove the cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
 
 ## PARAMETERS
 
-### -GatewayType
-Gateway type the command takes effect on.
+### -GatewayClusterId
+The cluster ID of the gateway to remove
 
 ```yaml
-Type: GatewayType
+Type: Guid
 Parameter Sets: (All)
-Aliases:
-Accepted values: Resource, Personal
+Aliases: Cluster, Id
 
 Required: True
 Position: Named
@@ -47,29 +45,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Operation
-The operation to preform on the permission list.
+### -Scope
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
-Type: OperationType
+Type: PowerBIUserScope
 Parameter Sets: (All)
 Aliases:
-Accepted values: None, Add, Remove
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PrincipalObjectIds
-List of users to modify permissions.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases: Users
+Accepted values: Individual, Organization
 
 Required: False
 Position: Named

@@ -5,61 +5,59 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-OnPremisesDataGatewayTenantPolicy
+# Get-OnPremisesDataGatewayClusterStatus
 
 ## SYNOPSIS
-Set the gateway creation policy for the tenant
+Get cluster status
 
 ## SYNTAX
 
 ```
-Set-OnPremisesDataGatewayTenantPolicy [-ResourceGatewayInstallPolicy <PolicyType>]
- [-PersonalGatewayInstallPolicy <PolicyType>] [<CommonParameters>]
+Get-OnPremisesDataGatewayClusterStatus [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Set the gateway creation policy for the tenant
+Get cluster status of a particular cluster. 
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Set-OnPremisesDataGatewayTenantPolicy -ResourceGatewayInstallPolicy
-Open
+PS C:\> Get-OnPremisesDataGatewayClusterStatus -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
 ```
 
-Allow users to create on-premises data gateways on the current user's tenant.
+Get the status of the gateway cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77.
 
 ## PARAMETERS
 
-### -PersonalGatewayInstallPolicy
-The personal gateway creation tenant policy
+### -GatewayClusterId
+Cluster to get status of
 
 ```yaml
-Type: PolicyType
+Type: Guid
 Parameter Sets: (All)
-Aliases:
-Accepted values: None, Open, Restricted
+Aliases: Cluster, Id
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ResourceGatewayInstallPolicy
-The on-premises data gateway creation tenant policy
+### -Scope
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
-Type: PolicyType
+Type: PowerBIUserScope
 Parameter Sets: (All)
 Aliases:
-Accepted values: None, Open, Restricted
+Accepted values: Individual, Organization
 
 Required: False
 Position: Named
-Default value: None
+Default value: Individual
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -73,7 +71,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Void
+### [Microsoft.PowerBI.Common.Api.Gateways.Entities.GatewayClusterStatusResponse, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]
 
 ## NOTES
 

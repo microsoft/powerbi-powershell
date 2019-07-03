@@ -5,71 +5,56 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-OnPremisesDataGatewayClusterMember
+# Set-OnPremisesDataGatewayTenantPolicy
 
 ## SYNOPSIS
-Remove gateway from gateway cluster
+Set the gateway installation and registration policy for the tenant
 
 ## SYNTAX
 
 ```
-Remove-OnPremisesDataGatewayClusterMember [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -MemberGatewayId <Guid> [<CommonParameters>]
+Set-OnPremisesDataGatewayTenantPolicy [-ResourceGatewayInstallPolicy <PolicyType>]
+ [-PersonalGatewayInstallPolicy <PolicyType>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Remove gateway from gateway cluster
+Set the gateway installation and registration policy for the tenant. 
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Remove-OnPremisesDataGatewayClusterMember -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -MemberGatewayId E407A364-3A89-4E21-8791-C108DB41E75A
+PS C:\> Set-OnPremisesDataGatewayTenantPolicy -ResourceGatewayInstallPolicy Open
 ```
 
-Remove the gateway with ID E407A364-3A89-4E21-8791-C108DB41E75A from the
-cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
+Allow users to install and register on-premises data gateways on the user's tenant.
 
 ## PARAMETERS
 
-### -GatewayClusterId
-The cluster where the gateway to be removed is a member
+### -PersonalGatewayInstallPolicy
+Tenant policy for Personal gateway installation and registration
 
 ```yaml
-Type: Guid
+Type: PolicyType
 Parameter Sets: (All)
-Aliases: Cluster, Id
+Aliases:
+Accepted values: None, Open, Restricted
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -MemberGatewayId
-The gateway to remove from the cluster
+### -ResourceGatewayInstallPolicy
+The on-premises data gateway in a standard mode installation and registration tenant policy. Setting it to "Open" would enable all users to install and register gateways while setting it to "Restricted" would restrict users.
 
 ```yaml
-Type: Guid
+Type: PolicyType
 Parameter Sets: (All)
 Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Scope
-Power BI scope to run the command
-
-```yaml
-Type: PowerBIUserScope
-Parameter Sets: (All)
-Aliases:
-Accepted values: Individual, Organization
+Accepted values: None, Open, Restricted
 
 Required: False
 Position: Named

@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Abstractions.Utilities;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
@@ -65,15 +66,16 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             var url = Invariant($"{GetODataUrlStart(asIndividual: false)}/gatewayInstallers");
             if (type != null)
             {
-                url += Invariant($"?type={type.ToString()}");
+                var encodedOdataFilter = HttpUtility.UrlEncode(Invariant($"type eq '{type.ToString()}'"));
+                url += Invariant($"?$filter={encodedOdataFilter}");
             }
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
-            var installerPrincipal = await DeserializeResponseContent<IEnumerable<InstallerPrincipal>>(response);
+            var odataInstallerPrincipal = await DeserializeResponseContent<ODataResponseList<InstallerPrincipal>>(response);
 
-            return installerPrincipal;
+            return odataInstallerPrincipal.Value;
         }
 
         public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
@@ -133,7 +135,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> AddUsersToGatewayCluster(Guid gatewayClusterId, GatewayClusterAddPrincipalRequest addPrincipalRequest, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters({gatewayClusterId})/permissions");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/permissions");
 
             var httpContent = SerializeObject(addPrincipalRequest);
             var response =  await HttpClientInstance.PostAsync(url, httpContent);
@@ -144,7 +146,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> DeleteUserOnGatewayCluster(Guid gatewayClusterId, Guid permissionId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters({gatewayClusterId})/permissions({permissionId})");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/permissions/{permissionId}");
 
             var response = await HttpClientInstance.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
