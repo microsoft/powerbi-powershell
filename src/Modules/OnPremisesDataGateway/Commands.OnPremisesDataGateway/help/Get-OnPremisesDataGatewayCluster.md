@@ -36,6 +36,12 @@ PS C:\> Get-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-96
 
 Get cluster details for the specific cluster "DC8F2C49-5731-4B27-966B-3DB5094C2E77"
 
+### Example 3
+```powershell
+PS C:\> Get-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 | Select -ExpandProperty MemberGateways
+```
+Get details of each member gateway in the specific cluster "DC8F2C49-5731-4B27-966B-3DB5094C2E77".
+
 ## PARAMETERS
 
 ### -GatewayClusterId
