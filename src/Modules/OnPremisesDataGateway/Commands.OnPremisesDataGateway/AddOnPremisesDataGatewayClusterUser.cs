@@ -15,7 +15,7 @@ using Microsoft.PowerBI.Common.Client;
 namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(HttpStatusCode))]
+    [OutputType(typeof(void))]
     public class AddOnPremisesDataGatewayClusterUser : PowerBIClientCmdlet, IUserScope
     {
         public const string CmdletName = "OnPremisesDataGatewayClusterUser";
