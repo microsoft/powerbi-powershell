@@ -55,8 +55,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetOnPremisesDataGatewayTenantPolicy(initFactory)
             {
-                ResourceGatewayInstallPolicy = PolicyType.Restricted,
-                PersonalGatewayInstallPolicy = PolicyType.None
+                ResourceGatewayInstallPolicy = PolicyType.Restricted
             };
 
             // Act
