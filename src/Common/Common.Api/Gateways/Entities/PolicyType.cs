@@ -10,8 +10,9 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
     [DataContract]
     public enum PolicyType
     {
-        [EnumMember]
-        None = 0,
+        // NOTE: The endpoint that accepts this contract includes 'None'
+        //[EnumMember]
+        //None = 0,
         [EnumMember]
         Open = 1,
         [EnumMember]

@@ -489,8 +489,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient("");
             var request = new UpdateGatewayPolicyRequest()
             {
-                ResourceGatewayInstallPolicy = PolicyType.Restricted,
-                PersonalGatewayInstallPolicy = PolicyType.None
+                ResourceGatewayInstallPolicy = PolicyType.Restricted
             };
 
             // Act
