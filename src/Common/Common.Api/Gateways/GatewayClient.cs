@@ -51,7 +51,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters?$expand=permissions,memberGateways");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -80,7 +80,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}?$expand=permissions,memberGateways");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -92,7 +92,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<GatewayClusterStatusResponse> GetGatewayClusterStatus(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}/status?$expand=permissions,memberGateways");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/status?$expand=permissions,memberGateways");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -104,7 +104,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> PatchGatewayCluster(Guid gatewayClusterId, PatchGatewayClusterRequest patchGatewayClusterRequest, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}");
 
             var httpContent = SerializeObject(patchGatewayClusterRequest);
             var response = await HttpClientInstance.PatchAsync(url, httpContent);
@@ -115,7 +115,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> DeleteGatewayCluster(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}");
 
             var response = await HttpClientInstance.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
@@ -125,7 +125,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> DeleteGatewayClusterMember(Guid gatewayClusterId, Guid memberGatewayId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}/memberGateways/{memberGatewayId}");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/memberGateways/{memberGatewayId}");
 
             var response = await HttpClientInstance.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
@@ -135,7 +135,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> AddUsersToGatewayCluster(Guid gatewayClusterId, GatewayClusterAddPrincipalRequest addPrincipalRequest, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}/permissions");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/permissions");
 
             var httpContent = SerializeObject(addPrincipalRequest);
             var response =  await HttpClientInstance.PostAsync(url, httpContent);
@@ -190,7 +190,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<IEnumerable<GatewayClusterDatasource>> GetGatewayClusterDatasources(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -202,7 +202,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<GatewayClusterDatasource> GetGatewayClusterDatasource(Guid gatewayClusterId, Guid gatewayDatasourceId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -215,7 +215,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         public async Task<HttpResponseMessage> GetGatewayClusterDatasourceStatus(Guid gatewayClusterId, Guid gatewayDatasourceId, bool asIndividual)
         {
 
-            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/status");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/status");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -229,7 +229,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             bool asIndividual)
         {
 
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources");
 
             var httpContent = SerializeObject(datasourceToGatewayClusterRequest);
             var response = await HttpClientInstance.PostAsync(url, httpContent);
@@ -246,7 +246,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             UpdateGatewayClusterDatasourceRequest updateDatasourceRequest,
             bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}");
 
             var httpContent = SerializeObject(updateDatasourceRequest);
             var response = await HttpClientInstance.PatchAsync(url, httpContent);
@@ -257,7 +257,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> DeleteGatewayClusterDatasource(Guid gatewayClusterId, Guid gatewayDatasourceId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}");
 
             var response = await HttpClientInstance.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
@@ -268,7 +268,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
         public async Task<HttpResponseMessage> AddUsersToGatewayClusterDatasource(Guid gatewayClusterId, Guid gatewayDatasourceId, DatasourceUser datasourceUser, bool asIndividual)
         {
 
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/users");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/users");
 
             var httpContent = SerializeObject(datasourceUser);
             var response = await HttpClientInstance.PostAsync(url, httpContent);
@@ -279,7 +279,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<IEnumerable<DatasourceUser>> GetGatewayClusterDatasourceUsers(Guid gatewayClusterId, Guid gatewayDatasourceId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/users");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/users");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -291,7 +291,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<HttpResponseMessage> RemoveGatewayClusterDatasourceUser(Guid gatewayClusterId, Guid gatewayDatasourceId, string user, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/users/{user}");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/users/{user}");
 
             var response = await HttpClientInstance.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
@@ -305,7 +305,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             DatasourceCredentialDetails updateCredentialDetails,
             bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayclusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/credentials");
+            var url = Invariant($"{GetODataUrlStart(asIndividual: true)}/gatewayClusters/{gatewayClusterId}/datasources/{gatewayDatasourceId}/credentials");
 
             var httpContent = SerializeObject(updateCredentialDetails);
             var response = await HttpClientInstance.PatchAsync(url, httpContent);
