@@ -38,7 +38,7 @@ Tenant policy for Personal gateway installation and registration
 Type: PolicyType
 Parameter Sets: (All)
 Aliases:
-Accepted values: None, Open, Restricted
+Accepted values: Open, Restricted
 
 Required: False
 Position: Named
@@ -54,7 +54,7 @@ The on-premises data gateway in a standard mode installation and registration te
 Type: PolicyType
 Parameter Sets: (All)
 Aliases:
-Accepted values: None, Open, Restricted
+Accepted values: Open, Restricted
 
 Required: False
 Position: Named
