@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Gateways\Entities\MashupFunctionParameterValues.cs" />
-    <Compile Remove="Gateways\Entities\MashupTestConnectionDetails.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <PackageReference Include="Microsoft.PowerBI.Api" Version="2.7.0" />
   </ItemGroup>
   
