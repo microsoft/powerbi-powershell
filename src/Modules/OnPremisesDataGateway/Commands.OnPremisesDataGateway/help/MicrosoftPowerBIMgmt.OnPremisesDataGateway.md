@@ -23,9 +23,6 @@ Add user and associated permissions to cluster
 ### [Get-OnPremisesDataGatewayCluster](Get-OnPremisesDataGatewayCluster.md)
 Get clusters for the current user
 
-### [Get-OnPremisesDataGatewayClusterStatus](Get-OnPremisesDataGatewayClusterStatus.md)
-Get cluster status
-
 ### [Get-OnPremisesDataGatewayClusterDatasource](Get-OnPremisesDataGatewayClusterDatasource.md)
 Returns the specified datasource from the specified cluster
 
@@ -47,18 +44,6 @@ Get the gateway installation and registration policy for the tenant.
 ### [Remove-OnPremisesDataGatewayCluster](Remove-OnPremisesDataGatewayCluster.md)
 Remove a gateway cluster
 
-### [Remove-OnPremisesDataGatewayClusterMember](Remove-OnPremisesDataGatewayClusterMember.md)
-Remove gateway from gateway cluster
-
-### [Remove-OnPremisesDataGatewayClusterUser](Remove-OnPremisesDataGatewayClusterUser.md)
-Remove user from gateway cluster
-
-### [Set-OnPremisesDataGatewayCluster](Set-OnPremisesDataGatewayCluster.md)
-Set attributes of an existing gateway cluster
-
-### [Remove-OnPremisesDataGatewayCluster](Remove-OnPremisesDataGatewayCluster.md)
-Remove a gateway cluster
-
 ### [Remove-OnPremisesDataGatewayClusterDatasource](Remove-OnPremisesDataGatewayClusterDatasource.md)
 Removes the specified datasource from the specified cluster
 
@@ -69,7 +54,7 @@ Removes the specified user from the specified datasource of the specified cluste
 Remove gateway from gateway cluster
 
 ### [Remove-OnPremisesDataGatewayClusterUser](Remove-OnPremisesDataGatewayClusterUser.md)
-Removes the specified user from the specified cluster
+Remove user from gateway cluster
 
 ### [Set-OnPremisesDataGatewayCluster](Set-OnPremisesDataGatewayCluster.md)
 Set attributes of an existing gateway cluster
