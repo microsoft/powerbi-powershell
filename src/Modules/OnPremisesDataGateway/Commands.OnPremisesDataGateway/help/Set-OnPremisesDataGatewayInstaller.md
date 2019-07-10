@@ -13,7 +13,7 @@ Modify list of users who can install and register new gateways on the tenant
 ## SYNTAX
 
 ```
-Set-OnPremisesDataGatewayInstaller [-PrincipalObjectIds <String[]>] -Operation <OperationType>
+Set-OnPremisesDataGatewayInstaller -PrincipalObjectIds <String[]> -Operation <OperationType>
  -GatewayType <GatewayType> [<CommonParameters>]
 ```
 
@@ -82,7 +82,7 @@ Type: String[]
 Parameter Sets: (All)
 Aliases: Users
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
