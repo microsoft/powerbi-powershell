@@ -26,7 +26,7 @@ Set attributes of an existing gateway cluster
 
 ### Example 1
 ```powershell
-PS C:\> Set-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -AllowCloudDatasourceRefresh true
+PS C:\> Set-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -AllowCloudDatasourceRefresh $true
 ```
 
 Allow Power BI cloud datasource refresh on the cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
