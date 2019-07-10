@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
     [OutputType(typeof(GatewayClusterDatasource))]
     public class GetOnPremisesDataGatewayClusterDatasources : PowerBIClientCmdlet, IUserScope
     {
-        public const string CmdletName = "GetOnPremisesDataGatewayClusterDatasources";
+        public const string CmdletName = "OnPremisesDataGatewayClusterDatasources";
         public const string CmdletVerb = VerbsCommon.Get;
 
         [Parameter()]
