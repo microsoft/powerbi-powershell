@@ -14,7 +14,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
     public interface IGatewayClient
     {
         Task<IEnumerable<GatewayCluster>> GetGatewayClusters(bool asIndividual);
-        Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual);
+        Task<GatewayCluster> GetGatewayCluster(Guid gatewayClusterId, bool asIndividual);
         Task<GatewayClusterStatusResponse> GetGatewayClusterStatus(Guid gatewayClusterId, bool asIndividual);
         Task<HttpResponseMessage> PatchGatewayCluster(Guid gatewayClusterId, PatchGatewayClusterRequest patchGatewayClusterRequest, bool asIndividual);
         Task<HttpResponseMessage> DeleteGatewayCluster(Guid gatewayClusterId, bool asIndividual);

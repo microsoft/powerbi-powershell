@@ -234,7 +234,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient(serializedOdataResponse);
 
             // Act
-            var result = await client.GetGatewayClusters(clusterId, true);
+            var result = await client.GetGatewayCluster(clusterId, true);
 
             // Assert
             result.Id.Should().Be(clusterId);
@@ -294,7 +294,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var client = Utilities.GetTestClient(serializedODataResponse);
 
             // Act
-            var result = await client.GetGatewayClusters(clusterId, true);
+            var result = await client.GetGatewayCluster(clusterId, true);
 
             // Assert
             oDataResponse.Should().BeEquivalentTo(result);

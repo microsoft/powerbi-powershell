@@ -112,7 +112,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .GetGatewayClusters(clusterId, true))
+                .GetGatewayCluster(clusterId, true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);

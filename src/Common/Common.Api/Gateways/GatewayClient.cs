@@ -78,7 +78,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             return odataInstallerPrincipal.Value;
         }
 
-        public async Task<GatewayCluster> GetGatewayClusters(Guid gatewayClusterId, bool asIndividual)
+        public async Task<GatewayCluster> GetGatewayCluster(Guid gatewayClusterId, bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}?$expand=permissions,memberGateways");
 
