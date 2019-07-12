@@ -37,7 +37,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter()]
         public string DisplayName { get; set; }
 
-        [Parameter()]
+        [Parameter(Mandatory = true)]
         public string Identifier { get; set; }
 
         [Parameter()]
@@ -64,7 +64,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                 };
 
                 var result = client.Gateways.AddUsersToGatewayClusterDatasource(GatewayClusterId, GatewayClusterDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

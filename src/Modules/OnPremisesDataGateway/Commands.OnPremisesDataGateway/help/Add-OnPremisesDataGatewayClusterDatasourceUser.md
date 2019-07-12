@@ -15,7 +15,7 @@ Grants the permissions required to use the specified datasource for the specifie
 ```
 Add-OnPremisesDataGatewayClusterDatasourceUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
  -GatewayClusterDatasourceId <Guid> -DatasourceUserAccessRight <String> [-DisplayName <String>]
- [-Identifier <String>] [-PrincipalType <String>] [-EmailAddress <String>] [<CommonParameters>]
+ -Identifier <String> [-PrincipalType <String>] [-EmailAddress <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,10 +25,10 @@ Grants the permissions required to use the specified datasource for the specifie
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-OnPremisesDataGatewayClusterDatasourceStatus -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804 -DatasourceUserAccessRight Read -Identifier testUpn@tenant.com
 ```
 
-{{ Add example description here }}
+Grants read access to 'testUpn@tenant.com' for the datasource.
 
 ## PARAMETERS
 
@@ -115,7 +115,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
