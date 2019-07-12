@@ -14,7 +14,7 @@ Removes the specified datasource from the specified cluster
 
 ```
 Remove-OnPremisesDataGatewayClusterDatasource [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayDatasourceId <Guid> [<CommonParameters>]
+ -GatewayClusterDatasourceId <Guid> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,8 +46,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GatewayDatasourceId
-{{Fill GatewayDatasourceId Description}}
+### -GatewayClusterDatasourceId
+{{Fill GatewayClusterDatasourceId Description}}
 
 ```yaml
 Type: Guid

@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(GetOnPremisesDataGatewayClusterDatasourceUsersInfo)
                     .AddParameter(nameof(GetOnPremisesDataGatewayClusterDatasourceUsers.GatewayClusterId), Guid.NewGuid())
-                    .AddParameter(nameof(GetOnPremisesDataGatewayClusterDatasourceUsers.GatewayDatasourceId), Guid.NewGuid());
+                    .AddParameter(nameof(GetOnPremisesDataGatewayClusterDatasourceUsers.GatewayClusterDatasourceId), Guid.NewGuid());
 
                 // Act
                 var result = ps.Invoke();
@@ -50,7 +50,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var gatewayClusterId = Guid.NewGuid();
-            var gatewayDatasourceId = Guid.NewGuid();
+            var GatewayClusterDatasourceId = Guid.NewGuid();
 
             var expectedResponse = new DatasourceUser
             {
@@ -63,14 +63,14 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .GetGatewayClusterDatasourceUsers(gatewayClusterId, gatewayDatasourceId, true))
+                .GetGatewayClusterDatasourceUsers(gatewayClusterId, GatewayClusterDatasourceId, true))
                 .ReturnsAsync(new[] { expectedResponse });
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new GetOnPremisesDataGatewayClusterDatasourceUsers(initFactory)
             {
                 GatewayClusterId = gatewayClusterId,
-                GatewayDatasourceId = gatewayDatasourceId,
+                GatewayClusterDatasourceId = GatewayClusterDatasourceId,
             };
 
             // Act

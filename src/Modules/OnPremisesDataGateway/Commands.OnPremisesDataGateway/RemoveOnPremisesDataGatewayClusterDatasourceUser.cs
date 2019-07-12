@@ -29,7 +29,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         [Alias("DatasourceId")]
         [Parameter(Mandatory = true)]
-        public Guid GatewayDatasourceId { get; set; }
+        public Guid GatewayClusterDatasourceId { get; set; }
 
         [Alias("UserEmailAddress")]
         [Parameter(Mandatory = true)]
@@ -43,7 +43,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var result = client.Gateways.RemoveGatewayClusterDatasourceUser(GatewayClusterId, GatewayDatasourceId, EmailAddress, this.Scope == PowerBIUserScope.Individual).Result;
+                var result = client.Gateways.RemoveGatewayClusterDatasourceUser(GatewayClusterId, GatewayClusterDatasourceId, EmailAddress, this.Scope == PowerBIUserScope.Individual).Result;
                 Logger.WriteObject(result, true);
             }
         }

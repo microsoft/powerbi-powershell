@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(RemoveOnPremisesDataGatewayClusterDatasourceUserInfo)
                     .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.GatewayClusterId), Guid.NewGuid())
-                    .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.GatewayDatasourceId), Guid.NewGuid())
+                    .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.GatewayClusterDatasourceId), Guid.NewGuid())
                     .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.EmailAddress), "theEmailAddress@foo.com");
 
                 // Act
@@ -51,20 +51,20 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var gatewayClusterId = Guid.NewGuid();
-            var gatewayDatasourceId = Guid.NewGuid();
+            var GatewayClusterDatasourceId = Guid.NewGuid();
             var emailAddress = Guid.NewGuid().ToString();
 
             var expectedResponse = new HttpResponseMessage();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .RemoveGatewayClusterDatasourceUser(gatewayClusterId, gatewayDatasourceId, emailAddress, true))
+                .RemoveGatewayClusterDatasourceUser(gatewayClusterId, GatewayClusterDatasourceId, emailAddress, true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemoveOnPremisesDataGatewayClusterDatasourceUser(initFactory)
             {
                 GatewayClusterId = gatewayClusterId,
-                GatewayDatasourceId = gatewayDatasourceId,
+                GatewayClusterDatasourceId = GatewayClusterDatasourceId,
                 EmailAddress = emailAddress,
             };
 

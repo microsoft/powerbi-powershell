@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(SetOnPremisesDataGatewayClusterDatasourceInfo)
                     .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasource.GatewayClusterId), Guid.NewGuid())
-                    .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasource.GatewayDatasourceId), Guid.NewGuid());
+                    .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasource.GatewayClusterDatasourceId), Guid.NewGuid());
 
                 // Act
                 var result = ps.Invoke();
@@ -50,7 +50,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var gatewayClusterId = Guid.NewGuid();
-            var gatewayDatasourceId = Guid.NewGuid();
+            var GatewayClusterDatasourceId = Guid.NewGuid();
 
             var updateRequest = new UpdateGatewayClusterDatasourceRequest
             {
@@ -62,14 +62,14 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             var expectedResponse = new HttpResponseMessage();
             var client = new Mock<IPowerBIApiClient>();
             client.SetupSequence(x => x.Gateways
-                .UpdateGatewayClusterDatasource(gatewayClusterId, gatewayDatasourceId, It.IsAny<UpdateGatewayClusterDatasourceRequest>(), true))
+                .UpdateGatewayClusterDatasource(gatewayClusterId, GatewayClusterDatasourceId, It.IsAny<UpdateGatewayClusterDatasourceRequest>(), true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetOnPremisesDataGatewayClusterDatasource(initFactory)
             {
                 GatewayClusterId = gatewayClusterId,
-                GatewayDatasourceId = gatewayDatasourceId,
+                GatewayClusterDatasourceId = GatewayClusterDatasourceId,
                 Annotation = updateRequest.Annotation,
                 DatasourceName = updateRequest.DatasourceName,
                 SingleSignOnType = updateRequest.SingleSignOnType,

@@ -29,7 +29,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         [Alias("DatasourceId")]
         [Parameter(Mandatory = true)]
-        public Guid GatewayDatasourceId { get; set; }
+        public Guid GatewayClusterDatasourceId { get; set; }
 
         public GetOnPremisesDataGatewayClusterDatasourceUsers() : base() { }
 
@@ -39,7 +39,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var result = client.Gateways.GetGatewayClusterDatasourceUsers(GatewayClusterId, GatewayDatasourceId, this.Scope == PowerBIUserScope.Individual).Result;
+                var result = client.Gateways.GetGatewayClusterDatasourceUsers(GatewayClusterId, GatewayClusterDatasourceId, this.Scope == PowerBIUserScope.Individual).Result;
                 Logger.WriteObject(result, true);
             }
         }

@@ -14,7 +14,7 @@ Checks the connectivity status of the specified datasource from the specified cl
 
 ```
 Get-OnPremisesDataGatewayClusterDatasourceStatus [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayDatasourceId <Guid> [<CommonParameters>]
+ -GatewayClusterDatasourceId <Guid> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,8 +46,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GatewayDatasourceId
-{{Fill GatewayDatasourceId Description}}
+### -GatewayClusterDatasourceId
+{{Fill GatewayClusterDatasourceId Description}}
 
 ```yaml
 Type: Guid

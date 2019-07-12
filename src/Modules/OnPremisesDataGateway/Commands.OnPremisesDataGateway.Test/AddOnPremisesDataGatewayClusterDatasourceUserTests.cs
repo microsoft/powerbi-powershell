@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(AddOnPremisesDataGatewayClusterDatasourceUserInfo)
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.GatewayClusterId), Guid.NewGuid())
-                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.GatewayDatasourceId), Guid.NewGuid())
+                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.GatewayClusterDatasourceId), Guid.NewGuid())
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.DatasourceUserAccessRight), "Read")
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.DisplayName), Guid.NewGuid().ToString())
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.Identifier), Guid.NewGuid().ToString())
@@ -55,7 +55,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var gatewayClusterId = Guid.NewGuid();
-            var gatewayDatasourceId = Guid.NewGuid();
+            var GatewayClusterDatasourceId = Guid.NewGuid();
 
             var request = new DatasourceUser()
             {
@@ -69,14 +69,14 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             var expectedResponse = new HttpResponseMessage();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .AddUsersToGatewayClusterDatasource(gatewayClusterId, gatewayDatasourceId, It.IsAny<DatasourceUser>(), true))
+                .AddUsersToGatewayClusterDatasource(gatewayClusterId, GatewayClusterDatasourceId, It.IsAny<DatasourceUser>(), true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new AddOnPremisesDataGatewayClusterDatasourceUser(initFactory)
             {
                 GatewayClusterId = gatewayClusterId,
-                GatewayDatasourceId = gatewayDatasourceId,
+                GatewayClusterDatasourceId = GatewayClusterDatasourceId,
                 DatasourceUserAccessRight = request.DatasourceUserAccessRight,
                 DisplayName = request.DisplayName,
                 Identifier = request.Identifier,

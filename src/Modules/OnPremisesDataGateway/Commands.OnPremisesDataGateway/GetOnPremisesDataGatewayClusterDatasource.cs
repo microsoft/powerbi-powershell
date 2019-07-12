@@ -27,9 +27,9 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter(Mandatory = true)]
         public Guid GatewayClusterId { get; set; }
 
-        [Alias("DatasourceId")]
-        [Parameter(Mandatory = true)]
-        public Guid GatewayDatasourceId { get; set; }
+        [Alias("DatasourceId", "Datasource")]
+        [Parameter()]
+        public Guid GatewayClusterDatasourceId { get; set; }
 
         public GetOnPremisesDataGatewayClusterDatasource() : base() { }
 
@@ -39,8 +39,23 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var result = client.Gateways.GetGatewayClusterDatasource(GatewayClusterId, GatewayDatasourceId, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                if (this.GatewayClusterDatasourceId != default)
+                {
+                    var result = client.Gateways.GetGatewayClusterDatasource(
+                                            GatewayClusterId,
+                                            this.GatewayClusterDatasourceId,
+                                            this.Scope == PowerBIUserScope.Individual)
+                                       .Result;
+                    Logger.WriteObject(result, true);
+                }
+                else
+                {
+                    var result = client.Gateways.GetGatewayClusterDatasources(
+                                            GatewayClusterId,
+                                            this.Scope == PowerBIUserScope.Individual)
+                                       .Result;
+                    Logger.WriteObject(result, true);
+                }
             }
         }
     }

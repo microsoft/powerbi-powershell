@@ -29,7 +29,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         [Alias("DatasourceId")]
         [Parameter(Mandatory = true)]
-        public Guid GatewayDatasourceId { get; set; }
+        public Guid GatewayClusterDatasourceId { get; set; }
 
         [Parameter()]
         public string Annotation { get; set; }
@@ -55,7 +55,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                    SingleSignOnType = SingleSignOnType,
                 };
 
-                var result = client.Gateways.UpdateGatewayClusterDatasource(GatewayClusterId, GatewayDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
+                var result = client.Gateways.UpdateGatewayClusterDatasource(GatewayClusterId, GatewayClusterDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
                 Logger.WriteObject(result, true);
             }
         }

@@ -29,7 +29,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         [Alias("DatasourceId")]
         [Parameter(Mandatory = true)]
-        public Guid GatewayDatasourceId { get; set; }
+        public Guid GatewayClusterDatasourceId { get; set; }
 
         [Parameter(Mandatory = true)]
         public string Credentials { get; set; }
@@ -79,7 +79,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                     UseEndUserOAuth2Credentials = UseEndUserOAuth2Credentials,
                 };
 
-                var result = client.Gateways.UpdateGatewayClusterDatasourceCredentials(GatewayClusterId, GatewayDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
+                var result = client.Gateways.UpdateGatewayClusterDatasourceCredentials(GatewayClusterId, GatewayClusterDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
                 Logger.WriteObject(result, true);
             }
         }

@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(SetOnPremisesDataGatewayClusterDatasourceCredentialsInfo)
                     .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasourceCredentials.GatewayClusterId), Guid.NewGuid())
-                    .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasourceCredentials.GatewayDatasourceId), Guid.NewGuid())
+                    .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasourceCredentials.GatewayClusterDatasourceId), Guid.NewGuid())
                     .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasourceCredentials.Credentials), "the credentials string")
                     .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasourceCredentials.CredentialType), "Basic")
                     .AddParameter(nameof(SetOnPremisesDataGatewayClusterDatasourceCredentials.EncryptedConnection), "Encrypted")
@@ -55,7 +55,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var gatewayClusterId = Guid.NewGuid();
-            var gatewayDatasourceId = Guid.NewGuid();
+            var GatewayClusterDatasourceId = Guid.NewGuid();
 
             var request = new DatasourceCredentialDetails
             {
@@ -79,14 +79,14 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .UpdateGatewayClusterDatasourceCredentials(gatewayClusterId, gatewayDatasourceId, It.IsAny<DatasourceCredentialDetails>(), true))
+                .UpdateGatewayClusterDatasourceCredentials(gatewayClusterId, GatewayClusterDatasourceId, It.IsAny<DatasourceCredentialDetails>(), true))
                 .ReturnsAsync(new[] { expectedResponse });
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetOnPremisesDataGatewayClusterDatasourceCredentials(initFactory)
             {
                 GatewayClusterId = gatewayClusterId,
-                GatewayDatasourceId = gatewayDatasourceId,
+                GatewayClusterDatasourceId = GatewayClusterDatasourceId,
                 Credentials = request.Credentials,
                 CredentialType = request.CredentialType,
                 EncryptedConnection = request.EncryptedConnection,

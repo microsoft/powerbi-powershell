@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 ps.AddCommand(RemoveOnPremisesDataGatewayClusterDatasourceInfo)
                     .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasource.GatewayClusterId), Guid.NewGuid())
-                    .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasource.GatewayDatasourceId), Guid.NewGuid());
+                    .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasource.GatewayClusterDatasourceId), Guid.NewGuid());
 
                 // Act
                 var result = ps.Invoke();
@@ -50,19 +50,19 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
         {
             // Arrange
             var gatewayClusterId = Guid.NewGuid();
-            var gatewayDatasourceId = Guid.NewGuid();
+            var GatewayClusterDatasourceId = Guid.NewGuid();
 
             var expectedResponse = new HttpResponseMessage();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .DeleteGatewayClusterDatasource(gatewayClusterId, gatewayDatasourceId, true))
+                .DeleteGatewayClusterDatasource(gatewayClusterId, GatewayClusterDatasourceId, true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new RemoveOnPremisesDataGatewayClusterDatasource(initFactory)
             {
                 GatewayClusterId = gatewayClusterId,
-                GatewayDatasourceId = gatewayDatasourceId,
+                GatewayClusterDatasourceId = GatewayClusterDatasourceId,
             };
 
             // Act

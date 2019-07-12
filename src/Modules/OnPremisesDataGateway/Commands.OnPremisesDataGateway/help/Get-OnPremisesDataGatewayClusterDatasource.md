@@ -14,7 +14,7 @@ Returns the specified datasource from the specified cluster
 
 ```
 Get-OnPremisesDataGatewayClusterDatasource [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayDatasourceId <Guid> [<CommonParameters>]
+ [-GatewayClusterDatasourceId <Guid>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,12 +24,27 @@ Returns the specified datasource from the specified cluster
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-OnPremisesDataGatewayClusterDatasource -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -
 ```
 
-{{ Add example description here }}
+Get all datasources on the cluster
 
 ## PARAMETERS
+
+### -GatewayClusterDatasourceId
+{{Fill GatewayClusterDatasourceId Description}}
+
+```yaml
+Type: Guid
+Parameter Sets: (All)
+Aliases: DatasourceId, Datasource
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -GatewayClusterId
 {{Fill GatewayClusterId Description}}
@@ -38,21 +53,6 @@ PS C:\> {{ Add example code here }}
 Type: Guid
 Parameter Sets: (All)
 Aliases: Cluster, Id
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -GatewayDatasourceId
-{{Fill GatewayDatasourceId Description}}
-
-```yaml
-Type: Guid
-Parameter Sets: (All)
-Aliases: DatasourceId
 
 Required: True
 Position: Named

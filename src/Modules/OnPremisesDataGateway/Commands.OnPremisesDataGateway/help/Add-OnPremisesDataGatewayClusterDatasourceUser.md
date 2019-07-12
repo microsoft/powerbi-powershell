@@ -14,8 +14,8 @@ Grants the permissions required to use the specified datasource for the specifie
 
 ```
 Add-OnPremisesDataGatewayClusterDatasourceUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayDatasourceId <Guid> -DatasourceUserAccessRight <String> [-DisplayName <String>] [-Identifier <String>]
- [-PrincipalType <String>] [-EmailAddress <String>] [<CommonParameters>]
+ -GatewayClusterDatasourceId <Guid> -DatasourceUserAccessRight <String> [-DisplayName <String>]
+ [-Identifier <String>] [-PrincipalType <String>] [-EmailAddress <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -77,13 +77,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GatewayClusterId
-{{Fill GatewayClusterId Description}}
+### -GatewayClusterDatasourceId
+{{Fill GatewayClusterDatasourceId Description}}
 
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases: Cluster, Id
+Aliases: DatasourceId
 
 Required: True
 Position: Named
@@ -92,13 +92,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GatewayDatasourceId
-{{Fill GatewayDatasourceId Description}}
+### -GatewayClusterId
+{{Fill GatewayClusterId Description}}
 
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases: DatasourceId
+Aliases: Cluster, Id
 
 Required: True
 Position: Named

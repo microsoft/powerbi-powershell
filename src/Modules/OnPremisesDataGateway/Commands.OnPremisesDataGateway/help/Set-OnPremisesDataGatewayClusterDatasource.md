@@ -14,7 +14,7 @@ Set the properties of the specified datasource from the specified cluster
 
 ```
 Set-OnPremisesDataGatewayClusterDatasource [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayDatasourceId <Guid> [-Annotation <String>] [-DatasourceName <String>] [-SingleSignOnType <String>]
+ -GatewayClusterDatasourceId <Guid> [-Annotation <String>] [-DatasourceName <String>] [-SingleSignOnType <String>]
  [<CommonParameters>]
 ```
 
@@ -77,8 +77,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GatewayDatasourceId
-{{Fill GatewayDatasourceId Description}}
+### -GatewayClusterDatasourceId
+{{Fill GatewayClusterDatasourceId Description}}
 
 ```yaml
 Type: Guid

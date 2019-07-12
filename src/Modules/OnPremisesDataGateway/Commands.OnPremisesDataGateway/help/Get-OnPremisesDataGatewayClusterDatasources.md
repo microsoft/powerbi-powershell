@@ -24,10 +24,11 @@ Get-OnPremisesDataGatewayClusterDatasources [-Scope <PowerBIUserScope>] -Gateway
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-OnPremisesDataGatewayClusterDatasources -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
 ```
 
-{{ Add example description here }}
+Get all datasources on the cluster
+
 
 ## PARAMETERS
 

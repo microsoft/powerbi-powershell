@@ -14,7 +14,7 @@ Updates the credentials of the specified datasource from the specified cluster
 
 ```
 Set-OnPremisesDataGatewayClusterDatasourceCredentials [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayDatasourceId <Guid> -Credentials <String> -CredentialType <String> -EncryptedConnection <String>
+ -GatewayClusterDatasourceId <Guid> -Credentials <String> -CredentialType <String> -EncryptedConnection <String>
  -EncryptionAlgorithm <String> -PrivacyLevel <String> [-SkipTestConnection <Boolean>]
  [-UseCallerAADIdentity <Boolean>] [-UseCustomOAuthApp <Boolean>] [-UseEndUserOAuth2Credentials <Boolean>]
  [<CommonParameters>]
@@ -109,8 +109,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GatewayDatasourceId
-{{Fill GatewayDatasourceId Description}}
+### -GatewayClusterDatasourceId
+{{Fill GatewayClusterDatasourceId Description}}
 
 ```yaml
 Type: Guid

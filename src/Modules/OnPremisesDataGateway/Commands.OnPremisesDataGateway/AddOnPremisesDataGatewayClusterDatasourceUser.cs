@@ -29,7 +29,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
 
         [Alias("DatasourceId")]
         [Parameter(Mandatory = true)]
-        public Guid GatewayDatasourceId { get; set; }
+        public Guid GatewayClusterDatasourceId { get; set; }
 
         [Parameter(Mandatory = true)]
         public string DatasourceUserAccessRight { get; set; }
@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                     EmailAddress = EmailAddress,
                 };
 
-                var result = client.Gateways.AddUsersToGatewayClusterDatasource(GatewayClusterId, GatewayDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
+                var result = client.Gateways.AddUsersToGatewayClusterDatasource(GatewayClusterId, GatewayClusterDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
                 Logger.WriteObject(result, true);
             }
         }

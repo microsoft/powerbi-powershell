@@ -14,7 +14,7 @@ Removes the specified user from the specified datasource of the specified cluste
 
 ```
 Remove-OnPremisesDataGatewayClusterDatasourceUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayDatasourceId <Guid> -EmailAddress <String> [<CommonParameters>]
+ -GatewayClusterDatasourceId <Guid> -EmailAddress <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,8 +61,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GatewayDatasourceId
-{{Fill GatewayDatasourceId Description}}
+### -GatewayClusterDatasourceId
+{{Fill GatewayClusterDatasourceId Description}}
 
 ```yaml
 Type: Guid
