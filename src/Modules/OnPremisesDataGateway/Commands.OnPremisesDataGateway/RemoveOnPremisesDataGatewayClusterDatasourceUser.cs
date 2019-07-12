@@ -27,7 +27,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter(Mandatory = true)]
         public Guid GatewayClusterId { get; set; }
 
-        [Alias("DatasourceId")]
+        [Alias("DatasourceId", "Datasource")]
         [Parameter(Mandatory = true)]
         public Guid GatewayClusterDatasourceId { get; set; }
 

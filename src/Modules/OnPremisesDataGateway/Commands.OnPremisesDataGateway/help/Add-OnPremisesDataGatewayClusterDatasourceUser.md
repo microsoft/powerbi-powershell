@@ -83,7 +83,7 @@ Accept wildcard characters: False
 ```yaml
 Type: Guid
 Parameter Sets: (All)
-Aliases: DatasourceId
+Aliases: DatasourceId, Datasource
 
 Required: True
 Position: Named
