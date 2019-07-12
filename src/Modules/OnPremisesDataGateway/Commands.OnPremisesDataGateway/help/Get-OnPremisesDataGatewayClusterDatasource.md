@@ -24,10 +24,17 @@ Returns the specified datasource from the specified cluster
 
 ### Example 1
 ```powershell
-PS C:\> Get-OnPremisesDataGatewayClusterDatasource -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -
+PS C:\> Get-OnPremisesDataGatewayClusterDatasource -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
 ```
 
 Get all datasources on the cluster
+
+### Example 2
+```powershell
+PS C:\> Get-OnPremisesDataGatewayClusterDatasource -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804
+```
+
+Gets a single datasource on the cluster
 
 ## PARAMETERS
 
