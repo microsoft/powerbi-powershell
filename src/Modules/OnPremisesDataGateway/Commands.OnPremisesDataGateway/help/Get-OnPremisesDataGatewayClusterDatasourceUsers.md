@@ -24,10 +24,10 @@ Returns a list of users who have access to the specified datasource from the spe
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-OnPremisesDataGatewayClusterDatasourceUsers -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804
 ```
 
-{{ Add example description here }}
+Gets the datasource users
 
 ## PARAMETERS
 
