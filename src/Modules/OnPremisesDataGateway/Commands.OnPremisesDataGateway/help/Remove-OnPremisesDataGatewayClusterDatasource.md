@@ -24,10 +24,10 @@ Removes the specified datasource from the specified cluster
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-OnPremisesDataGatewayClusterDatasource -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804
 ```
 
-{{ Add example description here }}
+Removes the datasource from the cluster.
 
 ## PARAMETERS
 
