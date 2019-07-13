@@ -10,13 +10,13 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
     [DataContract]
     public sealed class UpdateGatewayClusterDatasourceRequest
     {
-        [DataMember(Name = "datasourceName")]
+        [DataMember(Name = "datasourceName", EmitDefaultValue = false)]
         public string DatasourceName { get; set; }
 
-        [DataMember(Name = "datasourceAnnotation")]
+        [DataMember(Name = "datasourceAnnotation", EmitDefaultValue = false)]
         public string Annotation { get; set; }
 
-        [DataMember(Name = "singleSignOnType")]
+        [DataMember(Name = "singleSignOnType", EmitDefaultValue = false)]
         public string SingleSignOnType { get; set; }
     }
 }
