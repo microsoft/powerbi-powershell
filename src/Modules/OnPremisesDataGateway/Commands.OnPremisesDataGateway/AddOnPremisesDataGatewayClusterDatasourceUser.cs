@@ -32,19 +32,22 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public Guid GatewayClusterDatasourceId { get; set; }
 
         [Parameter(Mandatory = true)]
-        public string DatasourceUserAccessRight { get; set; }
+        public DatasourceUserAccessRight? DatasourceUserAccessRight { get; set; }
 
         [Parameter()]
         public string DisplayName { get; set; }
 
+        // Based on backend code, this input is redundant with UserEmailAddress
+        //[Parameter()]
+        //public string Identifier { get; set; }
+
+        // Not currently used by this API
+        //[Parameter()]
+        //public PrincipalType? PrincipalType { get; set; }
+
+        [Alias("User", "EmailAddress")]
         [Parameter(Mandatory = true)]
-        public string Identifier { get; set; }
-
-        [Parameter()]
-        public string PrincipalType { get; set; }
-
-        [Parameter()]
-        public string EmailAddress { get; set; }
+        public string UserEmailAddress { get; set; }
 
         public AddOnPremisesDataGatewayClusterDatasourceUser() : base() { }
 
@@ -54,13 +57,11 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var request = new DatasourceUser
+                var request = new UserAccessRightEntry
                 {
                     DatasourceUserAccessRight = DatasourceUserAccessRight,
                     DisplayName = DisplayName,
-                    Identifier = Identifier,
-                    PrincipalType = PrincipalType,
-                    EmailAddress = EmailAddress,
+                    UserEmailAddress = UserEmailAddress,
                 };
 
                 var result = client.Gateways.AddUsersToGatewayClusterDatasource(GatewayClusterId, GatewayClusterDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;

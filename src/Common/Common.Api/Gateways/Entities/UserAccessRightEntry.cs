@@ -4,17 +4,21 @@
  */
 
 using System.Runtime.Serialization;
+using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
     [DataContract]
-    public sealed class DatasourceUser
+    public class UserAccessRightEntry
     {
         [DataMember(Name = "datasourceAccessRight")]
-        public string DatasourceUserAccessRight { get; set; }
+        public DatasourceUserAccessRight? DatasourceUserAccessRight { get; set; }
+
+        [DataMember(Name = "groupUserAccessRight")]
+        public GroupUserAccessRight GroupUserAccessRight { get; set; }
 
         [DataMember(Name = "emailAddress")]
-        public string EmailAddress { get; set; }
+        public string UserEmailAddress { get; set; }
 
         [DataMember(Name = "displayName")]
         public string DisplayName { get; set; }
@@ -23,6 +27,6 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
         public string Identifier { get; set; }
 
         [DataMember(Name = "principalType")]
-        public string PrincipalType { get; set; }
+        public PrincipalType? PrincipalType { get; set; }
     }
 }

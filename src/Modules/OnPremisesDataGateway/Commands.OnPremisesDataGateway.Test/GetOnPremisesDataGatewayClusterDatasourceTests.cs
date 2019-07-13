@@ -69,7 +69,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 },
                 DatasourceName = "the datasource name",
                 DatasourceType = "SQL",
-                Users = new List<DatasourceUser>(),
+                Users = new List<UserAccessRightEntry>(),
             };
 
             var client = new Mock<IPowerBIApiClient>();
@@ -136,7 +136,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 },
                 DatasourceName = "the datasource name",
                 DatasourceType = "SQL",
-                Users = new List<DatasourceUser>(),
+                Users = new List<UserAccessRightEntry>(),
             };
 
             var client = new Mock<IPowerBIApiClient>();

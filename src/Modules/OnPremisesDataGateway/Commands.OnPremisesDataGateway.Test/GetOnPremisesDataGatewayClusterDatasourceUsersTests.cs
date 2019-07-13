@@ -52,13 +52,13 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             var gatewayClusterId = Guid.NewGuid();
             var GatewayClusterDatasourceId = Guid.NewGuid();
 
-            var expectedResponse = new DatasourceUser
+            var expectedResponse = new UserAccessRightEntry
             {
-                DatasourceUserAccessRight = "ReadWrite",
+                DatasourceUserAccessRight = DatasourceUserAccessRight.ReadWrite,
                 DisplayName = "the user displayName1",
                 Identifier = Guid.NewGuid().ToString(),
-                PrincipalType = "User",
-                EmailAddress = "theEmailAddress1@foo.com",
+                PrincipalType = PrincipalType.User,
+                UserEmailAddress = "theEmailAddress1@foo.com",
             };
 
             var client = new Mock<IPowerBIApiClient>();

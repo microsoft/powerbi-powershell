@@ -37,7 +37,7 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: UserEmailAddress
+Aliases: UserEmailAddress, Identifier
 
 Required: True
 Position: Named

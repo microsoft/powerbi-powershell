@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter(Mandatory = true)]
         public Guid GatewayClusterDatasourceId { get; set; }
 
-        [Alias("UserEmailAddress")]
+        [Alias("UserEmailAddress", "Identifier")]
         [Parameter(Mandatory = true)]
         public string EmailAddress { get; set; }
 

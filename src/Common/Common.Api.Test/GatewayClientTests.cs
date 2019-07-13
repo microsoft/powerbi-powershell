@@ -578,13 +578,13 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
             // Arrange
             var client = Utilities.GetTestClient("");
-            var request = new DatasourceUser()
+            var request = new UserAccessRightEntry()
             {
-                DatasourceUserAccessRight = "Read",
+                DatasourceUserAccessRight = DatasourceUserAccessRight.Read,
                 DisplayName = "the user displayName",
                 Identifier = Guid.NewGuid().ToString(),
-                PrincipalType = "User",
-                EmailAddress = "theEmailAddress@foo.com",
+                PrincipalType = PrincipalType.User,
+                UserEmailAddress = "theEmailAddress@foo.com",
             };
 
             // Act
@@ -631,13 +631,13 @@ namespace Microsoft.PowerBI.Common.Api.Test
         {
             // Arrange
             var client = Utilities.GetTestClient("");
-            var request = new DatasourceUser()
+            var request = new UserAccessRightEntry()
             {
-                DatasourceUserAccessRight = "Read",
+                DatasourceUserAccessRight = DatasourceUserAccessRight.Read,
                 DisplayName = "the user displayName",
                 Identifier = Guid.NewGuid().ToString(),
-                PrincipalType = "User",
-                EmailAddress = "theEmailAddress@foo.com",
+                PrincipalType = PrincipalType.User,
+                UserEmailAddress = "theEmailAddress@foo.com",
             };
 
             // Act
@@ -673,7 +673,7 @@ namespace Microsoft.PowerBI.Common.Api.Test
             var resultUsers = result.ToArray()[0];
 
             // Assert
-            resultUsers.EmailAddress.Should().Be(userEmailAddress);
+            resultUsers.UserEmailAddress.Should().Be(userEmailAddress);
         }
 
         [TestMethod]

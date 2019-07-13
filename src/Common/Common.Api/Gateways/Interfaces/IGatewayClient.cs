@@ -31,8 +31,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Interfaces
         Task<GatewayClusterDatasource> CreateGatewayClusterDatasource(Guid gatewayClusterId, PublishDatasourceToGatewayClusterRequest datasourceToGatewayClusterRequest, bool asIndividual);
         Task<HttpResponseMessage> UpdateGatewayClusterDatasource(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, UpdateGatewayClusterDatasourceRequest updateDatasourceRequest, bool asIndividual);
         Task<HttpResponseMessage> DeleteGatewayClusterDatasource(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, bool asIndividual);
-        Task<HttpResponseMessage> AddUsersToGatewayClusterDatasource(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, DatasourceUser datasourceUser, bool asIndividual);
-        Task<IEnumerable<DatasourceUser>> GetGatewayClusterDatasourceUsers(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, bool asIndividual);
+        Task<HttpResponseMessage> AddUsersToGatewayClusterDatasource(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, UserAccessRightEntry datasourceUser, bool asIndividual);
+        Task<IEnumerable<UserAccessRightEntry>> GetGatewayClusterDatasourceUsers(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, bool asIndividual);
         Task<HttpResponseMessage> RemoveGatewayClusterDatasourceUser(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, string user, bool asIndividual);
         Task<IEnumerable<DatasourceErrorDetails>> UpdateGatewayClusterDatasourceCredentials(Guid gatewayClusterId, Guid gatewayClusterDatasourceId, DatasourceCredentialDetails updateCredentialDetails, bool asIndividual);
     }

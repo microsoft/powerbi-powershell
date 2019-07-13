@@ -114,7 +114,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 DatasourceErrorDetails = new List<DatasourceErrorDetails>(),
                 DatasourceName = request.DatasourceName,
                 DatasourceType = request.DatasourceType,
-                Users = new List<DatasourceUser>(),
+                Users = new List<UserAccessRightEntry>(),
             };
 
             var client = new Mock<IPowerBIApiClient>();

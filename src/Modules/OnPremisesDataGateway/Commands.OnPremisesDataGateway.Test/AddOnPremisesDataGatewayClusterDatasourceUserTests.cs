@@ -37,9 +37,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.GatewayClusterDatasourceId), Guid.NewGuid())
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.DatasourceUserAccessRight), "Read")
                     .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.DisplayName), Guid.NewGuid().ToString())
-                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.Identifier), Guid.NewGuid().ToString())
-                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.PrincipalType), "User")
-                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.EmailAddress), "theEmailAddress@foo.com");
+                    .AddParameter(nameof(AddOnPremisesDataGatewayClusterDatasourceUser.UserEmailAddress), "theEmailAddress@foo.com");
 
                 // Act
                 var result = ps.Invoke();
@@ -57,19 +55,19 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             var gatewayClusterId = Guid.NewGuid();
             var GatewayClusterDatasourceId = Guid.NewGuid();
 
-            var request = new DatasourceUser()
+            var request = new UserAccessRightEntry()
             {
-                DatasourceUserAccessRight = "Read",
+                DatasourceUserAccessRight = DatasourceUserAccessRight.Read,
                 DisplayName = "the user displayName",
                 Identifier = Guid.NewGuid().ToString(),
-                PrincipalType = "User",
-                EmailAddress = "theEmailAddress@foo.com",
+                PrincipalType = PrincipalType.User,
+                UserEmailAddress = "theEmailAddress@foo.com",
             };
 
             var expectedResponse = new HttpResponseMessage();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Gateways
-                .AddUsersToGatewayClusterDatasource(gatewayClusterId, GatewayClusterDatasourceId, It.IsAny<DatasourceUser>(), true))
+                .AddUsersToGatewayClusterDatasource(gatewayClusterId, GatewayClusterDatasourceId, It.IsAny<UserAccessRightEntry>(), true))
                 .ReturnsAsync(expectedResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
@@ -79,9 +77,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 GatewayClusterDatasourceId = GatewayClusterDatasourceId,
                 DatasourceUserAccessRight = request.DatasourceUserAccessRight,
                 DisplayName = request.DisplayName,
-                Identifier = request.Identifier,
-                PrincipalType = request.PrincipalType,
-                EmailAddress = request.EmailAddress,
+                UserEmailAddress = request.UserEmailAddress,
             };
 
             // Act

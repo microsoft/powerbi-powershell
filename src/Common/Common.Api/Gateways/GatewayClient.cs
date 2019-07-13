@@ -265,7 +265,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             return response;
         }
 
-        public async Task<HttpResponseMessage> AddUsersToGatewayClusterDatasource(Guid gatewayClusterId, Guid GatewayClusterDatasourceId, DatasourceUser datasourceUser, bool asIndividual)
+        public async Task<HttpResponseMessage> AddUsersToGatewayClusterDatasource(Guid gatewayClusterId, Guid GatewayClusterDatasourceId, UserAccessRightEntry datasourceUser, bool asIndividual)
         {
 
             var url = Invariant($"{GetODataUrlStart(true)}/gatewayClusters/{gatewayClusterId}/datasources/{GatewayClusterDatasourceId}/users");
@@ -277,14 +277,14 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             return response;
         }
 
-        public async Task<IEnumerable<DatasourceUser>> GetGatewayClusterDatasourceUsers(Guid gatewayClusterId, Guid GatewayClusterDatasourceId, bool asIndividual)
+        public async Task<IEnumerable<UserAccessRightEntry>> GetGatewayClusterDatasourceUsers(Guid gatewayClusterId, Guid GatewayClusterDatasourceId, bool asIndividual)
         {
             var url = Invariant($"{GetODataUrlStart(true)}/gatewayClusters/{gatewayClusterId}/datasources/{GatewayClusterDatasourceId}/users");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
-            var datasourceUsers = await DeserializeResponseContent<ODataResponseList<DatasourceUser>>(response);
+            var datasourceUsers = await DeserializeResponseContent<ODataResponseList<UserAccessRightEntry>>(response);
 
             return datasourceUsers?.Value;
         }
@@ -338,7 +338,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         private static StringContent SerializeObject(object objectToSerialize)
         {
-            return new StringContent(JsonConvert.SerializeObject(objectToSerialize), Encoding.UTF8, "application/json");
+            return new StringContent(JsonConvert.SerializeObject(objectToSerialize, new StringEnumConverter()), Encoding.UTF8, "application/json");
         }
 
         private async Task<T> DeserializeResponseContent<T>(HttpResponseMessage response)

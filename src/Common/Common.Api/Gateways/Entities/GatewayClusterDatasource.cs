@@ -31,7 +31,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
         public string DatasourceName { get; set; }
 
         [DataMember(Name = "users")]
-        public IEnumerable<DatasourceUser> Users { get; set; }
+        public IEnumerable<UserAccessRightEntry> Users { get; set; }
 
         [DataMember(Name = "datasourceErrorDetails")]
         public IEnumerable<DatasourceErrorDetails> DatasourceErrorDetails { get; set; }

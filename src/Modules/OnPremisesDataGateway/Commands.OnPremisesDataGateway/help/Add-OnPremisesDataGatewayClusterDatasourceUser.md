@@ -14,8 +14,8 @@ Grants the permissions required to use the specified datasource for the specifie
 
 ```
 Add-OnPremisesDataGatewayClusterDatasourceUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayClusterDatasourceId <Guid> -DatasourceUserAccessRight <String> [-DisplayName <String>]
- -Identifier <String> [-PrincipalType <String>] [-EmailAddress <String>] [<CommonParameters>]
+ -GatewayClusterDatasourceId <Guid> -DatasourceUserAccessRight <DatasourceUserAccessRight>
+ [-DisplayName <String>] -UserEmailAddress <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,7 +25,7 @@ Grants the permissions required to use the specified datasource for the specifie
 
 ### Example 1
 ```powershell
-PS C:\> Get-OnPremisesDataGatewayClusterDatasourceStatus -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804 -DatasourceUserAccessRight Read -Identifier testUpn@tenant.com
+PS C:\> Get-OnPremisesDataGatewayClusterDatasourceStatus -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804 -DatasourceUserAccessRight Read -UserEmailAddress testEmail@tenant.com
 ```
 
 Grants read access to 'testUpn@tenant.com' for the datasource.
@@ -36,7 +36,7 @@ Grants read access to 'testUpn@tenant.com' for the datasource.
 {{Fill DatasourceUserAccessRight Description}}
 
 ```yaml
-Type: String
+Type: DatasourceUserAccessRight
 Parameter Sets: (All)
 Aliases:
 
@@ -49,21 +49,6 @@ Accept wildcard characters: False
 
 ### -DisplayName
 {{Fill DisplayName Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EmailAddress
-{{Fill EmailAddress Description}}
 
 ```yaml
 Type: String
@@ -107,36 +92,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Identifier
-{{Fill Identifier Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PrincipalType
-{{Fill PrincipalType Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Scope
 {{Fill Scope Description}}
 
@@ -147,6 +102,21 @@ Aliases:
 Accepted values: Individual, Organization
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserEmailAddress
+{{Fill UserEmailAddress Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: User, EmailAddress
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
