@@ -56,7 +56,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                 };
 
                 var result = client.Gateways.UpdateGatewayClusterDatasource(GatewayClusterId, GatewayClusterDatasourceId, request, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

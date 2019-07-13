@@ -25,10 +25,10 @@ Set the properties of the specified datasource from the specified cluster
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Set-OnPremisesDataGatewayClusterDatasource -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804 -DatasourceName "New datasource name"
 ```
 
-{{ Add example description here }}
+Update the name of the datasource to "New datasource name"
 
 ## PARAMETERS
 
