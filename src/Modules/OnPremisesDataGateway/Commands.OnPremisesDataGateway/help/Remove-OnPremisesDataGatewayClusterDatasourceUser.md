@@ -14,7 +14,7 @@ Removes the specified user from the specified datasource of the specified cluste
 
 ```
 Remove-OnPremisesDataGatewayClusterDatasourceUser [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -GatewayClusterDatasourceId <Guid> -EmailAddress <String> [<CommonParameters>]
+ -GatewayClusterDatasourceId <Guid> -UserId <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,27 +24,12 @@ Removes the specified user from the specified datasource of the specified cluste
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-OnPremisesDataGatewayClusterDatasourceUser -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -GatewayClusterDatasourceId 64C574B7-86C6-4560-B710-40AC18990804 -UserId testEmail@tenant.com
 ```
 
-{{ Add example description here }}
+Removes access of 'testUpn@tenant.com' for the datasource.
 
 ## PARAMETERS
-
-### -EmailAddress
-{{Fill EmailAddress Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: UserEmailAddress, Identifier
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -GatewayClusterDatasourceId
 {{Fill GatewayClusterDatasourceId Description}}
@@ -86,6 +71,21 @@ Aliases:
 Accepted values: Individual, Organization
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserId
+The user to remove. This should be either a PrincipalObjectId (GUID type) or match the Identifier/UserEmailAddress value from Get-OnPremisesDataGatewayClusterDatasourceUsers
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: UserEmailAddress, EmailAddress, PrincipalObjectId, User
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

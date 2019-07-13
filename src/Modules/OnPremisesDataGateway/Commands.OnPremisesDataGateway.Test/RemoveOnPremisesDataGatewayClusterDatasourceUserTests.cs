@@ -35,7 +35,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
                 ps.AddCommand(RemoveOnPremisesDataGatewayClusterDatasourceUserInfo)
                     .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.GatewayClusterId), Guid.NewGuid())
                     .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.GatewayClusterDatasourceId), Guid.NewGuid())
-                    .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.EmailAddress), "theEmailAddress@foo.com");
+                    .AddParameter(nameof(RemoveOnPremisesDataGatewayClusterDatasourceUser.UserId), "theEmailAddress@foo.com");
 
                 // Act
                 var result = ps.Invoke();
@@ -65,7 +65,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             {
                 GatewayClusterId = gatewayClusterId,
                 GatewayClusterDatasourceId = GatewayClusterDatasourceId,
-                EmailAddress = emailAddress,
+                UserId = emailAddress,
             };
 
             // Act
