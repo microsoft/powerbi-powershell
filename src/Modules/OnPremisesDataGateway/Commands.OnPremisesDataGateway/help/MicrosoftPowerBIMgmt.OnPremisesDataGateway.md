@@ -11,9 +11,6 @@ Locale:
 Cmdlets to configure on-premises data gateway related items.
 
 ## MicrosoftPowerBIMgmt.OnPremisesDataGateway Cmdlets
-### [Add-OnPremisesDataGatewayClusterDatasource](Add-OnPremisesDataGatewayClusterDatasource.md)
-Creates a new datasource on the specified cluster
-
 ### [Add-OnPremisesDataGatewayClusterDatasourceUser](Add-OnPremisesDataGatewayClusterDatasourceUser.md)
 Grants the permissions required to use the specified datasource for the specified user
 
@@ -61,9 +58,6 @@ Set attributes of an existing gateway cluster
 
 ### [Set-OnPremisesDataGatewayClusterDatasource](Set-OnPremisesDataGatewayClusterDatasource.md)
 Set the properties of the specified datasource from the specified cluster
-
-### [Set-OnPremisesDataGatewayClusterDatasourceCredentials](Set-OnPremisesDataGatewayClusterDatasourceCredentials.md)
-Updates the credentials of the specified datasource from the specified cluster
 
 ### [Set-OnPremisesDataGatewayInstaller](Set-OnPremisesDataGatewayInstaller.md)
 Modify list of users who can install and register new gateways on the tenant
