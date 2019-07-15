@@ -4,7 +4,6 @@
  */
 
 using System.Runtime.Serialization;
-using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 {
@@ -15,7 +14,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
         public DatasourceUserAccessRight? DatasourceUserAccessRight { get; set; }
 
         [DataMember(Name = "groupUserAccessRight")]
-        public GroupUserAccessRight GroupUserAccessRight { get; set; }
+        public GroupUserAccessRight? GroupUserAccessRight { get; set; }
 
         [DataMember(Name = "emailAddress")]
         public string UserEmailAddress { get; set; }
