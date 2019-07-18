@@ -69,13 +69,21 @@ function Get-VSBuildFolder
         throw "Unable to find vswhere, confirm Visual Studio is installed: $vsWhereExe"
     }
 
-    $vsWhereArgs = @('-latest', '-requires', 'Microsoft.Component.MSBuild', '-find', 'MSBuild\**\Bin\MSBuild.exe')
+    $vsWhereArgs = @('-latest', '-format', 'json', '-requires', 'Microsoft.Component.MSBuild')
     if($Prerelease) {
         $vsWhereArgs += '-prerelease'
     }
 
-    # https://github.com/microsoft/vswhere/wiki/Find-MSBuild#powershell
-    $msbuildPath = & $vsWhereExe $vsWhereArgs | select-object -first 1
+    $vsWhereOutput = & $vsWhereExe $vsWhereArgs
+    if(!$vsWhereOutput) {
+        throw "Failed to get result from vswhere.exe"
+    }
+
+    $vsInstance = $vsWhereOutput | Out-String | ConvertFrom-Json | Select-Object -First 1
+    Write-Verbose "Using VS instance: $($vsInstance.installationPath)"
+    Write-Verbose "VS Version: $($vsInstance.installationVersion)"
+
+    $msbuildPath = Join-Path -Path $vsInstance.installationPath -ChildPath 'MSBuild\15.0\Bin\MSBuild.exe'
     if(!(Test-Path -Path $msbuildPath)) {
         throw "Unable to find MSBuild: $msbuildPath"
     }
