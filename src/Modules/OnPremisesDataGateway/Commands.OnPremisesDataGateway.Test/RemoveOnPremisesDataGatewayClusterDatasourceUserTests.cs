@@ -72,7 +72,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedUnitTestResults(null, client, initFactory);
         }
     }
 }
