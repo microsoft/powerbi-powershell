@@ -17,30 +17,25 @@ namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
     [OutputType(typeof(IEnumerable<Datasource>))]
-    public class GetPowerBIDataflowDatasource : PowerBIClientCmdlet, IUserScope
+    public class GetPowerBIDataflowDatasource : PowerBIClientCmdlet, IUserId, IUserScope
     {
         public const string CmdletVerb = VerbsCommon.Get;
         public const string CmdletName = "PowerBIDataflowDatasource";
 
         #region ParameterSets
         private const string IdParameterSetName = "Id";
-        private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
-        private const string ObjectIdParameterSetName = "ObjectAndId";
-        private const string ObjectNameParameterSetName = "ObjectAndName";
-        private const string ObjectListParameterSetName = "ObjectAndList";
+        private const string DataflowAndIdParameterSetName = "DataflowAndId";
+        private const string DataflowAndListParameterSetName = "DataflowAndList";
         #endregion
 
         #region Parameters
-        [Alias("DataflowId")]
         [Parameter(Mandatory = true, ParameterSetName = ListParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
-        [Parameter(Mandatory = true, ParameterSetName = NameParameterSetName)]
         public Guid DataflowId { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = ObjectIdParameterSetName, ValueFromPipeline = true)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectNameParameterSetName, ValueFromPipeline = true)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectListParameterSetName, ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, ParameterSetName = DataflowAndIdParameterSetName, ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, ParameterSetName = DataflowAndListParameterSetName, ValueFromPipeline = true)]
         public Dataflow Dataflow { get; set; }
 
         [Alias("GroupId")]
@@ -49,13 +44,8 @@ namespace Microsoft.PowerBI.Commands.Data
 
         [Alias("DatasourceId")]
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectIdParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = DataflowAndIdParameterSetName)]
         public Guid Id { get; set; }
-
-        [Alias("DatasoureName")]
-        [Parameter(Mandatory = true, ParameterSetName = NameParameterSetName)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectNameParameterSetName)]
-        public string Name { get; set; }
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
@@ -92,22 +82,16 @@ namespace Microsoft.PowerBI.Commands.Data
                         client.Dataflows.GetDataflowDatasourcesAsAdmin(this.DataflowId) : 
                         client.Dataflows.GetDataflowDatasources(this.WorkspaceId, this.DataflowId);
                 }
-                else
+                else if (this.Scope == PowerBIUserScope.Organization)
                 {
-                    datasources = this.Scope == PowerBIUserScope.Organization ?
-                        client.Dataflows.GetDataflowDatasourcesAsAdmin(this.DataflowId) :
-                        null;
+                    // No workspace id - Works only for organization scope
+                    datasources = client.Dataflows.GetDataflowDatasourcesAsAdmin(this.DataflowId);
                 }
             }
 
             if (this.Id != default)
             {
-                datasources = datasources.Where(d => this.Id == d.DatasourceId);
-            }
-
-            if (!string.IsNullOrEmpty(this.Name))
-            {
-                datasources = datasources.Where(d => d.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase));
+                datasources = datasources.Where(d => this.Id.ToString() == d.DatasourceId);
             }
 
             this.Logger.WriteObject(datasources, true);

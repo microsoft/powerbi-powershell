@@ -13,7 +13,7 @@ namespace Microsoft.PowerBI.Common.Api.Dataflows
         public string ModelUrl { get; set; }
         public string ConfiguredBy { get; set; }
 
-        public static implicit operator Dataflow(PowerBI.Api.V2.Models.Dataflow dataflow)
+        public static implicit operator Dataflow(PowerBI.Api.V2.Models.DataflowMetadata dataflow)
         {
             if (dataflow == null)
             {
@@ -22,7 +22,7 @@ namespace Microsoft.PowerBI.Common.Api.Dataflows
 
             return new Dataflow
             {
-                Id = dataflow.ObjectId,
+                Id = new System.Guid(dataflow.ObjectId),
                 Name = dataflow.Name,
                 Description = dataflow.Description,
                 ModelUrl = dataflow.ModelUrl,
