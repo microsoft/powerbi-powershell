@@ -135,7 +135,7 @@ namespace Microsoft.PowerBI.Commands.Data
 
                 if (!string.IsNullOrEmpty(this.Name))
                 {
-                    dataflows?.Where(d => d.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase));
+                    dataflows = dataflows?.Where(d => d.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (this.Skip.HasValue)

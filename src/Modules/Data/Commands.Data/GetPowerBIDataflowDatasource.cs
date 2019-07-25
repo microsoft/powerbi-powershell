@@ -91,7 +91,7 @@ namespace Microsoft.PowerBI.Commands.Data
 
             if (this.Id != default)
             {
-                datasources = datasources.Where(d => this.Id.ToString() == d.DatasourceId);
+                datasources = datasources.Where(d => this.Id.ToString().Equals(d.DatasourceId, StringComparison.OrdinalIgnoreCase));
             }
 
             this.Logger.WriteObject(datasources, true);
