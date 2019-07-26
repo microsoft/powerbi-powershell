@@ -5,9 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Gateways.Credentials;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
 using Microsoft.PowerBI.Common.Client;
 
@@ -30,7 +32,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         [Parameter(Mandatory = true)]
         public string ConnectionDetails { get; set; }
 
-        [Parameter(Mandatory = true)]
+        //[Parameter(Mandatory = true)]
         public IDictionary<Guid, DatasourceCredentialDetails> CredentialDetailsDictionary { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -53,18 +55,38 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         {
             using (var client = CreateClient())
             {
-                var request = new PublishDatasourceToGatewayClusterRequest
+                var memberGateways = client.Gateways.GetGatewayCluster(this.GatewayClusterId, this.Scope == PowerBIUserScope.Individual).Result.MemberGateways;
+
+                var credentialsDictionary = new Dictionary<Guid, DatasourceCredentialDetails>();
+                foreach (var member in memberGateways)
                 {
-                    Annotation = Annotation,
-                    ConnectionDetails = ConnectionDetails,
-                    CredentialDetailsDictionary = CredentialDetailsDictionary,
-                    DatasourceName = DatasourceName,
-                    DatasourceType = DatasourceType,
-                    SingleSignOnType = SingleSignOnType,
-                };
+                    var datasourceCredentialDetails = DatasourceCredentialDetailsFactory.Create(
+                        "foo",
+                        "bar",
+                        member.PublicKey,
+                        CredentialType.Windows,
+                        EncryptedConnection.Encrypted,
+                        PrivacyLevel.None,
+                        DataMovementConstants.RSA_OAEPEncryptionAlgorithm,
+                        false,
+                        false,
+                        false,
+                        false);
+
+                    credentialsDictionary.Add(member.Id, datasourceCredentialDetails);
+                }
+
+                var request = PublishDatasourceToGatewayClusterRequestFactory.Create(
+                    PowerBI.Common.Api.Gateways.Entities.DatasourceType.Sql,
+                    new SqlConnectionDetails(),
+                    "{}",
+                    credentialsDictionary,
+                    "datasourceName",
+                    new MashupTestConnectionDetails(),
+                    PowerBI.Common.Api.Gateways.Entities.SingleSignOnType.None);
 
                 var result = client.Gateways.CreateGatewayClusterDatasource(GatewayClusterId, request, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

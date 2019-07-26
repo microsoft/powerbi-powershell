@@ -37,5 +37,8 @@ namespace Microsoft.PowerBI.Common.Api.Gateways.Entities
 
         [DataMember(Name = "clusterId")]
         public Guid? ClusterId { get; set; }
+
+        [DataMember(Name = "publicKey")]
+        public string PublicKey { get; set; }
     }
 }

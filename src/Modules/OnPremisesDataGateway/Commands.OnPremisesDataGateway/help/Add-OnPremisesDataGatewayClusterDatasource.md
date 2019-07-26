@@ -14,10 +14,8 @@ Creates a new datasource on the specified cluster
 
 ```
 Add-OnPremisesDataGatewayClusterDatasource [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- -ConnectionDetails <String>
- -CredentialDetailsDictionary <System.Collections.Generic.IDictionary`2[System.Guid,Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceCredentialDetails]>
- -DatasourceName <String> -DatasourceType <String> [-Annotation <String>] [-SingleSignOnType <String>]
- [<CommonParameters>]
+ -ConnectionDetails <String> -DatasourceName <String> -DatasourceType <String> [-Annotation <String>]
+ [-SingleSignOnType <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,21 +52,6 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CredentialDetailsDictionary
-{{Fill CredentialDetailsDictionary Description}}
-
-```yaml
-Type: System.Collections.Generic.IDictionary`2[System.Guid,Microsoft.PowerBI.Common.Api.Gateways.Entities.DatasourceCredentialDetails]
 Parameter Sets: (All)
 Aliases:
 
