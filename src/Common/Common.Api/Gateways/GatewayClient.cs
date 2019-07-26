@@ -190,7 +190,7 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
 
         public async Task<IEnumerable<GatewayClusterDatasource>> GetGatewayClusterDatasources(Guid gatewayClusterId, bool asIndividual)
         {
-            var url = Invariant($"{GetODataUrlStart(true)}/gatewayClusters/{gatewayClusterId}/datasources");
+            var url = Invariant($"{GetODataUrlStart(asIndividual)}/gatewayClusters/{gatewayClusterId}/datasources");
 
             var response = await HttpClientInstance.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -347,10 +347,12 @@ namespace Microsoft.PowerBI.Common.Api.Gateways
             serializer.Converters.Add(new StringEnumConverter());
 
             using (var sr = new StreamReader(await response.Content.ReadAsStreamAsync()))
+            {
                 using (var jsonTextReader = new JsonTextReader(sr))
                 {
                     return serializer.Deserialize<T>(jsonTextReader);
                 }
+            }
         }
     }
 }
