@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
+using System.Net;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Gateways.Entities;
@@ -53,7 +54,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                 };
 
                 var result = client.Gateways.AddUsersToGatewayCluster(GatewayClusterId, request, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

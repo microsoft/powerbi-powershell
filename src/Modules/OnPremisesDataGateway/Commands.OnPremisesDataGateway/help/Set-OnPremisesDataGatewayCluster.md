@@ -20,21 +20,21 @@ Set-OnPremisesDataGatewayCluster [-Scope <PowerBIUserScope>] -GatewayClusterId <
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Set attributes of an existing gateway cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Set-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -AllowCloudDatasourceRefresh true
+PS C:\> Set-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -AllowCloudDatasourceRefresh $true
 ```
 
-Allow cloud datasource refresh on the cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
+Allow Power BI cloud datasource refresh on the cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
 
 ## PARAMETERS
 
 ### -AllowCloudDatasourceRefresh
-If set to true, cloud datasource refresh is allowed on this cluster.
+If set to true, Power BI cloud datasource refresh is allowed on this cluster.
 
 ```yaml
 Type: Boolean
@@ -49,7 +49,7 @@ Accept wildcard characters: False
 ```
 
 ### -AllowCustomConnectors
-If set to true, custom connector based refreshes are allowed on this cluster.
+If set to true, Power BI custom connector based refreshes are allowed on this cluster.
 
 ```yaml
 Type: Boolean
@@ -154,7 +154,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Power BI scope to run the command
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
 Type: PowerBIUserScope
@@ -164,7 +164,7 @@ Accepted values: Individual, Organization
 
 Required: False
 Position: Named
-Default value: None
+Default value: Individual
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

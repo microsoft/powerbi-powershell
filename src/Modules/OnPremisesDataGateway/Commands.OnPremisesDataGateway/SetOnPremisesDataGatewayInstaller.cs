@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
         public const string CmdletVerb = VerbsCommon.Set;
 
         [Alias("Users")]
-        [Parameter()]
+        [Parameter(Mandatory = true)]
         public string[] PrincipalObjectIds { get; set; }
 
         [Parameter(Mandatory = true)]
@@ -42,7 +42,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
                 };
 
                 var result = client.Gateways.UpdateInstallerPrincipals(request).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

@@ -5,34 +5,35 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-OnPremisesDataGatewayClusterStatus
+# Remove-OnPremisesDataGatewayClusterMember
 
 ## SYNOPSIS
-Get cluster status
+Remove gateway from gateway cluster
 
 ## SYNTAX
 
 ```
-Get-OnPremisesDataGatewayClusterStatus [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
- [<CommonParameters>]
+Remove-OnPremisesDataGatewayClusterMember [-Scope <PowerBIUserScope>] -GatewayClusterId <Guid>
+ -MemberGatewayId <Guid> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get cluster status of a particular cluster. 
+Remove gateway from gateway cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Get-OnPremisesDataGatewayClusterStatus -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
+PS C:\> Remove-OnPremisesDataGatewayClusterMember -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -MemberGatewayId E407A364-3A89-4E21-8791-C108DB41E75A
 ```
 
-Get the status of the gateway cluster DC8F2C49-5731-4B27-966B-3DB5094C2E77
+Remove the gateway with ID E407A364-3A89-4E21-8791-C108DB41E75A from the
+cluster with ID DC8F2C49-5731-4B27-966B-3DB5094C2E77
 
 ## PARAMETERS
 
 ### -GatewayClusterId
-Cluster to get status of
+The cluster where the gateway to be removed is a member
 
 ```yaml
 Type: Guid
@@ -46,8 +47,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -MemberGatewayId
+The gateway to remove from the cluster
+
+```yaml
+Type: Guid
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Scope
-Power BI scope to run the command
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
 Type: PowerBIUserScope
@@ -71,7 +87,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [Microsoft.PowerBI.Common.Api.Gateways.Entities.GatewayClusterStatusResponse, Microsoft.PowerBI.Common.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]
+### System.Void
 
 ## NOTES
 

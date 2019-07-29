@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-OnPremisesDataGatewayClusterUser
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Remove user from gateway cluster
 
 ## SYNTAX
 
@@ -18,21 +18,22 @@ Remove-OnPremisesDataGatewayClusterUser [-Scope <PowerBIUserScope>] -GatewayClus
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Remove user from gateway cluster
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> $userToRemove = $(Get-AzureADUser -ObjectId "testUpn@tenant.com").ObjectId
+PS C:\> Remove-OnPremisesDataGatewayClusterUser -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 -PrincipalObjectId $userToRemove
 ```
 
-{{ Add example description here }}
+Removes the user "testUpn@tenant.com" from the gateway cluster.
 
 ## PARAMETERS
 
 ### -GatewayClusterId
-{{Fill GatewayClusterId Description}}
+Gateway cluster where the user should be removed
 
 ```yaml
 Type: Guid
@@ -47,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -PrincipalObjectId
-{{Fill PrincipalObjectId Description}}
+Azure Active Directory (AAD) principal object ID (i.e. user ID) to add to the gateway cluster
 
 ```yaml
 Type: Guid
@@ -62,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-{{Fill Scope Description}}
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
 Type: PowerBIUserScope
@@ -72,24 +73,21 @@ Accepted values: Individual, Organization
 
 Required: False
 Position: Named
-Default value: None
+Default value: Individual
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None
 
-
 ## OUTPUTS
 
 ### System.Void
-
 
 ## NOTES
 
