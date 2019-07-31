@@ -30,10 +30,10 @@ namespace Microsoft.PowerBI.Commands.Data
         public Guid WorkspaceId { get; set; }
 
         [Alias("DataflowId")]
-        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
         public Guid Id { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = DataflowParameterSetName, ValueFromPipelineByPropertyName = true)]
+        [Parameter(Mandatory = true, ParameterSetName = DataflowParameterSetName)]
         public Dataflow Dataflow { get; set; }
 
         [Parameter(Mandatory = false)]

@@ -29,4 +29,10 @@
     <ProjectReference Include="..\Commands.Data\Commands.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="dataflowModel.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

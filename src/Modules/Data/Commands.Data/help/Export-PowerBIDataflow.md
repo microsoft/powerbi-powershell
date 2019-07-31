@@ -45,13 +45,6 @@ PS C:\> Export-PowerBIDataflow -Id 9b519499-5ba1-4f1c-878b-be3a69f1791f -Scope O
 
 Saves dataflow with ID 9b519499-5ba1-4f1c-878b-be3a69f1791f from within the user's organization into a file named Sales.json in the current working directory ($PWD).
 
-### Example 3
-```powershell
-PS C:\> Get-PowerBIDataflow -Scope Organization -Name "MyDataflow" | Export-PowerBIDataflow -Scope Organization
-```
-
-Saves dataflow with Name "MyDataflow", using a pipeline result from a call to Get-PowerBIDataflow.
-
 ## PARAMETERS
 
 ### -Dataflow
@@ -65,7 +58,7 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -80,7 +73,7 @@ Aliases: DataflowId
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

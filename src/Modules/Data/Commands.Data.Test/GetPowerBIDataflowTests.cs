@@ -14,7 +14,7 @@ using Microsoft.PowerBI.Common.Api.Dataflows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Microsoft.PowerBI.Commands.Data
+namespace Microsoft.PowerBI.Commands.Data.Test
 {
     [TestClass]
     public class GetPowerBIDataflowTests
