@@ -76,9 +76,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
                 using (var client = this.CreateClient())
                 {
-                    var result = client.Workspaces.MigrateWorkspaceCapacity(this.Id, this.CapacityId);
-
-                    this.Logger.WriteObject(result, true);
+                    client.Workspaces.MigrateWorkspaceCapacity(this.Id, this.CapacityId);
                 }
             }
             else

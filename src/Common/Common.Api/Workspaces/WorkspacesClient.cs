@@ -61,7 +61,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
             return (Workspace)this.Client.Groups.CreateGroup(new PowerBI.Api.V2.Models.GroupCreationRequest(name: workspaceName));
         }
 
-        public object MigrateWorkspaceCapacity(Guid workspaceId, Guid capacityId)
+        public void MigrateWorkspaceCapacity(Guid workspaceId, Guid capacityId)
         {
             if (capacityId != Guid.Empty)
             {
@@ -77,7 +77,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                     },
                 };
 
-                return this.Client.Capacities.MoveWorkspacesToPremiumCapacity(request);
+                this.Client.Capacities.AssignWorkspacesToCapacity(request);
             }
             else
             {
@@ -86,7 +86,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                     WorkspacesToUnassign = new string[] { workspaceId.ToString() },
                 };
 
-                return this.Client.Capacities.MoveWorkspacesToSharedCapacity(request);
+                this.Client.Capacities.UnassignWorkspacesFromCapacity(request);
             }
         }
     }

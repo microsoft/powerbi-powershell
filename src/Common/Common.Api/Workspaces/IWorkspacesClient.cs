@@ -28,6 +28,6 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         object NewWorkspaceAsUser(string workspaceName);
 
-        object MigrateWorkspaceCapacity(Guid workspaceId, Guid capacityId);
+        void MigrateWorkspaceCapacity(Guid workspaceId, Guid capacityId);
     }
 }

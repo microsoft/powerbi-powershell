@@ -273,11 +273,9 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var workspaceId = Guid.NewGuid();
             var capacityGuid = Guid.NewGuid();
 
-            var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
-                .MigrateWorkspaceCapacity(workspaceId, capacityGuid))
-                .Returns(expectedResponse);
+                .MigrateWorkspaceCapacity(workspaceId, capacityGuid));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBIWorkspace(initFactory)
             {
@@ -291,7 +289,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+            TestUtilities.AssertExpectedUnitTestResults(null, client, initFactory);
         }
 
         [TestMethod]
