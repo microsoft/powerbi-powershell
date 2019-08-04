@@ -25,8 +25,8 @@ Export-PowerBIDataflow [-WorkspaceId <Guid>] -Dataflow <Dataflow> [-Scope <Power
 ```
 
 ## DESCRIPTION
-Saves a Power BI dataflow from the Power BI service into a .json file that represents a Dataflow object.
-For -Scope Individual, user must specify the dataflow's Workspace, using the given -WorkspaceId value.
+Export a Power BI dataflow from the Power BI service into a .json file that represents a Dataflow object.
+For -Scope Individual, user must specify the dataflow's workspace, using the given -WorkspaceId value.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
@@ -36,14 +36,14 @@ Before you run this command, make sure you log in using Connect-PowerBIServiceAc
 PS C:\> Export-PowerBIDataflow -WorkspaceId ed451706-2b02-430c-b25c-20c0842c6375 -Id 9b519499-5ba1-4f1c-878b-be3a69f1791f -OutFile .\Sales.json
 ```
 
-Saves dataflow with ID 9b519499-5ba1-4f1c-878b-be3a69f1791f from a workspace with Id ed451706-2b02-430c-b25c-20c0842c6375 into a file named Sales.json in your current working directory ($PWD).
+Export dataflow with ID 9b519499-5ba1-4f1c-878b-be3a69f1791f from a workspace with Id ed451706-2b02-430c-b25c-20c0842c6375 into a file named Sales.json in your current working directory ($PWD).
 
 ### Example 2
 ```powershell
 PS C:\> Export-PowerBIDataflow -Id 9b519499-5ba1-4f1c-878b-be3a69f1791f -Scope Organization -OutFile .\Sales.json
 ```
 
-Saves dataflow with ID 9b519499-5ba1-4f1c-878b-be3a69f1791f from within the user's organization into a file named Sales.json in the current working directory ($PWD).
+Export dataflow with ID 9b519499-5ba1-4f1c-878b-be3a69f1791f from within the user's organization into a file named Sales.json in the current working directory ($PWD).
 
 ## PARAMETERS
 

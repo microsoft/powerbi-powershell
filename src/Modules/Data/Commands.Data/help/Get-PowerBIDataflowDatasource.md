@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBIDataflowDatasource
 
 ## SYNOPSIS
-Returns a list of Power BI datasources for the given Dataflow.
+Returns a list of Power BI data sources for the given Dataflow.
 
 ## SYNTAX
 
@@ -37,9 +37,9 @@ Get-PowerBIDataflowDatasource -Dataflow <Dataflow> [-WorkspaceId <Guid>] [-Scope
 ```
 
 ## DESCRIPTION
-Retrieves a list of Power BI datasources under the specified dataflow that match the specified search criteria and scope.
-Datasources connected to Dataflows doesn't have a Name value, so there is no Name parameter.
-For -Scope Individual, user must specify the dataflow's Workspace, using the given -WorkspaceId value.
+Retrieves a list of Power BI data sources under the specified dataflow that match the specified search criteria and scope.
+Data sources connected to Dataflows doesn't have a Name value, so there is no 'Name' parameter.
+For -Scope Individual, user must specify the dataflow's workspace, using the given -WorkspaceId value.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
@@ -49,33 +49,33 @@ Before you run this command, make sure you log in using Connect-PowerBIServiceAc
 PS C:\> Get-PowerBIDatasource -DataflowId 23d088a0-a395-483e-b81c-54f51f3e4e3c -WorkspaceId ed451706-2b02-430c-b25c-20c0842c6375
 ```
 
-Returns all datasources in a Power BI dataflow with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for a dataflow the calling user has access to.
+Returns all data sources in a Power BI dataflow with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for a dataflow the calling user has access to in the given workspace.
 
 ### Example 2
 ```powershell
 PS C:\> Get-PowerBIDatasource -DataflowId 23d088a0-a395-483e-b81c-54f51f3e4e3c -Scope Organization
 ```
 
-Returns all datasources in a Power BI dataflow with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for a dataflow in the calling user's organization.
+Returns all data sources in a Power BI dataflow with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c, for a dataflow in the calling user's organization.
 
 ### Example 3
 ```powershell
 PS C:\> Get-PowerBIDatasource -DataflowId 23d088a0-a395-483e-b81c-54f51f3e4e3c -WorkspaceId ed451706-2b02-430c-b25c-20c0842c6375 -Id a3066be2-ea12-4ae2-b8e9-b8006b1fbf61
 ```
 
-Returns a datasource with ID a3066be2-ea12-4ae2-b8e9-b8006b1fbf61, in a dataflow with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c the calling user has access to.
+Returns a data source with ID a3066be2-ea12-4ae2-b8e9-b8006b1fbf61, in a dataflow with ID 23d088a0-a395-483e-b81c-54f51f3e4e3c the calling user has access to in the given workspace.
 
 ### Example 4
 ```powershell
 PS C:\> Get-PowerBIDataflow -Scope Organization -Name "MyDataflow" | Get-PowerBIDatasource -Scope Organization
 ```
 
-Returns all datasources in a Power BI dataflow with Name "MyDataflow", using a pipeline result from a call to Get-PowerBIDataflow.
+Returns all data sources in a Power BI dataflow with Name "MyDataflow", using a pipeline result from a call to Get-PowerBIDataflow.
 
 ## PARAMETERS
 
 ### -Dataflow
-Dataflow for returning datasources for.
+Dataflow object to retrieve and return data sources for.
 
 ```yaml
 Type: Dataflow
@@ -90,7 +90,7 @@ Accept wildcard characters: False
 ```
 
 ### -DataflowId
-ID of the dataflow to return datasources for.
+ID of the dataflow to retrieve and return data sources for.
 
 ```yaml
 Type: Guid
@@ -105,7 +105,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-ID of the datasource to return.
+ID of the data source to return.
 
 ```yaml
 Type: Guid
@@ -120,7 +120,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Indicates scope of the call. Individual returns only datasources from dataflows assigned to the caller; Organization returns datasources for all dataflows within a tenant (must be an administrator to initiate). Individual is the default.
+Indicates scope of the call. Individual returns only data sources from dataflows assigned to the caller; Organization returns data sources for all dataflows within a tenant (must be an administrator to initiate). Individual is the default.
 
 ```yaml
 Type: PowerBIUserScope
@@ -136,7 +136,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-ID of the workspace to filter results to, datasources only belonging to that workspace are shown. Only available when -Scope is Individual.
+ID of the workspace to filter results to. Only data sources belonging to that workspace are shown. Available only when -Scope is Individual.
 
 ```yaml
 Type: Guid
