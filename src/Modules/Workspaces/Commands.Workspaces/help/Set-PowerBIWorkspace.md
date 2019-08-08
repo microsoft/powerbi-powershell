@@ -23,6 +23,11 @@ Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> [-Name <String>] [-D
 Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<CommonParameters>]
 ```
 
+### Capacity
+```
+Set-PowerBIWorkspace [-Scope <PowerBIUserScope>] -Id <Guid> -CapacityId <Guid> [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Updates the name or description of a Power BI workspace.
 Only workspaces in the new workspace experiences preview are supported.
@@ -51,6 +56,21 @@ If the current user is an administrator, this will update the specified workspac
 
 ## PARAMETERS
 
+### -CapacityId
+The capacity object id which a workspace will be assigned to. If CapacityId is set to "00000000-0000-0000-0000-000000000000", the workspace will be migrated to shared capacity.
+
+```yaml
+Type: Guid
+Parameter Sets: Capacity
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Description
 The new description to give to the workspace to update.
 
@@ -71,7 +91,7 @@ ID of the workspace to update.
 
 ```yaml
 Type: Guid
-Parameter Sets: Properties
+Parameter Sets: Properties, Capacity
 Aliases: GroupId, WorkspaceId
 
 Required: True
