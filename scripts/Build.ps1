@@ -14,7 +14,7 @@
 # Executes build, pack and clean for the solution.
 #
 #.NOTES
-# Requires Visual Studio 2019 to be installed (at least 16.0 where vswhere.exe is available).
+# Requires Visual Studio 2019 to be installed (at least 16.2 where vswhere.exe is available).
 ##############################
 [CmdletBinding()]
 param
