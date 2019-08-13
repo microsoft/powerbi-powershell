@@ -38,7 +38,7 @@ namespace Microsoft.PowerBI.Commands.OnPremisesDataGateway
             using (var client = CreateClient())
             {
                 var result = client.Gateways.DeleteUserOnGatewayCluster(GatewayClusterId, PrincipalObjectId, this.Scope == PowerBIUserScope.Individual).Result;
-                Logger.WriteObject(result, true);
+                Logger.WriteDebug(result);
             }
         }
     }

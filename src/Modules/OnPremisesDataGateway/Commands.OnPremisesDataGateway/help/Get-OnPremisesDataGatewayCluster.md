@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayCluster
 
 ## SYNOPSIS
-Get clusters for the current user.
+Get clusters for the current user
 
 ## SYNTAX
 
@@ -27,7 +27,21 @@ is specified, all clusters will be returned.
 PS C:\> Get-OnPremisesDataGatewayCluster
 ```
 
-Get all clusters for the current user.
+Get all clusters details for the current user
+
+### Example 2
+```powershell
+PS C:\> Get-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77
+```
+
+Get cluster details for the specific cluster "DC8F2C49-5731-4B27-966B-3DB5094C2E77"
+
+### Example 3
+```powershell
+PS C:\> Get-OnPremisesDataGatewayCluster -GatewayClusterId DC8F2C49-5731-4B27-966B-3DB5094C2E77 | Select -ExpandProperty MemberGateways
+```
+
+Get details of each member gateway in the specific cluster "DC8F2C49-5731-4B27-966B-3DB5094C2E77".
 
 ## PARAMETERS
 
@@ -47,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -Scope
-Power BI scope to run the command
+Security Scope to run the command. This would determine if you are running this command in the scope of a Tenant/Service admin or a Gateway Admin
 
 ```yaml
 Type: PowerBIUserScope
@@ -57,7 +71,7 @@ Accepted values: Individual, Organization
 
 Required: False
 Position: Named
-Default value: None
+Default value: Individual
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

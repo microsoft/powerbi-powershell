@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-OnPremisesDataGatewayTenantPolicy
 
 ## SYNOPSIS
-Get gateway tenant policy
+Get the gateway installation and registration policy for the tenant.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Get-OnPremisesDataGatewayTenantPolicy [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get gateway tenant policy
+Get the gateway installation and registration policy for the tenant. This command is availble only for Tenant/service admins.
 
 ## EXAMPLES
 
@@ -26,7 +26,7 @@ Get gateway tenant policy
 PS C:\> Get-OnPremisesDataGatewayTenantPolicy
 ```
 
-Get the tenant policy for the current user
+Get the gateway installation and registration policy for the tenant.
 
 ## PARAMETERS
 
