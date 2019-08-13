@@ -60,6 +60,7 @@ namespace Microsoft.PowerBI.Commands.Data
         [Parameter(Mandatory = false, ParameterSetName = ObjectIdParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = ObjectNameParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = ObjectListParameterSetName)]
+        [ValidateSet("actualStorage")]
         public string Include { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]

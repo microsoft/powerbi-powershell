@@ -34,7 +34,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         public IEnumerable<Dataset> GetDatasetsForWorkspace(Guid workspaceId, string expand = null)
         {
-            return this.Client.Datasets.GetDatasetsWithODataQueryInGroup(groupId: workspaceId.ToString(), expand: expand).Value?.Select(x => (Dataset)x);
+            return this.Client.Datasets.GetDatasetsWithODataQuery(groupId: workspaceId.ToString(), expand: expand).Value?.Select(x => (Dataset)x);
         }
 
         public IEnumerable<Dataset> GetDatasetsAsAdmin(string filter = null, int? top = null, int? skip = null, string expand = null)
@@ -51,11 +51,11 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         {
             if (workspaceId.HasValue && workspaceId.Value != default)
             {
-                this.Client.Datasets.PatchDatasetByIdInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString(), patchDatasetRequest: patchDatasetRequest);
+                this.Client.Datasets.UpdateDatasetByIdInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString(), updateDatasetRequest: patchDatasetRequest);
             }
             else
             {
-                this.Client.Datasets.PatchDatasetById(datasetKey: datasetId.ToString(), patchDatasetRequest: patchDatasetRequest);
+                this.Client.Datasets.UpdateDatasetById(datasetKey: datasetId.ToString(), updateDatasetRequest: patchDatasetRequest);
             }
         }
 

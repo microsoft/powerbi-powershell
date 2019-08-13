@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
@@ -17,6 +18,8 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         IEnumerable<Workspace> GetWorkspaces(string filter = default, int? top = default, int? skip = default);
 
         IEnumerable<Workspace> GetWorkspacesAsAdmin(string expand = default, string filter = default, int? top = default, int? skip = default);
+
+        WorkspaceLastMigrationStatus GetWorkspaceLastMigrationStatus(Guid workspaceId);
 
         object UpdateWorkspaceAsAdmin(Guid workspaceId, Workspace updatedProperties);
 

@@ -117,7 +117,9 @@ Accept wildcard characters: False
 ```
 
 ### -Include
-OData expand, case-sensitive (element names start lowercase).```yaml
+OData expand, case-sensitive (element names start lowercase).
+
+```yaml
 Type: String
 Parameter Sets: (All)
 Aliases: Expand

@@ -16,7 +16,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         {
             if (datasetStorage == null)
             {
-                return null;                                                                                                                                                                                                                            }
+                return null;
+            }
 
             return new DatasetStorage
             {
