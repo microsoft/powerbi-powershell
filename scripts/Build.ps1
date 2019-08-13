@@ -14,7 +14,7 @@
 # Executes build, pack and clean for the solution.
 #
 #.NOTES
-# Requires Visual Studio 2017 to be installed (at least 15.2 where vswhere.exe is available).
+# Requires Visual Studio 2019 to be installed (at least 16.0 where vswhere.exe is available).
 ##############################
 [CmdletBinding()]
 param
@@ -52,7 +52,10 @@ param
     [switch] $NoBuild,
 
     # Indicates to add the AppVeyor logger.
-    [switch] $AppVeyorLogger
+    [switch] $AppVeyorLogger,
+
+    # Indicates to not build in parallel, removes the /m switch.
+    [switch] $NoParallel
 )
 
 function Get-VSBuildFolder
@@ -125,6 +128,10 @@ if($AppVeyorLogger) {
 
 if($BinaryLogger) {
     $msBuildArgs += '/bl'
+}
+
+if(!$NoParallel) {
+    $msBuildArgs += '/m'
 }
 
 Write-Verbose "Executing: & $msbuildPath $($msBuildArgs -join ' ')"
