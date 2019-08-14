@@ -40,6 +40,9 @@ namespace Microsoft.PowerBI.Commands.Admin
         public string ActivityType { get; set; }
 
         [Parameter(Mandatory = false)]
+        public string User { get; set; }
+
+        [Parameter(Mandatory = false)]
         [ValidateSet("JsonString", "JsonObject")]
         public OutputType ResultType { get; set; } = OutputType.JsonString;
 
@@ -80,10 +83,18 @@ namespace Microsoft.PowerBI.Commands.Admin
 
             string formattedStartDateTime = $"'{this.StartDateTime}'";
             string formattedEndDateTime = $"'{this.EndDateTime}'";
-            string formattedFilter = this.ActivityType;
-            if (!string.IsNullOrEmpty(this.ActivityType))
+            string formattedFilter = null;
+            if (!string.IsNullOrEmpty(this.ActivityType) && !string.IsNullOrEmpty(this.User))
+            {
+                formattedFilter = $"Activity eq '{this.ActivityType}' and UserId eq '{this.User}'";
+            }
+            else if (!string.IsNullOrEmpty(this.ActivityType))
             {
                 formattedFilter = $"Activity eq '{this.ActivityType}'";
+            }
+            else if (!string.IsNullOrEmpty(this.User))
+            {
+                formattedFilter = $"UserId eq '{this.User}'";
             }
 
             var finalResult = this.ExecuteCmdletHelper(formattedStartDateTime, formattedEndDateTime, formattedFilter);
