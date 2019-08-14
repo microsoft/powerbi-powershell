@@ -61,5 +61,10 @@ namespace Microsoft.PowerBI.Common.Api.Admin
 
             this.Client.Admin.PatchCapacityAsAdmin(capacityId, capacityPatchRequest);
         }
+
+        public ActivityEvent.ActivityEventResponse GetActivityEvents(string startDateTime, string endDateTime, string continuationToken = null, string filter = null)
+        {
+            return this.Client.Admin.GetActivityEvents(startDateTime, endDateTime, continuationToken, filter);
+        }
     }
 }
