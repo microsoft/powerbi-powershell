@@ -10,8 +10,6 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Admin;
 using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Datasets;
-using Microsoft.PowerBI.Common.Api.Gateways;
-using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.Rest;
@@ -31,22 +29,18 @@ namespace Microsoft.PowerBI.Common.Api
         public IDatasetsClient Datasets { get; set; }
         
         public IAdminClient Admin { get; set; }
-        
-        public IGatewayClient Gateways { get; set; }
 
         public ICapacityClient Capacities { get; set; }
 
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings);
-            this.Gateways = CreateGatewaysClient(authenticator, profile, logger, settings);
             InitializeClients();
         }
 
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings, httpClientHandler);
-            this.Gateways = CreateGatewaysClient(authenticator, profile, logger, settings, httpClientHandler);
             InitializeClients();
         }
 
@@ -85,28 +79,6 @@ namespace Microsoft.PowerBI.Common.Api
             }
         }
 
-        private static IGatewayClient CreateGatewaysClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
-        {
-            var token = authenticator.Authenticate(profile, logger, settings);
-            if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
-            {
-                return new GatewayClient(baseUri, token);
-            }
-
-            throw new ArgumentNullException(nameof(IPowerBIEnvironment.GlobalServiceEndpoint));
-        }
-
-        private static IGatewayClient CreateGatewaysClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
-        {
-            var token = authenticator.Authenticate(profile, logger, settings);
-            if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
-            {
-                return new GatewayClient(baseUri, token, httpClientHandler);
-            }
-
-            throw new ArgumentNullException(nameof(IPowerBIEnvironment.GlobalServiceEndpoint));
-        }
-
         public void Dispose()
         {
             Dispose(true);
@@ -134,11 +106,6 @@ namespace Microsoft.PowerBI.Common.Api
                 {
                     this.Client.Dispose();
                     this.Client = null;
-                }
-
-                if(this.Gateways != null)
-                {
-                    this.Gateways = null;
                 }
 
                 if (this.Reports != null)
