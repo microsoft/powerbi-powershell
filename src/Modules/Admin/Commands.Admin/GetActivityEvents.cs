@@ -7,6 +7,7 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Common.Api.ActivityEvent;
 using Microsoft.PowerBI.Common.Client;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
@@ -56,7 +57,8 @@ namespace Microsoft.PowerBI.Commands.Admin
                 foreach (var entity in response.ActivityEventEntities)
                 {
                     string jsonRepresentation = JsonConvert.SerializeObject(entity);
-                    this.Logger.WriteObject(jsonRepresentation, true);
+                    string indented = JValue.Parse(jsonRepresentation).ToString(Formatting.Indented);
+                    this.Logger.WriteObject(indented, true);
                 }
 
                 this.Logger.WriteObject(response.ContinuationToken);
