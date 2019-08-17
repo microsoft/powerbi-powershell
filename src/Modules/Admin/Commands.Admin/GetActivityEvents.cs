@@ -54,14 +54,9 @@ namespace Microsoft.PowerBI.Commands.Admin
                 }
 
                 ActivityEventResponse response = client.Admin.GetActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
-                foreach (var entity in response.ActivityEventEntities)
-                {
-                    string jsonRepresentation = JsonConvert.SerializeObject(entity);
-                    string indented = JValue.Parse(jsonRepresentation).ToString(Formatting.Indented);
-                    this.Logger.WriteObject(indented, true);
-                }
-
-                this.Logger.WriteObject(response.ContinuationToken);
+                string jsonRepresentation = JsonConvert.SerializeObject(response);
+                string indented = JValue.Parse(jsonRepresentation).ToString(Formatting.Indented);
+                this.Logger.WriteObject(indented, true);
             }
         }
     }
