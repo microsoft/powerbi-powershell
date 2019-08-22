@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Management.Automation;
 using Microsoft.PowerBI.Common.Api.ActivityEvent;
 using Microsoft.PowerBI.Common.Client;
@@ -18,6 +19,7 @@ namespace Microsoft.PowerBI.Commands.Admin
         public const string CmdletName = "PowerBIActivityEvents";
         public const string CmdletVerb = VerbsCommon.Get;
         private const string ListParameterSetName = "List";
+        private bool validationError = false;
 
         public GetActivityEvents() : base() { }
 
@@ -35,8 +37,37 @@ namespace Microsoft.PowerBI.Commands.Admin
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public string Filter { get; set; }
 
+        protected override void BeginProcessing()
+        {
+            base.BeginProcessing();
+            try
+            {
+                DateTime.Parse(this.StartDateTime);
+            }
+            catch
+            {
+                this.validationError = true;
+                this.Logger.ThrowTerminatingError($"{nameof(this.StartDateTime)} is not a valid DateTime.");
+            }
+
+            try
+            {
+                DateTime.Parse(this.EndDateTime);
+            }
+            catch
+            {
+                this.validationError = true;
+                this.Logger.ThrowTerminatingError($"{nameof(this.EndDateTime)} is not a valid DateTime.");
+            }
+        }
+
         public override void ExecuteCmdlet()
         {
+            if(this.validationError)
+            {
+                return;
+            }
+
             using (var client = this.CreateClient())
             {
                 string formattedStartDateTime = $"'{this.StartDateTime}'";
