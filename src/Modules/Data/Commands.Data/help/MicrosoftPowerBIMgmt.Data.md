@@ -38,6 +38,9 @@ Creates a new Power BI table object.
 ### [Remove-PowerBIRow](Remove-PowerBIRow.md)
 Removes rows from a Power BI table.
 
+### [Set-PowerBIDataset](Set-PowerBIDataset.md)
+Updates the properties for the specified Power BI dataset.
+
 ### [Set-PowerBITable](Set-PowerBITable.md)
 Updates the metadata and schema for the specified Power BI table.
 

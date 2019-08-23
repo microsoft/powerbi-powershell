@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.PowerBI.Common.Api.Helpers;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
@@ -25,6 +26,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public bool IsEffectiveIdentityRequired { get; set; }
         public bool IsEffectiveIdentityRolesRequired { get; set; }
         public bool IsOnPremGatewayRequired { get; set; }
+        public DatasetStorageMode? TargetStorageMode { get; set; }
+        public DatasetStorage ActualStorage { get; set; }
 
         public static implicit operator Dataset(PowerBI.Api.V2.Models.Dataset dataset)
         {
@@ -47,7 +50,9 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 DefaultMode = ConvertDefaultMode(dataset.DefaultMode),
                 IsRefreshable = dataset.IsRefreshable.GetValueOrDefault(),
                 IsEffectiveIdentityRequired = dataset.IsEffectiveIdentityRequired.GetValueOrDefault(),
-                IsOnPremGatewayRequired = dataset.IsOnPremGatewayRequired.GetValueOrDefault()
+                IsOnPremGatewayRequired = dataset.IsOnPremGatewayRequired.GetValueOrDefault(),
+                TargetStorageMode = EnumTypeConverter.ConvertTo<DatasetStorageMode, PowerBI.Api.V2.Models.DatasetStorageMode>(dataset.TargetStorageMode),
+                ActualStorage = dataset.ActualStorage,
             };
         }
 

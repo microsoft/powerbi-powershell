@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.PowerBI.Api.V2;
+using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
@@ -34,6 +35,11 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         public IEnumerable<Workspace> GetWorkspacesAsAdmin(string expand = null, string filter = null, int? top = null, int? skip = null)
         {
             return this.Client.Groups.GetGroupsAsAdmin(expand, filter, top, skip).Value.Select(x => (Workspace)x);
+        }
+
+        public WorkspaceLastMigrationStatus GetWorkspaceLastMigrationStatus(Guid workspaceId)
+        {
+            return this.Client.Groups.GetLastMigrationStatus(workspaceId.ToString());
         }
 
         public object RemoveWorkspaceUser(Guid workspaceId, string userPrincipalName)

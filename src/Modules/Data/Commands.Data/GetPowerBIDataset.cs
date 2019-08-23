@@ -53,6 +53,16 @@ namespace Microsoft.PowerBI.Commands.Data
         [Parameter(Mandatory = false, ParameterSetName = ObjectListParameterSetName)]
         public int? First { get; set; }
 
+        [Alias("Expand")]
+        [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = ObjectIdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = ObjectNameParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = ObjectListParameterSetName)]
+        [ValidateSet("actualStorage")]
+        public string Include { get; set; }
+
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = ObjectListParameterSetName)]
         public int? Skip { get; set; }
@@ -108,14 +118,14 @@ namespace Microsoft.PowerBI.Commands.Data
                 if(this.WorkspaceId != default)
                 {
                     datasets = this.Scope == PowerBIUserScope.Individual ?
-                        client.Datasets.GetDatasetsForWorkspace(this.WorkspaceId) :
-                        client.Datasets.GetDatasetsAsAdminForWorkspace(this.WorkspaceId, filter: this.Filter, top: this.First, skip: this.Skip);
+                        client.Datasets.GetDatasetsForWorkspace(this.WorkspaceId, this.Include) :
+                        client.Datasets.GetDatasetsAsAdminForWorkspace(this.WorkspaceId, filter: this.Filter, top: this.First, skip: this.Skip, expand: this.Include);
                 }
                 else
                 {
                     datasets = this.Scope == PowerBIUserScope.Individual ?
-                        client.Datasets.GetDatasets() :
-                        client.Datasets.GetDatasetsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip);
+                        client.Datasets.GetDatasets(this.Include) :
+                        client.Datasets.GetDatasetsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip, expand: this.Include);
                 }
             }
 

@@ -88,6 +88,14 @@ If you are a tenant administrator, you can view all workspaces in your tenant by
 Get-PowerBIWorkspace -Scope Organization -All
 ```
 
+### Get Workspace Migration Status
+
+Get Power BI workspace migration status:
+
+```powershell
+Get-PowerBIWorkspaceMigrationStatus
+```
+
 ### Update Workspace
 
 Update the name or description of a user's workspace:
@@ -234,6 +242,14 @@ Get Power BI tables contained within a dataset:
 
 ```powershell
 Get-PowerBITable -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
+```
+
+### Set Datasets
+
+Set Power BI datasets:
+
+```powershell
+Set-PowerBIDataset
 ```
 
 ### Call the Power BI Rest API

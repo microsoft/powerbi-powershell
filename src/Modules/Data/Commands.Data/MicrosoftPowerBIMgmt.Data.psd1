@@ -62,7 +62,7 @@ PowerShellVersion = '3.0'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-# FormatsToProcess = @()
+FormatsToProcess = @('Microsoft.PowerBI.Commands.Data.format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
@@ -71,7 +71,7 @@ PowerShellVersion = '3.0'
 FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'Add-PowerBIDataset','Set-PowerBITable','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset','Get-PowerBIDatasource','Get-PowerBITable','Add-PowerBIRow','Remove-PowerBIRow'
+CmdletsToExport = 'Add-PowerBIDataset','Set-PowerBITable','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset','Get-PowerBIDatasource','Get-PowerBITable','Add-PowerBIRow','Remove-PowerBIRow', 'Set-PowerBIDataset'
 
 # Variables to export from this module
 VariablesToExport = '*'

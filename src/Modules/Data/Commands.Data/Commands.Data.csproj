@@ -15,9 +15,13 @@
     <PackageTags>PowerBI;Datasources;Datasets</PackageTags>
 </PropertyGroup>
 <ItemGroup>
+  <None Remove="Microsoft.PowerBI.Commands.Data.format.ps1xml" />
   <None Remove="MicrosoftPowerBIMgmt.Data.psd1" />
 </ItemGroup>
 <ItemGroup>
+  <Content Include="Microsoft.PowerBI.Commands.Data.format.ps1xml">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
   <Content Include="MicrosoftPowerBIMgmt.Data.psd1">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
