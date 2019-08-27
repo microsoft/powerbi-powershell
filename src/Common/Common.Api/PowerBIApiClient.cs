@@ -12,6 +12,7 @@ using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
+using Microsoft.PowerBI.Common.Api.Dataflows;
 using Microsoft.Rest;
 
 namespace Microsoft.PowerBI.Common.Api
@@ -32,6 +33,8 @@ namespace Microsoft.PowerBI.Common.Api
 
         public ICapacityClient Capacities { get; set; }
 
+        public IDataflowsClient Dataflows { get; set; }
+
         public PowerBIApiClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.Client = CreateClient(authenticator, profile, logger, settings);
@@ -51,6 +54,7 @@ namespace Microsoft.PowerBI.Common.Api
             this.Datasets = new DatasetsClient(this.Client);
             this.Admin = new AdminClient(this.Client);
             this.Capacities = new CapacityClient(this.Client);
+            this.Dataflows = new DataflowsClient(this.Client);
         }
 
         private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
@@ -131,6 +135,11 @@ namespace Microsoft.PowerBI.Common.Api
                 if (this.Capacities != null)
                 {
                     this.Capacities = null;
+                }
+
+                if (this.Dataflows != null)
+                {
+                    this.Dataflows = null;
                 }
             }
         }

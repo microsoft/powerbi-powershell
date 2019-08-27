@@ -12,7 +12,7 @@ using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
-using Microsoft.PowerBI.Common.Api.Datasets;
+using Microsoft.PowerBI.Common.Api.Dataflows;
 using Microsoft.PowerBI.Common.Api.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -20,36 +20,44 @@ using Moq;
 namespace Microsoft.PowerBI.Commands.Data.Test
 {
     [TestClass]
-    public class GetPowerBIDatasourceTests
+    public class GetPowerBIDataflowDatasourceTests
     {
-        public static CmdletInfo GetPowerBIDatasourceCmdletInfo { get; } = new CmdletInfo($"{GetPowerBIDatasource.CmdletVerb}-{GetPowerBIDatasource.CmdletName}", typeof(GetPowerBIDatasource));
+        public static CmdletInfo GetPowerBIDataflowDatasourceCmdletInfo { get; } = new CmdletInfo($"{GetPowerBIDataflowDatasource.CmdletVerb}-{GetPowerBIDataflowDatasource.CmdletName}", typeof(GetPowerBIDataflowDatasource));
 
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndGetPowerBIDatasourceIndividualScope()
+        public void EndToEndGetPowerBIDataflowDatasourceOrganizationScope()
         {
             /*
              * Requirement to run test:
-             * Need at least one dataset containing a datasource assigned to the user logging into the test.
+             * Need at least one dataflow containing a datasource assigned to the user logging into the test.
              */
 
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
                 ProfileTestUtilities.ConnectToPowerBI(ps);
-                ps.AddCommand(GetPowerBIDatasetTests.GetPowerBIDatasetCmdletInfo);
-                var existingDatasets = ps.Invoke();
+                ps.AddCommand(GetPowerBIDataflowTests.GetPowerBIDataflowCmdletInfo).AddParameter(nameof(GetPowerBIDataflowDatasource.Scope), PowerBIUserScope.Organization);
+
+                var existingDataflows = ps.Invoke();
                 TestUtilities.AssertNoCmdletErrors(ps);
                 ps.Commands.Clear();
 
-                if(!existingDatasets.Any())
+                if(!existingDataflows.Any())
                 {
-                    Assert.Inconclusive("No datasets returned. Verify you have datasets under your logged in user.");
+                    Assert.Inconclusive("No dataflows returned. Verify you have dataflows under your logged in user.");
                 }
 
-                var testDataset = existingDatasets.Select(d => (Dataset)d.BaseObject).FirstOrDefault();
-                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDatasource.DatasetId), testDataset.Id.ToString());
+                var testDataflow = existingDataflows.Select(d => (Dataflow)d.BaseObject).FirstOrDefault();
+
+                var parameters = new Dictionary<string, object>()
+                {
+                    { nameof(GetPowerBIDataflowDatasource.DataflowId), testDataflow.Id },
+                    { nameof(GetPowerBIDataflowDatasource.Scope), PowerBIUserScope.Organization }
+                };
+
+                ps.AddCommand(GetPowerBIDataflowDatasourceCmdletInfo).AddParameters(parameters);
 
                 // Act
                 var result = ps.Invoke();
@@ -64,7 +72,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void EndToEndGetPowerBIDatasourceWithoutLogin()
+        public void EndToEndGetPowerBIDataflowDatasourceWithoutLoginFail()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -72,9 +80,10 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                 {
-                    { nameof(GetPowerBIDatasource.DatasetId), Guid.NewGuid() }
+                    { nameof(GetPowerBIDataflowDatasource.DataflowId), Guid.NewGuid() },
+                    { nameof(GetPowerBIDataflowDatasource.WorkspaceId), Guid.NewGuid() }
                 };
-                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameters(parameters);
+                ps.AddCommand(GetPowerBIDataflowDatasourceCmdletInfo).AddParameters(parameters);
 
                 // Act
                 var results = ps.Invoke();
@@ -86,19 +95,18 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void EndToEndGetPowerBIDatasourceOrganizationScopeAndWorkspaceId()
+        public void EndToEndGetPowerBIDataflowDatasourceOrganizationScopeWithoutLoginFail()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                // Arrange
+                // Arrange - 
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                 {
-                    { nameof(GetPowerBIDatasource.DatasetId), Guid.NewGuid() },
-                    { nameof(GetPowerBIDatasource.WorkspaceId), Guid.NewGuid() },
-                    { nameof(GetPowerBIDatasource.Scope), PowerBIUserScope.Organization }
+                    { nameof(GetPowerBIDataflowDatasource.DataflowId), Guid.NewGuid() },
+                    { nameof(GetPowerBIDataflowDatasource.Scope), PowerBIUserScope.Organization }
                 };
-                ps.AddCommand(GetPowerBIDatasourceCmdletInfo).AddParameters(parameters);
+                ps.AddCommand(GetPowerBIDataflowDatasourceCmdletInfo).AddParameters(parameters);
 
                 // Act
                 var results = ps.Invoke();
@@ -111,18 +119,20 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
-        public void EndToEndPipingDatasetIntoGetPowerBIDatasourceIndividualScope()
+        public void EndToEndPipingDataflowIntoGetPowerBIDataflowDatasourceOrganizationScope()
         {
             /*
              * Requirement to run test:
-             * Need at least one dataset containing a datasource assigned to the user logging into the test.
+             * Need at least one dataflow containing a datasource assigned to the user logging into the test.
              */
 
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
-                ps.AddCommand(GetPowerBIDatasetTests.GetPowerBIDatasetCmdletInfo).AddCommand(GetPowerBIDatasourceCmdletInfo);
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+
+                ps.AddCommand(GetPowerBIDataflowTests.GetPowerBIDataflowCmdletInfo).AddParameter(nameof(GetPowerBIDataflowDatasource.Scope), PowerBIUserScope.Organization)
+                    .AddCommand(GetPowerBIDataflowDatasourceCmdletInfo).AddParameter(nameof(GetPowerBIDataflowDatasource.Scope), PowerBIUserScope.Organization);
 
                 // Act
                 var results = ps.Invoke();
@@ -140,42 +150,19 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void GetPowerBIDatasourceIndividualScope_ListParameterSet()
+        public void GetPowerBIDataflowDatasourceIndividualScopeAndWorkspaceId_ListParameterSet()
         {
             // Arrange
-            var datasetId = Guid.NewGuid();
-            var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
-            var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.GetDatasources(datasetId, null)).Returns(expectedDatasources);
-            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIDatasource(initFactory)
-            {
-                Scope = PowerBIUserScope.Individual,
-                DatasetId = datasetId,
-                ParameterSet = "List",
-            };
-
-            // Act
-            cmdlet.InvokePowerBICmdlet();
-
-            // Assert
-            initFactory.AssertExpectedUnitTestResults(expectedDatasources);
-        }
-
-        [TestMethod]
-        public void GetPowerBIDatasourceIndividualScopeAndWorkspaceId_ListParameterSet()
-        {
-            // Arrange
-            var datasetId = Guid.NewGuid();
+            var dataflowId = Guid.NewGuid();
             var workspaceId = Guid.NewGuid();
             var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.GetDatasources(datasetId, workspaceId)).Returns(expectedDatasources);
+            client.Setup(x => x.Dataflows.GetDataflowDatasources(workspaceId, dataflowId)).Returns(expectedDatasources);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIDatasource(initFactory)
+            var cmdlet = new GetPowerBIDataflowDatasource(initFactory)
             {
                 Scope = PowerBIUserScope.Individual,
-                DatasetId = datasetId,
+                DataflowId = dataflowId,
                 WorkspaceId = workspaceId,
                 ParameterSet = "List",
             };
@@ -188,18 +175,18 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void GetPowerBIDatasourceOrganizationScope_ListParameterSet()
+        public void GetPowerBIDataflowDatasourceOrganizationScope_ListParameterSet()
         {
             // Arrange
-            var datasetId = Guid.NewGuid();
+            var dataflowId = Guid.NewGuid();
             var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.GetDatasourcesAsAdmin(datasetId)).Returns(expectedDatasources);
+            client.Setup(x => x.Dataflows.GetDataflowDatasourcesAsAdmin(dataflowId)).Returns(expectedDatasources);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIDatasource(initFactory)
+            var cmdlet = new GetPowerBIDataflowDatasource(initFactory)
             {
                 Scope = PowerBIUserScope.Organization,
-                DatasetId = datasetId,
+                DataflowId = dataflowId,
                 ParameterSet = "List",
             };
 
@@ -211,19 +198,22 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         }
 
         [TestMethod]
-        public void GetPowerBIDatasourceIndividualScope_ObjectAndListParameterSet()
+        public void GetPowerBIDataflowDatasourceIndividualScope_ObjectAndListParameterSet()
         {
             // Arrange
-            var testDataset = new Dataset { Id = Guid.NewGuid(), Name = "TestDataset" };
+            var testDataflow = new Dataflow { Id = Guid.NewGuid(), Name = "TestDataflow" };
             var expectedDatasources = new List<Datasource> { new Datasource { DatasourceId = Guid.NewGuid().ToString(), Name = "TestDatasource", GatewayId = Guid.NewGuid().ToString() } };
+            var workspaceId = Guid.NewGuid();
+
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Datasets.GetDatasources(testDataset.Id, null)).Returns(expectedDatasources);
+            client.Setup(x => x.Dataflows.GetDataflowDatasources(workspaceId, testDataflow.Id)).Returns(expectedDatasources);
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIDatasource(initFactory)
+            var cmdlet = new GetPowerBIDataflowDatasource(initFactory)
             {
                 Scope = PowerBIUserScope.Individual,
-                Dataset = testDataset,
-                ParameterSet = "ObjectAndList",
+                Dataflow = testDataflow,
+                WorkspaceId = workspaceId,
+                ParameterSet = "DataflowAndList",
             };
 
             // Act

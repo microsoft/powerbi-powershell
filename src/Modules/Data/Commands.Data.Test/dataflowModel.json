@@ -1,0 +1,120 @@
+﻿{
+    "name": "testJsonName",
+    "description": "testJsonDescription",
+    "version": "1.0",
+    "pbi:mashup": {
+      "fastCombine": false,
+      "allowNativeQueries": false,
+      "queriesMetadata": {
+        "Sheet1": {
+          "queryId": "b278ad46-1a5a-4b32-a5b1-76b194ff01e5",
+          "queryName": "Sheet1",
+          "loadEnabled": true
+        },
+        "Sales_Promotion_Effectiveness__Final": {
+          "queryId": "8825fb81-1ccf-4f56-ab82-d5fb1117455c",
+          "queryName": "Sales_Promotion_Effectiveness__Final",
+          "loadEnabled": true
+        }
+      },
+      "document": "section Section1;\r\nshared Sheet1 = let\r\n  Source = Excel.Workbook(Web.Contents(\"https://fortestingelenakutko.blob.core.windows.net/mycont1/SalesFinance.xlsx\"), null, true),\r\n  #\"Navigation 1\" = Source{[Item = \"Sheet1\", Kind = \"Sheet\"]}[Data]\r\nin\r\n  #\"Navigation 1\";\r\nshared Sales_Promotion_Effectiveness__Final = let\r\n  Source = Excel.Workbook(Web.Contents(\"https://fortestingelenakutko.blob.core.windows.net/mycont1/SalesFinance.xlsx\"), null, true),\r\n  #\"Navigation 1\" = Source{[Item = \"Sheet1!Sales_Promotion_Effectiveness__Final\", Kind = \"DefinedName\"]}[Data]\r\nin\r\n  #\"Navigation 1\";\r\n"
+  },
+    "annotations": [
+        {
+            "name": "pbi:QueriesMetadata",
+            "value": "{\"Sheet1\":{\"queryId\":\"332d8066-fd1a-4af3-8df3-913bd105900b\",\"queryName\":\"Sheet1\",\"queryGroupId\":null,\"entityName\":null,\"loadEnabled\":true},\"Sales_Promotion_Effectiveness__Final\":{\"queryId\":\"cf1e0d38-9196-44ee-ba54-5d5e40c4b9d1\",\"queryName\":\"Sales_Promotion_Effectiveness__Final\",\"queryGroupId\":null,\"entityName\":null,\"loadEnabled\":true}}"
+        }
+    ],
+    "entities": [
+        {
+            "$type": "LocalEntity",
+            "name": "Sheet1",
+            "description": "",
+            "pbi:refreshPolicy": {
+                "$type": "FullRefreshPolicy",
+                "location": "Sheet1.csv"
+            },
+            "attributes": [
+                {
+                    "name": "Column1",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column2",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column3",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column4",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column5",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column6",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column7",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column8",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column9",
+                    "dataType": "string"
+                }
+            ]
+        },
+        {
+            "$type": "LocalEntity",
+            "name": "Sales_Promotion_Effectiveness__Final",
+            "description": "",
+            "pbi:refreshPolicy": {
+                "$type": "FullRefreshPolicy",
+                "location": "Sales_Promotion_Effectiveness__Final.csv"
+            },
+            "attributes": [
+                {
+                    "name": "Column1",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column2",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column3",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column4",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column5",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column6",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column7",
+                    "dataType": "string"
+                },
+                {
+                    "name": "Column8",
+                    "dataType": "string"
+                }
+            ]
+        }
+    ]
+}

@@ -3,7 +3,9 @@
  * Licensed under the MIT License.
  */
 
-namespace Microsoft.PowerBI.Common.Api.Datasets
+using System;
+
+namespace Microsoft.PowerBI.Common.Api.Shared
 {
     public class Datasource
     {
