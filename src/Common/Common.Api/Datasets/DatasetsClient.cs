@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2;
+using Microsoft.PowerBI.Common.Api.Shared;
 
 namespace Microsoft.PowerBI.Common.Api.Datasets
 {
