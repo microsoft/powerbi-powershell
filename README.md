@@ -11,10 +11,11 @@ Below is a table of the various Power BI PowerShell modules found in this reposi
 | Description | Module Name | PowerShell Gallery link |
 | ----------- | ----------- | ----------------------- |
 | Rollup Module for Power BI Cmdlets | `MicrosoftPowerBIMgmt` | [![MicrosoftPowerBIMgmt](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.svg?style=flat-square&label=MicrosoftPowerBIMgmt)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt/) |
-| Admin module for Power BI Cmdlets | [MicrosoftPowerBIMgmt.Admin](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.admin) | [![MicrosoftPowerBIMgmt.Admin](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Admin.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Admin)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Admin/) |
-| Capacities module for Power BI Cmdlets | [MicrosoftPowerBIMgmt.Capacities](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.capacities) | [![MicrosoftPowerBIMgmt.Capacities](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Capacities.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Capacities)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Capacities/) |
-| Data module for Power BI Cmdlets | [MicrosoftPowerBIMgmt.Data](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.data) | [![MicrosoftPowerBIMgmt.Data](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Data.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Data)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Data/) |
-| Profile module for Power BI Cmdlets | [MicrosoftPowerBIMgmt.Profile](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile) | [![MicrosoftPowerBIMgmt.Profile](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Profile.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Profile)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Profile/) |
+| Admin module for Power BI | [MicrosoftPowerBIMgmt.Admin](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.admin) | [![MicrosoftPowerBIMgmt.Admin](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Admin.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Admin)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Admin/) |
+| Capacities module for Power BI | [MicrosoftPowerBIMgmt.Capacities](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.capacities) | [![MicrosoftPowerBIMgmt.Capacities](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Capacities.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Capacities)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Capacities/) |
+| Data module for Power BI | [MicrosoftPowerBIMgmt.Data](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.data) | [![MicrosoftPowerBIMgmt.Data](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Data.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Data)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Data/) |
+| OnPremisesDataGateway module for Power BI | [MicrosoftPowerBIMgmt.OnPremisesDataGateway](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.onPremisesDataGateway) | [![MicrosoftPowerBIMgmt.OnPremisesDataGateway](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.OnPremisesDataGateway.svg?style=flat-square&label=MicrosoftPowerBIMgmt.OnPremisesDataGateway)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.OnPremisesDataGateway/) |
+| Profile module for Power BI | [MicrosoftPowerBIMgmt.Profile](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile) | [![MicrosoftPowerBIMgmt.Profile](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Profile.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Profile)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Profile/) |
 | Reports module for Power BI | [MicrosoftPowerBIMgmt.Reports](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.reports) | [![MicrosoftPowerBIMgmt.Reports](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Reports.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Reports)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Reports/) |
 | Workspaces module for Power BI | [MicrosoftPowerBIMgmt.Workspaces](https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces) | [![MicrosoftPowerBIMgmt.Workspaces](https://img.shields.io/powershellgallery/v/MicrosoftPowerBIMgmt.Workspaces.svg?style=flat-square&label=MicrosoftPowerBIMgmt.Workspaces)](https://www.powershellgallery.com/packages/MicrosoftPowerBIMgmt.Workspaces/) |
 
@@ -85,6 +86,14 @@ If you are a tenant administrator, you can view all workspaces in your tenant by
 
 ```powershell
 Get-PowerBIWorkspace -Scope Organization -All
+```
+
+### Get Workspace Migration Status
+
+Get Power BI workspace migration status:
+
+```powershell
+Get-PowerBIWorkspaceMigrationStatus
 ```
 
 ### Update Workspace
@@ -233,6 +242,14 @@ Get Power BI tables contained within a dataset:
 
 ```powershell
 Get-PowerBITable -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
+```
+
+### Set Datasets
+
+Set Power BI datasets:
+
+```powershell
+Set-PowerBIDataset
 ```
 
 ### Call the Power BI Rest API

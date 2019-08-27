@@ -14,7 +14,7 @@
 # Executes build, pack and clean for the solution.
 #
 #.NOTES
-# Requires Visual Studio 2017 to be installed (at least 15.2 where vswhere.exe is available).
+# Requires Visual Studio 2019 to be installed (at least 16.2 where vswhere.exe is available).
 ##############################
 [CmdletBinding()]
 param
@@ -52,7 +52,10 @@ param
     [switch] $NoBuild,
 
     # Indicates to add the AppVeyor logger.
-    [switch] $AppVeyorLogger
+    [switch] $AppVeyorLogger,
+
+    # Indicates to not build in parallel, removes the /m switch.
+    [switch] $NoParallel
 )
 
 function Get-VSBuildFolder
@@ -69,21 +72,13 @@ function Get-VSBuildFolder
         throw "Unable to find vswhere, confirm Visual Studio is installed: $vsWhereExe"
     }
 
-    $vsWhereArgs = @('-latest', '-format', 'json', '-requires', 'Microsoft.Component.MSBuild')
+    $vsWhereArgs = @('-latest', '-requires', 'Microsoft.Component.MSBuild', '-find', 'MSBuild\**\Bin\MSBuild.exe')
     if($Prerelease) {
         $vsWhereArgs += '-prerelease'
     }
 
-    $vsWhereOutput = & $vsWhereExe $vsWhereArgs
-    if(!$vsWhereOutput) {
-        throw "Failed to get result from vswhere.exe"
-    }
-
-    $vsInstance = $vsWhereOutput | Out-String | ConvertFrom-Json | Select-Object -First 1
-    Write-Verbose "Using VS instance: $($vsInstance.installationPath)"
-    Write-Verbose "VS Version: $($vsInstance.installationVersion)"
-
-    $msbuildPath = Join-Path -Path $vsInstance.installationPath -ChildPath 'MSBuild\15.0\Bin\MSBuild.exe'
+    # https://github.com/microsoft/vswhere/wiki/Find-MSBuild#powershell
+    $msbuildPath = & $vsWhereExe $vsWhereArgs | select-object -first 1
     if(!(Test-Path -Path $msbuildPath)) {
         throw "Unable to find MSBuild: $msbuildPath"
     }
@@ -133,6 +128,10 @@ if($AppVeyorLogger) {
 
 if($BinaryLogger) {
     $msBuildArgs += '/bl'
+}
+
+if(!$NoParallel) {
+    $msBuildArgs += '/m'
 }
 
 Write-Verbose "Executing: & $msbuildPath $($msBuildArgs -join ' ')"

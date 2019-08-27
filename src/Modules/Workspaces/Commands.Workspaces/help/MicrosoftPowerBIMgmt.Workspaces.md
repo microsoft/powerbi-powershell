@@ -17,6 +17,9 @@ Gives permissions to a specified user to access a Power BI workspace.
 ### [Get-PowerBIWorkspace](Get-PowerBIWorkspace.md)
 Returns a list of Power BI workspaces.
 
+### [Get-PowerBIWorkspaceMigrationStatus](Get-PowerBIWorkspaceMigrationStatus.md)
+Gets Power BI workspace migration status.
+
 ### [New-PowerBIWorkspace](New-PowerBIWorkspace.md)
 Creates a new Power BI workspace.
 

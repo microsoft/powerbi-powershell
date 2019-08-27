@@ -14,34 +14,38 @@ Returns a list of Power BI datasets.
 
 ### List (Default)
 ```
-Get-PowerBIDataset [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int32>] [-Skip <Int32>]
- [-WorkspaceId <Guid>] [<CommonParameters>]
+Get-PowerBIDataset [-Scope <PowerBIUserScope>] [-Filter <String>] [-First <Int32>] [-Include <String>]
+ [-Skip <Int32>] [-WorkspaceId <Guid>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-PowerBIDataset -Id <Guid> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
+Get-PowerBIDataset -Id <Guid> [-Scope <PowerBIUserScope>] [-Include <String>] [-WorkspaceId <Guid>]
+ [<CommonParameters>]
 ```
 
 ### ObjectAndId
 ```
-Get-PowerBIDataset -Id <Guid> [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<CommonParameters>]
+Get-PowerBIDataset -Id <Guid> [-Scope <PowerBIUserScope>] [-Include <String>] -Workspace <Workspace>
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-PowerBIDataset -Name <String> [-Scope <PowerBIUserScope>] [-WorkspaceId <Guid>] [<CommonParameters>]
+Get-PowerBIDataset -Name <String> [-Scope <PowerBIUserScope>] [-Include <String>] [-WorkspaceId <Guid>]
+ [<CommonParameters>]
 ```
 
 ### ObjectAndName
 ```
-Get-PowerBIDataset -Name <String> [-Scope <PowerBIUserScope>] -Workspace <Workspace> [<CommonParameters>]
+Get-PowerBIDataset -Name <String> [-Scope <PowerBIUserScope>] [-Include <String>] -Workspace <Workspace>
+ [<CommonParameters>]
 ```
 
 ### ObjectAndList
 ```
-Get-PowerBIDataset [-Scope <PowerBIUserScope>] [-First <Int32>] [-Skip <Int32>] -Workspace <Workspace>
- [<CommonParameters>]
+Get-PowerBIDataset [-Scope <PowerBIUserScope>] [-First <Int32>] [-Include <String>] [-Skip <Int32>]
+ -Workspace <Workspace> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -106,6 +110,22 @@ Parameter Sets: Id, ObjectAndId
 Aliases: DatasetId
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Include
+OData expand, case-sensitive (element names start lowercase).
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Expand
+Accepted values: actualStorage
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
