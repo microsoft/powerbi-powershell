@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-PowerBIActivityEvents
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Retrieves the audit activity events for the tenant.
 
 ## SYNTAX
 
@@ -18,28 +18,33 @@ Get-PowerBIActivityEvents -StartDateTime <String> -EndDateTime <String> [-Contin
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retrieves the audit activity events by the tenant administrator for the organization.
+
+This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50
 ```
 
-{{ Add example description here }}
+### Example 2
+```powershell
+PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ContinuationToken %2BRID%3A244SAKlHY7YLAAAAAAAAAA%3D%3D%23RT%3A2%23TRC%3A10%23FPC%3AAQsAAAAAAAAAFwAAAAAAAAA%3D -Filter viewreport
+```
 
 ## PARAMETERS
 
-### -ContinuationToken
-{{Fill ContinuationToken Description}}
+### -StartDateTime
+Indicates the starting date time of the window of audit event results. It should be in UTC format and also ISO 8601 compliant. Both [StartDateTime](#-startdatetime) and [EndDateTime](#-enddatetime) should be within the same UTC day.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -47,11 +52,11 @@ Accept wildcard characters: False
 ```
 
 ### -EndDateTime
-{{Fill EndDateTime Description}}
+Indicates the ending date time of the window of audit event results. It should be in UTC format and also ISO 8601 compliant. Both [StartDateTime](#-startdatetime) and [EndDateTime](#-enddatetime) should be within the same UTC day.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases:
 
 Required: True
@@ -61,12 +66,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-{{Fill Filter Description}}
+### -ContinuationToken
+A string token that can be used to retrieive the next chunk of the result set.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases:
 
 Required: False
@@ -76,15 +81,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -StartDateTime
-{{Fill StartDateTime Description}}
+### -Filter
+Filters the results based on a boolean condition. Currently only supporting filterting based on audit event record's 'Activity' type.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
