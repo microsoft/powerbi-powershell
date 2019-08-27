@@ -5,6 +5,7 @@
 
 using System;
 using System.Management.Automation;
+using System.Net;
 using Microsoft.PowerBI.Common.Api.ActivityEvent;
 using Microsoft.PowerBI.Common.Client;
 using Newtonsoft.Json;
@@ -76,12 +77,12 @@ namespace Microsoft.PowerBI.Commands.Admin
                 string formattedFilter = this.Filter;
                 if (!string.IsNullOrEmpty(this.ContinuationToken))
                 {
-                    formattedContinuationToken = $"'{this.ContinuationToken}'";
+                    formattedContinuationToken = $"'{WebUtility.UrlDecode(this.ContinuationToken)}'";
                 }
 
                 if(!string.IsNullOrEmpty(this.Filter))
                 {
-                    formattedFilter = $"activityType eq '{this.Filter}'";
+                    formattedFilter = $"Activity eq '{this.Filter}'";
                 }
 
                 ActivityEventResponse response = client.Admin.GetActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
