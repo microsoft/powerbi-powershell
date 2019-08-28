@@ -87,14 +87,6 @@ If you are a tenant administrator, you can view all workspaces in your tenant by
 Get-PowerBIWorkspace -Scope Organization -All
 ```
 
-### Get Workspace Migration Status
-
-Get Power BI workspace migration status:
-
-```powershell
-Get-PowerBIWorkspaceMigrationStatus
-```
-
 ### Update Workspace
 
 Update the name or description of a user's workspace:
@@ -117,6 +109,14 @@ Remove user's permissions from a given workspace:
 
 ```powershell
 Remove-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com
+```
+
+### Get Workspace Migration Status
+
+Get Power BI workspace migration status:
+
+```powershell
+Get-PowerBIWorkspaceMigrationStatus -Id 038f9a64-1fcd-42f2-957a-13a63b3d3235
 ```
 
 ### Restore Workspace
@@ -227,6 +227,14 @@ Get Power BI datasets:
 Get-PowerBIDataset
 ```
 
+### Update Dataset Storage Mode
+
+Set Power BI dataset to use Premium Files for storage mode:
+
+```powershell
+Set-PowerBIDataset -Id 038f9a64-1fcd-42f2-957a-13a63b3d3235 -TargetStorageMode PremiumFiles
+```
+
 ### Get Datasources
 
 Get Power BI datasources for a dataset:
@@ -241,14 +249,6 @@ Get Power BI tables contained within a dataset:
 
 ```powershell
 Get-PowerBITable -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
-```
-
-### Set Datasets
-
-Set Power BI datasets:
-
-```powershell
-Set-PowerBIDataset
 ```
 
 ### Call the Power BI Rest API
