@@ -22,6 +22,6 @@ namespace Microsoft.PowerBI.Common.Api.Admin
 
         void SetPowerBICapacityEncryptionKey(Guid tenantKeyId, Guid capacityId);
 
-        ActivityEventResponse GetActivityEvents(string startDateTime, string endDateTime, string continuationToken = null, string filter = null);
+        ActivityEventResponse GetPowerBIActivityEvents(string startDateTime, string endDateTime, string continuationToken = null, string filter = null);
     }
 }

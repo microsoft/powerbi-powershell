@@ -15,29 +15,28 @@ using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
-    [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
+    [Cmdlet(CmdletVerb, CmdletName)]
     [OutputType(typeof(List<object>))]
-    public class GetActivityEvents : PowerBIClientCmdlet
+    public class GetPowerBIActivityEvents : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIActivityEvents";
         public const string CmdletVerb = VerbsCommon.Get;
-        private const string ListParameterSetName = "List";
         private bool validationError = false;
 
-        public GetActivityEvents() : base() { }
+        public GetPowerBIActivityEvents() : base() { }
 
-        public GetActivityEvents(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public GetPowerBIActivityEvents(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
-        [Parameter(Mandatory = true, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = true)]
         public string StartDateTime { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = true)]
         public string EndDateTime { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false)]
         public string ActivityType { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false)]
         public int ResultType { get; set; }
 
         protected override void BeginProcessing()
@@ -66,7 +65,7 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         public override void ExecuteCmdlet()
         {
-            if(this.validationError)
+            if (this.validationError)
             {
                 return;
             }
@@ -74,7 +73,7 @@ namespace Microsoft.PowerBI.Commands.Admin
             string formattedStartDateTime = $"'{this.StartDateTime}'";
             string formattedEndDateTime = $"'{this.EndDateTime}'";
             string formattedFilter = this.ActivityType;
-            if(!string.IsNullOrEmpty(this.ActivityType))
+            if (!string.IsNullOrEmpty(this.ActivityType))
             {
                 formattedFilter = $"Activity eq '{this.ActivityType}'";
             }
@@ -88,12 +87,12 @@ namespace Microsoft.PowerBI.Commands.Admin
             var finalResult = new List<object>();
             using (var client = this.CreateClient())
             {
-                ActivityEventResponse response = client.Admin.GetActivityEvents(formattedStartDateTime, formattedEndDateTime, null, formattedFilter);
+                ActivityEventResponse response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, null, formattedFilter);
                 while (response.ContinuationToken != null)
                 {
                     finalResult = finalResult.Concat(response.ActivityEventEntities).ToList();
                     string formattedContinuationToken = $"'{WebUtility.UrlDecode(response.ContinuationToken)}'";
-                    response = client.Admin.GetActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
+                    response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
                 }
 
                 finalResult = finalResult.Concat(response.ActivityEventEntities).ToList();
