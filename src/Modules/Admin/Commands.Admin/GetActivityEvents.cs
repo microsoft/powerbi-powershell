@@ -121,11 +121,5 @@ namespace Microsoft.PowerBI.Commands.Admin
                     break;
             }
         }
-
-        enum OutputType
-        {
-            JsonString,
-            Objects
-        }
     }
 }
