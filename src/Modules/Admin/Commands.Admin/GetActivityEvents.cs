@@ -4,6 +4,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using System.Net;
 using Microsoft.PowerBI.Common.Api.ActivityEvent;
@@ -14,7 +16,7 @@ using Newtonsoft.Json.Linq;
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
-    [OutputType(typeof(ActivityEventResponse))]
+    [OutputType(typeof(List<object>))]
     public class GetActivityEvents : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIActivityEvents";
@@ -33,10 +35,10 @@ namespace Microsoft.PowerBI.Commands.Admin
         public string EndDateTime { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
-        public string ContinuationToken { get; set; }
+        public string ActivityType { get; set; }
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
-        public string Filter { get; set; }
+        public int ResultType { get; set; }
 
         protected override void BeginProcessing()
         {
@@ -73,23 +75,60 @@ namespace Microsoft.PowerBI.Commands.Admin
             {
                 string formattedStartDateTime = $"'{this.StartDateTime}'";
                 string formattedEndDateTime = $"'{this.EndDateTime}'";
-                string formattedContinuationToken = this.ContinuationToken;
-                string formattedFilter = this.Filter;
-                if (!string.IsNullOrEmpty(this.ContinuationToken))
+                string formattedFilter = this.ActivityType;
+                if(!string.IsNullOrEmpty(this.ActivityType))
                 {
-                    formattedContinuationToken = $"'{WebUtility.UrlDecode(this.ContinuationToken)}'";
+                    formattedFilter = $"Activity eq '{this.ActivityType}'";
                 }
 
-                if(!string.IsNullOrEmpty(this.Filter))
-                {
-                    formattedFilter = $"Activity eq '{this.Filter}'";
-                }
-
-                ActivityEventResponse response = client.Admin.GetActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
-                string jsonRepresentation = JsonConvert.SerializeObject(response);
-                string indented = JValue.Parse(jsonRepresentation).ToString(Formatting.Indented);
-                this.Logger.WriteObject(indented, true);
+                var finalResult = this.ExecuteCmdletHelper(formattedStartDateTime, formattedEndDateTime, formattedFilter);
+                this.LogResult(finalResult);
             }
+        }
+
+        private List<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime, string formattedFilter)
+        {
+            var finalResult = new List<object>();
+            using (var client = this.CreateClient())
+            {
+                ActivityEventResponse response = client.Admin.GetActivityEvents(formattedStartDateTime, formattedEndDateTime, null, formattedFilter);
+                while (response.ContinuationToken != null)
+                {
+                    finalResult = finalResult.Concat(response.ActivityEventEntities).ToList();
+                    string formattedContinuationToken = $"'{WebUtility.UrlDecode(response.ContinuationToken)}'";
+                    response = client.Admin.GetActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
+                }
+
+                finalResult = finalResult.Concat(response.ActivityEventEntities).ToList();
+            }
+
+            return finalResult;
+        }
+
+        private void LogResult(List<object> result)
+        {
+            switch (this.ResultType)
+            {
+                case (int)OutputType.JsonString:
+                    {
+                        string jsonRepresentation = JsonConvert.SerializeObject(result);
+                        string indented = JValue.Parse(jsonRepresentation).ToString(Formatting.Indented);
+                        this.Logger.WriteObject(indented, true);
+                    }
+                    break;
+                case (int)OutputType.Objects:
+                    this.Logger.WriteObject(result, true);
+                    break;
+                default:
+                    this.Logger.ThrowTerminatingError($"{nameof(this.ResultType)} is not a valid type. Only 0 or 1 are supported.");
+                    break;
+            }
+        }
+
+        enum OutputType
+        {
+            JsonString,
+            Objects
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 {
                     { nameof(GetActivityEvents.StartDateTime), StartDateTime },
                     { nameof(GetActivityEvents.EndDateTime), EndDateTime },
-                    { nameof(GetActivityEvents.Filter), "ViewReport" },
+                    { nameof(GetActivityEvents.ActivityType), "ViewReport" },
                 };
 
                 ps.AddCommand(GetPowerBIActivityEventsCmdletInfo).AddParameters(parameters);
@@ -65,7 +65,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 {
                     { nameof(GetActivityEvents.StartDateTime), StartDateTime },
                     { nameof(GetActivityEvents.EndDateTime), EndDateTime },
-                    { nameof(GetActivityEvents.Filter), "ViewReport" },
+                    { nameof(GetActivityEvents.ActivityType), "ViewReport" },
                 };
 
                 ps.AddCommand(GetPowerBIActivityEventsCmdletInfo).AddParameters(parameters);
@@ -84,15 +84,17 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Arrange
             object obj1 = new object();
             object obj2 = new object();
+            object obj3 = new object();
             IList<object> ActivityEventEntities = new List<object>
             {
                 obj1,
-                obj2
+                obj2,
+                obj3
             };
 
             var activityEventResponse = new ActivityEventResponse();
             activityEventResponse.ActivityEventEntities = ActivityEventEntities;
-            activityEventResponse.ContinuationToken = "next-page";
+            activityEventResponse.ContinuationToken = null;
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Admin.GetActivityEvents($"'{StartDateTime}'", $"'{EndDateTime}'", null, null)).Returns(activityEventResponse);
@@ -177,8 +179,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
-            ActivityEventResponse actualResponse = JsonConvert.DeserializeObject<ActivityEventResponse>(results[0].ToString());
-            Assert.AreEqual(expectedResponse.ActivityEventEntities.Count(), actualResponse.ActivityEventEntities.Count());
+            List<object> actualResponse = JsonConvert.DeserializeObject<List<object>>(results[0].ToString());
+            Assert.AreEqual(expectedResponse.ActivityEventEntities.Count(), actualResponse.Count());
         }
 
         private static void AssertGetActivityEventsNeverCalled(Mock<IPowerBIApiClient> client, TestPowerBICmdletInitFactory initFactory)

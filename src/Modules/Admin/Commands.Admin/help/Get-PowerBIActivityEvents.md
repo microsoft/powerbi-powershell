@@ -13,8 +13,8 @@ Retrieves the audit activity events for the tenant.
 ## SYNTAX
 
 ```
-Get-PowerBIActivityEvents -StartDateTime <String> -EndDateTime <String> [-ContinuationToken <String>]
- [-Filter <String>] [<CommonParameters>]
+Get-PowerBIActivityEvents -StartDateTime <String> -EndDateTime <String> [-ActivityType <String>]
+ [-ResultType <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,20 +31,20 @@ PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTim
 
 ### Example 2
 ```powershell
-PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ContinuationToken %2BRID%3A244SAKlHY7YLAAAAAAAAAA%3D%3D%23RT%3A2%23TRC%3A10%23FPC%3AAQsAAAAAAAAAFwAAAAAAAAA%3D -Filter viewreport
+PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -ResultType 1
 ```
 
 ## PARAMETERS
 
-### -StartDateTime
-Indicates the starting date time of the window of audit event results. It should be in UTC format and also ISO 8601 compliant. Both [StartDateTime](#-startdatetime) and [EndDateTime](#-enddatetime) should be within the same UTC day.
+### -ActivityType
+Filters the results based on a boolean condition. Currently only supporting filterting based on audit event record's 'Activity'
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -56,7 +56,7 @@ Indicates the ending date time of the window of audit event results. It should b
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -66,30 +66,33 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ContinuationToken
-A string token that can be used to retrieive the next chunk of the result set.
+### -ResultType
+Indicates the type of result that is returned by the cmdlet. Currently the supported values are:
+
+* 0: Result type is string.
+* 1: Result type is List of objects.
 
 ```yaml
-Type: String
-Parameter Sets: List
+Type: Int32
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-Filters the results based on a boolean condition. Currently only supporting filterting based on audit event record's 'Activity' type.
+### -StartDateTime
+Indicates the starting date time of the window of audit event results. It should be in UTC format and also ISO 8601 compliant. Both [StartDateTime](#-startdatetime) and [EndDateTime](#-enddatetime) should be within the same UTC day.
 
 ```yaml
 Type: String
-Parameter Sets: List
+Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
