@@ -4,7 +4,7 @@ Welcome to the PowerShell community for Microsoft Power BI. Here you will find r
 
 For questions or issues using the modules, please log an issue and we will respond as quickly as possible.
 
-## PowerShell Modules
+## PowerShell modules
 
 Below is a table of the various Power BI PowerShell modules found in this repository.
 
@@ -20,7 +20,7 @@ Below is a table of the various Power BI PowerShell modules found in this reposi
 
 More documentation can be found at https://docs.microsoft.com/en-us/powershell/power-bi/overview.
 
-## Supported Environments and PowerShell Versions
+## Supported environments and PowerShell versions
 
 * Windows PowerShell v3.0 and up with .NET 4.7.1 or above.
 * PowerShell Core (v6) and up on any OS platform supported by PowerShell Core.
@@ -67,7 +67,7 @@ If the `-Scope` parameter doesn't exist on the cmdlet, the entity doesn't suppor
 Connect-PowerBIServiceAccount   # or use aliases: Login-PowerBIServiceAccount, Login-PowerBI
 ```
 
-### Get Workspaces
+### Get workspaces
 
 Get workspaces for the user. By default (i.e. without `-First` parameter) it shows the first 100 workspaces assigned to the user:
 
@@ -87,15 +87,7 @@ If you are a tenant administrator, you can view all workspaces in your tenant by
 Get-PowerBIWorkspace -Scope Organization -All
 ```
 
-### Get Workspace Migration Status
-
-Get Power BI workspace migration status:
-
-```powershell
-Get-PowerBIWorkspaceMigrationStatus
-```
-
-### Update Workspace
+### Update workspace
 
 Update the name or description of a user's workspace:
 
@@ -119,7 +111,15 @@ Remove user's permissions from a given workspace:
 Remove-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com
 ```
 
-### Restore Workspace
+### Get workspace migration status
+
+Get Power BI workspace migration status:
+
+```powershell
+Get-PowerBIWorkspaceMigrationStatus -Id 038f9a64-1fcd-42f2-957a-13a63b3d3235
+```
+
+### Restore workspace
 
 To view deleted workspaces as a tenant administrator:
 
@@ -147,7 +147,7 @@ To correct this issue, use:
 Add-PowerBIWorkspaceUser -Scope Organization -Id f2a0fae5-1c37-4ee6-97da-c9d31851fe17 -UserPrincipalName 'john@contoso.com' -AccessRight Admin
 ```
 
-### Get Reports
+### Get reports
 
 Get all reports for the user:
 
@@ -161,7 +161,7 @@ If you are a tenant administrator, you can view all reports in your tenant by us
 Get-PowerBIReport -Scope Organization
 ```
 
-### Get Dashboards
+### Get dashboards
 
 Get dashboards for the user:
 
@@ -175,7 +175,7 @@ If you are a tenant administrator, you can view all dashboards in your tenant by
 Get-PowerBIDashboard -Scope Organization
 ```
 
-### Get Tiles
+### Get tiles
 
 Get tiles within a dashboard:
 
@@ -183,7 +183,7 @@ Get tiles within a dashboard:
 Get-PowerBITile -DashboardId 9a58d5e5-61bc-447c-86c4-e221128b1c99
 ```
 
-### Get Imports
+### Get imports
 
 Get Power BI imports:
 
@@ -191,7 +191,7 @@ Get Power BI imports:
 Get-PowerBIImport
 ```
 
-### Create Report
+### Create report
 
 Create a report in Power BI by uploading a \*.pbix file:
 
@@ -205,7 +205,7 @@ By default, the report is placed in the user's My Workspace. To place in a diffe
 New-PowerBIReport -Path .\newReport.pbix -Name 'New Report' -WorkspaceId f95755a1-950c-46bd-a912-5aab4012a06d
 ```
 
-### Export Report
+### Export report
 
 Export a Power BI report to \*.pbix file:
 
@@ -219,7 +219,7 @@ If the workspace exists outside the My Workspace, export with the `WorkspaceId` 
 Export-PowerBIReport -Id b48c088c-6f4e-4b7a-b015-d844ab534b2a -OutFile .\exportedReport.pbix -WorkspaceId 3bdd9735-0ab5-4f21-bd5d-87e7f1d7fb84
 ```
 
-### Get Datasets
+### Get datasets
 
 Get Power BI datasets:
 
@@ -227,7 +227,15 @@ Get Power BI datasets:
 Get-PowerBIDataset
 ```
 
-### Get Datasources
+### Update dataset storage mode
+
+Set Power BI dataset to use Premium Files for storage mode:
+
+```powershell
+Set-PowerBIDataset -Id 038f9a64-1fcd-42f2-957a-13a63b3d3235 -TargetStorageMode PremiumFiles
+```
+
+### Get datasources
 
 Get Power BI datasources for a dataset:
 
@@ -235,20 +243,12 @@ Get Power BI datasources for a dataset:
 Get-PowerBIDatasource -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
 ```
 
-### Get Tables
+### Get tables
 
 Get Power BI tables contained within a dataset:
 
 ```powershell
 Get-PowerBITable -DatasetId 65d7d7e5-8af0-4e94-b20b-50a882ae15e1
-```
-
-### Set Datasets
-
-Set Power BI datasets:
-
-```powershell
-Set-PowerBIDataset
 ```
 
 ### Call the Power BI Rest API
@@ -265,7 +265,7 @@ If you want to use the authenticated session outside of PowerShell, get the acce
 Get-PowerBIAccessToken -AsString
 ```
 
-### Troubleshooting Errors
+### Troubleshooting errors
 
 To get more information about an error returned back from the cmdlets, use:
 
@@ -275,7 +275,7 @@ Resolve-PowerBIError -Last
 
 This information can be useful for opening support tickets for Power BI.
 
-## Issues and Feedback
+## Issues and feedback
 
 If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for Power BI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues). If the issue is an error returned from the cmdlets, add detail from `Resolve-PowerBIError` to the issue.
 
@@ -283,7 +283,7 @@ If your issue is broader than just the PowerShell cmdlets, please submit your fe
 
 We track our roadmap of planned features in [ROADMAP.md](ROADMAP.md).
 
-### Reporting Security Issues
+### Reporting security issues
 
 Security issues and bugs should be reported privately, via email, to the Microsoft Security Response Center (MSRC) at [secure@microsoft.com](mailto:secure@microsoft.com).
 
