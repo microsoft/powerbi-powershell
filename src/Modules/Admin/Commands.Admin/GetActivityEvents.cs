@@ -71,19 +71,16 @@ namespace Microsoft.PowerBI.Commands.Admin
                 return;
             }
 
-            using (var client = this.CreateClient())
+            string formattedStartDateTime = $"'{this.StartDateTime}'";
+            string formattedEndDateTime = $"'{this.EndDateTime}'";
+            string formattedFilter = this.ActivityType;
+            if(!string.IsNullOrEmpty(this.ActivityType))
             {
-                string formattedStartDateTime = $"'{this.StartDateTime}'";
-                string formattedEndDateTime = $"'{this.EndDateTime}'";
-                string formattedFilter = this.ActivityType;
-                if(!string.IsNullOrEmpty(this.ActivityType))
-                {
-                    formattedFilter = $"Activity eq '{this.ActivityType}'";
-                }
-
-                var finalResult = this.ExecuteCmdletHelper(formattedStartDateTime, formattedEndDateTime, formattedFilter);
-                this.LogResult(finalResult);
+                formattedFilter = $"Activity eq '{this.ActivityType}'";
             }
+
+            var finalResult = this.ExecuteCmdletHelper(formattedStartDateTime, formattedEndDateTime, formattedFilter);
+            this.LogResult(finalResult);
         }
 
         private List<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime, string formattedFilter)
