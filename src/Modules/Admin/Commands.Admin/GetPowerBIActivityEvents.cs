@@ -116,7 +116,6 @@ namespace Microsoft.PowerBI.Commands.Admin
                     this.Logger.WriteObject(result, true);
                     break;
                 default:
-                    this.Logger.ThrowTerminatingError($"{nameof(this.ResultType)} is unsupported. Only JsonString or JsonObject are supported.");
                     break;
             }
         }
