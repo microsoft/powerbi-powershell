@@ -8,6 +8,6 @@ namespace Microsoft.PowerBI.Common.Api.ActivityEvent
     public enum OutputType
     {
         JsonString,
-        Objects
+        JsonObject
     }
 }

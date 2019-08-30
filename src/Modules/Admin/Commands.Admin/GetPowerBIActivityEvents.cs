@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(List<object>))]
+    [OutputType(typeof(IEnumerable<object>))]
     public class GetPowerBIActivityEvents : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIActivityEvents";
@@ -37,7 +37,7 @@ namespace Microsoft.PowerBI.Commands.Admin
         public string ActivityType { get; set; }
 
         [Parameter(Mandatory = false)]
-        public int ResultType { get; set; }
+        public OutputType ResultType { get; set; } = OutputType.JsonString;
 
         protected override void BeginProcessing()
         {
@@ -82,15 +82,15 @@ namespace Microsoft.PowerBI.Commands.Admin
             this.LogResult(finalResult);
         }
 
-        private List<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime, string formattedFilter)
+        private IEnumerable<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime, string formattedFilter)
         {
-            var finalResult = new List<object>();
+            IEnumerable<object> finalResult = new List<object>();
             using (var client = this.CreateClient())
             {
                 ActivityEventResponse response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, null, formattedFilter);
                 while (response.ContinuationToken != null)
                 {
-                    finalResult = finalResult.Concat(response.ActivityEventEntities).ToList();
+                    finalResult = finalResult.Concat(response.ActivityEventEntities);
                     string formattedContinuationToken = $"'{WebUtility.UrlDecode(response.ContinuationToken)}'";
                     response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
                 }
@@ -101,22 +101,22 @@ namespace Microsoft.PowerBI.Commands.Admin
             return finalResult;
         }
 
-        private void LogResult(List<object> result)
+        private void LogResult(IEnumerable<object> result)
         {
             switch (this.ResultType)
             {
-                case (int)OutputType.JsonString:
+                case OutputType.JsonString:
                     {
                         string jsonRepresentation = JsonConvert.SerializeObject(result);
                         string indented = JValue.Parse(jsonRepresentation).ToString(Formatting.Indented);
                         this.Logger.WriteObject(indented, true);
                     }
                     break;
-                case (int)OutputType.Objects:
+                case OutputType.JsonObject:
                     this.Logger.WriteObject(result, true);
                     break;
                 default:
-                    this.Logger.ThrowTerminatingError($"{nameof(this.ResultType)} is not a valid type. Only 0 or 1 are supported.");
+                    this.Logger.ThrowTerminatingError($"{nameof(this.ResultType)} is unsupported. Only JsonString or JsonObject are supported.");
                     break;
             }
         }

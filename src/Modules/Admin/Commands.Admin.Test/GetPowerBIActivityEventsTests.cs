@@ -53,7 +53,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
 
         [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
-        public void GetPowerBIActivityEvents_NonInteractive_ActivityType()
+        public void EndToEndGetPowerBIActivityEventsWithoutLogin()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
@@ -111,12 +111,83 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             AssertExpectedUnitTestResults(activityEventResponse, initFactory);
         }
 
+        [TestMethod]
+        public void GetPowerBIActivityEventsWithInvalidStartDateTime()
+        {
+            // Arrange
+            var activityEventResponse = new ActivityEventResponse
+            {
+                ActivityEventEntities = new List<object>
+                {
+                    new object()
+                },
+                ContinuationToken = "next-page"
+            };
+
+            string invalidStartDateTime = "Some-invalid-startDateTime";
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Admin.GetPowerBIActivityEvents($"'{invalidStartDateTime}'", $"'{EndDateTime}'", null, null)).Returns(activityEventResponse);
+
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIActivityEvents(initFactory)
+            {
+                StartDateTime = invalidStartDateTime,
+                EndDateTime = EndDateTime,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertGetActivityEventsNeverCalled(client, initFactory);
+        }
+
+        [TestMethod]
+        public void GetPowerBIActivityEventsWithInvalidEndDateTime()
+        {
+            // Arrange
+            var activityEventResponse = new ActivityEventResponse
+            {
+                ActivityEventEntities = new List<object>
+                {
+                    new object()
+                },
+                ContinuationToken = "next-page"
+            };
+
+            string invalidEndDateTime = "Some-invalid-endDateTime";
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Admin.GetPowerBIActivityEvents($"'{StartDateTime}'", $"'{invalidEndDateTime}'", null, null)).Returns(activityEventResponse);
+
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIActivityEvents(initFactory)
+            {
+                StartDateTime = StartDateTime,
+                EndDateTime = invalidEndDateTime,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertGetActivityEventsNeverCalled(client, initFactory);
+        }
+
+
         private static void AssertExpectedUnitTestResults(ActivityEventResponse expectedResponse, TestPowerBICmdletInitFactory initFactory)
         {
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
             var results = initFactory.Logger.Output.ToList();
             List<object> actualResponse = JsonConvert.DeserializeObject<List<object>>(results[0].ToString());
             Assert.AreEqual(expectedResponse.ActivityEventEntities.Count(), actualResponse.Count());
+        }
+
+        private static void AssertGetActivityEventsNeverCalled(Mock<IPowerBIApiClient> client, TestPowerBICmdletInitFactory initFactory)
+        {
+            Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
+            var results = initFactory.Logger.Output.ToList();
+            Assert.IsFalse(results.Any());
+            client.Verify(x => x.Admin.GetPowerBIActivityEvents(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

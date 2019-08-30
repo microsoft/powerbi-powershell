@@ -1,25 +1,25 @@
 ---
 external help file: Microsoft.PowerBI.Commands.Admin.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Admin
-online version:
+online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.admin/get-powerbiactivityevents?view=powerbi-ps
 schema: 2.0.0
 ---
 
 # Get-PowerBIActivityEvents
 
 ## SYNOPSIS
-Retrieves the audit activity events for the tenant.
+Retrieves the audit activity events for a Power BI tenant.
 
 ## SYNTAX
 
 ```
 Get-PowerBIActivityEvents -StartDateTime <String> -EndDateTime <String> [-ActivityType <String>]
- [-ResultType <Int32>] [<CommonParameters>]
+ [-ResultType <OutputType>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Retrieves the audit activity events by the tenant administrator for the organization.
-
+Retrieves the audit activity events for the calling user's tenant.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 This cmdlet requires the calling user to be a tenant administrator of the Power BI service.
 
 ## EXAMPLES
@@ -37,7 +37,7 @@ PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTim
 ## PARAMETERS
 
 ### -ActivityType
-Filters the results based on a boolean condition. Currently only supporting filterting based on audit event record's 'Activity'
+Filters the activity records based on this activity type.
 
 ```yaml
 Type: String
@@ -52,7 +52,7 @@ Accept wildcard characters: False
 ```
 
 ### -EndDateTime
-Indicates the ending date time of the window of audit event results. It should be in UTC format and also ISO 8601 compliant. Both [StartDateTime](#-startdatetime) and [EndDateTime](#-enddatetime) should be within the same UTC day.
+Specifies the end of a timespan to retrieve audit activity events. It should be in UTC format and ISO 8601 compliant. Both StartDateTime and EndDateTime should be within the same UTC day.
 
 ```yaml
 Type: String
@@ -69,23 +69,23 @@ Accept wildcard characters: False
 ### -ResultType
 Indicates the type of result that is returned by the cmdlet. Currently the supported values are:
 
-* 0: Result type is string.
-* 1: Result type is List of objects.
+* JsonString: Result type is a string representation of list of Json objects.
+* JsonObject: Result type is List of objects.
 
 ```yaml
-Type: Int32
+Type: OutputType
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: 0
+Default value: JsonString
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -StartDateTime
-Indicates the starting date time of the window of audit event results. It should be in UTC format and also ISO 8601 compliant. Both [StartDateTime](#-startdatetime) and [EndDateTime](#-enddatetime) should be within the same UTC day.
+Specifies the start of a timespan to retrieve audit activity events. It should be in UTC format and ISO 8601 compliant. Both StartDateTime and EndDateTime should be within the same UTC day.
 
 ```yaml
 Type: String
