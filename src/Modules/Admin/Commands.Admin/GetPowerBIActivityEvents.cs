@@ -8,19 +8,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using System.Net;
+using Microsoft.PowerBI.Commands.Profile.Errors;
+using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.ActivityEvent;
 using Microsoft.PowerBI.Common.Client;
+using Microsoft.Rest;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(IEnumerable<object>))]
+    [OutputType(typeof(IList<object>))]
     public class GetPowerBIActivityEvents : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIActivityEvents";
         public const string CmdletVerb = VerbsCommon.Get;
+        private const string FeatureNotAvailableError = "FeatureNotAvailableError";
         private bool validationError = false;
 
         public GetPowerBIActivityEvents() : base() { }
@@ -86,20 +90,34 @@ namespace Microsoft.PowerBI.Commands.Admin
             this.LogResult(finalResult);
         }
 
-        private IEnumerable<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime, string formattedFilter)
+        private IList<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime, string formattedFilter)
         {
-            IEnumerable<object> finalResult = new List<object>();
+            var finalResult = new List<object>();
             using (var client = this.CreateClient())
             {
-                ActivityEventResponse response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, null, formattedFilter);
-                while (response.ContinuationToken != null)
+                try
                 {
-                    finalResult = finalResult.Concat(response.ActivityEventEntities);
-                    string formattedContinuationToken = $"'{WebUtility.UrlDecode(response.ContinuationToken)}'";
-                    response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
-                }
+                    ActivityEventResponse response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, null, formattedFilter);
+                    while (response.ContinuationToken != null)
+                    {
+                        finalResult.AddRange(response.ActivityEventEntities);
+                        string formattedContinuationToken = $"'{WebUtility.UrlDecode(response.ContinuationToken)}'";
+                        response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
+                    }
 
-                finalResult = finalResult.Concat(response.ActivityEventEntities).ToList();
+                    finalResult.AddRange(response.ActivityEventEntities);
+                }
+                catch (HttpOperationException ex)
+                {
+                    var deserialized = JsonConvert.DeserializeObject<PowerBIFeatureNotAvailableErrorType>(ex?.Response?.Content);
+                    if (deserialized != null && deserialized.Error != null && deserialized.Error.Code.Equals(FeatureNotAvailableError))
+                    {
+                        string errorId = "Feature is not available on your tenant.";
+                        var errorRecord = new ErrorRecord(ex, errorId, ErrorCategory.NotEnabled, null /*targetObject*/);
+                        var powerBIRestExceptionRecord = new PowerBIRestExceptionRecord(ex, errorRecord);
+                        this.Logger.ThrowTerminatingError(powerBIRestExceptionRecord, ErrorCategory.NotEnabled);
+                    }
+                }
             }
 
             return finalResult;
