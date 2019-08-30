@@ -46,20 +46,24 @@ namespace Microsoft.PowerBI.Commands.Admin
             {
                 DateTime.Parse(this.StartDateTime);
             }
-            catch
+            catch (Exception ex)
             {
                 this.validationError = true;
-                this.Logger.ThrowTerminatingError($"{nameof(this.StartDateTime)} is not a valid DateTime.");
+                string errorId = $"{nameof(this.StartDateTime)} is not a valid DateTime.";
+                var errorRecord = new ErrorRecord(ex, errorId, ErrorCategory.InvalidArgument, this.StartDateTime);
+                this.Logger.ThrowTerminatingError(errorRecord);
             }
 
             try
             {
                 DateTime.Parse(this.EndDateTime);
             }
-            catch
+            catch (Exception ex)
             {
                 this.validationError = true;
-                this.Logger.ThrowTerminatingError($"{nameof(this.EndDateTime)} is not a valid DateTime.");
+                string errorId = $"{nameof(this.EndDateTime)} is not a valid DateTime.";
+                var errorRecord = new ErrorRecord(ex, errorId, ErrorCategory.InvalidArgument, this.EndDateTime);
+                this.Logger.ThrowTerminatingError(errorRecord);
             }
         }
 
