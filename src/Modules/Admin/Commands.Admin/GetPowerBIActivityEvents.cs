@@ -5,11 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
 using System.Net;
 using Microsoft.PowerBI.Commands.Profile.Errors;
-using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.ActivityEvent;
 using Microsoft.PowerBI.Common.Client;
 using Microsoft.Rest;
@@ -41,6 +40,7 @@ namespace Microsoft.PowerBI.Commands.Admin
         public string ActivityType { get; set; }
 
         [Parameter(Mandatory = false)]
+        [ValidateSet("JsonString", "JsonObject")]
         public OutputType ResultType { get; set; } = OutputType.JsonString;
 
         protected override void BeginProcessing()
@@ -113,7 +113,7 @@ namespace Microsoft.PowerBI.Commands.Admin
                     if (deserialized != null && deserialized.Error != null && deserialized.Error.Code.Equals(FeatureNotAvailableError))
                     {
                         string errorId = "Feature is not available on your tenant.";
-                        var errorRecord = new ErrorRecord(ex, errorId, ErrorCategory.NotEnabled, null /*targetObject*/);
+                        var errorRecord = new ErrorRecord(ex, errorId, ErrorCategory.NotEnabled, this /*targetObject*/);
                         var powerBIRestExceptionRecord = new PowerBIRestExceptionRecord(ex, errorRecord);
                         this.Logger.ThrowTerminatingError(powerBIRestExceptionRecord, ErrorCategory.NotEnabled);
                     }

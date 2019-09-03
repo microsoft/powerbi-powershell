@@ -5,7 +5,7 @@
 
 using System.Runtime.Serialization;
 
-namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
+namespace Microsoft.PowerBI.Common.Api
 {
     [DataContract]
     public class PowerBIFeatureNotAvailableErrorType

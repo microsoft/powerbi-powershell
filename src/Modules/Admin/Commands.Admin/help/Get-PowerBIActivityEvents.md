@@ -31,7 +31,7 @@ PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTim
 
 ### Example 2
 ```powershell
-PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -ResultType 1
+PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -ResultType JsonObject
 ```
 
 ## PARAMETERS
@@ -67,10 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResultType
-Indicates the type of result that is returned by the cmdlet. Currently the supported values are:
-
-* JsonString: Result type is a string representation of list of Json objects.
-* JsonObject: Result type is List of objects.
+Specifies the type of result that is returned by the cmdlet.
 
 ```yaml
 Type: OutputType
