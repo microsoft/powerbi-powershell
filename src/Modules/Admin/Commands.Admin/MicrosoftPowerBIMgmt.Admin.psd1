@@ -71,7 +71,7 @@ FormatsToProcess = @('Microsoft.PowerBI.Commands.Admin.format.ps1xml')
 FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'Add-PowerBIEncryptionKey', 'Get-PowerBIEncryptionKey', 'Get-PowerBIWorkspaceEncryptionStatus', 'Switch-PowerBIEncryptionKey', 'Set-PowerBICapacityEncryptionKey'
+CmdletsToExport = 'Add-PowerBIEncryptionKey', 'Get-PowerBIEncryptionKey', 'Get-PowerBIWorkspaceEncryptionStatus', 'Switch-PowerBIEncryptionKey', 'Set-PowerBICapacityEncryptionKey', 'Get-PowerBIActivityEvents'
 
 # Variables to export from this module
 VariablesToExport = '*'
