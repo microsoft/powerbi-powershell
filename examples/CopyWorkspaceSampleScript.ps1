@@ -137,7 +137,7 @@ Foreach ($report in $reports) {
 
     Write-Host "== Exporting $report_name with id: $report_id to $temp_path"
     try {
-        Export-PowerBIReport -Id $report_id -OutFile "$temp_path" -ErrorAction Stop
+        Export-PowerBIReport -Id $report_id -WorkspaceId $source_workspace_ID -OutFile "$temp_path" -ErrorAction Stop
     }
     catch {
         Write-Warning "= This report and dataset cannot be copied, skipping. This is expected for most workspaces."
