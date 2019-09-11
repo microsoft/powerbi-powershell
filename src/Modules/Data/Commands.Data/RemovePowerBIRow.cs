@@ -8,6 +8,9 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
+using Microsoft.PowerBI.Common.Abstractions;
+using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Api.Reports;
 
 namespace Microsoft.PowerBI.Commands.Data
 {

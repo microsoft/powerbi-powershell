@@ -42,4 +42,10 @@
     <ProjectReference Include="..\..\Profile\Commands.Profile\Commands.Profile.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="RemovePowerBIReport.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
 </Project>

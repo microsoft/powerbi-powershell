@@ -39,6 +39,9 @@ namespace Microsoft.PowerBI.Common.Api.Reports
 
         Import GetImportForWorkspace(Guid workspaceId, Guid importId);
 
+        object DeleteReport(Guid reportID);
+        object DeleteReport(Guid workspaceID, Guid reportID);
+
         IEnumerable<Import> GetImports();
 
         IEnumerable<Import> GetImportsAsAdmin(string expand = default, string filter = default, int? top = default, int? skip = default);

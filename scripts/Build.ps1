@@ -83,7 +83,7 @@ function Get-VSBuildFolder
     Write-Verbose "Using VS instance: $($vsInstance.installationPath)"
     Write-Verbose "VS Version: $($vsInstance.installationVersion)"
 
-    $msbuildPath = Join-Path -Path $vsInstance.installationPath -ChildPath 'MSBuild\15.0\Bin\MSBuild.exe'
+    $msbuildPath = Join-Path -Path $vsInstance.installationPath -ChildPath 'MSBuild\Current\Bin\MSBuild.exe'
     if(!(Test-Path -Path $msbuildPath)) {
         throw "Unable to find MSBuild: $msbuildPath"
     }
