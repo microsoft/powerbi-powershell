@@ -2,7 +2,7 @@
 
 ## Developer Environment Requirements
 
-* [Visual Studio 2017](https://www.visualstudio.com/thank-you-downloading-visual-studio/)
+* [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
 * [.NET Core SDK](https://www.microsoft.com/net/learn/get-started/windows)
     * Version driven by [global.json](src/Common/Commands.Common/global.json)
     * Cmdlets are designed to use .NET Core 2.0 SDK with .NET Standard 2.0
@@ -90,7 +90,7 @@ Open PowerShell prompt and run (in repository root directory):
 # You can call cmdlets after this point such as Connect-PowerBIServiceAccount, their modules get auto-imported
 ```
 
-#### Visual Studio 2017
+#### Visual Studio 2019
 
 1. Open [src/PowerBIPowerShell.sln](src/PowerBIPowerShell.sln).
 2. Press `F6` or click `Build` menu and select `Build Solution`.

@@ -7,64 +7,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using System.Text;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Common.Api.Datasets;
+using Microsoft.PowerBI.Common.Api.Dataflows;
 using Microsoft.PowerBI.Common.Api.Workspaces;
 using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Data
 {
     [Cmdlet(CmdletVerb, CmdletName, DefaultParameterSetName = ListParameterSetName)]
-    [OutputType(typeof(IEnumerable<Dataset>))]
-    public class GetPowerBIDataset : PowerBIClientCmdlet, IUserScope, IUserFilter, IUserFirstSkip, IUserId
+    [OutputType(typeof(IEnumerable<Dataflow>))]
+    public class GetPowerBIDataflow : PowerBIClientCmdlet, IUserId, IUserScope, IUserFilter, IUserFirstSkip
     {
         public const string CmdletVerb = VerbsCommon.Get;
-        public const string CmdletName = "PowerBIDataset";
+        public const string CmdletName = "PowerBIDataflow";
 
         #region ParameterSets
         private const string IdParameterSetName = "Id";
         private const string NameParameterSetName = "Name";
         private const string ListParameterSetName = "List";
-        private const string ObjectIdParameterSetName = "ObjectAndId";
-        private const string ObjectNameParameterSetName = "ObjectAndName";
-        private const string ObjectListParameterSetName = "ObjectAndList";
+        private const string WorkspaceAndIdParameterSetName = "WorkspaceAndId";
+        private const string WorkspaceAndNameParameterSetName = "WorkspaceAndName";
+        private const string WorkspaceAndListParameterSetName = "WorkspaceAndList";
         #endregion
 
         #region Parameters
-        [Alias("DatasetId")]
+        [Alias("DataflowId")]
         [Parameter(Mandatory = true, ParameterSetName = IdParameterSetName)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectIdParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceAndIdParameterSetName)]
         public Guid Id { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = NameParameterSetName)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectNameParameterSetName)]
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceAndNameParameterSetName)]
         public string Name { get; set; }
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = WorkspaceAndListParameterSetName)]
         public string Filter { get; set; }
 
         [Alias("Top")]
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = ObjectListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = WorkspaceAndListParameterSetName)]
         public int? First { get; set; }
 
-        [Alias("Expand")]
-        [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = ObjectIdParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = ObjectNameParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = ObjectListParameterSetName)]
-        [ValidateSet("actualStorage")]
-        public string Include { get; set; }
-
-        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
-        [Parameter(Mandatory = false, ParameterSetName = ObjectListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = WorkspaceAndListParameterSetName)]
         public int? Skip { get; set; }
 
         [Alias("GroupId")]
@@ -74,16 +64,16 @@ namespace Microsoft.PowerBI.Commands.Data
         public Guid WorkspaceId { get; set; }
 
         [Alias("Group")]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectIdParameterSetName, ValueFromPipeline = true)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectNameParameterSetName, ValueFromPipeline = true)]
-        [Parameter(Mandatory = true, ParameterSetName = ObjectListParameterSetName, ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceAndIdParameterSetName, ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceAndNameParameterSetName, ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, ParameterSetName = WorkspaceAndListParameterSetName, ValueFromPipeline = true)]
         public Workspace Workspace { get; set; }
         #endregion
 
         #region Constructors
-        public GetPowerBIDataset() : base() { }
+        public GetPowerBIDataflow() : base() { }
 
-        public GetPowerBIDataset(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public GetPowerBIDataflow(IPowerBIClientCmdletInitFactory init) : base(init) { }
         #endregion
 
         protected override void BeginProcessing()
@@ -93,13 +83,20 @@ namespace Microsoft.PowerBI.Commands.Data
             {
                 this.Logger.ThrowTerminatingError($"{nameof(this.Filter)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
             }
+
+            if (this.Scope == PowerBIUserScope.Individual && this.WorkspaceId == null && this.Workspace == null)
+            {
+                this.Logger.ThrowTerminatingError($"{nameof(this.Workspace)} or {nameof(this.WorkspaceId)} must be applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Individual)}");
+            }
         }
 
         public override void ExecuteCmdlet()
         {
-            if(this.Workspace != null)
+            if (this.Workspace != null)
             {
                 this.WorkspaceId = this.Workspace.Id;
+
+                this.Logger.WriteDebug($"Using {nameof(this.Workspace)} object to get {nameof(this.WorkspaceId)} parameter. Value: {this.WorkspaceId}");
             }
 
             if (this.Id != default)
@@ -112,47 +109,47 @@ namespace Microsoft.PowerBI.Commands.Data
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
             }
 
-            IEnumerable<Dataset> datasets = null;
+            IEnumerable<Dataflow> dataflows = null;
             using (var client = this.CreateClient())
             {
-                if(this.WorkspaceId != default)
+                if (this.WorkspaceId != default)
                 {
-                    datasets = this.Scope == PowerBIUserScope.Individual ?
-                        client.Datasets.GetDatasetsForWorkspace(this.WorkspaceId, this.Include) :
-                        client.Datasets.GetDatasetsAsAdminForWorkspace(this.WorkspaceId, filter: this.Filter, top: this.First, skip: this.Skip, expand: this.Include);
+                    dataflows = this.Scope == PowerBIUserScope.Organization ?
+                        client.Dataflows.GetDataflowsAsAdminForWorkspace(this.WorkspaceId, filter: this.Filter, top: this.First, skip: this.Skip) :
+                        client.Dataflows.GetDataflows(this.WorkspaceId);
                 }
-                else
+                else if (this.Scope == PowerBIUserScope.Organization)
                 {
-                    datasets = this.Scope == PowerBIUserScope.Individual ?
-                        client.Datasets.GetDatasets(this.Include) :
-                        client.Datasets.GetDatasetsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip, expand: this.Include);
+                    // No workspace id - Works only for organization scope
+                    dataflows = client.Dataflows.GetDataflowsAsAdmin(filter: this.Filter, top: this.First, skip: this.Skip);
                 }
             }
 
+            // In individual scope - filter the results locally
             if (this.Scope == PowerBIUserScope.Individual)
             {
                 if (this.Id != default)
                 {
-                    datasets = datasets?.Where(d => this.Id == d.Id);
+                    dataflows = dataflows?.Where(d => this.Id == d.Id);
                 }
 
                 if (!string.IsNullOrEmpty(this.Name))
                 {
-                    datasets?.Where(d => d.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase));
+                    dataflows = dataflows?.Where(d => d.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (this.Skip.HasValue)
                 {
-                    datasets = datasets?.Skip(this.Skip.Value);
+                    dataflows = dataflows?.Skip(this.Skip.Value);
                 }
 
                 if (this.First.HasValue)
                 {
-                    datasets = datasets?.Take(this.First.Value);
+                    dataflows = dataflows?.Take(this.First.Value);
                 }
             }
 
-            this.Logger.WriteObject(datasets, true);
+            this.Logger.WriteObject(dataflows, true);
         }
     }
 }
