@@ -64,7 +64,6 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                     { nameof(GetPowerBIActivityEvents.StartDateTime), StartDateTime },
                     { nameof(GetPowerBIActivityEvents.EndDateTime), EndDateTime },
                     { nameof(GetPowerBIActivityEvents.ActivityType), "ViewReport" },
-                    { nameof(GetPowerBIActivityEvents.User), "admin@alangria.info" },
                 };
 
                 ps.AddCommand(GetPowerBIActivityEventsCmdletInfo).AddParameters(parameters);
