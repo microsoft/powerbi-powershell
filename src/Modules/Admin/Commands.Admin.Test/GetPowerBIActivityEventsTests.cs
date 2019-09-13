@@ -22,7 +22,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
     {
         private static CmdletInfo GetPowerBIActivityEventsCmdletInfo => new CmdletInfo($"{GetPowerBIActivityEvents.CmdletVerb}-{GetPowerBIActivityEvents.CmdletName}", typeof(GetPowerBIActivityEvents));
         private static string StartDateTime = "2019-08-15T20:00:00Z";
-        private static string EndDateTime = "2019-08-15T23:59:59Z";
+        private static string EndDateTime = "2019-08-15T22:00:00Z";
 
         [TestMethod]
         [TestCategory("Interactive")]
