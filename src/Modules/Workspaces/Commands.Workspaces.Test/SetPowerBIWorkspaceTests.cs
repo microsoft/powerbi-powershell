@@ -92,6 +92,36 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndSetWorkspaceOrganizationScopeCapacityParameterSet()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
+                var capacityId = WorkspacesTestUtilities.GetFirstCapacityInOrganization(ps);
+
+                var parameters = new Dictionary<string, object>
+                {
+                    { nameof(SetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                    { nameof(SetPowerBIWorkspace.Id), workspace.Id },
+                    { nameof(SetPowerBIWorkspace.CapacityId), capacityId }
+                };
+                ps.AddCommand(Cmdlet).AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndSetWorkspaceIndividualScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
@@ -234,6 +264,32 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
             // Assert
             TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void SetPowerBIWorkspaceOrganizationScope_CapacityParameterSet()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var capacityGuid = Guid.NewGuid();
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .MigrateWorkspaceCapacity(workspaceId, capacityGuid));
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new SetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                ParameterSet = "Capacity",
+                Id = workspaceId,
+                CapacityId = capacityGuid,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(null, client, initFactory);
         }
 
         [TestMethod]

@@ -17,6 +17,15 @@ Adds a dataset to a Power BI workspace.
 ### [Add-PowerBIRow](Add-PowerBIRow.md)
 Adds rows to the specified table in a Power BI dataset.
 
+### [Export-PowerBIDataflow](Export-PowerBIDataflow.md)
+Exports a Power BI dataflow to the .json file format.
+
+### [Get-PowerBIDataflow](Get-PowerBIDataflow.md)
+Returns a list of Power BI dataflows.
+
+### [Get-PowerBIDataflowDatasource](Get-PowerBIDataflowDatasource.md)
+Returns a list of Power BI data sources for the given Dataflow.
+
 ### [Get-PowerBIDataset](Get-PowerBIDataset.md)
 Returns a list of Power BI datasets.
 
@@ -37,6 +46,9 @@ Creates a new Power BI table object.
 
 ### [Remove-PowerBIRow](Remove-PowerBIRow.md)
 Removes rows from a Power BI table.
+
+### [Set-PowerBIDataset](Set-PowerBIDataset.md)
+Updates the properties for the specified Power BI dataset.
 
 ### [Set-PowerBITable](Set-PowerBITable.md)
 Updates the metadata and schema for the specified Power BI table.

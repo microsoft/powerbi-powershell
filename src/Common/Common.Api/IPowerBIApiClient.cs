@@ -7,9 +7,9 @@ using System;
 using Microsoft.PowerBI.Common.Api.Admin;
 using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Datasets;
-using Microsoft.PowerBI.Common.Api.Gateways.Interfaces;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
+using Microsoft.PowerBI.Common.Api.Dataflows;
 
 namespace Microsoft.PowerBI.Common.Api
 {
@@ -25,7 +25,6 @@ namespace Microsoft.PowerBI.Common.Api
 
         ICapacityClient Capacities { get; set; }
 
-        IGatewayClient Gateways { get; set; }
-
+        IDataflowsClient Dataflows { get; set; }
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Datasets;
+using Microsoft.PowerBI.Common.Api.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.PowerBI.Api.V2;
+using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
@@ -36,6 +37,11 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
             return this.Client.Groups.GetGroupsAsAdmin(expand, filter, top, skip).Value.Select(x => (Workspace)x);
         }
 
+        public WorkspaceLastMigrationStatus GetWorkspaceLastMigrationStatus(Guid workspaceId)
+        {
+            return this.Client.Groups.GetLastMigrationStatus(workspaceId.ToString());
+        }
+
         public object RemoveWorkspaceUser(Guid workspaceId, string userPrincipalName)
         {
             return this.Client.Groups.DeleteUserInGroup(workspaceId.ToString(), userPrincipalName);
@@ -59,6 +65,35 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         public object NewWorkspaceAsUser(string workspaceName)
         {
             return (Workspace)this.Client.Groups.CreateGroup(new PowerBI.Api.V2.Models.GroupCreationRequest(name: workspaceName));
+        }
+
+        public void MigrateWorkspaceCapacity(Guid workspaceId, Guid capacityId)
+        {
+            if (capacityId != Guid.Empty)
+            {
+                var request = new PowerBI.Api.V2.Models.AssignWorkspacesToCapacityRequest
+                {
+                    CapacityMigrationAssignments = new List<PowerBI.Api.V2.Models.CapacityMigrationAssignment>
+                    {
+                        new PowerBI.Api.V2.Models.CapacityMigrationAssignment
+                        {
+                            WorkspacesToAssign = new List<string> { workspaceId.ToString() },
+                            TargetCapacityObjectId = capacityId.ToString(),
+                        }
+                    },
+                };
+
+                this.Client.Capacities.AssignWorkspacesToCapacity(request);
+            }
+            else
+            {
+                var request = new PowerBI.Api.V2.Models.UnassignWorkspacesCapacityRequest
+                {
+                    WorkspacesToUnassign = new string[] { workspaceId.ToString() },
+                };
+
+                this.Client.Capacities.UnassignWorkspacesFromCapacity(request);
+            }
         }
     }
 }
