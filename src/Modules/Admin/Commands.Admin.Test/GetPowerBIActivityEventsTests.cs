@@ -21,8 +21,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
     public class GetPowerBIActivityEventsTests
     {
         private static CmdletInfo GetPowerBIActivityEventsCmdletInfo => new CmdletInfo($"{GetPowerBIActivityEvents.CmdletVerb}-{GetPowerBIActivityEvents.CmdletName}", typeof(GetPowerBIActivityEvents));
-        private static string StartDateTime = "2019-08-15T20:00:00Z";
-        private static string EndDateTime = "2019-08-15T22:00:00Z";
+        private static string StartDateTime = "2019-09-12T20:00:00Z";
+        private static string EndDateTime = "2019-09-12T23:59:59Z";
 
         [TestMethod]
         [TestCategory("Interactive")]
@@ -32,12 +32,12 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
-                ProfileTestUtilities.ConnectToPowerBI(ps);
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBI.Common.Abstractions.PowerBIEnvironmentType.OneBox);
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(GetPowerBIActivityEvents.StartDateTime), StartDateTime },
                     { nameof(GetPowerBIActivityEvents.EndDateTime), EndDateTime },
-                    { nameof(GetPowerBIActivityEvents.ActivityType), "ViewReport" },
+                    { nameof(GetPowerBIActivityEvents.ActivityType), "ViewDashboard" },
                 };
 
                 ps.AddCommand(GetPowerBIActivityEventsCmdletInfo).AddParameters(parameters);

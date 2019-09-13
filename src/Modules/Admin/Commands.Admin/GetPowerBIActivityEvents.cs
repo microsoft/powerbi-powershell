@@ -119,7 +119,7 @@ namespace Microsoft.PowerBI.Commands.Admin
                     {
                         finalResult.AddRange(response.ActivityEventEntities);
                         string formattedContinuationToken = $"'{WebUtility.UrlDecode(response.ContinuationToken)}'";
-                        response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, this.Filter);
+                        response = client.Admin.GetPowerBIActivityEvents(null, null, formattedContinuationToken, null);
                     }
 
                     finalResult.AddRange(response.ActivityEventEntities);
@@ -133,6 +133,10 @@ namespace Microsoft.PowerBI.Commands.Admin
                         var errorRecord = new ErrorRecord(ex, errorId, ErrorCategory.NotEnabled, this /*targetObject*/);
                         var powerBIRestExceptionRecord = new PowerBIRestExceptionRecord(ex, errorRecord);
                         this.Logger.ThrowTerminatingError(powerBIRestExceptionRecord, ErrorCategory.NotEnabled);
+                    }
+                    else
+                    {
+                        throw ex;
                     }
                 }
             }
