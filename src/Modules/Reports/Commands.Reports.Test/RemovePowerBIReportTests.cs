@@ -6,10 +6,7 @@ using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Commands.Reports;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
-using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-
 
 namespace Commands.Reports.Test
 {

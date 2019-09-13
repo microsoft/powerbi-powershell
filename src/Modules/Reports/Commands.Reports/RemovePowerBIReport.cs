@@ -12,10 +12,7 @@ using Microsoft.PowerBI.Common.Client;
 
 namespace Microsoft.PowerBI.Commands.Reports
 {
-    [Cmdlet(CmdletVerb, CmdletName)]
-    [OutputType(typeof(void))]
-
-    public class RemovePowerBIReport : PowerBIClientCmdlet
+        public class RemovePowerBIReport : PowerBIClientCmdlet
     {
         public const string CmdletName = "PowerBIReport";
         public const string CmdletVerb = VerbsCommon.Remove;
@@ -27,17 +24,6 @@ namespace Microsoft.PowerBI.Commands.Reports
         [Parameter(Mandatory = false)]
         [Alias("GroupId")]
         public Guid WorkspaceId { get; set; }
-
-        public RemovePowerBIReport() : base() { }
-
-        public RemovePowerBIReport(IPowerBIClientCmdletInitFactory init) : base(init) { }
-
-
-        protected override void BeginProcessing()
-        {
-            base.BeginProcessing();
-        }
-
 
         public override void ExecuteCmdlet()
         {

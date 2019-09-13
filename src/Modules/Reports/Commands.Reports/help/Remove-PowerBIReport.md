@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-PowerBIReport
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Deletes a Power BI report from a Workspace.
 
 ## SYNTAX
 
@@ -17,21 +17,29 @@ Remove-PowerBIReport -Id <Guid> [-WorkspaceId <Guid>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Deletes/Removes a Power BI report from a Workspace. The report will not be deleted from everywhere, just in that specific workspace.
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Remove-PowerBIReport -Id 12345-abc56-jkl56-700a0 -WorkspaceId ccd01-bif87-abc12-34efg
 ```
 
-{{ Add example description here }}
+You are deleting a Report with the GUID, '12345-abc56-jkl56-700a0', from the Workspace with Workspace ID of 'ccd01-bif87-abc12-34efg'. 
+
+### Example 2
+```powershell
+PS C:\> Remove-PowerBIReport -Id 12345-abc56-jkl56-700a0
+```
+
+You are deleting a Report with the GUID of '12345-abc56-jkl56-700a0' from whatever Workspace it is in.
 
 ## PARAMETERS
 
 ### -Id
-{{Fill Id Description}}
+Report GUID Id that you wish to delete/remove from that workspace
 
 ```yaml
 Type: Guid
@@ -46,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -WorkspaceId
-{{Fill WorkspaceId Description}}
+Workspace GUID Id that the report is housed in.
 
 ```yaml
 Type: Guid
