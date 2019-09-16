@@ -25,6 +25,9 @@ namespace Microsoft.PowerBI.Commands.Admin
         public const string CmdletVerb = VerbsCommon.Get;
         private const string FeatureNotAvailableError = "FeatureNotAvailableError";
         private bool validationError = false;
+        private string Filter = null;
+        private string ActivityTypeFilter = null;
+        private string UserIdFilter = null;
 
         public GetPowerBIActivityEvents() : base() { }
 
@@ -37,7 +40,18 @@ namespace Microsoft.PowerBI.Commands.Admin
         public string EndDateTime { get; set; }
 
         [Parameter(Mandatory = false)]
-        public string ActivityType { get; set; }
+        public string ActivityType
+        {
+            get => this.ActivityTypeFilter;
+            set => this.ActivityTypeFilter = !string.IsNullOrEmpty(value) ? $"Activity eq '{value}'" : value;
+        }
+
+        [Parameter(Mandatory = false)]
+        public string User
+        {
+            get => this.UserIdFilter;
+            set => this.UserIdFilter = !string.IsNullOrEmpty(value) ? $"UserId eq '{value}'" : value;
+        }
 
         [Parameter(Mandatory = false)]
         [ValidateSet("JsonString", "JsonObject")]
@@ -80,29 +94,32 @@ namespace Microsoft.PowerBI.Commands.Admin
 
             string formattedStartDateTime = $"'{this.StartDateTime}'";
             string formattedEndDateTime = $"'{this.EndDateTime}'";
-            string formattedFilter = this.ActivityType;
             if (!string.IsNullOrEmpty(this.ActivityType))
             {
-                formattedFilter = $"Activity eq '{this.ActivityType}'";
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? this.ActivityType : $"({this.Filter}) and ({this.ActivityType})";
+            }
+            if (!string.IsNullOrEmpty(this.User))
+            {
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? this.User : $"({this.Filter}) and ({this.User})";
             }
 
-            var finalResult = this.ExecuteCmdletHelper(formattedStartDateTime, formattedEndDateTime, formattedFilter);
+            var finalResult = this.ExecuteCmdletHelper(formattedStartDateTime, formattedEndDateTime);
             this.LogResult(finalResult);
         }
 
-        private IList<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime, string formattedFilter)
+        private IList<object> ExecuteCmdletHelper(string formattedStartDateTime, string formattedEndDateTime)
         {
             var finalResult = new List<object>();
             using (var client = this.CreateClient())
             {
                 try
                 {
-                    ActivityEventResponse response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, null, formattedFilter);
+                    ActivityEventResponse response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, null, this.Filter);
                     while (response.ContinuationToken != null)
                     {
                         finalResult.AddRange(response.ActivityEventEntities);
                         string formattedContinuationToken = $"'{WebUtility.UrlDecode(response.ContinuationToken)}'";
-                        response = client.Admin.GetPowerBIActivityEvents(formattedStartDateTime, formattedEndDateTime, formattedContinuationToken, formattedFilter);
+                        response = client.Admin.GetPowerBIActivityEvents(null, null, formattedContinuationToken, null);
                     }
 
                     finalResult.AddRange(response.ActivityEventEntities);
@@ -116,6 +133,10 @@ namespace Microsoft.PowerBI.Commands.Admin
                         var errorRecord = new ErrorRecord(ex, errorId, ErrorCategory.NotEnabled, this /*targetObject*/);
                         var powerBIRestExceptionRecord = new PowerBIRestExceptionRecord(ex, errorRecord);
                         this.Logger.ThrowTerminatingError(powerBIRestExceptionRecord, ErrorCategory.NotEnabled);
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
             }

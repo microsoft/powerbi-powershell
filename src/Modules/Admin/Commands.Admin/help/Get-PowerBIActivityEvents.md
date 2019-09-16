@@ -14,7 +14,7 @@ Retrieves the audit activity events for a Power BI tenant.
 
 ```
 Get-PowerBIActivityEvents -StartDateTime <String> -EndDateTime <String> [-ActivityType <String>]
- [-ResultType <OutputType>] [<CommonParameters>]
+ [-User <String>] [-ResultType <OutputType>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,7 +31,7 @@ PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTim
 
 ### Example 2
 ```powershell
-PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -ResultType JsonObject
+PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -User admin@contoso.com -ResultType JsonObject
 ```
 
 ## PARAMETERS
@@ -90,6 +90,21 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -User
+Filters the activity records based on this user email.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
