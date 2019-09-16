@@ -136,7 +136,7 @@ namespace Microsoft.PowerBI.Commands.Admin
                     }
                     else
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             }

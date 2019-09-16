@@ -31,7 +31,7 @@ PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTim
 
 ### Example 2
 ```powershell
-PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -User admin@tenant.com -ResultType JsonObject
+PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -User admin@contoso.com -ResultType JsonObject
 ```
 
 ## PARAMETERS
