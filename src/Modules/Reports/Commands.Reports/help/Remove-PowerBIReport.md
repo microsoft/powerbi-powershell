@@ -8,16 +8,28 @@ schema: 2.0.0
 # Remove-PowerBIReport
 
 ## SYNOPSIS
-Deletes a Power BI report from a Workspace.
+Deletes a Power BI report.
 
 ## SYNTAX
 
+### MyWorkspace (Default)
 ```
-Remove-PowerBIReport -Id <Guid> [-WorkspaceId <Guid>] [<CommonParameters>]
+Remove-PowerBIReport -Id <Guid> [<CommonParameters>]
+```
+
+### WorkspaceId
+```
+Remove-PowerBIReport -Id <Guid> -WorkspaceId <Guid> [<CommonParameters>]
+```
+
+### Workspace
+```
+Remove-PowerBIReport -Id <Guid> -Workspace <Workspace> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Deletes/Removes a Power BI report from a Workspace. The report will not be deleted from everywhere, just in that specific workspace.
+Removes a Power BI report from a workspace.
+If no workspace is specified, your personal (My Workspace) is used.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
@@ -27,19 +39,19 @@ Before you run this command, make sure you log in using Connect-PowerBIServiceAc
 PS C:\> Remove-PowerBIReport -Id 12345-abc56-jkl56-700a0 -WorkspaceId ccd01-bif87-abc12-34efg
 ```
 
-You are deleting a Report with the GUID, '12345-abc56-jkl56-700a0', from the Workspace with Workspace ID of 'ccd01-bif87-abc12-34efg'. 
+Deletes a report with the GUID, '12345-abc56-jkl56-700a0', from the Workspace with ID of 'ccd01-bif87-abc12-34efg'. 
 
 ### Example 2
 ```powershell
 PS C:\> Remove-PowerBIReport -Id 12345-abc56-jkl56-700a0
 ```
 
-You are deleting a Report with the GUID of '12345-abc56-jkl56-700a0' from whatever Workspace it is in.
+Deletes a report with the GUID of '12345-abc56-jkl56-700a0' from your personal workspace.
 
 ## PARAMETERS
 
 ### -Id
-Report GUID Id that you wish to delete/remove from that workspace
+Id of the report to be deleted.
 
 ```yaml
 Type: Guid
@@ -53,15 +65,30 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Workspace
+Workspace object that contains the report to be deleted.
+
+```yaml
+Type: Workspace
+Parameter Sets: Workspace
+Aliases: Group
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WorkspaceId
-Workspace GUID Id that the report is housed in.
+Id of the workspace that contains the report to be deleted.
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: WorkspaceId
 Aliases: GroupId
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

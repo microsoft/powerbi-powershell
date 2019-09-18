@@ -40,6 +40,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
         Import GetImportForWorkspace(Guid workspaceId, Guid importId);
 
         object DeleteReport(Guid reportID);
+
         object DeleteReport(Guid workspaceID, Guid reportID);
 
         IEnumerable<Import> GetImports();

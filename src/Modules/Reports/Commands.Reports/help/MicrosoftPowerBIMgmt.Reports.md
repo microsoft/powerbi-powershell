@@ -39,5 +39,5 @@ Creates a new empty Power BI dashboard.
 Creates a Power BI report.
 
 ### [Remove-PowerBIReport](Remove-PowerBIReport.md)
-{{Fill in the Synopsis}}
+Deletes a Power BI report.
 
