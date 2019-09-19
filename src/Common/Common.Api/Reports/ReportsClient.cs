@@ -247,5 +247,15 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 this.Client.Dashboards.CloneTile(dashboardKey, tileKey, requestParameters) :
                 this.Client.Dashboards.CloneTile(workspaceId.ToString(), dashboardKey, tileKey, requestParameters);
         }
+
+        public object DeleteReport(Guid reportID)
+        {
+            return this.Client.Reports.DeleteReport(reportID.ToString());
+        }
+
+        public object DeleteReport(Guid workspaceID, Guid reportID)
+        {
+            return this.Client.Reports.DeleteReport(workspaceID.ToString(), reportID.ToString()); 
+        }
     }
 }
