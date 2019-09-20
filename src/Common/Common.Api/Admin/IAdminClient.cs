@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.PowerBI.Common.Api.ActivityEvent;
 using Microsoft.PowerBI.Common.Api.Encryption;
 
 namespace Microsoft.PowerBI.Common.Api.Admin
@@ -20,5 +21,7 @@ namespace Microsoft.PowerBI.Common.Api.Admin
         EncryptionKey RotatePowerBIEncryptionKey(Guid tenantKeyId, string keyVaultKeyIdentifier);
 
         void SetPowerBICapacityEncryptionKey(Guid tenantKeyId, Guid capacityId);
+
+        ActivityEventResponse GetPowerBIActivityEvents(string startDateTime, string endDateTime, string continuationToken = null, string filter = null);
     }
 }
