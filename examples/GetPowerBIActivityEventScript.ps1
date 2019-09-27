@@ -73,13 +73,23 @@ elseif (!([string]::IsNullOrEmpty($ActivityType)) -and !([string]::IsNullOrEmpty
 $activityEvents = (Invoke-PowerBIRestMethod -Url $OriginalUrl -Method Get) | ConvertFrom-Json
 $result = $result + $activityEvents.activityEventEntities
 $continuationUri = $activityEvents.continuationUri
+$continuationToken = $activityEvents.continuationToken
 
-while ($continuationUri) {
-    $UriAndQuerySplit = $continuationUri -split "\?"
-    $FullUri = [string]::Format("{0}{1}",$UriPrefix,$UriAndQuerySplit[1])
+# Checking on both continuationUri and continuationToken since the continuationUri changes are still flighting across rings at the time of this script's check in.
+while ($continuationUri -or $continuationToken) {
+    $FullUri = [string]::Empty
+    if (![string]::IsNullOrEmpty($continuationUri)) {
+        $UriAndQuerySplit = $continuationUri -split "\?"
+        $FullUri = [string]::Format("{0}{1}",$UriPrefix,$UriAndQuerySplit[1])    
+    }
+    elseif (![string]::IsNullOrEmpty($continuationToken)) {
+        $FullUri = [string]::Format("{0}&continuationToken='{1}'",$OriginalUrl,$continuationToken)
+    }
+    
     $activityEvents = (Invoke-PowerBIRestMethod -Url $FullUri -Method Get) | ConvertFrom-Json
     $result = $result + $activityEvents.activityEventEntities
     $continuationUri = $activityEvents.continuationUri
+    $continuationToken = $activityEvents.continuationToken
 }
 
 $result
