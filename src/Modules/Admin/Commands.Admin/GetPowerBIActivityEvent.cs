@@ -55,7 +55,6 @@ namespace Microsoft.PowerBI.Commands.Admin
         }
 
         [Parameter(Mandatory = false)]
-        [ValidateSet("JsonString", "JsonObject")]
         public OutputType ResultType { get; set; } = OutputType.JsonString;
 
         protected override void BeginProcessing()
