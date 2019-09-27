@@ -18,10 +18,11 @@ using Newtonsoft.Json.Linq;
 namespace Microsoft.PowerBI.Commands.Admin
 {
     [Cmdlet(CmdletVerb, CmdletName)]
+    [Alias("Get-PowerBIActivityEvents")]
     [OutputType(typeof(IList<object>))]
-    public class GetPowerBIActivityEvents : PowerBIClientCmdlet
+    public class GetPowerBIActivityEvent : PowerBIClientCmdlet
     {
-        public const string CmdletName = "PowerBIActivityEvents";
+        public const string CmdletName = "PowerBIActivityEvent";
         public const string CmdletVerb = VerbsCommon.Get;
         private const string FeatureNotAvailableError = "FeatureNotAvailableError";
         private bool validationError = false;
@@ -29,9 +30,9 @@ namespace Microsoft.PowerBI.Commands.Admin
         private string ActivityTypeFilter = null;
         private string UserIdFilter = null;
 
-        public GetPowerBIActivityEvents() : base() { }
+        public GetPowerBIActivityEvent() : base() { }
 
-        public GetPowerBIActivityEvents(IPowerBIClientCmdletInitFactory init) : base(init) { }
+        public GetPowerBIActivityEvent(IPowerBIClientCmdletInitFactory init) : base(init) { }
 
         [Parameter(Mandatory = true)]
         public string StartDateTime { get; set; }

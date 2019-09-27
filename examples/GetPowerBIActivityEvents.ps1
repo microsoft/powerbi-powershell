@@ -16,7 +16,7 @@
 .Parameter User
     Filters the activity records based on this user email.
 .Example
-    PS C:\> .\GetPowerBIActivityEventScript.ps1 -StartDateTime 2019-09-12T00:00:00 -EndDateTime 2019-09-12T10:00:00 -ActivityType viewreport -User admin@contoso.com
+    PS C:\> .\GetPowerBIActivityEvents.ps1 -StartDateTime 2019-09-12T00:00:00 -EndDateTime 2019-09-12T10:00:00 -ActivityType viewreport -User admin@contoso.com
 
 #>
 
