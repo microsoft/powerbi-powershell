@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
     [TestClass]
     public class GetPowerBIActivityEventsTests
     {
-        private static CmdletInfo GetPowerBIActivityEventsCmdletInfo => new CmdletInfo($"{GetPowerBIActivityEvents.CmdletVerb}-{GetPowerBIActivityEvents.CmdletName}", typeof(GetPowerBIActivityEvents));
+        private static CmdletInfo GetPowerBIActivityEventsCmdletInfo => new CmdletInfo($"{GetPowerBIActivityEvent.CmdletVerb}-{GetPowerBIActivityEvent.CmdletName}", typeof(GetPowerBIActivityEvent));
         private static string StartDateTime = "2019-08-15T20:00:00Z";
         private static string EndDateTime = "2019-08-15T22:00:00Z";
 
@@ -35,9 +35,9 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 ProfileTestUtilities.ConnectToPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                 {
-                    { nameof(GetPowerBIActivityEvents.StartDateTime), StartDateTime },
-                    { nameof(GetPowerBIActivityEvents.EndDateTime), EndDateTime },
-                    { nameof(GetPowerBIActivityEvents.ActivityType), "ViewReport" },
+                    { nameof(GetPowerBIActivityEvent.StartDateTime), StartDateTime },
+                    { nameof(GetPowerBIActivityEvent.EndDateTime), EndDateTime },
+                    { nameof(GetPowerBIActivityEvent.ActivityType), "ViewReport" },
                 };
 
                 ps.AddCommand(GetPowerBIActivityEventsCmdletInfo).AddParameters(parameters);
@@ -61,9 +61,9 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
                 ProfileTestUtilities.SafeDisconnectFromPowerBI(ps);
                 var parameters = new Dictionary<string, object>()
                 {
-                    { nameof(GetPowerBIActivityEvents.StartDateTime), StartDateTime },
-                    { nameof(GetPowerBIActivityEvents.EndDateTime), EndDateTime },
-                    { nameof(GetPowerBIActivityEvents.ActivityType), "ViewReport" },
+                    { nameof(GetPowerBIActivityEvent.StartDateTime), StartDateTime },
+                    { nameof(GetPowerBIActivityEvent.EndDateTime), EndDateTime },
+                    { nameof(GetPowerBIActivityEvent.ActivityType), "ViewReport" },
                 };
 
                 ps.AddCommand(GetPowerBIActivityEventsCmdletInfo).AddParameters(parameters);
@@ -98,7 +98,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             client.Setup(x => x.Admin.GetPowerBIActivityEvents($"'{StartDateTime}'", $"'{EndDateTime}'", null, null)).Returns(activityEventResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIActivityEvents(initFactory)
+            var cmdlet = new GetPowerBIActivityEvent(initFactory)
             {
                 StartDateTime = StartDateTime,
                 EndDateTime = EndDateTime,
@@ -129,7 +129,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             client.Setup(x => x.Admin.GetPowerBIActivityEvents($"'{invalidStartDateTime}'", $"'{EndDateTime}'", null, null)).Returns(activityEventResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIActivityEvents(initFactory)
+            var cmdlet = new GetPowerBIActivityEvent(initFactory)
             {
                 StartDateTime = invalidStartDateTime,
                 EndDateTime = EndDateTime,
@@ -160,7 +160,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             client.Setup(x => x.Admin.GetPowerBIActivityEvents($"'{StartDateTime}'", $"'{invalidEndDateTime}'", null, null)).Returns(activityEventResponse);
 
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
-            var cmdlet = new GetPowerBIActivityEvents(initFactory)
+            var cmdlet = new GetPowerBIActivityEvent(initFactory)
             {
                 StartDateTime = StartDateTime,
                 EndDateTime = invalidEndDateTime,
