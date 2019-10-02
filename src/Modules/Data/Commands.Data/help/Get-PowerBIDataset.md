@@ -123,7 +123,6 @@ OData expand, case-sensitive (element names start lowercase).
 Type: String
 Parameter Sets: (All)
 Aliases: Expand
-Accepted values: actualStorage
 
 Required: False
 Position: Named
