@@ -24,7 +24,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         private static string StartDateTime = "2019-08-15T20:00:00Z";
         private static string EndDateTime = "2019-08-15T22:00:00Z";
 
-        // [TestMethod] -- disabling this test until we bring back the cmdlet again.
+        // [TestMethod] -- disabling this test until we bring back the cmdlet live again.
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetPowerBIActivityEvents()
