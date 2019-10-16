@@ -28,10 +28,9 @@
     Copyright = 'Microsoft Corporation. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description = 'The MicrosoftPowerBIMgmt module enables report developers and administrators to automate the report lifecycle as well as tenant administration tasks.
-    With this module, it is possible to automate report publishing, as well as migrate them from development to QA to production workspaces, without overwriting datasets or connections.
-    This module also has commands for cloning all reports, datasets, & dashboards, or even permissions between workspaces.
-    Gathering access information for security audits, including working with orphaned or deleted Workspaces is also included.
+    Description = 'The MicrosoftPowerBIMgmt module enables report developers and administrators to automate the report lifecycle and tenant administration tasks.
+    With this module, you can automate report publishing, as well as migrate reports from development to QA to production workspaces, without overwriting datasets or connections.
+    This module also has commands to copy reports, datasets, dashboards, and permissions between workspaces. You can also use the module to gather access information for security audits, and to work with orphaned or deleted workspaces.
     For official documentation, go to https://docs.microsoft.com/powershell/power-bi/overview'
 
     # Minimum version of the Windows PowerShell engine required by this module
