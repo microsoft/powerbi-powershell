@@ -14,9 +14,6 @@ PowerShell cmdlets for performing administrative duties across the Power BI serv
 ### [Add-PowerBIEncryptionKey](Add-PowerBIEncryptionKey.md)
 Adds an encryption key for Power BI workspaces assigned to a capacity.
 
-### [Get-PowerBIActivityEvent](Get-PowerBIActivityEvent.md)
-Retrieves the audit activity events for a Power BI tenant.
-
 ### [Get-PowerBIEncryptionKey](Get-PowerBIEncryptionKey.md)
 Retrieves the encryption key for the tenant.
 
