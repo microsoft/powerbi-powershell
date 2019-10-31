@@ -14,14 +14,16 @@ Gives permissions to a specified user to access a Power BI workspace.
 
 ### Id (Default)
 ```
-Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
- -AccessRight <WorkspaceUserAccessRight> [<CommonParameters>]
+Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> [-Identifier <String>]
+ [-UserPrincipalName <String>] -AccessRight <WorkspaceUserAccessRight>
+ [-PrincipalType <WorkspaceUserPrincipalType>] [<CommonParameters>]
 ```
 
 ### Workspace
 ```
-Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
- -AccessRight <WorkspaceUserAccessRight> -Workspace <Workspace> [<CommonParameters>]
+Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] [-Identifier <String>] [-UserPrincipalName <String>]
+ -AccessRight <WorkspaceUserAccessRight> [-PrincipalType <WorkspaceUserPrincipalType>] -Workspace <Workspace>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -68,6 +70,37 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -Identifier
+{{Fill Identifier Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PrincipalType
+{{Fill PrincipalType Description}}
+
+```yaml
+Type: WorkspaceUserPrincipalType
+Parameter Sets: (All)
+Aliases:
+Accepted values: App, Group, User
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Scope
 Indicates scope of the call. Individual operates against only workspaces assigned to the caller; Organization operates against all workspaces within a tenant (must be an administrator to initiate). Individual is the default.
 
@@ -92,7 +125,7 @@ Type: String
 Parameter Sets: (All)
 Aliases: UserEmailAddress
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

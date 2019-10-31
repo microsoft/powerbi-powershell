@@ -35,13 +35,19 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Alias("GroupId", "WorkspaceId")]
         public Guid Id { get; set; }
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Mandatory = false)]
+        public string Identifier { get; set; }
+
+        [Parameter(Mandatory = false)]
         [Alias("UserEmailAddress")]
         public string UserPrincipalName { get; set; }
 
         [Parameter(Mandatory = true)]
         [Alias("UserAccessRight")]
         public WorkspaceUserAccessRight AccessRight { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public WorkspaceUserPrincipalType? PrincipalType { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = WorkspaceParameterSetName)]
         [Alias("Group")]
@@ -62,7 +68,17 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         public override void ExecuteCmdlet()
         {
             var workspaceId = this.ParameterSet.Equals(IdParameterSetName) ? this.Id : this.Workspace.Id;
-            var userAccessRight = new WorkspaceUser { AccessRight = this.AccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
+
+            WorkspaceUser userAccessRight;
+
+            if (this.PrincipalType.HasValue)
+            {
+                userAccessRight = new WorkspaceUser { AccessRight = this.AccessRight.ToString(), Identifier = this.Identifier, PrincipalType = this.PrincipalType.ToString() };
+            }
+            else
+            {
+                userAccessRight = new WorkspaceUser { AccessRight = this.AccessRight.ToString(), UserPrincipalName = this.UserPrincipalName };
+            }
 
             using (var client = this.CreateClient())
             {

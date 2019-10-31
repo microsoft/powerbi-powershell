@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
@@ -77,6 +78,52 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                     { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id }, 
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
                     { nameof(AddPowerBIWorkspaceUser.AccessRight), WorkspaceUserAccessRight.Admin }
+                };
+                ps.AddCommand(Cmdlet).AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Any());
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndAddPowerBIWorkspaceUser_ExplicitPrincipalType()
+        {
+            // Set this to the identifier of the object (App, Group, or User) you want to add to the workspace.
+            const string ObjectId = "";
+
+            // Optionally specify the Id of an existing workspace. Otherwise, the first returned workspace will be used.
+            const string WorkspaceId = "";
+
+            // The type of the object being added to the workspace.
+            const WorkspaceUserPrincipalType PrincipalType = WorkspaceUserPrincipalType.App;
+
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps, environment: PowerBIEnvironmentType.Public);
+
+                string workspaceId = WorkspaceId;
+                if (string.IsNullOrEmpty(WorkspaceId))
+                {
+                    var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
+                    WorkspacesTestUtilities.AssertShouldContinueIndividualTest(workspace);
+                    workspaceId = workspace.Id.ToString();
+                }
+
+                var parameters = new Dictionary<string, object>()
+                {
+                    { nameof(AddPowerBIWorkspaceUser.Id), workspaceId }, 
+                    { nameof(AddPowerBIWorkspaceUser.PrincipalType), PrincipalType },
+                    { nameof(AddPowerBIWorkspaceUser.Identifier), ObjectId },
+                    { nameof(AddPowerBIWorkspaceUser.AccessRight), WorkspaceUserAccessRight.Contributor }
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);
 
@@ -216,6 +263,64 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Id = workspaceId,
                 UserPrincipalName = user.UserPrincipalName,
                 AccessRight = WorkspaceUserAccessRight.Member,
+                ParameterSet = "Id",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void AddPowerBIWorkspaceUser_PrincipalTypeApp()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var principalId = Guid.NewGuid();
+            var user = new WorkspaceUser { Identifier = principalId.ToString(), AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = PrincipalType.App };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .AddWorkspaceUser(workspaceId, It.Is<WorkspaceUser>(u => u.Identifier == user.Identifier && u.AccessRight == user.AccessRight && u.PrincipalType == user.PrincipalType)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
+            {
+                Id = workspaceId,
+                Identifier = user.Identifier,
+                AccessRight = WorkspaceUserAccessRight.Member,
+                PrincipalType = WorkspaceUserPrincipalType.App,
+                ParameterSet = "Id",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void AddPowerBIWorkspaceUser_PrincipalTypeGroup()
+        {
+            // Arrange
+            var workspaceId = Guid.NewGuid();
+            var groupName = "groupName";
+            var user = new WorkspaceUser { Identifier = groupName, AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = PrincipalType.Group };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .AddWorkspaceUser(workspaceId, It.Is<WorkspaceUser>(u => u.Identifier == user.Identifier && u.AccessRight == user.AccessRight && u.PrincipalType == user.PrincipalType)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
+            {
+                Id = workspaceId,
+                Identifier = user.Identifier,
+                AccessRight = WorkspaceUserAccessRight.Member,
+                PrincipalType = WorkspaceUserPrincipalType.Group,
                 ParameterSet = "Id",
             };
 
