@@ -21,11 +21,12 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             if (string.IsNullOrEmpty(groupUserAccessRight.PrincipalType))
             {
+                // Principal type is not set, default to adding a user by their email address.
                 return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, UserPrincipalName = groupUserAccessRight.EmailAddress };
             }
             else
             {
-                // Principal is either an App, Group, or User specified by an OID.
+                // Principal type is explicitly set.
                 return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, Identifier = groupUserAccessRight.Identifier, PrincipalType = groupUserAccessRight.PrincipalType };
             }
         }
@@ -34,11 +35,12 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             if (string.IsNullOrEmpty(workspaceUser.PrincipalType))
             {
+                // Principal type is not set, default to adding a user by their email address.
                 return new GroupUserAccessRight { GroupUserAccessRightProperty = workspaceUser.AccessRight, EmailAddress = workspaceUser.UserPrincipalName };
             }
             else
             {
-                // Principal is either an App, Group, or User specified by an OID.
+                // Principal type is explicitly set.
                 return new GroupUserAccessRight { GroupUserAccessRightProperty = workspaceUser.AccessRight, Identifier = workspaceUser.Identifier, PrincipalType = workspaceUser.PrincipalType };
             }
         }

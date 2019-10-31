@@ -28,7 +28,7 @@ Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] [-Identifier <String>] [-Us
 
 ## DESCRIPTION
 Grants permissions to a specified user to access a Power BI workspace using the provided inputs and scope specified.
-Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
+Before you run this command, make sure you log in using Connect-PowerBIServiceAccount.
 
 ## EXAMPLES
 
@@ -71,7 +71,7 @@ Accept wildcard characters: False
 ```
 
 ### -Identifier
-{{Fill Identifier Description}}
+Identifier of the principal to add to the group. For Apps and Groups, this will be their object identifier (GUID). For users, this can be an email address.
 
 ```yaml
 Type: String
@@ -86,7 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -PrincipalType
-{{Fill PrincipalType Description}}
+The type of the principal to add to the group.
 
 ```yaml
 Type: WorkspaceUserPrincipalType
