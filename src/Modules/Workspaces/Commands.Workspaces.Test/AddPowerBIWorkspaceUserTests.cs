@@ -96,10 +96,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         public void EndToEndAddPowerBIWorkspaceUser_ExplicitPrincipalType()
         {
             // Set this to the identifier of the object (App, Group, or User) you want to add to the workspace.
-            const string ObjectId = "b6a32eb9-17b6-4c16-82ae-e97d3c09bfe4";
+            const string ObjectId = "";
 
             // Optionally specify the Id of an existing workspace. Otherwise, the first returned workspace will be used.
-            const string WorkspaceId = "8e6fb832-c583-4907-bdfe-576fc4954831";
+            const string WorkspaceId = "";
 
             // The type of the object being added to the workspace.
             const WorkspaceUserPrincipalType PrincipalType = WorkspaceUserPrincipalType.App;
@@ -335,8 +335,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         {
             // Arrange
             var workspaceId = Guid.NewGuid();
-            var groupName = "groupName";
-            var user = new WorkspaceUser { Identifier = groupName, AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = WorkspaceUserPrincipalType.Group };
+            var groupId = Guid.NewGuid();
+            var user = new WorkspaceUser { Identifier = groupId.ToString(), AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = WorkspaceUserPrincipalType.Group };
             var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
