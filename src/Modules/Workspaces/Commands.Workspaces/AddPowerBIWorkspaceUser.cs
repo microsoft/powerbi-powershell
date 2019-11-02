@@ -55,7 +55,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         [Parameter(Mandatory = true, ParameterSetName = PrincipalTypeWithIdParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = PrincipalTypeWithWorkspaceParameterSetName)]
-        public WorkspaceUserPrincipalType? PrincipalType { get; set; }
+        public WorkspaceUserPrincipalType PrincipalType { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = PrincipalTypeWithIdParameterSetName)]
         [Parameter(Mandatory = true, ParameterSetName = PrincipalTypeWithWorkspaceParameterSetName)]
