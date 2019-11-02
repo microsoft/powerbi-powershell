@@ -103,9 +103,9 @@ Add a user to a given workspace:
 Add-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com -AccessRight Admin
 ```
 
-### Add new application to workspace
+### Add new service principal to workspace
 
-Add an application to a given workspace:
+Add a service principal to a given workspace:
 
 ```powershell
 Add-PowerBIWorkspaceUser -WorkspaceId 3244f1c1-01cf-457f-9383-6035e4950fdc -Identifier "09934a8f-5066-44b2-91a6-f4987c76ae9e" -AccessRight Contibutor -PrincipalType App
