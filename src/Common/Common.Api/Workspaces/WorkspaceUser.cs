@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using Microsoft.PowerBI.Api.V2.Models;
 
 namespace Microsoft.PowerBI.Common.Api.Workspaces
@@ -15,33 +16,33 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         public string Identifier { get; set; }
 
-        public string PrincipalType { get; set; }
+        public WorkspaceUserPrincipalType? PrincipalType { get; set; }
 
         public static implicit operator WorkspaceUser(GroupUserAccessRight groupUserAccessRight)
         {
-            if (string.IsNullOrEmpty(groupUserAccessRight.PrincipalType))
+            if (!string.IsNullOrEmpty(groupUserAccessRight.PrincipalType) && Enum.TryParse(groupUserAccessRight.PrincipalType, out WorkspaceUserPrincipalType principalType))
             {
-                // Principal type is not set, default to adding a user by their email address.
-                return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, UserPrincipalName = groupUserAccessRight.EmailAddress };
+                // Principal type is explicitly set.
+                return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, Identifier = groupUserAccessRight.Identifier, PrincipalType = principalType };
             }
             else
             {
-                // Principal type is explicitly set.
-                return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, Identifier = groupUserAccessRight.Identifier, PrincipalType = groupUserAccessRight.PrincipalType };
+                // Principal type is not set, default to adding a user by their email address.
+                return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, UserPrincipalName = groupUserAccessRight.EmailAddress };
             }
         }
 
         public static implicit operator GroupUserAccessRight(WorkspaceUser workspaceUser)
         {
-            if (string.IsNullOrEmpty(workspaceUser.PrincipalType))
+            if (workspaceUser.PrincipalType.HasValue)
             {
-                // Principal type is not set, default to adding a user by their email address.
-                return new GroupUserAccessRight { GroupUserAccessRightProperty = workspaceUser.AccessRight, EmailAddress = workspaceUser.UserPrincipalName };
+                // Principal type is explicitly set.
+                return new GroupUserAccessRight { GroupUserAccessRightProperty = workspaceUser.AccessRight, Identifier = workspaceUser.Identifier, PrincipalType = workspaceUser.PrincipalType.ToString() };
             }
             else
             {
-                // Principal type is explicitly set.
-                return new GroupUserAccessRight { GroupUserAccessRightProperty = workspaceUser.AccessRight, Identifier = workspaceUser.Identifier, PrincipalType = workspaceUser.PrincipalType };
+                // Principal type is not set, default to adding a user by their email address.
+                return new GroupUserAccessRight { GroupUserAccessRightProperty = workspaceUser.AccessRight, EmailAddress = workspaceUser.UserPrincipalName };
             }
         }
     }

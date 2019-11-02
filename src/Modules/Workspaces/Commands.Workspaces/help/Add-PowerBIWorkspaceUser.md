@@ -12,18 +12,28 @@ Gives permissions to a specified user to access a Power BI workspace.
 
 ## SYNTAX
 
-### Id (Default)
+### UserEmailWithId (Default)
 ```
-Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> [-Identifier <String>]
- [-UserPrincipalName <String>] -AccessRight <WorkspaceUserAccessRight>
- [-PrincipalType <WorkspaceUserPrincipalType>] [<CommonParameters>]
+Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -UserPrincipalName <String>
+ -AccessRight <WorkspaceUserAccessRight> [<CommonParameters>]
 ```
 
-### Workspace
+### PrincipalTypeWithId
 ```
-Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] [-Identifier <String>] [-UserPrincipalName <String>]
- -AccessRight <WorkspaceUserAccessRight> [-PrincipalType <WorkspaceUserPrincipalType>] -Workspace <Workspace>
- [<CommonParameters>]
+Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -Id <Guid> -AccessRight <WorkspaceUserAccessRight>
+ -PrincipalType <WorkspaceUserPrincipalType> -Identifier <String> [<CommonParameters>]
+```
+
+### UserEmailWithWorkspace
+```
+Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -UserPrincipalName <String>
+ -AccessRight <WorkspaceUserAccessRight> -Workspace <Workspace> [<CommonParameters>]
+```
+
+### PrincipalTypeWithWorkspace
+```
+Add-PowerBIWorkspaceUser [-Scope <PowerBIUserScope>] -AccessRight <WorkspaceUserAccessRight>
+ -Workspace <Workspace> -PrincipalType <WorkspaceUserPrincipalType> -Identifier <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -60,7 +70,7 @@ ID of the workspace the user should be added to.
 
 ```yaml
 Type: Guid
-Parameter Sets: Id
+Parameter Sets: UserEmailWithId, PrincipalTypeWithId
 Aliases: GroupId, WorkspaceId
 
 Required: True
@@ -75,10 +85,10 @@ Identifier of the principal to add to the group. For Apps and Groups, this will 
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
+Parameter Sets: PrincipalTypeWithId, PrincipalTypeWithWorkspace
+Aliases: PrincipalId
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -90,11 +100,11 @@ The type of the principal to add to the group.
 
 ```yaml
 Type: WorkspaceUserPrincipalType
-Parameter Sets: (All)
+Parameter Sets: PrincipalTypeWithId, PrincipalTypeWithWorkspace
 Aliases:
 Accepted values: App, Group, User
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -122,10 +132,10 @@ User Principal Name (or UPN, commonly an email address) for the user whose permi
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: UserEmailWithId, UserEmailWithWorkspace
 Aliases: UserEmailAddress
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -137,7 +147,7 @@ The workspace entity to add the user to.
 
 ```yaml
 Type: Workspace
-Parameter Sets: Workspace
+Parameter Sets: UserEmailWithWorkspace, PrincipalTypeWithWorkspace
 Aliases: Group
 
 Required: True

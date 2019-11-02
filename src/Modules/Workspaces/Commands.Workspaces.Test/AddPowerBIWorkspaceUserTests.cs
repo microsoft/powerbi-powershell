@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
@@ -97,10 +96,10 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         public void EndToEndAddPowerBIWorkspaceUser_ExplicitPrincipalType()
         {
             // Set this to the identifier of the object (App, Group, or User) you want to add to the workspace.
-            const string ObjectId = "";
+            const string ObjectId = "b6a32eb9-17b6-4c16-82ae-e97d3c09bfe4";
 
             // Optionally specify the Id of an existing workspace. Otherwise, the first returned workspace will be used.
-            const string WorkspaceId = "";
+            const string WorkspaceId = "8e6fb832-c583-4907-bdfe-576fc4954831";
 
             // The type of the object being added to the workspace.
             const WorkspaceUserPrincipalType PrincipalType = WorkspaceUserPrincipalType.App;
@@ -207,7 +206,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Id = workspaceId,
                 UserPrincipalName = user.UserPrincipalName,
                 AccessRight = WorkspaceUserAccessRight.Member,
-                ParameterSet = "Id",
+                ParameterSet = "UserEmailWithId",
             };
 
             // Act
@@ -235,7 +234,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Workspace = workspace,
                 UserPrincipalName = user.UserPrincipalName,
                 AccessRight = WorkspaceUserAccessRight.Member,
-                ParameterSet = "Workspace",
+                ParameterSet = "UserEmailWithWorkspace",
             };
 
             // Act
@@ -263,7 +262,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Id = workspaceId,
                 UserPrincipalName = user.UserPrincipalName,
                 AccessRight = WorkspaceUserAccessRight.Member,
-                ParameterSet = "Id",
+                ParameterSet = "UserEmailWithId",
             };
 
             // Act
@@ -274,12 +273,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         [TestMethod]
-        public void AddPowerBIWorkspaceUser_PrincipalTypeApp()
+        public void AddPowerBIWorkspaceUser_PrincipalTypeApp_WithId()
         {
             // Arrange
             var workspaceId = Guid.NewGuid();
             var principalId = Guid.NewGuid();
-            var user = new WorkspaceUser { Identifier = principalId.ToString(), AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = PrincipalType.App };
+            var user = new WorkspaceUser { Identifier = principalId.ToString(), AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = WorkspaceUserPrincipalType.App };
             var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
@@ -292,7 +291,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Identifier = user.Identifier,
                 AccessRight = WorkspaceUserAccessRight.Member,
                 PrincipalType = WorkspaceUserPrincipalType.App,
-                ParameterSet = "Id",
+                ParameterSet = "PrincipalTypeWithId",
             };
 
             // Act
@@ -303,12 +302,41 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         }
 
         [TestMethod]
-        public void AddPowerBIWorkspaceUser_PrincipalTypeGroup()
+        public void AddPowerBIWorkspaceUser_PrincipalTypeApp_WithWorkspace()
+        {
+            // Arrange
+            var workspace = new Workspace { Id = Guid.NewGuid() };
+            var principalId = Guid.NewGuid();
+            var user = new WorkspaceUser { Identifier = principalId.ToString(), AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = WorkspaceUserPrincipalType.App };
+            var expectedResponse = new object();
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces
+                .AddWorkspaceUser(workspace.Id, It.Is<WorkspaceUser>(u => u.Identifier == user.Identifier && u.AccessRight == user.AccessRight && u.PrincipalType == user.PrincipalType)))
+                .Returns(expectedResponse);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new AddPowerBIWorkspaceUser(initFactory)
+            {
+                Workspace = workspace,
+                Identifier = user.Identifier,
+                AccessRight = WorkspaceUserAccessRight.Member,
+                PrincipalType = WorkspaceUserPrincipalType.App,
+                ParameterSet = "PrincipalTypeWithWorkspace",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            TestUtilities.AssertExpectedUnitTestResults(expectedResponse, client, initFactory);
+        }
+
+        [TestMethod]
+        public void AddPowerBIWorkspaceUser_PrincipalTypeGroup_WithId()
         {
             // Arrange
             var workspaceId = Guid.NewGuid();
             var groupName = "groupName";
-            var user = new WorkspaceUser { Identifier = groupName, AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = PrincipalType.Group };
+            var user = new WorkspaceUser { Identifier = groupName, AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = WorkspaceUserPrincipalType.Group };
             var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
@@ -321,7 +349,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 Identifier = user.Identifier,
                 AccessRight = WorkspaceUserAccessRight.Member,
                 PrincipalType = WorkspaceUserPrincipalType.Group,
-                ParameterSet = "Id",
+                ParameterSet = "PrincipalTypeWithId",
             };
 
             // Act
