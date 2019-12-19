@@ -33,7 +33,7 @@ Retrieves Power BI activity events between 08-10-19 14:35:20 UTC and 08-10-2019 
 
 ### Example 2
 ```powershell
-PS C:\> Get-PowerBIActivityEvents -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -User admin@contoso.com -ResultType JsonObject
+PS C:\> Get-PowerBIActivityEvent -StartDateTime 2019-08-10T14:35:20 -EndDateTime 2019-08-10T18:25:50 -ActivityType viewreport -User admin@contoso.com -ResultType JsonObject
 ```
 
 Retrieves Power BI activity events between 08-10-19 14:35:20 UTC and 08-10-2019 18:25:50 UTC with the activity type of viewreport for user admin@contoso.com. Output will be JSON objects.
