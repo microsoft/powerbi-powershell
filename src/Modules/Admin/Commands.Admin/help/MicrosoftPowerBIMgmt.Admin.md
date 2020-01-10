@@ -17,6 +17,9 @@ Adds an encryption key for Power BI workspaces assigned to a capacity.
 ### [Get-PowerBIActivityEvent](Get-PowerBIActivityEvent.md)
 Retrieves the audit activity events for a Power BI tenant.
 
+### [Get-PowerBIArtifact](Get-PowerBIArtifact.md)
+Retrieves artifacts belonging to Power BI workspaces.
+
 ### [Get-PowerBIEncryptionKey](Get-PowerBIEncryptionKey.md)
 Retrieves the encryption key for the tenant.
 
