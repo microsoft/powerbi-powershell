@@ -15,7 +15,7 @@ Returns a list of Power BI workspaces.
 ### List (Default)
 ```
 Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
- [-First <Int32>] [-Skip <Int32>] [<CommonParameters>]
+ [-First <Int32>] [-Skip <Int32>] [-Include <ArtifactType[]>] [<CommonParameters>]
 ```
 
 ### Id
@@ -31,7 +31,7 @@ Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParamete
 ### All
 ```
 Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <String>] [-Deleted] [-Orphaned]
- [-All] [<CommonParameters>]
+ [-Include <ArtifactType[]>] [-All] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,6 +61,13 @@ PS C:\> Get-PowerBIWorkspace -Scope Organization -Filter "tolower(name) eq 'cont
 ```
 
 Returns a workspace named 'Contoso Sales' (case insensitive with tolower) within the user's organization.
+
+### Example 3
+```powershell
+PS C:\> Get-PowerBIWorkspace -Scope Organization -Include All
+```
+
+Returns all Power BI workspaces along with related reports, dashboards, datasets, dataflows and workbooks within the user's organization.
 
 ## PARAMETERS
 
@@ -133,6 +140,21 @@ Parameter Sets: Id
 Aliases: GroupId, WorkspaceId
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Include
+Retrieves related artifacts associated with the Power BI workspace. Only available when -Scope is Organization.
+
+```yaml
+Type: ArtifactType[]
+Parameter Sets: List, All
+Aliases: Expand
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

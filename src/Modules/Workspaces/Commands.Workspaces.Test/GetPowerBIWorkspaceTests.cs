@@ -159,6 +159,46 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndGetWorkspacesAllAndOrganizationScopeAndIncludeAll()
+        {
+            /*
+             * Test requires at least one workspace (group or preview workspace) with the given user and login as an administrator
+             */
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspaceWithUsersInOrganization(ps);
+                WorkspacesTestUtilities.AssertShouldContinueOrganizationTest(workspace);
+                var userEmailAddress = workspace.Users.FirstOrDefault().UserPrincipalName;
+                var parameters = new Dictionary<string, object>()
+                    {
+                        { nameof(GetPowerBIWorkspace.Scope), PowerBIUserScope.Organization },
+                        { nameof(GetPowerBIWorkspace.All), true },
+                        { nameof(GetPowerBIWorkspace.Include), new ArtifactType[] { ArtifactType.All } },
+                    };
+                ps.AddCommand(WorkspacesTestUtilities.GetPowerBIWorkspaceCmdletInfo)
+                    .AddParameters(parameters);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+
+                if (!results.Any())
+                {
+                    Assert.Inconclusive("No workspaces returned. Verify you have workspaces with the specified user in your organization.");
+                }
+
+                Assert.IsNotNull(results.Select(x => (Workspace)x.BaseObject).FirstOrDefault(w => w.Id == workspace.Id));
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void EndToEndGetWorkspacesIndividualScope()
         {
             /*
@@ -1001,6 +1041,71 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
             // Assert
             AssertGetWorkspacesNeverCalled(client, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesIndividualScopeDoesNotSupportInclude()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Individual,
+                Include = new ArtifactType[] { ArtifactType.All },
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertGetWorkspacesNeverCalled(client, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesOrganizationScopeWithIncludeAllArtifacts()
+        {
+            // Arrange
+            var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
+            var client = new Mock<IPowerBIApiClient>();
+            client
+                .Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users,reports,dashboards,datasets,dataflows,workbooks", default, 100, default))
+                .Returns(expectedWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Include = new ArtifactType[] { ArtifactType.All },
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(expectedWorkspaces, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesOrganizationScopeWithIncludeDatasetArtifacts()
+        {
+            // Arrange
+            var expectedWorkspaces = new List<Workspace> { new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace" } };
+            var client = new Mock<IPowerBIApiClient>();
+            client
+                .Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users,datasets", default, 100, default))
+                .Returns(expectedWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                Include = new ArtifactType[] { ArtifactType.Datasets },
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(expectedWorkspaces, initFactory);
         }
 
         private static void AssertExpectedUnitTestResults(List<Workspace> expectedWorkspaces, TestPowerBICmdletInitFactory initFactory)
