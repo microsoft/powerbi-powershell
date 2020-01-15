@@ -20,12 +20,13 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 
 ### Id
 ```
-Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIWorkspace -Id <Guid> [-Scope <PowerBIUserScope>] [-Include <ArtifactType[]>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [<CommonParameters>]
+Get-PowerBIWorkspace -Name <String> [-Scope <PowerBIUserScope>] [-Include <ArtifactType[]>]
+ [<CommonParameters>]
 ```
 
 ### All
@@ -151,7 +152,7 @@ Retrieves related artifacts associated with the Power BI workspace. Only availab
 
 ```yaml
 Type: ArtifactType[]
-Parameter Sets: List, All
+Parameter Sets: (All)
 Aliases: Expand
 
 Required: False

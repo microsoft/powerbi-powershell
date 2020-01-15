@@ -72,6 +72,8 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
         [Alias("Expand")]
         public ArtifactType[] Include { get; set; }
 
