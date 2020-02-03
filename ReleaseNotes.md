@@ -1,2 +1,2 @@
 Updates to existing cmdlets:
-- Add-PowerBIWorkspaceUser: allow adding service principals and groups to workspaces.
+- Get-PowerBIWorkspace: added -Include parameter to include retrieving Reports, Dashboards, Datasets, Dataflows, Workbooks with workspace metadata
