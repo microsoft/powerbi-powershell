@@ -154,6 +154,7 @@ Retrieves related artifacts associated with the Power BI workspace. Only availab
 Type: ArtifactType[]
 Parameter Sets: (All)
 Aliases: Expand
+Accepted values: Reports, Dashboards, Datasets, Dataflows, Workbooks, All
 
 Required: False
 Position: Named
