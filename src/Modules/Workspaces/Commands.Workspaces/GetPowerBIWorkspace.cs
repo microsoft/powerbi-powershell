@@ -70,6 +70,13 @@ namespace Microsoft.PowerBI.Commands.Workspaces
         [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
         public int? Skip { get; set; }
 
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
+        [Alias("Expand")]
+        public ArtifactType[] Include { get; set; }
+
         #endregion
 
         protected override void BeginProcessing()
@@ -84,6 +91,19 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             if (!string.IsNullOrEmpty(this.User) && this.Scope.Equals(PowerBIUserScope.Individual))
             {
                 this.Logger.ThrowTerminatingError($"{nameof(this.User)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+            }
+
+            if (this.Include != null)
+            {
+                if (this.Include.Any() && this.Scope.Equals(PowerBIUserScope.Individual))
+                {
+                    this.Logger.ThrowTerminatingError($"{nameof(this.Include)} is only applied when -{nameof(this.Scope)} is set to {nameof(PowerBIUserScope.Organization)}");
+                }
+
+                if (this.Include.Contains(ArtifactType.All) && this.Include.Count() > 1)
+                {
+                    this.Logger.ThrowTerminatingError($"Parameter {nameof(this.Include)} is invalid. Enum {nameof(ArtifactType.All)} cannot be combined with other {nameof(ArtifactType)}");
+                }
             }
 
             if (this.Deleted.IsPresent && this.Orphaned.IsPresent)
@@ -103,6 +123,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             if (this.Orphaned.IsPresent && this.Scope.Equals(PowerBIUserScope.Individual))
             {
                 // You can't have orphaned workspaces when scope is Individual as orphaned workspaces are unassigned
+                return;
+            }
+
+            if (this.Include != null && this.Include.Any() && this.Scope.Equals(PowerBIUserScope.Individual))
+            {
+                // You can't use Include/Expand when scope is Individual
                 return;
             }
 
@@ -154,7 +180,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
                 var workspaces = this.Scope == PowerBIUserScope.Individual ?
                     client.Workspaces.GetWorkspaces(filter: this.Filter, top: this.First, skip: this.Skip) :
-                    client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: this.First, skip: this.Skip);
+                    client.Workspaces.GetWorkspacesAsAdmin(expand: this.GetExpandClauseForWorkspace(), filter: this.Filter, top: this.First, skip: this.Skip);
 
                 if (defaultingFirst && workspaces.Count() == 100)
                 {
@@ -176,7 +202,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
                     return;
                 }
 
-                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: "users", filter: this.Filter, top: top, skip: skip));
+                var allWorkspaces = this.ExecuteCmdletWithAll((top, skip) => client.Workspaces.GetWorkspacesAsAdmin(expand: this.GetExpandClauseForWorkspace(), filter: this.Filter, top: top, skip: skip));
 
                 var filteredWorkspaces = new List<Workspace>();
 
@@ -203,6 +229,27 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
                 this.Logger.WriteObject(filteredWorkspaces, true);
             }
+        }
+
+        private string GetExpandClauseForWorkspace()
+        {
+            this.Include = this.Include ?? new ArtifactType[0];
+            if (this.Include.Contains(ArtifactType.All))
+            {
+                this.Include = new ArtifactType[]
+                {
+                    ArtifactType.Reports,
+                    ArtifactType.Dashboards,
+                    ArtifactType.Datasets,
+                    ArtifactType.Dataflows,
+                    ArtifactType.Workbooks,
+                };
+            }
+
+            var includeArtifactTypes = string.Join(separator: ",", this.Include).ToLowerInvariant();
+            var includeArtifactTypesWithUsers = string.IsNullOrEmpty(includeArtifactTypes) ?
+                "users" : string.Concat("users", ",", includeArtifactTypes);
+            return includeArtifactTypesWithUsers;
         }
     }
 }
