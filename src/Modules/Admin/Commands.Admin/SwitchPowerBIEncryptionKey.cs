@@ -4,6 +4,7 @@
  */
 
 using System.Management.Automation;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Client;
 
@@ -16,6 +17,7 @@ namespace Microsoft.PowerBI.Commands.Admin
     {
         public const string CmdletName = "PowerBIEncryptionKey";
         public const string CmdletVerb = VerbsCommon.Switch;
+        private const string AdminVariable = "SwitchPowerBIEncryptionKeyAdminVariable";
 
         public SwitchPowerBIEncryptionKey() : base() { }
 
@@ -28,6 +30,7 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         [Parameter(Mandatory = true)]
         public string KeyVaultKeyUri { get; set; }
+        public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         #endregion
 
@@ -35,14 +38,25 @@ namespace Microsoft.PowerBI.Commands.Admin
         {
             using (var client = this.CreateClient())
             {
-                var encryptionKey = GetEncryptionKey(client, keyName: Name);
+                SessionState?.PSVariable?.Set(AdminVariable, this.Scope == PowerBIUserScope.Organization);
+
+                var encryptionKey = GetEncryptionKey(client, keyName: Name, asAdmin: this.Scope == PowerBIUserScope.Organization);
                 if (encryptionKey == null)
                 {
                     return;
                 }
 
-                var response = client.Admin.RotatePowerBIEncryptionKey(encryptionKey.Id, KeyVaultKeyUri);
-                this.Logger.WriteObject(response);
+                EncryptionKey responseEncryptionKey = null;
+
+                if (this.Scope == PowerBIUserScope.Individual)
+                {
+                    responseEncryptionKey = client.Encryption.RotatePowerBIEncryptionKey(encryptionKey.Id, KeyVaultKeyUri);
+                } else
+                {
+                    responseEncryptionKey = client.Admin.RotatePowerBIEncryptionKey(encryptionKey.Id, KeyVaultKeyUri);
+                }
+
+                this.Logger.WriteObject(responseEncryptionKey);
             }
         }
     }

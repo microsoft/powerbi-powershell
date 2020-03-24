@@ -5,6 +5,7 @@
 
 using System;
 using System.Management.Automation;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Client;
@@ -16,6 +17,7 @@ namespace Microsoft.PowerBI.Commands.Admin
     {
         public const string CmdletName = "PowerBICapacityEncryptionKey";
         public const string CmdletVerb = VerbsCommon.Set;
+        private const string AdminVariable = "SetPowerBIEncryptionKeyAdminVariable";
 
         public SetPowerBICapacityEncryptionKey() : base() { }
 
@@ -43,12 +45,17 @@ namespace Microsoft.PowerBI.Commands.Admin
         [Parameter(Mandatory = true, ParameterSetName = KeyNameAndCapacityParameterSet, ValueFromPipeline = true)]
         public Capacity Capacity { get; set; }
 
+        [Parameter(Mandatory = false)]
+        public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
+
         #endregion
 
         public override void ExecuteCmdlet()
         {
             using (var client = this.CreateClient())
             {
+                SessionState?.PSVariable?.Set(AdminVariable, this.Scope == PowerBIUserScope.Organization);
+
                 switch (ParameterSet)
                 {
                     case KeyNameAndCapacityIdParameterSet:
@@ -61,13 +68,20 @@ namespace Microsoft.PowerBI.Commands.Admin
                         break;
                 }
                 
-                var encryptionKey = GetEncryptionKey(client, KeyName);
+                var encryptionKey = GetEncryptionKey(client, KeyName, asAdmin: this.Scope == PowerBIUserScope.Organization);
                 if (encryptionKey == null)
                 {
                     return;
                 }
 
-                client.Admin.SetPowerBICapacityEncryptionKey(encryptionKey.Id, CapacityId);
+                if (this.Scope == PowerBIUserScope.Individual)
+                {
+                    client.Encryption.SetPowerBICapacityEncryptionKey(encryptionKey.Id, CapacityId);
+                }
+                else
+                {
+                    client.Admin.SetPowerBICapacityEncryptionKey(encryptionKey.Id, CapacityId);
+                }
             }
         }
     }

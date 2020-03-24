@@ -9,6 +9,7 @@ using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Api.Admin;
 using Microsoft.PowerBI.Common.Api.Capacities;
+using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.PowerBI.Common.Api.Reports;
 using Microsoft.PowerBI.Common.Api.Workspaces;
@@ -32,6 +33,8 @@ namespace Microsoft.PowerBI.Common.Api
         public IAdminClient Admin { get; set; }
 
         public ICapacityClient Capacities { get; set; }
+
+        public IEncryptionClient Encryption { get; set; }
 
         public IDataflowsClient Dataflows { get; set; }
 

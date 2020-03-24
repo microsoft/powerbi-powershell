@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Management.Automation;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Client;
 
@@ -16,6 +17,10 @@ namespace Microsoft.PowerBI.Commands.Admin
     {
         public const string CmdletName = "PowerBIEncryptionKey";
         public const string CmdletVerb = VerbsCommon.Get;
+        private const string AdminVariable = "GetPowerBIEncryptionKeyAdminVariable";
+
+        [Parameter(Mandatory = false)]
+        public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
 
         public GetPowerBIEncryptionKey() : base() { }
 
@@ -23,10 +28,22 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         public override void ExecuteCmdlet()
         {
+            SessionState?.PSVariable?.Set(AdminVariable, this.Scope == PowerBIUserScope.Organization);
+
             using (var client = this.CreateClient())
             {
-                var response = client.Admin.GetPowerBIEncryptionKeys();
-                this.Logger.WriteObject(response, true);
+                IEnumerable<EncryptionKey> encryptionKey = null;
+
+                if (this.Scope == PowerBIUserScope.Individual)
+                {
+                    encryptionKey = client.Encryption.GetPowerBIEncryptionKeys();
+
+                } else
+                {
+                    encryptionKey = client.Admin.GetPowerBIEncryptionKeys();
+                }
+
+                this.Logger.WriteObject(encryptionKey, enumerateCollection: true);
             }
         }
     }

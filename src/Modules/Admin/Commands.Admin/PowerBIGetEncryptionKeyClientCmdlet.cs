@@ -18,9 +18,9 @@ namespace Microsoft.PowerBI.Commands.Admin
 
         public PowerBIGetEncryptionKeyClientCmdlet (IPowerBIClientCmdletInitFactory init) : base(init) { }
 
-        protected EncryptionKey GetEncryptionKey(IPowerBIApiClient client, string keyName)
+        protected EncryptionKey GetEncryptionKey(IPowerBIApiClient client, string keyName, bool asAdmin)
         {
-            var tenantKeys = this.GetEncryptionKeys(client);
+            var tenantKeys = this.GetEncryptionKeys(client, asAdmin);
             if (tenantKeys == null)
             {
                 return null;
@@ -29,9 +29,17 @@ namespace Microsoft.PowerBI.Commands.Admin
             return GetMatchingEncryptionKey(tenantKeys, keyName);
         }
 
-        private IEnumerable<EncryptionKey> GetEncryptionKeys(IPowerBIApiClient client)
+        private IEnumerable<EncryptionKey> GetEncryptionKeys(IPowerBIApiClient client, bool asAdmin)
         {
-            var tenantKeys = client.Admin.GetPowerBIEncryptionKeys();
+            IEnumerable<EncryptionKey> tenantKeys = null;
+            if (asAdmin)
+            {
+                tenantKeys = client.Admin.GetPowerBIEncryptionKeys();
+            } else
+            {
+                tenantKeys = client.Encryption.GetPowerBIEncryptionKeys();
+            }
+
             if (tenantKeys == null || !tenantKeys.Any())
             {
                 this.Logger.ThrowTerminatingError("No encryption keys are set");

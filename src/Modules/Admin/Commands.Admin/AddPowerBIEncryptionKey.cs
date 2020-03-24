@@ -4,6 +4,7 @@
  */
 
 using System.Management.Automation;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api.Encryption;
 using Microsoft.PowerBI.Common.Client;
 
@@ -15,6 +16,7 @@ namespace Microsoft.PowerBI.Commands.Admin
     {
         public const string CmdletName = "PowerBIEncryptionKey";
         public const string CmdletVerb = VerbsCommon.Add;
+        private const string AdminVariable = "AddPowerBIEncryptionKeyAdminVariable";
 
         public AddPowerBIEncryptionKey() : base() { }
 
@@ -42,14 +44,28 @@ namespace Microsoft.PowerBI.Commands.Admin
         [Parameter(ParameterSetName = DefaultAndActivateParameterSet, Mandatory = false)]
         public SwitchParameter Activate { get; set; }
 
+        [Parameter(Mandatory = false)]
+        public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
+
         #endregion
 
         public override void ExecuteCmdlet()
         {
             using (var client = this.CreateClient())
             {
-                var response = client.Admin.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, Default, Activate);
-                this.Logger.WriteObject(response);
+                SessionState?.PSVariable?.Set(AdminVariable, this.Scope == PowerBIUserScope.Organization);
+                EncryptionKey encryptionKey = null;
+
+                if (this.Scope == PowerBIUserScope.Individual)
+                {
+                    encryptionKey = client.Encryption.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, Default, Activate);
+
+                } else
+                {
+                    encryptionKey = client.Admin.AddPowerBIEncryptionKey(Name, KeyVaultKeyUri, Default, Activate);
+                }
+
+                this.Logger.WriteObject(encryptionKey);
             }
         }
     }
