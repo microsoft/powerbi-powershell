@@ -14,17 +14,20 @@ Adds an encryption key for Power BI workspaces assigned to a capacity.
 
 ### DefaultAndActivate (Default)
 ```
-Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [-Activate] [<CommonParameters>]
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [-Activate]
+ [-Scope <PowerBIUserScope>] [<CommonParameters>]
 ```
 
 ### Default
 ```
-Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [<CommonParameters>]
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Default] [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ### Activate
 ```
-Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [<CommonParameters>]
+Add-PowerBIEncryptionKey -Name <String> -KeyVaultKeyUri <String> [-Activate] [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,6 +101,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Scope
+{{Fill Scope Description}}
+
+```yaml
+Type: PowerBIUserScope
+Parameter Sets: (All)
+Aliases:
+Accepted values: Individual, Organization
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

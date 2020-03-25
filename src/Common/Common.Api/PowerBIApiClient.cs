@@ -56,6 +56,7 @@ namespace Microsoft.PowerBI.Common.Api
             this.Workspaces = new WorkspacesClient(this.Client);
             this.Datasets = new DatasetsClient(this.Client);
             this.Admin = new AdminClient(this.Client);
+            this.Encryption = new EncryptionClient(this.Client);
             this.Capacities = new CapacityClient(this.Client);
             this.Dataflows = new DataflowsClient(this.Client);
         }

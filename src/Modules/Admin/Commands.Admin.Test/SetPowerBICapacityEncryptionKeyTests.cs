@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
 using Microsoft.PowerBI.Common.Api.Capacities;
 using Microsoft.PowerBI.Common.Api.Encryption;
@@ -41,8 +42,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
+            client.Verify(x => x.Encryption.GetPowerBIEncryptionKeys(), Times.Once());
+            client.Verify(x => x.Encryption.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
         }
 
@@ -64,8 +65,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
+            client.Verify(x => x.Encryption.GetPowerBIEncryptionKeys(), Times.Once());
+            client.Verify(x => x.Encryption.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
         }
 
@@ -87,8 +88,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             cmdlet.InvokePowerBICmdlet();
 
             // Assert
-            client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
+            client.Verify(x => x.Encryption.GetPowerBIEncryptionKeys(), Times.Once());
+            client.Verify(x => x.Encryption.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
             Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
         }
 
@@ -98,7 +99,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Throws(new Exception("Some exception"));
+            client.Setup(x => x.Encryption.GetPowerBIEncryptionKeys()).Throws(new Exception("Some exception"));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBICapacityEncryptionKey(initFactory)
             {
@@ -113,8 +114,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.AreEqual(throwingErrorRecords.Count(), 1);
             Assert.AreEqual(throwingErrorRecords.First().ToString(), "Some exception");
-            client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
+            client.Verify(x => x.Encryption.GetPowerBIEncryptionKeys(), Times.Once());
+            client.Verify(x => x.Encryption.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
         }
 
         [TestMethod]
@@ -124,7 +125,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
             var encryptionKeys = SetupPowerBIEncryptionKeyMock(client);
-            client.Setup(x => x.Admin.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()))
+            client.Setup(x => x.Encryption.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Throws(new Exception("Some exception"));
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBICapacityEncryptionKey(initFactory)
@@ -140,8 +141,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.AreEqual(throwingErrorRecords.Count(), 1);
             Assert.AreEqual(throwingErrorRecords.First().ToString(), "Some exception");
-            client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
+            client.Verify(x => x.Encryption.GetPowerBIEncryptionKeys(), Times.Once());
+            client.Verify(x => x.Encryption.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
         }
 
         [TestMethod]
@@ -164,8 +165,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.AreEqual(throwingErrorRecords.Count(), 1);
             Assert.AreEqual(throwingErrorRecords.First().ToString(), "No matching encryption keys found");
-            client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
+            client.Verify(x => x.Encryption.GetPowerBIEncryptionKeys(), Times.Once());
+            client.Verify(x => x.Encryption.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
         }
 
         [TestMethod]
@@ -173,7 +174,7 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
         {
             // Arrange
             var client = new Mock<IPowerBIApiClient>();
-            client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(new List<EncryptionKey>());
+            client.Setup(x => x.Encryption.GetPowerBIEncryptionKeys()).Returns(new List<EncryptionKey>());
             var initFactory = new TestPowerBICmdletInitFactory(client.Object);
             var cmdlet = new SetPowerBICapacityEncryptionKey(initFactory)
             {
@@ -188,8 +189,31 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             var throwingErrorRecords = initFactory.Logger.ThrowingErrorRecords;
             Assert.AreEqual(throwingErrorRecords.Count(), 1);
             Assert.AreEqual(throwingErrorRecords.First().ToString(), "No encryption keys are set");
+            client.Verify(x => x.Encryption.GetPowerBIEncryptionKeys(), Times.Once());
+            client.Verify(x => x.Encryption.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void SetPowerBICapacityEncryptionKey_AdminKeyNameAndCapacityIdParameterSet()
+        {
+            // Arrange
+            var client = new Mock<IPowerBIApiClient>();
+            var encryptionKeys = SetupPowerBIEncryptionKeyMock(client);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new SetPowerBICapacityEncryptionKey(initFactory)
+            {
+                KeyName = encryptionKeys[0].Name,
+                CapacityId = MockCapacityId,
+                Scope = PowerBIUserScope.Organization
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
             client.Verify(x => x.Admin.GetPowerBIEncryptionKeys(), Times.Once());
-            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
+            client.Verify(x => x.Admin.SetPowerBICapacityEncryptionKey(encryptionKeys[0].Id, MockCapacityId), Times.Once());
+            Assert.IsFalse(initFactory.Logger.ErrorRecords.Any());
         }
 
         private List<EncryptionKey> SetupPowerBIEncryptionKeyMock(Mock<IPowerBIApiClient> client)
@@ -214,6 +238,8 @@ namespace Microsoft.PowerBI.Commands.Admin.Test
             };
             var encryptionKeys = new List<EncryptionKey>() { encryptionKey1, encryptionKey2 };
             
+            client.Setup(x => x.Encryption.GetPowerBIEncryptionKeys()).Returns(encryptionKeys);
+            client.Setup(x => x.Encryption.SetPowerBICapacityEncryptionKey(encryptionKey1.Id, MockCapacityId));
             client.Setup(x => x.Admin.GetPowerBIEncryptionKeys()).Returns(encryptionKeys);
             client.Setup(x => x.Admin.SetPowerBICapacityEncryptionKey(encryptionKey1.Id, MockCapacityId));
 

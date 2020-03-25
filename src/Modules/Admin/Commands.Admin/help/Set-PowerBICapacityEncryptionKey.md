@@ -14,17 +14,20 @@ Updates the encryption key for the Power BI capacity.
 
 ### KeyNameAndCapacityId (Default)
 ```
-Set-PowerBICapacityEncryptionKey -KeyName <String> -CapacityId <Guid> [<CommonParameters>]
+Set-PowerBICapacityEncryptionKey -KeyName <String> -CapacityId <Guid> [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ### KeyNameAndCapacity
 ```
-Set-PowerBICapacityEncryptionKey -KeyName <String> -Capacity <Capacity> [<CommonParameters>]
+Set-PowerBICapacityEncryptionKey -KeyName <String> -Capacity <Capacity> [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ### KeyAndCapacityId
 ```
-Set-PowerBICapacityEncryptionKey -Key <EncryptionKey> -CapacityId <Guid> [<CommonParameters>]
+Set-PowerBICapacityEncryptionKey -Key <EncryptionKey> -CapacityId <Guid> [-Scope <PowerBIUserScope>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -97,6 +100,22 @@ Parameter Sets: KeyNameAndCapacityId, KeyNameAndCapacity
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Scope
+{{Fill Scope Description}}
+
+```yaml
+Type: PowerBIUserScope
+Parameter Sets: (All)
+Aliases:
+Accepted values: Individual, Organization
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
