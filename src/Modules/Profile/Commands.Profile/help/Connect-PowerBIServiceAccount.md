@@ -14,25 +14,28 @@ Log in to the Power BI service.
 
 ### User (Default)
 ```
-Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [<CommonParameters>]
+Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
+ [-DiscoveryUrl <String>] [<CommonParameters>]
 ```
 
 ### ServicePrincipal
 ```
-Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -Credential <PSCredential>
- [-ServicePrincipal] [-Tenant <String>] [<CommonParameters>]
+Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
+ -Credential <PSCredential> [-ServicePrincipal] [-Tenant <String>] [-DiscoveryUrl <String>]
+ [<CommonParameters>]
 ```
 
 ### UserAndCredential
 ```
-Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -Credential <PSCredential>
- [<CommonParameters>]
+Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
+ -Credential <PSCredential> [-DiscoveryUrl <String>] [<CommonParameters>]
 ```
 
 ### ServicePrincipalCertificate
 ```
-Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] -CertificateThumbprint <String>
- -ApplicationId <String> [-ServicePrincipal] [-Tenant <String>] [<CommonParameters>]
+Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
+ -CertificateThumbprint <String> -ApplicationId <String> [-ServicePrincipal] [-Tenant <String>]
+ [-DiscoveryUrl <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -113,6 +116,36 @@ Parameter Sets: ServicePrincipal, UserAndCredential
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomEnvironment
+The custom environment to use for the environments returned from the discovery url.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DiscoveryUrl
+The discovery url to get the backend services info from. Custom environment must also be supplied. 
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

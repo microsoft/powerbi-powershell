@@ -17,6 +17,7 @@ namespace Microsoft.PowerBI.Common.Abstractions
         USGov = 2,
         China = 3,
         USGovHigh = 4,
-        USGovMil = 5
+        USGovMil = 5,
+        Custom = 6
     }
 }
