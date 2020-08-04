@@ -1,0 +1,297 @@
+<#
+.Synopsis
+    Exports all the dataflow model.json from a Power BI workspace into a folder
+.Description
+    Exports all the dataflow model.json from a Power BI workspace into a folder. The format of the model files are
+        <MODELID>.json
+    The script will overwrite the file with the same name in the folder. It's important to keep the same name since ImportWorkspace.ps1 depends on the naming convention.
+    This script will fail if the target workspace does not exist.
+    This script uses the Power BI Management module for Windows PowerShell. If this module isn't installed, install it by using the command 'Install-Module -Name MicrosoftPowerBIMgmt -Scope CurrentUser'.
+.Parameter Workspace
+    [Required] The name of the workspace you'd like to export the dataflows from.
+.Parameter Location
+    [Required] Folder path where the model files will be saved.
+.Parameter Environment
+    [Optional]: A flag to indicate specific Power BI environments to log in to (Public, Germany, USGov, China, USGovHigh, USGovMil). Defailt is Public
+.Parameter V
+    [Optional]: A flag to indicate whether to produce verbose output. Default is false
+.Example
+    PS C:\> .\ExportWorkspace.ps1 -Workspace "Workspace1" -Folder C:\dataflows
+	Exports all the dataflows from the Power BI workspace "Workspace1" in to the folder C:\dataflows in the model.json format.
+#>
+
+Using module ".\Graph.psm1"
+
+param (
+    [Parameter(Mandatory=$true)]
+    [string] $Workspace,
+    [Parameter(Mandatory=$true)]
+    [string] $Location,
+	[Parameter(Mandatory=$false)]
+    [string] $Environment,
+    [Parameter(Mandatory=$false)]
+    [switch]$v = $false
+)
+Begin
+{
+#region Initialization
+    $ErrorActionPreference="SilentlyContinue"
+    Stop-Transcript | out-null
+    $ErrorActionPreference = "Continue"
+
+    Import-Module (Join-Path $PSScriptRoot DFUtils.psm1) -Force
+    Import-Module (Join-Path $PSScriptRoot Graph.psm1) -Force
+    DFLogMessage("SetVerbose : $v")
+    SetVerbose($v)
+#endregion
+}
+Process
+{
+    DFLogMessage("Workspace : $Workspace")
+    DFLogMessage("Location : $Location")
+
+    # Login to PowerBi and fetch the workspace id
+    LoginPowerBi($Environment)
+	$workspaceId = GetWorkspaceIdFromName($Workspace)
+    $dataflows = GetDataflowsForWorkspace($workspaceId)
+
+    # Create the output folder
+    DFLogMessage("Verifying location : $Location")
+    CreateDirectoryIfNotExists($Location)
+    
+    # Downloading all files
+    foreach ($dataflow in $dataflows.Values) 
+    {
+        $modelJson = GetDataflow $workspaceId $dataflow.objectId $dataflow.name
+        $outFile = Join-Path -Path $Location -ChildPath ($dataflow.objectId + ".json")
+        DeleteFileIfExists($outFile)
+        DFLogMessage("Copying dataflow [" + $dataflow.name + "] to file '$outFile'")
+        $modelJson | ConvertTo-Json -Depth 100 | Out-File $outFile
+        
+        # Verify that all reference models are in the same workspace
+        $referenceModels = GetReferenceModels($modelJson)
+        foreach ($referenceModel in $referenceModels) 
+        {
+            DFLogMessage("Dataflow [" + $dataflow.name + "] references dataflow: [" + $referenceModel.WorkspaceId + "/" + $referenceModel.DataflowId + "]")
+            if ($referenceModel.WorkspaceId -ne $workspaceId)
+            {
+                DFLogWarning("Dataflow [" + $dataflow.name + "] has dependency on another workspace id=" + $referenceModel.WorkspaceId + ".Import to a new workspace may not work ex expected")
+            }
+        }
+    }
+}
+End
+{
+    DFLogMessage("ExportWorkspace completed")
+}
+# SIG # Begin signature block
+# MIInLAYJKoZIhvcNAQcCoIInHTCCJxkCAQExDzANBglghkgBZQMEAgEFADB5Bgor
+# BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDlwo8jpBq/LpRn
+# x//kJhh6nhQajF8ClsjULRnggRmLnKCCEWUwggh3MIIHX6ADAgECAhM2AAABCXeq
+# 7JKeP287AAEAAAEJMA0GCSqGSIb3DQEBCwUAMEExEzARBgoJkiaJk/IsZAEZFgNH
+# QkwxEzARBgoJkiaJk/IsZAEZFgNBTUUxFTATBgNVBAMTDEFNRSBDUyBDQSAwMTAe
+# Fw0yMDAyMDkxMzIzMzFaFw0yMTAyMDgxMzIzMzFaMCQxIjAgBgNVBAMTGU1pY3Jv
+# c29mdCBBenVyZSBDb2RlIFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+# AoIBAQCYbOXmlszFnuCPBMUV6BC1J1QOI7+cqKNtzF8TpVghtmKqz3XY46b/YxOH
+# xTQp9J6ewnLLEzC2tP5AAx+Txqr1HpNy63D2U8WbBuRpXBk0bb8f8xrJoK7IVtSJ
+# i0dNXCQ0E/XDCw6EARlDrZPfRYR26xk1eCHoX6dWBSKzkrQuOAkcTomU0diFVKW1
+# O5A77bXGyF+l31eB5GyLjaPd52G6GzJBIYYKAtrfWRdH0Lei/LPqTcm1z3gLML0B
+# GKRNvxi4M21jZBE9LwCvkIKLIZiL/PM6IPXdCVhevxTfjfZuB/GEp0SWmL+EdRoe
+# ex084siN8ItdLPdg6hvpqXse/idLAgMBAAGjggWDMIIFfzApBgkrBgEEAYI3FQoE
+# HDAaMAwGCisGAQQBgjdbAQEwCgYIKwYBBQUHAwMwPQYJKwYBBAGCNxUHBDAwLgYm
+# KwYBBAGCNxUIhpDjDYTVtHiE8Ys+hZvdFs6dEoFgg93NZoaUjDICAWQCAQwwggJ2
+# BggrBgEFBQcBAQSCAmgwggJkMGIGCCsGAQUFBzAChlZodHRwOi8vY3JsLm1pY3Jv
+# c29mdC5jb20vcGtpaW5mcmEvQ2VydHMvQlkyUEtJQ1NDQTAxLkFNRS5HQkxfQU1F
+# JTIwQ1MlMjBDQSUyMDAxKDEpLmNydDBSBggrBgEFBQcwAoZGaHR0cDovL2NybDEu
+# YW1lLmdibC9haWEvQlkyUEtJQ1NDQTAxLkFNRS5HQkxfQU1FJTIwQ1MlMjBDQSUy
+# MDAxKDEpLmNydDBSBggrBgEFBQcwAoZGaHR0cDovL2NybDIuYW1lLmdibC9haWEv
+# QlkyUEtJQ1NDQTAxLkFNRS5HQkxfQU1FJTIwQ1MlMjBDQSUyMDAxKDEpLmNydDBS
+# BggrBgEFBQcwAoZGaHR0cDovL2NybDMuYW1lLmdibC9haWEvQlkyUEtJQ1NDQTAx
+# LkFNRS5HQkxfQU1FJTIwQ1MlMjBDQSUyMDAxKDEpLmNydDBSBggrBgEFBQcwAoZG
+# aHR0cDovL2NybDQuYW1lLmdibC9haWEvQlkyUEtJQ1NDQTAxLkFNRS5HQkxfQU1F
+# JTIwQ1MlMjBDQSUyMDAxKDEpLmNydDCBrQYIKwYBBQUHMAKGgaBsZGFwOi8vL0NO
+# PUFNRSUyMENTJTIwQ0ElMjAwMSxDTj1BSUEsQ049UHVibGljJTIwS2V5JTIwU2Vy
+# dmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1BTUUsREM9R0JM
+# P2NBQ2VydGlmaWNhdGU/YmFzZT9vYmplY3RDbGFzcz1jZXJ0aWZpY2F0aW9uQXV0
+# aG9yaXR5MB0GA1UdDgQWBBSFf5cqMUbeKYe6lzBbR/KdqpCuUjAOBgNVHQ8BAf8E
+# BAMCB4AwUAYDVR0RBEkwR6RFMEMxKTAnBgNVBAsTIE1pY3Jvc29mdCBPcGVyYXRp
+# b25zIFB1ZXJ0byBSaWNvMRYwFAYDVQQFEw0yMzYxNjcrNDU3Nzg5MIIB1AYDVR0f
+# BIIByzCCAccwggHDoIIBv6CCAbuGPGh0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9w
+# a2lpbmZyYS9DUkwvQU1FJTIwQ1MlMjBDQSUyMDAxLmNybIYuaHR0cDovL2NybDEu
+# YW1lLmdibC9jcmwvQU1FJTIwQ1MlMjBDQSUyMDAxLmNybIYuaHR0cDovL2NybDIu
+# YW1lLmdibC9jcmwvQU1FJTIwQ1MlMjBDQSUyMDAxLmNybIYuaHR0cDovL2NybDMu
+# YW1lLmdibC9jcmwvQU1FJTIwQ1MlMjBDQSUyMDAxLmNybIYuaHR0cDovL2NybDQu
+# YW1lLmdibC9jcmwvQU1FJTIwQ1MlMjBDQSUyMDAxLmNybIaBumxkYXA6Ly8vQ049
+# QU1FJTIwQ1MlMjBDQSUyMDAxLENOPUJZMlBLSUNTQ0EwMSxDTj1DRFAsQ049UHVi
+# bGljJTIwS2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlv
+# bixEQz1BTUUsREM9R0JMP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZT9v
+# YmplY3RDbGFzcz1jUkxEaXN0cmlidXRpb25Qb2ludDAfBgNVHSMEGDAWgBQbZqIZ
+# /JvrpdqEjxiY6RCkw3uSvTAfBgNVHSUEGDAWBgorBgEEAYI3WwEBBggrBgEFBQcD
+# AzANBgkqhkiG9w0BAQsFAAOCAQEAQYd76y+ByMUA3+A7WsHFVJZpuEyh9fqDOhQ3
+# f18LCatNSqBNUP0PYlEVimWJUvrr3RAHWBG2nr3inRaaivvveR51LkM1TH098qVj
+# v+7MNcwu8IkQ2d0+OoAfQXSsnFMNXsJBZsT6W3zscdK6YCFmyrPkYOI0NTPhoX+i
+# ZvhwtmR9x9UI3dDrd/Lg+9L+H5Cn4UI00llmM89XBpich2vzQR9N+3J98TJn5Yxf
+# IXoDYhX6zHu+cKilOjs2uwg3wCL3VekflxyOeyFC7hFTRFWAdWKJ+QM78WCFOElB
+# 38ah1U43wk7u+BruSXE/gXyGUi5NIfUsPmEE/S8l9UewoIPcIzCCCOYwggbOoAMC
+# AQICEx8AAAAUtMUfxvKAvnEAAAAAABQwDQYJKoZIhvcNAQELBQAwPDETMBEGCgmS
+# JomT8ixkARkWA0dCTDETMBEGCgmSJomT8ixkARkWA0FNRTEQMA4GA1UEAxMHYW1l
+# cm9vdDAeFw0xNjA5MTUyMTMzMDNaFw0yMTA5MTUyMTQzMDNaMEExEzARBgoJkiaJ
+# k/IsZAEZFgNHQkwxEzARBgoJkiaJk/IsZAEZFgNBTUUxFTATBgNVBAMTDEFNRSBD
+# UyBDQSAwMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANVXgQLW+frQ
+# 9xuAud03zSTcZmH84YlyrSkM0hsbmr+utG00tVRHgw40pxYbJp5W+hpDwnmJgicF
+# oGRrPt6FifMmnd//1aD/fW1xvGs80yZk9jxTNcisVF1CYIuyPctwuJZfwE3wcGxh
+# kVw/tj3ZHZVacSls3jRD1cGwrcVo1IR6+hHMvUejtt4/tv0UmUoH82HLQ8w1oTX9
+# D7xj35Zt9T0pOPqM3Gt9+/zs7tPp2gyoOYv8xR4X0iWZKuXTzxugvMA63YsB4ehu
+# SBqzHdkF55rxH47aT6hPhvDHlm7M2lsZcRI0CUAujwcJ/vELeFapXNGpt2d3wcPJ
+# M0bpzrPDJ/8CAwEAAaOCBNowggTWMBAGCSsGAQQBgjcVAQQDAgEBMCMGCSsGAQQB
+# gjcVAgQWBBSR/DPOQp72k+bifVTXCBi7uNdxZTAdBgNVHQ4EFgQUG2aiGfyb66Xa
+# hI8YmOkQpMN7kr0wggEEBgNVHSUEgfwwgfkGBysGAQUCAwUGCCsGAQUFBwMBBggr
+# BgEFBQcDAgYKKwYBBAGCNxQCAQYJKwYBBAGCNxUGBgorBgEEAYI3CgMMBgkrBgEE
+# AYI3FQYGCCsGAQUFBwMJBggrBgEFBQgCAgYKKwYBBAGCN0ABAQYLKwYBBAGCNwoD
+# BAEGCisGAQQBgjcKAwQGCSsGAQQBgjcVBQYKKwYBBAGCNxQCAgYKKwYBBAGCNxQC
+# AwYIKwYBBQUHAwMGCisGAQQBgjdbAQEGCisGAQQBgjdbAgEGCisGAQQBgjdbAwEG
+# CisGAQQBgjdbBQEGCisGAQQBgjdbBAEGCisGAQQBgjdbBAIwGQYJKwYBBAGCNxQC
+# BAweCgBTAHUAYgBDAEEwCwYDVR0PBAQDAgGGMBIGA1UdEwEB/wQIMAYBAf8CAQAw
+# HwYDVR0jBBgwFoAUKV5RXmSuNLnrrJwNp4x1AdEJCygwggFoBgNVHR8EggFfMIIB
+# WzCCAVegggFToIIBT4YjaHR0cDovL2NybDEuYW1lLmdibC9jcmwvYW1lcm9vdC5j
+# cmyGMWh0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2lpbmZyYS9jcmwvYW1lcm9v
+# dC5jcmyGI2h0dHA6Ly9jcmwyLmFtZS5nYmwvY3JsL2FtZXJvb3QuY3JshiNodHRw
+# Oi8vY3JsMy5hbWUuZ2JsL2NybC9hbWVyb290LmNybIaBqmxkYXA6Ly8vQ049YW1l
+# cm9vdCxDTj1BTUVST09ULENOPUNEUCxDTj1QdWJsaWMlMjBLZXklMjBTZXJ2aWNl
+# cyxDTj1TZXJ2aWNlcyxDTj1Db25maWd1cmF0aW9uLERDPUFNRSxEQz1HQkw/Y2Vy
+# dGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3Ry
+# aWJ1dGlvblBvaW50MIIBqwYIKwYBBQUHAQEEggGdMIIBmTA3BggrBgEFBQcwAoYr
+# aHR0cDovL2NybDEuYW1lLmdibC9haWEvQU1FUk9PVF9hbWVyb290LmNydDBHBggr
+# BgEFBQcwAoY7aHR0cDovL2NybC5taWNyb3NvZnQuY29tL3BraWluZnJhL2NlcnRz
+# L0FNRVJPT1RfYW1lcm9vdC5jcnQwNwYIKwYBBQUHMAKGK2h0dHA6Ly9jcmwyLmFt
+# ZS5nYmwvYWlhL0FNRVJPT1RfYW1lcm9vdC5jcnQwNwYIKwYBBQUHMAKGK2h0dHA6
+# Ly9jcmwzLmFtZS5nYmwvYWlhL0FNRVJPT1RfYW1lcm9vdC5jcnQwgaIGCCsGAQUF
+# BzAChoGVbGRhcDovLy9DTj1hbWVyb290LENOPUFJQSxDTj1QdWJsaWMlMjBLZXkl
+# MjBTZXJ2aWNlcyxDTj1TZXJ2aWNlcyxDTj1Db25maWd1cmF0aW9uLERDPUFNRSxE
+# Qz1HQkw/Y0FDZXJ0aWZpY2F0ZT9iYXNlP29iamVjdENsYXNzPWNlcnRpZmljYXRp
+# b25BdXRob3JpdHkwDQYJKoZIhvcNAQELBQADggIBACi3Soaajx+kAWjNwgDqkIvK
+# AOFkHmS1t0DlzZlpu1ANNfA0BGtck6hEG7g+TpUdVrvxdvPQ5lzU3bGTOBkyhGmX
+# oSIlWjKC7xCbbuYegk8n1qj3rTcjiakdbBqqHdF8J+fxv83E2EsZ+StzfCnZXA62
+# QCMn6t8mhCWBxpwPXif39Ua32yYHqP0QISAnLTjjcH6bAV3IIk7k5pQ/5NA6qIL8
+# yYD6vRjpCMl/3cZOyJD81/5+POLNMx0eCClOfFNxtaD0kJmeThwL4B2hAEpHTeRN
+# tB8ib+cze3bvkGNPHyPlSHIuqWoC31x2Gk192SfzFDPV1PqFOcuKjC8049SSBtC1
+# X7hyvMqAe4dop8k3u25+odhvDcWdNmimdMWvp/yZ6FyjbGlTxtUqE7iLTLF1eaUL
+# SEobAap16hY2N2yTJTISKHzHI4rjsEQlvqa2fj6GLxNj/jC+4LNy+uRmfQXShd30
+# lt075qTroz0Nt680pXvVhsRSdNnzW2hfQu2xuOLg8zKGVOD/rr0GgeyhODjKgL2G
+# Hxctbb9XaVSDf6ocdB//aDYjiabmWd/WYmy7fQ127KuasMh5nSV2orMcAed8CbIV
+# I3NYu+sahT1DRm/BGUN2hSpdsPQeO73wYvp1N7DdLaZyz7XsOCx1quCwQ+bojWVQ
+# TmKLGegSoUpZNfmP9MtSMYIVHTCCFRkCAQEwWDBBMRMwEQYKCZImiZPyLGQBGRYD
+# R0JMMRMwEQYKCZImiZPyLGQBGRYDQU1FMRUwEwYDVQQDEwxBTUUgQ1MgQ0EgMDEC
+# EzYAAAEJd6rskp4/bzsAAQAAAQkwDQYJYIZIAWUDBAIBBQCgga4wGQYJKoZIhvcN
+# AQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUw
+# LwYJKoZIhvcNAQkEMSIEIJvXlFJSGjIvd3FfjG5UW+P5EpwVOD2yZW/nMaujxabA
+# MEIGCisGAQQBgjcCAQwxNDAyoBSAEgBNAGkAYwByAG8AcwBvAGYAdKEagBhodHRw
+# Oi8vd3d3Lm1pY3Jvc29mdC5jb20wDQYJKoZIhvcNAQEBBQAEggEAF0iS8fiQVzU6
+# buxT8Ijfhd8UVRTnS0cZwanfvIB4dPrOxHSoCCsjPixDfzyurOlYm6E/tfxwJ/9y
+# uOhnljSTTjziotvCAGFVN7LnPPqybONLbVRX40KRkyMyaYJBy8wnmwanHoY0DOe9
+# nn05x5iIqvaXa6fhQe2WoVacrmKTu8PfMcUkAELpxzWpurZ6M+yzmSNyKhTMiUVf
+# S0LC75QSxQEYvp1Cp7w3m6NPHy3LCK904i8bALTBSnNifAzUd4ksD7Fgr3HRXOmU
+# JfCiT3dm94SWg/zTh6aRkEwdLFk4G+LpJSkZ8U2FkO1vnJC2maSqOwa6LF7qCao3
+# R173RxCVtaGCEuUwghLhBgorBgEEAYI3AwMBMYIS0TCCEs0GCSqGSIb3DQEHAqCC
+# Er4wghK6AgEDMQ8wDQYJYIZIAWUDBAIBBQAwggFRBgsqhkiG9w0BCRABBKCCAUAE
+# ggE8MIIBOAIBAQYKKwYBBAGEWQoDATAxMA0GCWCGSAFlAwQCAQUABCBU+hUm5v5n
+# ky2gfJ45Qde6uaiiqToIY/fdXrjzX4Dm0gIGXxYBsXCMGBMyMDIwMDgwMzIzNDE1
+# Mi4wMTJaMASAAgH0oIHQpIHNMIHKMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2Fz
+# aGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENv
+# cnBvcmF0aW9uMSUwIwYDVQQLExxNaWNyb3NvZnQgQW1lcmljYSBPcGVyYXRpb25z
+# MSYwJAYDVQQLEx1UaGFsZXMgVFNTIEVTTjo3QkYxLUUzRUEtQjgwODElMCMGA1UE
+# AxMcTWljcm9zb2Z0IFRpbWUtU3RhbXAgU2VydmljZaCCDjwwggTxMIID2aADAgEC
+# AhMzAAABH04lzawK9LgfAAAAAAEfMA0GCSqGSIb3DQEBCwUAMHwxCzAJBgNVBAYT
+# AlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYD
+# VQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xJjAkBgNVBAMTHU1pY3Jvc29mdCBU
+# aW1lLVN0YW1wIFBDQSAyMDEwMB4XDTE5MTExMzIxNDA0MVoXDTIxMDIxMTIxNDA0
+# MVowgcoxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQH
+# EwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xJTAjBgNV
+# BAsTHE1pY3Jvc29mdCBBbWVyaWNhIE9wZXJhdGlvbnMxJjAkBgNVBAsTHVRoYWxl
+# cyBUU1MgRVNOOjdCRjEtRTNFQS1CODA4MSUwIwYDVQQDExxNaWNyb3NvZnQgVGlt
+# ZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+# pUwPzFb3PxyMf046MLWFCtFwlCpzu1wPi26cp0QYxa19ybbPnDF+1xljQ1p6pXj+
+# hPLTQIgsV/xLAnDoKnRGmq37L4eSVSXgMmCTDaZLZUwJi3DysQgdCX8uwo+cnlfG
+# fFCZ0OzTIVgjt4wa1oWtqkg0eJ+/h4CeiGfdSfrz9Ds9o/zn8VWpfzscW7vHFjAm
+# T3XkATl3Z1UIVxibSDhOGS+fNEb8twd24Rn+qBpitRqVLbJGfLakIMj9cORXXhvY
+# WGyCQfyuPmWPKaQ194iZiqWL/s/9CWW5+381++7ORa9aqtOmDyRCTVDvGtLTIZns
+# A/WID7SQVxXgq8u5YtsIswIDAQABo4IBGzCCARcwHQYDVR0OBBYEFBWjHwA6MBNj
+# BDdlIlsrwTaJ+uDAMB8GA1UdIwQYMBaAFNVjOlyKMZDzQ3t8RhvFM2hahW1VMFYG
+# A1UdHwRPME0wS6BJoEeGRWh0dHA6Ly9jcmwubWljcm9zb2Z0LmNvbS9wa2kvY3Js
+# L3Byb2R1Y3RzL01pY1RpbVN0YVBDQV8yMDEwLTA3LTAxLmNybDBaBggrBgEFBQcB
+# AQROMEwwSgYIKwYBBQUHMAKGPmh0dHA6Ly93d3cubWljcm9zb2Z0LmNvbS9wa2kv
+# Y2VydHMvTWljVGltU3RhUENBXzIwMTAtMDctMDEuY3J0MAwGA1UdEwEB/wQCMAAw
+# EwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQELBQADggEBAJjRR8DcZOLK
+# YqvJzonPUcQsC9l/Pwu94Mv+7l8X1BW2+zKEqADT9ogJD3Op7cAg3x3x6baEL6qw
+# 4hwOCU3dWUEmxAS6hO6Wd8Fdi/oUZlM4qesCiX91DZ5P9xXiEDz1UXQxbZkY/Kge
+# gJAI4COyQItpLylGgmmx58X1y5gYUUmlzEHYwCe3UYLCm6AE2qN+/TQ51hylim7B
+# NR6s2wqIEJgFLGy11ZgSJOi5tQ5BqLOh+wItYRqroZR0QINNTZ0+KV0qymbanYqI
+# MifGbc5M9fNc+f2RNnG4MZvMAfsIUVlq/3MhrWN/kDKgvt7vx0LI/Ofg1lcFPFPj
+# wfuKzYtqbEQwggZxMIIEWaADAgECAgphCYEqAAAAAAACMA0GCSqGSIb3DQEBCwUA
+# MIGIMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMH
+# UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMTIwMAYDVQQD
+# EylNaWNyb3NvZnQgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgMjAxMDAeFw0x
+# MDA3MDEyMTM2NTVaFw0yNTA3MDEyMTQ2NTVaMHwxCzAJBgNVBAYTAlVTMRMwEQYD
+# VQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNy
+# b3NvZnQgQ29ycG9yYXRpb24xJjAkBgNVBAMTHU1pY3Jvc29mdCBUaW1lLVN0YW1w
+# IFBDQSAyMDEwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqR0NvHcR
+# ijog7PwTl/X6f2mUa3RUENWlCgCChfvtfGhLLF/Fw+Vhwna3PmYrW/AVUycEMR9B
+# GxqVHc4JE458YTBZsTBED/FgiIRUQwzXTbg4CLNC3ZOs1nMwVyaCo0UN0Or1R4HN
+# vyRgMlhgRvJYR4YyhB50YWeRX4FUsc+TTJLBxKZd0WETbijGGvmGgLvfYfxGwScd
+# JGcSchohiq9LZIlQYrFd/XcfPfBXday9ikJNQFHRD5wGPmd/9WbAA5ZEfu/QS/1u
+# 5ZrKsajyeioKMfDaTgaRtogINeh4HLDpmc085y9Euqf03GS9pAHBIAmTeM38vMDJ
+# RF1eFpwBBU8iTQIDAQABo4IB5jCCAeIwEAYJKwYBBAGCNxUBBAMCAQAwHQYDVR0O
+# BBYEFNVjOlyKMZDzQ3t8RhvFM2hahW1VMBkGCSsGAQQBgjcUAgQMHgoAUwB1AGIA
+# QwBBMAsGA1UdDwQEAwIBhjAPBgNVHRMBAf8EBTADAQH/MB8GA1UdIwQYMBaAFNX2
+# VsuP6KJcYmjRPZSQW9fOmhjEMFYGA1UdHwRPME0wS6BJoEeGRWh0dHA6Ly9jcmwu
+# bWljcm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1Y3RzL01pY1Jvb0NlckF1dF8yMDEw
+# LTA2LTIzLmNybDBaBggrBgEFBQcBAQROMEwwSgYIKwYBBQUHMAKGPmh0dHA6Ly93
+# d3cubWljcm9zb2Z0LmNvbS9wa2kvY2VydHMvTWljUm9vQ2VyQXV0XzIwMTAtMDYt
+# MjMuY3J0MIGgBgNVHSABAf8EgZUwgZIwgY8GCSsGAQQBgjcuAzCBgTA9BggrBgEF
+# BQcCARYxaHR0cDovL3d3dy5taWNyb3NvZnQuY29tL1BLSS9kb2NzL0NQUy9kZWZh
+# dWx0Lmh0bTBABggrBgEFBQcCAjA0HjIgHQBMAGUAZwBhAGwAXwBQAG8AbABpAGMA
+# eQBfAFMAdABhAHQAZQBtAGUAbgB0AC4gHTANBgkqhkiG9w0BAQsFAAOCAgEAB+aI
+# UQ3ixuCYP4FxAz2do6Ehb7Prpsz1Mb7PBeKp/vpXbRkws8LFZslq3/Xn8Hi9x6ie
+# JeP5vO1rVFcIK1GCRBL7uVOMzPRgEop2zEBAQZvcXBf/XPleFzWYJFZLdO9CEMiv
+# v3/Gf/I3fVo/HPKZeUqRUgCvOA8X9S95gWXZqbVr5MfO9sp6AG9LMEQkIjzP7QOl
+# lo9ZKby2/QThcJ8ySif9Va8v/rbljjO7Yl+a21dA6fHOmWaQjP9qYn/dxUoLkSbi
+# OewZSnFjnXshbcOco6I8+n99lmqQeKZt0uGc+R38ONiU9MalCpaGpL2eGq4EQoO4
+# tYCbIjggtSXlZOz39L9+Y1klD3ouOVd2onGqBooPiRa6YacRy5rYDkeagMXQzafQ
+# 732D8OE7cQnfXXSYIghh2rBQHm+98eEA3+cxB6STOvdlR3jo+KhIq/fecn5ha293
+# qYHLpwmsObvsxsvYgrRyzR30uIUBHoD7G4kqVDmyW9rIDVWZeodzOwjmmC3qjeAz
+# LhIp9cAvVCch98isTtoouLGp25ayp0Kiyc8ZQU3ghvkqmqMRZjDTu3QyS99je/WZ
+# ii8bxyGvWbWu3EQ8l1Bx16HSxVXjad5XwdHeMMD9zOZN+w2/XU/pnR4ZOC+8z1gF
+# Lu8NoFA12u8JJxzVs341Hgi62jbb01+P3nSISRKhggLOMIICNwIBATCB+KGB0KSB
+# zTCByjELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT
+# B1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjElMCMGA1UE
+# CxMcTWljcm9zb2Z0IEFtZXJpY2EgT3BlcmF0aW9uczEmMCQGA1UECxMdVGhhbGVz
+# IFRTUyBFU046N0JGMS1FM0VBLUI4MDgxJTAjBgNVBAMTHE1pY3Jvc29mdCBUaW1l
+# LVN0YW1wIFNlcnZpY2WiIwoBATAHBgUrDgMCGgMVANQvRJa2WvwYqkrR2BYDDosS
+# XkkMoIGDMIGApH4wfDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24x
+# EDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlv
+# bjEmMCQGA1UEAxMdTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBIDIwMTAwDQYJKoZI
+# hvcNAQEFBQACBQDi0vTXMCIYDzIwMjAwODA0MDQ0MDU1WhgPMjAyMDA4MDUwNDQw
+# NTVaMHcwPQYKKwYBBAGEWQoEATEvMC0wCgIFAOLS9NcCAQAwCgIBAAICHLYCAf8w
+# BwIBAAICEZ8wCgIFAOLURlcCAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGE
+# WQoDAqAKMAgCAQACAwehIKEKMAgCAQACAwGGoDANBgkqhkiG9w0BAQUFAAOBgQBe
+# l1eFLU8o0JldeWXiOI7sHMWxc+BHq4BCryeYW8zvpTmqfLfQ0Em2YndsNsLGHZX6
+# a/WQAzKRsMjw3IMrhVFSQm01ZjVQikV+u/4iskzAVmS9FJ0pEm5EGvvlegUAoceU
+# ewMiP0Z82TwuDDydjSqEKF96D6nlW8Iu02B0IqiDXzGCAw0wggMJAgEBMIGTMHwx
+# CzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRt
+# b25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xJjAkBgNVBAMTHU1p
+# Y3Jvc29mdCBUaW1lLVN0YW1wIFBDQSAyMDEwAhMzAAABH04lzawK9LgfAAAAAAEf
+# MA0GCWCGSAFlAwQCAQUAoIIBSjAaBgkqhkiG9w0BCQMxDQYLKoZIhvcNAQkQAQQw
+# LwYJKoZIhvcNAQkEMSIEIMJMsi698QK3Wuf7dKlV4BdZWY0ofqtzXA/jAh44+6c5
+# MIH6BgsqhkiG9w0BCRACLzGB6jCB5zCB5DCBvQQgqqVw9wBbf/k7/9NxWOfj0eEI
+# LScmByNE1X7fVsE+g6UwgZgwgYCkfjB8MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+# V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0
+# IENvcnBvcmF0aW9uMSYwJAYDVQQDEx1NaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Eg
+# MjAxMAITMwAAAR9OJc2sCvS4HwAAAAABHzAiBCA1IDrR8rxktsV4qBUTxytrHCku
+# Oae99pf8RO6HzvrSODANBgkqhkiG9w0BAQsFAASCAQBBYLiDdS8UhOW4h68I1WG9
+# jePr2BsWMVs4WZ40DWTw2S8gjbIp0aevYw+/4rXwHmR5yRcxttxsJSbZ/hfsZhuV
+# EI53gCB/7P4IP8qIJZkG+KvqooqwoRXq8m5H+0FLGE2v3L97slLCYUiizAXjTDRK
+# gNjwA66GeyUDgJNHSLRUcE9LRmE0x3Ngg4XecMt5M+paWFkveRuT3J104rnZ7bcq
+# ybbLrfloI5XQBfUpQv/EZG/kQg6FxGA9a1XlZ/49zeJCezSUe5KrU7HDNzXHzzWE
+# VAp9deRWfK1sdhf4dmfQg8XBwEisfMdKOr5q5WTvutL686XgRP4Zt6LnBPD+I0Xr
+# SIG # End signature block
