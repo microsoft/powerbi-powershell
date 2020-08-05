@@ -52,5 +52,11 @@ namespace Microsoft.PowerBI.Commands.Common
 
         [DataMember(Name = "ShowADALDebugMessages", IsRequired = false)]
         public bool ShowADALDebugMessages { get; set; }
+
+        [DataMember(Name = "DefaultClientId", IsRequired = false)]
+        public string DefaultClientId { get; set; }
+
+        [DataMember(Name = "DefaultRedirect", IsRequired = false)]
+        public string DefaultRedirect { get; set; }
     }
 }
