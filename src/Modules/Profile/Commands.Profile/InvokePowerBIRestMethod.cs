@@ -60,7 +60,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public Hashtable Headers { get; set; }
 
         [Parameter(Mandatory = false)]
-        public int TimeoutSec { get; set; } = 0;
+        public int TimeoutSec { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
