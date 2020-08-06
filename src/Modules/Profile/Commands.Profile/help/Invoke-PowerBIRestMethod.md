@@ -14,8 +14,8 @@ Executes a REST call to the Power BI service, with the specified URL and body.
 
 ```
 Invoke-PowerBIRestMethod -Url <String> -Method <PowerBIWebRequestMethod> [-Body <String>] [-OutFile <String>]
- [-ContentType <String>] [-Headers <Hashtable>] [-Organization <String>] [-Version <String>]
- [<CommonParameters>]
+ [-ContentType <String>] [-Headers <Hashtable>] [-TimeoutSec <Int32>] [-Organization <String>]
+ [-Version <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -121,6 +121,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TimeoutSec
+Specifies how long the request can be pending before it times out. Enter a value in seconds. The default value, 0, specifies an indefinite time-out.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

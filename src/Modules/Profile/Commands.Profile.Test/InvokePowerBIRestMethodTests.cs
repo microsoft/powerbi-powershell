@@ -3,10 +3,12 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using System.Net.Http;
+using System.Threading;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -55,7 +57,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                         { testHeaderName, testHeaderValue }
                     }
                 };
-                
+
                 // Act
                 mock.InvokePopulateClient(accessToken, client);
 
@@ -65,6 +67,47 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 Assert.IsNotNull(headerValues);
                 Assert.AreEqual(1, headerValues.Count());
                 Assert.AreEqual(testHeaderValue, headerValues.First());
+            }
+        }
+
+        [TestMethod]
+        public void InvokePowerBIRestMethod_PositiveTimeout()
+        {
+            // Arrange
+            var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
+            var testAuthenticator = initFactory.Authenticator;
+            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
+            using (var client = new HttpClient())
+            {
+                var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory)
+                {
+                    TimeoutSec = 100
+                };
+
+                // Act
+                mock.InvokePopulateClient(accessToken, client);
+
+                // Assert
+                Assert.AreEqual(client.Timeout, TimeSpan.FromSeconds(100));
+            }
+        }
+
+        [TestMethod]
+        public void InvokePowerBIRestMethod_DefaultTimeout()
+        {
+            // Arrange
+            var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
+            var testAuthenticator = initFactory.Authenticator;
+            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
+            using (var client = new HttpClient())
+            {
+                var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory);
+
+                // Act
+                mock.InvokePopulateClient(accessToken, client);
+
+                // Assert
+                Assert.AreEqual(client.Timeout, Timeout.InfiniteTimeSpan);
             }
         }
 
