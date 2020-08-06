@@ -126,7 +126,7 @@ Accept wildcard characters: False
 ```
 
 ### -TimeoutSec
-Specifies how long the request can be pending before it times out. Enter a value in seconds. The default value, 0, specifies an indefinite time-out.
+Specifies how long the request can be pending before it times out. Enter a value in seconds.
 
 ```yaml
 Type: Int32
@@ -135,7 +135,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 0
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
