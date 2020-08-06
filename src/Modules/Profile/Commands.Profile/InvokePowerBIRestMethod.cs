@@ -227,10 +227,6 @@ namespace Microsoft.PowerBI.Commands.Profile
             {
                 client.Timeout = TimeSpan.FromSeconds(this.TimeoutSec);
             }
-            else
-            {
-                client.Timeout = Timeout.InfiniteTimeSpan;
-            }
 
             if (this.Headers != null)
             {

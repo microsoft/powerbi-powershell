@@ -81,14 +81,14 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             {
                 var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory)
                 {
-                    TimeoutSec = 100
+                    TimeoutSec = 200
                 };
 
                 // Act
                 mock.InvokePopulateClient(accessToken, client);
 
                 // Assert
-                Assert.AreEqual(client.Timeout, TimeSpan.FromSeconds(100));
+                Assert.AreEqual(client.Timeout, TimeSpan.FromSeconds(200));
             }
         }
 
@@ -107,7 +107,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 mock.InvokePopulateClient(accessToken, client);
 
                 // Assert
-                Assert.AreEqual(client.Timeout, Timeout.InfiniteTimeSpan);
+                Assert.AreEqual(client.Timeout, TimeSpan.FromSeconds(100)); // default http client timeout
             }
         }
 
