@@ -111,6 +111,28 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             }
         }
 
+        [TestMethod]
+        public void InvokePowerBIRestMethod_ZeroTimeout()
+        {
+            // Arrange
+            var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
+            var testAuthenticator = initFactory.Authenticator;
+            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
+            using (var client = new HttpClient())
+            {
+                var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory)
+                {
+                    TimeoutSec = 0
+                };
+
+                // Act
+                mock.InvokePopulateClient(accessToken, client);
+
+                // Assert
+                Assert.AreEqual(client.Timeout, Timeout.InfiniteTimeSpan); // default http client timeout
+            }
+        }
+
         private class MockInvokePowerBIRestMethodCmdlet : InvokePowerBIRestMethod
         {
             public MockInvokePowerBIRestMethodCmdlet() : base() { }

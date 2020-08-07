@@ -60,7 +60,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public Hashtable Headers { get; set; }
 
         [Parameter(Mandatory = false)]
-        public int TimeoutSec { get; set; }
+        public int? TimeoutSec { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
@@ -219,13 +219,20 @@ namespace Microsoft.PowerBI.Commands.Profile
             client.DefaultRequestHeaders.UserAgent.Clear();
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-InvokeRest", PowerBICmdlet.CmdletVersion));
 
-            if (this.TimeoutSec < 0)
+            if (this.TimeoutSec != null)
             {
-                this.Logger.ThrowTerminatingError($"{nameof(this.TimeoutSec)} value cannot be negative.");
-            }
-            else if (this.TimeoutSec > 0)
-            {
-                client.Timeout = TimeSpan.FromSeconds(this.TimeoutSec);
+                if (this.TimeoutSec < 0)
+                {
+                    this.Logger.ThrowTerminatingError($"{nameof(this.TimeoutSec)} value cannot be negative.");
+                }
+                else if (this.TimeoutSec > 0)
+                {
+                    client.Timeout = TimeSpan.FromSeconds(Convert.ToDouble(this.TimeoutSec));
+                }
+                else
+                {
+                    client.Timeout = Timeout.InfiniteTimeSpan;
+                }
             }
 
             if (this.Headers != null)
