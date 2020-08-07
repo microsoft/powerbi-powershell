@@ -10,6 +10,7 @@ using System.Management.Automation;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -57,6 +58,9 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         [Parameter(Mandatory = false)]
         public Hashtable Headers { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public int? TimeoutSec { get; set; }
         #endregion
 
         public override void ExecuteCmdlet()
@@ -214,6 +218,22 @@ namespace Microsoft.PowerBI.Commands.Profile
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
             client.DefaultRequestHeaders.UserAgent.Clear();
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("MicrosoftPowerBIMgmt-InvokeRest", PowerBICmdlet.CmdletVersion));
+
+            if (this.TimeoutSec != null)
+            {
+                if (this.TimeoutSec < 0)
+                {
+                    this.Logger.ThrowTerminatingError($"{nameof(this.TimeoutSec)} value cannot be negative.");
+                }
+                else if (this.TimeoutSec > 0)
+                {
+                    client.Timeout = TimeSpan.FromSeconds(Convert.ToDouble(this.TimeoutSec));
+                }
+                else
+                {
+                    client.Timeout = Timeout.InfiniteTimeSpan;
+                }
+            }
 
             if (this.Headers != null)
             {
