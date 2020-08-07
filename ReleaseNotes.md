@@ -1,2 +1,4 @@
 Updates to existing cmdlets:
-- Get-PowerBIWorkspace: added -Include parameter to include retrieving Reports, Dashboards, Datasets, Dataflows, Workbooks with workspace metadata
+- Connect-PowerBIServiceAccount: added parameters -DiscoverUrl (string) to specify a custom service discovery url and -CustomEnvironment (string)
+to specify the environment to choose.
+- Invoke-PowerBIRestMethod: added parameter -TimeoutSec (int) to specify a client timeout in seconds.
