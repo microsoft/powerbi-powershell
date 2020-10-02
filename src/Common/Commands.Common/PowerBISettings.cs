@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
@@ -98,26 +99,32 @@ namespace Microsoft.PowerBI.Commands.Common
 
         public async Task<GSEnvironments> GetGlobalServiceConfig(string clientName = "powerbi-msolap")
         {
-            if(GlobalServiceEnvironments == null)
+            if (GlobalServiceEnvironments == null)
             {
-                using (var client = new HttpClient())
+                var defaultProtocol = ServicePointManager.SecurityProtocol;
+                try
                 {
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    try
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    using (var client = new HttpClient())
                     {
+                        client.DefaultRequestHeaders.Accept.Clear();
                         var response = await client.PostAsync("https://api.powerbi.com/powerbi/globalservice/v201606/environments/discover?client=" + clientName, null);
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        if (response.StatusCode == HttpStatusCode.OK)
                         {
                             var serializer = new DataContractJsonSerializer(typeof(GSEnvironments));
 
                             GlobalServiceEnvironments = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as GSEnvironments;
                         }
                     }
-                    catch (Exception)
-                    {
-                        // In the rare cases where we are in an environment where api.powerbi.com is inaccessible,
-                        // environments will be populated via custom discovery url. 
-                    }
+                }
+                catch (Exception)
+                {
+                    // In the rare cases where we are in an environment where api.powerbi.com is inaccessible,
+                    // environments will be populated via custom discovery url. 
+                }
+                finally
+                {
+                    ServicePointManager.SecurityProtocol = defaultProtocol;
                 }
             }
 
