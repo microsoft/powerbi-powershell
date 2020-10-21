@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using Microsoft.PowerBI.Api.V2.Models;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Common.Abstractions;
@@ -646,6 +647,34 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             var normalWorkspace = new Workspace { Id = Guid.NewGuid(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<WorkspaceUser> { user } };
 
             var allWorkspaces = new List<Workspace> { normalWorkspace, deletedWorkspace, orphanedWorkspace };
+
+            var client = new Mock<IPowerBIApiClient>();
+            client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
+            var initFactory = new TestPowerBICmdletInitFactory(client.Object);
+            var cmdlet = new GetPowerBIWorkspace(initFactory)
+            {
+                Scope = PowerBIUserScope.Organization,
+                All = true,
+                User = "randomUser@pbi.com",
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            AssertExpectedUnitTestResults(new List<Workspace> { normalWorkspace }, initFactory);
+        }
+
+        [TestMethod]
+        public void GetWorkspacesAllAndUser_FromV2Model()
+        {
+            // Arrange
+            var user = new GroupUserAccessRight { Identifier = "randomUser@pbi.com", PrincipalType = "User", GroupUserAccessRightProperty = WorkspaceUserAccessRight.Admin.ToString() };
+            var normalGroup = new Group { Id = Guid.NewGuid().ToString(), Name = "TestWorkspace", Type = WorkspaceType.Workspace, State = WorkspaceState.Active, Users = new List<GroupUserAccessRight> { user } };
+            var normalWorkspace = (Workspace)normalGroup;
+            Assert.AreEqual(normalWorkspace.Users.Single().UserPrincipalName, user.Identifier);
+
+            var allWorkspaces = new List<Workspace> { normalWorkspace };
 
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces.GetWorkspacesAsAdmin("users", null, It.IsAny<int>(), It.IsAny<int>())).Returns(allWorkspaces);
