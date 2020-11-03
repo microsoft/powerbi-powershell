@@ -56,7 +56,7 @@ Permissions to assign to the user.
 Type: WorkspaceUserAccessRight
 Parameter Sets: (All)
 Aliases: UserAccessRight
-Accepted values: Member, Admin, Contributor
+Accepted values: Member, Admin, Contributor, Viewer
 
 Required: True
 Position: Named
