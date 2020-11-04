@@ -4,3 +4,4 @@ Updates to existing cmdlets:
 - Get-PowerBIWorkspace: Display UserPrincipalName properly
 - Update security protocol to use TLS 1.2
 
+## Previous releases are not included in this change log
