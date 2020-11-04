@@ -1,156 +1,54 @@
-# ==================================================================
-# Utility graph node data structure
-# ==================================================================
-class DFGraphNode
+Using module ".\Graph.psm1"
+
+param (
+    [Parameter(Mandatory=$false)]
+    [switch]$v = $false
+)
+Begin
 {
-    [String]$Id
-    [Object]$Data
-    [Hashtable]$DownstreamNodes
-    [HashTable]$UpstreamNodes
-    [String]ToString()
+#region Initialization
+    $ErrorActionPreference="SilentlyContinue"
+    Stop-Transcript | out-null
+    $ErrorActionPreference = "Continue"
+
+    Import-Module (Join-Path $PSScriptRoot DFUtils.psm1) -Force
+    Import-Module (Join-Path $PSScriptRoot Graph.psm1) -Force
+    DFLogMessage("SetVerbose : $v")
+    SetVerbose($v)
+#endregion
+}
+Process
+{
+    $graph = New-Object DFGraph;
+
+    For ($i=0; $i -le 10; $i++) 
     {
-        return ($this.Id)
+        $graph.AddNode($i.ToString(), "Node" + $i);
+    }
+
+    $graph.AddEdge("0", "3")
+    $graph.AddEdge("1", "4")
+    $graph.AddEdge("4", "3")
+    $graph.AddEdge("3", "9")
+    $sorted = $graph.TopologicalSort()
+    foreach ($u in $sorted) 
+    {
+        DFLogMessage("Sort order: " + $u.Id + " " + $u.Data)
     }
 }
-
-# ==================================================================
-# Utility graph data structure
-# ================================================================
-class DFGraph
+End
 {
-    [Hashtable]$Nodes = @{}
-
-    # ==================================================================
-    # Adds a node to the graph
-    # ================================================================
-    [void] AddNode([String]$id, [System.Object]$data)
-    {
-        if ($null -ne $this.Nodes[$id])
-        {
-            DFThrowError("Graph node $id exists.")
-        }
-
-        $node = New-Object DFGraphNode;
-        $node.Id = $id
-        $node.Data = $data
-        $node.DownstreamNodes = @{}
-        $node.UpstreamNodes = @{}
-        $this.Nodes[$id] = $node
-
-        DFLogVerbose("Added node: " + $node.ToString())
-    }
-
-    # ==================================================================
-    # Adds an edge to the graph and verifies that there are no cycles
-    # ================================================================
-    [void] AddEdge([String]$idUpstream, [String]$idDownstream)
-    {
-        $nodeUpstream = $this.GetNode($idUpstream)
-        $nodeDownstream = $this.GetNode($idDownstream)
-
-        $p = $this.PathExists($idDownstream, $idUpstream)
-        if ($p)
-        {
-            DFThrowError("Adding edge " + $nodeUpstream.ToString() + " to " + $nodeDownstream.ToString() + " will create a cycle")
-        }
-
-        $nodeUpstream.DownstreamNodes[$idDownstream] = $idDownstream
-        $nodeDownstream.UpstreamNodes[$idUpstream] = $idUpstream
-
-        DFLogVerbose("Added edge: " + $nodeUpstream.ToString() + " to " + $nodeDownstream.ToString())
-    }
-
-    # ==================================================================
-    # Checks if a path exists between the two nodes
-    # ================================================================
-    [Boolean] PathExists([String]$idUpstream, [String]$idDownstream)
-    {
-        if ($idUpstream -eq $idDownstream)
-        {
-            return $true
-        }
-
-        $nodeUpstream = $this.GetNode($idUpstream)
-        foreach ($k in $nodeUpstream.DownstreamNodes.Keys) 
-        {
-            $p = $this.PathExists($k, $idDownstream)
-            if ($p)
-            {
-                return $true;
-            }
-        }
-
-        return $false;
-        
-    }
-
-    # ==================================================================
-    # Verifies and gets a node's data
-    # ================================================================
-    [DFGraphNode] GetNode([String]$id)
-    {
-        $node = $this.Nodes[$id]
-        if ($null -eq $node)
-        {
-            DFThrowError("Graph node $id does not exist")
-        }
-
-        return $node
-    }
-
-    # ==================================================================
-    # Topological sort of the graph
-    # ================================================================
-    [DFGraphNode[]] TopologicalSort()
-    {
-        $sortedNodes = @()
-        $allGraphNodes = $this.Nodes.Keys | Sort-Object
-        $visitedNodes = @{}
-        
-        while ($sortedNodes.Count -lt $this.Nodes.Count)
-        {
-            foreach($nodeId in $allGraphNodes) 
-            {
-                $node = $this.Nodes[$nodeId]
-
-                # Skip Visited nodes
-                if ($null -ne $visitedNodes[$nodeId])
-                {
-                    continue;
-                }
-
-                # Check if this node has unvisited node
-                $hasUnvisitedUpstream = $false
-                foreach ($uNodeId in $node.UpstreamNodes.Keys) 
-                {
-                    DFLogVerbose("TopologicalSort: Node " + $node.Id + " has upstream " + $uNodeId)
-                    if ($null -eq $visitedNodes[$uNodeId])
-                    {
-                        $hasUnvisitedUpstream = $true
-                        break;
-                    }
-                }
-
-                 # Add the node and mark this visited
-                if (!$hasUnvisitedUpstream)
-                {
-                    DFLogVerbose("TopologicalSort: Adding node " + $node.Id)
-                    $sortedNodes += $node
-                    $visitedNodes[$nodeId] = $node
-                }
-            }
-        }
-
-        return $sortedNodes
-    }
+    DFLogMessage("TestGraph completed")
 }
+
+    
 
 
 # SIG # Begin signature block
-# MIInLAYJKoZIhvcNAQcCoIInHTCCJxkCAQExDzANBglghkgBZQMEAgEFADB5Bgor
+# MIInMQYJKoZIhvcNAQcCoIInIjCCJx4CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCA7vqX8uIki1ihp
-# tKoaDt+20P7glbVh6RbknDlcX3Xw2KCCEWkwggh7MIIHY6ADAgECAhM2AAABCg+G
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCjrXjLU7/IP1At
+# 8RM5NyQtYe/13iJhcXCDFmoe5BhmgqCCEWkwggh7MIIHY6ADAgECAhM2AAABCg+G
 # jjrrP5YkAAEAAAEKMA0GCSqGSIb3DQEBCwUAMEExEzARBgoJkiaJk/IsZAEZFgNH
 # QkwxEzARBgoJkiaJk/IsZAEZFgNBTUUxFTATBgNVBAMTDEFNRSBDUyBDQSAwMTAe
 # Fw0yMDAyMDkxMzIzNTJaFw0yMTAyMDgxMzIzNTJaMCQxIjAgBgNVBAMTGU1pY3Jv
@@ -243,54 +141,54 @@ class DFGraph
 # 0oXd9JbdO+ak66M9DbevNKV71YbEUnTZ81toX0Ltsbji4PMyhlTg/669BoHsoTg4
 # yoC9hh8XLW2/V2lUg3+qHHQf/2g2I4mm5lnf1mJsu30NduyrmrDIeZ0ldqKzHAHn
 # fAmyFSNzWLvrGoU9Q0ZvwRlDdoUqXbD0Hju98GL6dTew3S2mcs+17DgsdargsEPm
-# 6I1lUE5iixnoEqFKWTX5j/TLUjGCFRkwghUVAgEBMFgwQTETMBEGCgmSJomT8ixk
+# 6I1lUE5iixnoEqFKWTX5j/TLUjGCFR4wghUaAgEBMFgwQTETMBEGCgmSJomT8ixk
 # ARkWA0dCTDETMBEGCgmSJomT8ixkARkWA0FNRTEVMBMGA1UEAxMMQU1FIENTIENB
 # IDAxAhM2AAABCg+GjjrrP5YkAAEAAAEKMA0GCWCGSAFlAwQCAQUAoIGuMBkGCSqG
 # SIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3
-# AgEVMC8GCSqGSIb3DQEJBDEiBCDXSd9Q/vY8Na7+Y4BugBBB6y9FCOmpetgWscAk
-# BQhn5TBCBgorBgEEAYI3AgEMMTQwMqAUgBIATQBpAGMAcgBvAHMAbwBmAHShGoAY
-# aHR0cDovL3d3dy5taWNyb3NvZnQuY29tMA0GCSqGSIb3DQEBAQUABIIBAI+d9QTz
-# O/RQfD29LV2hEvwRWic9dJOvk0odpI60RHHaRF1ptgZYC9kZTnQ44HhlzDhIBFwl
-# O8iYDGmHeBjSIKFkDrnTjQayxYqqA6t4gLwPiPedazduNsckbdCAADcEdAtX+Uf1
-# i+tbef04Y5ueMOKWHJrWEl1UAGgrTXDn3h8mjVsEt3VrqyVns13EMo6azDOui3y8
-# 5bGdGwA0CwD/c3gfzcvwxnBkzafjH9L1K7vqDR1jl0ejIYtLp3MGA/6qWFajX5rD
-# tYQRKrB/v6ySH6D0d44hi9pn+5StCs+LLIwwd87u5ZnURd2FZCiW00uQLbjUvQOk
-# 8aFf4I3h1CDMnCChghLhMIIS3QYKKwYBBAGCNwMDATGCEs0wghLJBgkqhkiG9w0B
-# BwKgghK6MIIStgIBAzEPMA0GCWCGSAFlAwQCAQUAMIIBUQYLKoZIhvcNAQkQAQSg
-# ggFABIIBPDCCATgCAQEGCisGAQQBhFkKAwEwMTANBglghkgBZQMEAgEFAAQgTtdV
-# bRmEsPDN6nXS7QoaNSgPLhyvxL5DI7VtACUqzYECBl9zfjarZxgTMjAyMDA5MzAw
-# NjE1MzYuNjQ1WjAEgAIB9KCB0KSBzTCByjELMAkGA1UEBhMCVVMxEzARBgNVBAgT
+# AgEVMC8GCSqGSIb3DQEJBDEiBCCQ8VfRFNFe74lodbMLKAT40M42fcyz3IPUEvDM
+# nNOOfTBCBgorBgEEAYI3AgEMMTQwMqAUgBIATQBpAGMAcgBvAHMAbwBmAHShGoAY
+# aHR0cDovL3d3dy5taWNyb3NvZnQuY29tMA0GCSqGSIb3DQEBAQUABIIBADOMFczh
+# xuyQFMr6hyy3r/ldL3F3lKWGDpdVdpj+qys3gjmGrkDI7Pqa2BdJgaC8eNT+Xvs1
+# DVGH2/w4pSgdzihDu2p0EYW242Ku27ru/YyXyMKldWabbJo6woPoijhzx35Ai2X1
+# brNdpkyUSUM5EX0PPYG6VaLliZoOYhlBLGj8sQM/a+6XOP6rC4PQdayXBumMePv0
+# 0cn7KzCWe5Dras+DFMiWXD/f1Fbj06e4H3sYeYdJpo5HobJM2Qcua+4VyYV2T2WA
+# weQKPL8jhQVRw5FF97gpXOPZFF8SXC1Y3yW4wE4KJ0mYk/Ye/VdHDrdJN55l3TYw
+# m9maykZauwiw+eqhghLmMIIS4gYKKwYBBAGCNwMDATGCEtIwghLOBgkqhkiG9w0B
+# BwKgghK/MIISuwIBAzEPMA0GCWCGSAFlAwQCAQUAMIIBUQYLKoZIhvcNAQkQAQSg
+# ggFABIIBPDCCATgCAQEGCisGAQQBhFkKAwEwMTANBglghkgBZQMEAgEFAAQgMzpu
+# g8YjxqO/Mdw3teJh2GPdMy4WLpngelslMG0QIDICBl9zfLRZsBgTMjAyMDA5MzAw
+# NjEzNDMuMTgzWjAEgAIB9KCB0KSBzTCByjELMAkGA1UEBhMCVVMxEzARBgNVBAgT
 # Cldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29m
 # dCBDb3Jwb3JhdGlvbjElMCMGA1UECxMcTWljcm9zb2Z0IEFtZXJpY2EgT3BlcmF0
-# aW9uczEmMCQGA1UECxMdVGhhbGVzIFRTUyBFU046N0JGMS1FM0VBLUI4MDgxJTAj
-# BgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0YW1wIFNlcnZpY2Wggg44MIIE8TCCA9mg
-# AwIBAgITMwAAAR9OJc2sCvS4HwAAAAABHzANBgkqhkiG9w0BAQsFADB8MQswCQYD
+# aW9uczEmMCQGA1UECxMdVGhhbGVzIFRTUyBFU046RDZCRC1FM0U3LTE2ODUxJTAj
+# BgNVBAMTHE1pY3Jvc29mdCBUaW1lLVN0YW1wIFNlcnZpY2Wggg49MIIE8TCCA9mg
+# AwIBAgITMwAAAR4OvOVLFqIDGwAAAAABHjANBgkqhkiG9w0BAQsFADB8MQswCQYD
 # VQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEe
 # MBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSYwJAYDVQQDEx1NaWNyb3Nv
-# ZnQgVGltZS1TdGFtcCBQQ0EgMjAxMDAeFw0xOTExMTMyMTQwNDFaFw0yMTAyMTEy
-# MTQwNDFaMIHKMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4G
+# ZnQgVGltZS1TdGFtcCBQQ0EgMjAxMDAeFw0xOTExMTMyMTQwNDBaFw0yMTAyMTEy
+# MTQwNDBaMIHKMQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4G
 # A1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSUw
 # IwYDVQQLExxNaWNyb3NvZnQgQW1lcmljYSBPcGVyYXRpb25zMSYwJAYDVQQLEx1U
-# aGFsZXMgVFNTIEVTTjo3QkYxLUUzRUEtQjgwODElMCMGA1UEAxMcTWljcm9zb2Z0
+# aGFsZXMgVFNTIEVTTjpENkJELUUzRTctMTY4NTElMCMGA1UEAxMcTWljcm9zb2Z0
 # IFRpbWUtU3RhbXAgU2VydmljZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
-# ggEBAKVMD8xW9z8cjH9OOjC1hQrRcJQqc7tcD4tunKdEGMWtfcm2z5wxftcZY0Na
-# eqV4/oTy00CILFf8SwJw6Cp0Rpqt+y+HklUl4DJgkw2mS2VMCYtw8rEIHQl/LsKP
-# nJ5XxnxQmdDs0yFYI7eMGtaFrapINHifv4eAnohn3Un68/Q7PaP85/FVqX87HFu7
-# xxYwJk915AE5d2dVCFcYm0g4ThkvnzRG/LcHduEZ/qgaYrUalS2yRny2pCDI/XDk
-# V14b2FhsgkH8rj5ljymkNfeImYqli/7P/Qlluft/NfvuzkWvWqrTpg8kQk1Q7xrS
-# 0yGZ7AP1iA+0kFcV4KvLuWLbCLMCAwEAAaOCARswggEXMB0GA1UdDgQWBBQVox8A
-# OjATYwQ3ZSJbK8E2ifrgwDAfBgNVHSMEGDAWgBTVYzpcijGQ80N7fEYbxTNoWoVt
+# ggEBAM4TtxgQovz18FyurO38G3WqlV+etLFjCViCzevcL+0aVl4USidzKo5r5FFg
+# ZB9b6ncAkfAJxYf6xmQ42HDmtpju+cK2O24q3xu+o1DRp7DFd3261HnBZVRfnEoR
+# 7PAIh9eenBq+LFH4Z3pArL3U1y8TwVdBU91WEOvcUyLM6qSpyHIdiuPgz0uC3FuS
+# IPJxrGxq/dfrxO21zCkFwwKfahsVJmMJpRXMdsavoR+gvTdN5pvHRZmsR7bHtBPR
+# mRhAEJiYlLVRdBIBVWOpvXCcxevv7Ufx8cut3X920zYOxH8NfCfASjP1nVSmt5+W
+# mHd3VXYhtX3Mo559eCn8gHZpFLsCAwEAAaOCARswggEXMB0GA1UdDgQWBBSMEyjn
+# kXhG4Ev7fps/2a8n2maKWzAfBgNVHSMEGDAWgBTVYzpcijGQ80N7fEYbxTNoWoVt
 # VTBWBgNVHR8ETzBNMEugSaBHhkVodHRwOi8vY3JsLm1pY3Jvc29mdC5jb20vcGtp
 # L2NybC9wcm9kdWN0cy9NaWNUaW1TdGFQQ0FfMjAxMC0wNy0wMS5jcmwwWgYIKwYB
 # BQUHAQEETjBMMEoGCCsGAQUFBzAChj5odHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20v
 # cGtpL2NlcnRzL01pY1RpbVN0YVBDQV8yMDEwLTA3LTAxLmNydDAMBgNVHRMBAf8E
-# AjAAMBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBCwUAA4IBAQCY0UfA
-# 3GTiymKryc6Jz1HELAvZfz8LveDL/u5fF9QVtvsyhKgA0/aICQ9zqe3AIN8d8em2
-# hC+qsOIcDglN3VlBJsQEuoTulnfBXYv6FGZTOKnrAol/dQ2eT/cV4hA89VF0MW2Z
-# GPyoHoCQCOAjskCLaS8pRoJpsefF9cuYGFFJpcxB2MAnt1GCwpugBNqjfv00OdYc
-# pYpuwTUerNsKiBCYBSxstdWYEiToubUOQaizofsCLWEaq6GUdECDTU2dPildKspm
-# 2p2KiDInxm3OTPXzXPn9kTZxuDGbzAH7CFFZav9zIa1jf5AyoL7e78dCyPzn4NZX
-# BTxT48H7is2LamxEMIIGcTCCBFmgAwIBAgIKYQmBKgAAAAAAAjANBgkqhkiG9w0B
+# AjAAMBMGA1UdJQQMMAoGCCsGAQUFBwMIMA0GCSqGSIb3DQEBCwUAA4IBAQAuZNyO
+# dZYjkIITIlQNJeh2NIc83bDeiIBFIO+DmMjbsfaGPuv0L7/54xTmR+TMj2ZMn/eb
+# W5pTJoa9Y75oZd8XqFO/KEYBCjahyXC5Bxw+pWqT70BGsg+m0IdGYaFADJYQm6NW
+# C1atY38q0oscfoZYgGR4THJIkXZpN+7uPr1yA/PkMNK+XdSaCFQGXW5NdSH/Qx5C
+# ySF3B8ngEpRos7aoABeaVAfja1FVqxrSo1gx0+bvEXVhBWWvUQGe+b2VQdNpvQ2p
+# UX4S7qRufctSzSiAeBaYECaRCNY5rK1ovLAwiEd3Bg7KntLBolQfHr1w/Vc2s52i
+# ScaFReh04dJdfiFtMIIGcTCCBFmgAwIBAgIKYQmBKgAAAAAAAjANBgkqhkiG9w0B
 # AQsFADCBiDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNV
 # BAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjEyMDAG
 # A1UEAxMpTWljcm9zb2Z0IFJvb3QgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IDIwMTAw
@@ -324,36 +222,37 @@ class DFGraph
 # YWtvd6mBy6cJrDm77MbL2IK0cs0d9LiFAR6A+xuJKlQ5slvayA1VmXqHczsI5pgt
 # 6o3gMy4SKfXAL1QnIffIrE7aKLixqduWsqdCosnPGUFN4Ib5KpqjEWYw07t0Mkvf
 # Y3v1mYovG8chr1m1rtxEPJdQcdeh0sVV42neV8HR3jDA/czmTfsNv11P6Z0eGTgv
-# vM9YBS7vDaBQNdrvCScc1bN+NR4Iuto229Nfj950iEkSoYICyjCCAjMCAQEwgfih
+# vM9YBS7vDaBQNdrvCScc1bN+NR4Iuto229Nfj950iEkSoYICzzCCAjgCAQEwgfih
 # gdCkgc0wgcoxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYD
 # VQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xJTAj
 # BgNVBAsTHE1pY3Jvc29mdCBBbWVyaWNhIE9wZXJhdGlvbnMxJjAkBgNVBAsTHVRo
-# YWxlcyBUU1MgRVNOOjdCRjEtRTNFQS1CODA4MSUwIwYDVQQDExxNaWNyb3NvZnQg
-# VGltZS1TdGFtcCBTZXJ2aWNloiMKAQEwBwYFKw4DAhoDFQDUL0SWtlr8GKpK0dgW
-# Aw6LEl5JDKCBgzCBgKR+MHwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
+# YWxlcyBUU1MgRVNOOkQ2QkQtRTNFNy0xNjg1MSUwIwYDVQQDExxNaWNyb3NvZnQg
+# VGltZS1TdGFtcCBTZXJ2aWNloiMKAQEwBwYFKw4DAhoDFQA5yQbj7emrMRP+jjdY
+# uspZjMqw3KCBgzCBgKR+MHwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5n
 # dG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9y
 # YXRpb24xJjAkBgNVBAMTHU1pY3Jvc29mdCBUaW1lLVN0YW1wIFBDQSAyMDEwMA0G
-# CSqGSIb3DQEBBQUAAgUA4x38sjAiGA8yMDIwMDkzMDAyMzQyNloYDzIwMjAxMDAx
-# MDIzNDI2WjBzMDkGCisGAQQBhFkKBAExKzApMAoCBQDjHfyyAgEAMAYCAQACAQ0w
-# BwIBAAICEeUwCgIFAOMfTjICAQAwNgYKKwYBBAGEWQoEAjEoMCYwDAYKKwYBBAGE
-# WQoDAqAKMAgCAQACAwehIKEKMAgCAQACAwGGoDANBgkqhkiG9w0BAQUFAAOBgQCs
-# NWR/f1ao5K78fPvtrv8I6tDFjadgz8FFeKHgU99iC+EW+aPBksfsiBYOVIH2BCKB
-# uVdvtKQ6sKKsHbNjsLjMxoQxBVHUmoj/pcpUl6ixlUFMCIjWNpZgp31QcYYILUZz
-# LrM4wbxS2pjsEF0smV+k1Mviji970IKYQgl3zN1U6zGCAw0wggMJAgEBMIGTMHwx
-# CzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRt
-# b25kMR4wHAYDVQQKExVNaWNyb3NvZnQgQ29ycG9yYXRpb24xJjAkBgNVBAMTHU1p
-# Y3Jvc29mdCBUaW1lLVN0YW1wIFBDQSAyMDEwAhMzAAABH04lzawK9LgfAAAAAAEf
-# MA0GCWCGSAFlAwQCAQUAoIIBSjAaBgkqhkiG9w0BCQMxDQYLKoZIhvcNAQkQAQQw
-# LwYJKoZIhvcNAQkEMSIEIHkjLC9kVO0ZeMZ9T6xdI7zokJ11PH1VLqoC0XiBTtGK
-# MIH6BgsqhkiG9w0BCRACLzGB6jCB5zCB5DCBvQQgqqVw9wBbf/k7/9NxWOfj0eEI
-# LScmByNE1X7fVsE+g6UwgZgwgYCkfjB8MQswCQYDVQQGEwJVUzETMBEGA1UECBMK
-# V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0
-# IENvcnBvcmF0aW9uMSYwJAYDVQQDEx1NaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0Eg
-# MjAxMAITMwAAAR9OJc2sCvS4HwAAAAABHzAiBCAe0OgRCZFiZd0aKiUnbpU5+VbO
-# 9MTJzekGtUe9/NbwYTANBgkqhkiG9w0BAQsFAASCAQAQzHoh0Zen3/kwcHj1dyLV
-# +WIK+xIkU8lsXlBnJAg7XO1SCuZy0MdMTSqQm2jAz7FSFPEymXZ/Zo4+QuNND2p0
-# Uw/fZ6OYv0BXZvrBU0KoV6GrqmTJ0Phuwf0HHAWVbpUOlL6EnGHoueNDxK+Nrbju
-# h8Dv61+6j8U3CGYgTfl7VT1ecWz0zqCsxBYsbPsqCKWNJcKuYIj7IfTpeUEpwIJg
-# pnHG19sVba6dBgY1LLzLdbNt1VVQxHVvAT45xl1e330bCbPL0tCr77430FkhcWvn
-# oHcWO7c9M1dCxGX2m/VFRA08+jAQyijutSW1685B8TGlDcol889cPBH8Yz2yGQGg
+# CSqGSIb3DQEBBQUAAgUA4x37LDAiGA8yMDIwMDkzMDAyMjc1NloYDzIwMjAxMDAx
+# MDIyNzU2WjB4MD4GCisGAQQBhFkKBAExMDAuMAoCBQDjHfssAgEAMAsCAQACAwS1
+# 8AIB/zAHAgEAAgIRyjAKAgUA4x9MrAIBADA2BgorBgEEAYRZCgQCMSgwJjAMBgor
+# BgEEAYRZCgMCoAowCAIBAAIDB6EgoQowCAIBAAIDAYagMA0GCSqGSIb3DQEBBQUA
+# A4GBAHlJnI/DFF/6HgTSvCWhdqDwdifI/Tz2vkYS1vfpnlw8hZSJE5uIA/qzND63
+# p4xart9dhA3aieRbhQv3FUswgJNVO/ZlXukVJNwvXNUuVVC20C97nhA0/7aUgkl1
+# odWKUd1jR7WXB3kU6r37Eu6ZviEJNp6EW94E84X+CuY4fNWgMYIDDTCCAwkCAQEw
+# gZMwfDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT
+# B1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjEmMCQGA1UE
+# AxMdTWljcm9zb2Z0IFRpbWUtU3RhbXAgUENBIDIwMTACEzMAAAEeDrzlSxaiAxsA
+# AAAAAR4wDQYJYIZIAWUDBAIBBQCgggFKMBoGCSqGSIb3DQEJAzENBgsqhkiG9w0B
+# CRABBDAvBgkqhkiG9w0BCQQxIgQgCHbIcy7/pFt9ZX1U1MuZ1lCeLTUCuNHWEFQa
+# 9r9m5DgwgfoGCyqGSIb3DQEJEAIvMYHqMIHnMIHkMIG9BCBzO+RYw99xOlHlvaef
+# PKE3cS3NJdWU8foiBBwPjdZfRzCBmDCBgKR+MHwxCzAJBgNVBAYTAlVTMRMwEQYD
+# VQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNy
+# b3NvZnQgQ29ycG9yYXRpb24xJjAkBgNVBAMTHU1pY3Jvc29mdCBUaW1lLVN0YW1w
+# IFBDQSAyMDEwAhMzAAABHg685UsWogMbAAAAAAEeMCIEIBPJLLCdX/jUsCZl12yn
+# 5xwTWlHR3VCbrwaOXPIaF294MA0GCSqGSIb3DQEBCwUABIIBAB2pd2y87N9tqhmO
+# uJEHIHrxtw6mM1uSm3xgpx3BAMk6J/llXGDImjlQmvuRzOqG3d8CXar+0uVuv93Q
+# u8YAPISN5zv2jde5iJYe0UjwpEI6Ob8UqDDCYP+ObT+OSel9sse4pzIDnsC+LaaW
+# QqNbPs8t08ufSvwYmvVF9Ec8724YOXmdyuwfh0ZeBq2qgOX36dYg/Cuu++AbfwwC
+# /XBOSZRnpYKfTvkq1ixAKBYnk/Nn+IJMUqGGAzDTW/l3He4mHfcdNhLonr3RWZGa
+# iT+2eOs2Vn0ekzrCMQDJFpf5PbZgvkhe+OwonCnppoVY/wmkRiOIocDjPrTSHZJr
+# /7XFTLE=
 # SIG # End signature block
