@@ -295,7 +295,7 @@ This information can be useful for opening support tickets for Power BI.
 
 If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for Power BI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues). If the issue is an error returned from the cmdlets, add detail from `Resolve-PowerBIError` to the issue.
 
-If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [Power BI Community](http://community.powerbi.com/) or the official [Power BI Support](https://powerbi.microsoft.com/en-us/support/) site.
+If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [Power BI Community](https://community.powerbi.com/) or the official [Power BI Support](https://powerbi.microsoft.com/en-us/support/) site.
 
 We track our roadmap of planned features in [ROADMAP.md](ROADMAP.md).
 
