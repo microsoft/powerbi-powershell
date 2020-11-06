@@ -9,6 +9,7 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
     {
         Member,
         Admin,
-        Contributor
+        Contributor,
+        Viewer,
     }
 }

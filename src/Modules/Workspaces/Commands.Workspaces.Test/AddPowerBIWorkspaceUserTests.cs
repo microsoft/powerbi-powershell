@@ -336,7 +336,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             // Arrange
             var workspaceId = Guid.NewGuid();
             var groupId = Guid.NewGuid();
-            var user = new WorkspaceUser { Identifier = groupId.ToString(), AccessRight = WorkspaceUserAccessRight.Member.ToString(), PrincipalType = WorkspaceUserPrincipalType.Group };
+            var user = new WorkspaceUser { Identifier = groupId.ToString(), AccessRight = WorkspaceUserAccessRight.Viewer.ToString(), PrincipalType = WorkspaceUserPrincipalType.Group };
             var expectedResponse = new object();
             var client = new Mock<IPowerBIApiClient>();
             client.Setup(x => x.Workspaces
@@ -347,7 +347,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
             {
                 Id = workspaceId,
                 Identifier = user.Identifier,
-                AccessRight = WorkspaceUserAccessRight.Member,
+                AccessRight = WorkspaceUserAccessRight.Viewer,
                 PrincipalType = WorkspaceUserPrincipalType.Group,
                 ParameterSet = "PrincipalTypeWithId",
             };
