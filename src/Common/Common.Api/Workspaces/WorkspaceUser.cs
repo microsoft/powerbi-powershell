@@ -22,6 +22,12 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
         {
             if (!string.IsNullOrEmpty(groupUserAccessRight.PrincipalType) && Enum.TryParse(groupUserAccessRight.PrincipalType, out WorkspaceUserPrincipalType principalType))
             {
+                // User principal type
+                if (principalType == WorkspaceUserPrincipalType.User)
+                {
+                    return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, UserPrincipalName = groupUserAccessRight.Identifier, Identifier = groupUserAccessRight.Identifier, PrincipalType = principalType };
+                }
+
                 // Principal type is explicitly set.
                 return new WorkspaceUser { AccessRight = groupUserAccessRight.GroupUserAccessRightProperty, Identifier = groupUserAccessRight.Identifier, PrincipalType = principalType };
             }

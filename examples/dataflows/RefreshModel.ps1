@@ -1,34 +1,32 @@
 <#
 .Synopsis
-    Imports all the dataflow model.json from a folder into a Power BI workspace.
+    Refreshes a dataflow and optionally triggers the refresh of depending datasets.
 .Description
-    Imports all the dataflow model.json from a folder into a Power BI workspace. The script also chains all the reference models in the same workspace correctly.
-    The scripts rely on the format used by ExportWorkspace.ps1 in order to fix the reference model paths correctly.This script will fail if the target workspace does not exist.
+    Refreshes a dataflow in the specified Power BI workspace. The script optionally triggers the refresh of depending datasets.
+    This script will fail if the target workspace or target dataflow does not exist.
     This script uses the Power BI Management module for Windows PowerShell. If this module isn't installed, install it by using the command 'Install-Module -Name MicrosoftPowerBIMgmt -Scope CurrentUser'.
 .Parameter Workspace
-    [Required] The name of the workspace you'd like to import all the dataflows from
-.Parameter Location
-    [Required] Folder path where the model files are located.
-.Parameter Overwrite
-    [Optional]: A flag to indicate whether to overwrite a model with the same name if it exists. Default is false
+    [Required] The name of the workspace where the dataflow resides
+.Parameter Dataflow
+    [Required] The name of the dataflow to refresh
+.Parameter RefreshDatasets
+    [Optional]: A flag to indicate whether to refresh depending datasets. Default is false
 .Parameter Environment
     [Optional]: A flag to indicate specific Power BI environments to log in to (Public, Germany, USGov, China, USGovHigh, USGovMil). Defailt is Public
 .Parameter V
     [Optional]: A flag to indicate whether to produce verbose output. Default is false
 .Example
-    PS C:\> .\ImportWorkspace.ps1 -Workspace "Workspace1" -Folder C:\dataflows -Overwrite
-	Imports all the dataflows from the folder C:\dataflows into the Power BI workspace "Workspace1"
+    PS C:\> .\RefreshModel.ps1 -Workspace "Workspace1" -Dataflow "Dataflow1" -RefreshDatasets
+	Refreshes the dataflow Dataflow1 in the Power BI workspace "Workspace1" and refreshes the depending datasets
 #>
-
 Using module ".\Graph.psm1"
-
 param (
     [Parameter(Mandatory=$true)]
     [string] $Workspace,
     [Parameter(Mandatory=$true)]
-    [string] $Location,
+    [string] $Dataflow,
     [Parameter(Mandatory=$false)]
-    [switch]$Overwrite = $false,
+    [switch]$RefreshDatasets = $false,
 	[Parameter(Mandatory=$false)]
     [string] $Environment,
     [Parameter(Mandatory=$false)]
@@ -40,7 +38,7 @@ Begin
     $ErrorActionPreference="SilentlyContinue"
     Stop-Transcript | out-null
     $ErrorActionPreference = "Continue"
-
+    
     Import-Module (Join-Path $PSScriptRoot DFUtils.psm1) -Force
     Import-Module (Join-Path $PSScriptRoot Graph.psm1) -Force
     DFLogMessage("SetVerbose : $v")
@@ -51,80 +49,33 @@ Process
 {
     # Login to PowerBi and fetch the workspace id
     DFLogMessage("Overwrite : $Overwrite")
-    DFLogMessage("Location : $Location")
     LoginPowerBi($Environment)
 	$workspaceId = GetWorkspaceIdFromName($Workspace)
-    $dataflows = GetDataflowsForWorkspace($workspaceId)
+    $dataflowId = GetDataflowIdFromName $workspaceId $Dataflow
     
-    # Verifies the output folder
-    DFLogMessage("Verifying location : $Location")
-    VerifyDirectory($Location)
+    # Refresh the model
+    RefreshModel $workspaceId $dataflowId
     
-    # Read all files and construct the graph
-    $graph = New-Object DFGraph;
-    $modelJsonFiles = Get-ChildItem $Location -Filter *.json
-    foreach ($modelJsonFile in $modelJsonFiles) 
+    # Refresh dependent datasets
+    if ($RefreshDatasets)
     {
-        $modelId =  $modelJsonFile.Basename
-        $modelJson = ReadModelJson($modelJsonFile.FullName)
-        $graph.AddNode($modelId, $modelJson)
-    }
-
-    # Add the graph edges
-    foreach ($modelNode in $graph.Nodes.Values) 
-    {
-        $modelId = $modelNode.Id
-        $referenceModels = GetReferenceModels($modelNode.Data)
-        foreach ($referenceModel in $referenceModels) 
+        $dependentDatasets = GetDependentDatasets $workspaceId $dataflowId
+        foreach ($item in $dependentDatasets) 
         {
-            if ($null -eq $graph.Nodes[$referenceModel.DataflowId])
-            {
-                DFLogWarning("Model $modelId may not import successfully since it has dependency on model " + $referenceModel.DataflowId + "which does not exist in the folder")
-            }
-            else
-            {
-                DFLogMessage("Reference: $modelId => " + $referenceModel.DataflowId)
-                $graph.AddEdge($referenceModel.DataflowId, $modelId)   
-            }
-        }
-    }
-
-    # Find the topological sort and start import in that order
-    $sortedModels = $graph.TopologicalSort()
-    $referenceReplacements = @{}
-    foreach ($modelNode in $sortedModels) 
-    {
-        $modelName = $modelNode.Data.Name
-        DFLogMessage("Importing: " + $modelNode.Id + " " + $modelName)
-
-        # Fix reference
-        $json = $modelNode.Data
-        foreach ($replacementModelId in $referenceReplacements.Keys)
-        {
-            FixReference $json $replacementModelId $workspaceId $referenceReplacements[$replacementModelId].objectId 
+            RefreshDataset $workspaceId $item.datasetObjectId
         }
 
-        # Import the dataflow
-        $overwriteModelId = GetOverrwiteModelId $dataflows  $Overwrite  $modelName
-        $importedDataflow = ImportModel $workspaceId  $overwriteModelId  $json $dataflows
-        DFLogMessage("Old Id= " + $modelNode.Id + "Imported dataflow id= " + $importedDataflow.objectId + " Name= " + $importedDataflow.name)
-        $referenceReplacements[$modelNode.Id] = $importedDataflow
-        if ($null -eq $dataflows[$importedDataflow.objectId])
-        {
-            DFLogMessage("New dataflow id= " + $importedDataflow.objectId + " Name= " + $importedDataflow.name)
-            $dataflows[$importedDataflow.objectId] = $importedDataflow
-        }
     }
 }
 End
 {
-    DFLogMessage("ImportWorkspace completed")
+    Write-Host "Refresh Dataflow completed"
 }
 # SIG # Begin signature block
 # MIInMAYJKoZIhvcNAQcCoIInITCCJx0CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCD3lNWyAVIzxINl
-# tEKNsIOb+U5ookyGENs45RBtbb9fjaCCEWkwggh7MIIHY6ADAgECAhM2AAABCg+G
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBtHKnk3RwDsclm
+# 9LZVk8BVX3lCpb+EeOaYFGLGIwpEB6CCEWkwggh7MIIHY6ADAgECAhM2AAABCg+G
 # jjrrP5YkAAEAAAEKMA0GCSqGSIb3DQEBCwUAMEExEzARBgoJkiaJk/IsZAEZFgNH
 # QkwxEzARBgoJkiaJk/IsZAEZFgNBTUUxFTATBgNVBAMTDEFNRSBDUyBDQSAwMTAe
 # Fw0yMDAyMDkxMzIzNTJaFw0yMTAyMDgxMzIzNTJaMCQxIjAgBgNVBAMTGU1pY3Jv
@@ -221,19 +172,19 @@ End
 # ARkWA0dCTDETMBEGCgmSJomT8ixkARkWA0FNRTEVMBMGA1UEAxMMQU1FIENTIENB
 # IDAxAhM2AAABCg+GjjrrP5YkAAEAAAEKMA0GCWCGSAFlAwQCAQUAoIGuMBkGCSqG
 # SIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3
-# AgEVMC8GCSqGSIb3DQEJBDEiBCB1e0rT9Nu6QeNo9i3V+pRgt8JD0cxlNENCGzcC
-# 5B+EoTBCBgorBgEEAYI3AgEMMTQwMqAUgBIATQBpAGMAcgBvAHMAbwBmAHShGoAY
-# aHR0cDovL3d3dy5taWNyb3NvZnQuY29tMA0GCSqGSIb3DQEBAQUABIIBAFVssUlo
-# YX23meqTDzfQ+tdRgeixP/jJEyJvN7IyVmLnJgg41PU+zLWe+lY9ajq6QiImwC/Q
-# H6Nc+N84Y895EBHX7yBS/dyqNwhgHf1oVpXCYviCB6qVVG5uLwe5h/d10RQ/yLpb
-# Pks+wipA4HuENLHQg+cQEiG5PXcY1OKT43CCDJINI8n+a0F1g+2jiNs5Ip2hICoL
-# WET7UGTRr33Q1a32bucXhMY6XAD6xuk1IJp003ofbZkaU+H9owTeNTkBQHInyRjf
-# LNgybF/mEiYGcztSz9h724ItwoI/mApsKVeoD6nrxQsaCMJVUQCHA7KHVvxOJyBD
-# hZO+dtTJYzjHjf2hghLlMIIS4QYKKwYBBAGCNwMDATGCEtEwghLNBgkqhkiG9w0B
+# AgEVMC8GCSqGSIb3DQEJBDEiBCAOM930us4WUx2c+eCBMGoqgP0KUOJKX5HCyr8T
+# tNKnyzBCBgorBgEEAYI3AgEMMTQwMqAUgBIATQBpAGMAcgBvAHMAbwBmAHShGoAY
+# aHR0cDovL3d3dy5taWNyb3NvZnQuY29tMA0GCSqGSIb3DQEBAQUABIIBAB30DeEw
+# nyAxpLgkDRb41TCFgmSIwfi5LHA1kQzC4Te8NoUOUHsVUHa+Ym+gn91lQ8OD9oPO
+# lGMeIRuU5YveS01XYiaUQWWeX15uzUAAfHy0HNH7y//yQgQd8KcNs/Bi5mfpK9tT
+# w5RzlDkjtopCSqnw1LZW0QHH1qFrF6ZdMYGjo2+LHz+avPIaMRkOPRrSL58izF3D
+# JUy8zjeyOAYEBcgrm8lLPh7mIl2W2DAw3hiWhyzIQCEHLAd2old9XHw859/eopd6
+# RRHqy3zQ+McKIV1h6pruz48+a3HTDa2p17vqF4vPVOSYVi2JOmAoF4ocNRiVEpg6
+# o6L/rfre1r6X14ShghLlMIIS4QYKKwYBBAGCNwMDATGCEtEwghLNBgkqhkiG9w0B
 # BwKgghK+MIISugIBAzEPMA0GCWCGSAFlAwQCAQUAMIIBUAYLKoZIhvcNAQkQAQSg
-# ggE/BIIBOzCCATcCAQEGCisGAQQBhFkKAwEwMTANBglghkgBZQMEAgEFAAQgcO8F
-# 4JjfHyTzX5N0KI3ENA9uuEpo3yTB+HkXDKMTmKYCBl9zfLRhuBgSMjAyMDA5MzAw
-# NjE1MTYuNzhaMASAAgH0oIHQpIHNMIHKMQswCQYDVQQGEwJVUzETMBEGA1UECBMK
+# ggE/BIIBOzCCATcCAQEGCisGAQQBhFkKAwEwMTANBglghkgBZQMEAgEFAAQgkmc5
+# TchxEadp0UveudCG2Mh55UTfcuCZyC7ysYjAwF8CBl9zfLRihBgSMjAyMDA5MzAw
+# NjE1MjEuOTRaMASAAgH0oIHQpIHNMIHKMQswCQYDVQQGEwJVUzETMBEGA1UECBMK
 # V2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0
 # IENvcnBvcmF0aW9uMSUwIwYDVQQLExxNaWNyb3NvZnQgQW1lcmljYSBPcGVyYXRp
 # b25zMSYwJAYDVQQLEx1UaGFsZXMgVFNTIEVTTjpENkJELUUzRTctMTY4NTElMCMG
@@ -318,17 +269,17 @@ End
 # UmVkbW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSYwJAYDVQQD
 # Ex1NaWNyb3NvZnQgVGltZS1TdGFtcCBQQ0EgMjAxMAITMwAAAR4OvOVLFqIDGwAA
 # AAABHjANBglghkgBZQMEAgEFAKCCAUowGgYJKoZIhvcNAQkDMQ0GCyqGSIb3DQEJ
-# EAEEMC8GCSqGSIb3DQEJBDEiBCBrj0U3y2zA01CkKCb+WqUu+Bf+JwU60yspyrZR
-# nfL38zCB+gYLKoZIhvcNAQkQAi8xgeowgecwgeQwgb0EIHM75FjD33E6UeW9p588
+# EAEEMC8GCSqGSIb3DQEJBDEiBCAfmr1t3c3XFkNLRJpf2ZKclu8hBV9VSbAo34kr
+# /OUKWTCB+gYLKoZIhvcNAQkQAi8xgeowgecwgeQwgb0EIHM75FjD33E6UeW9p588
 # oTdxLc0l1ZTx+iIEHA+N1l9HMIGYMIGApH4wfDELMAkGA1UEBhMCVVMxEzARBgNV
 # BAgTCldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jv
 # c29mdCBDb3Jwb3JhdGlvbjEmMCQGA1UEAxMdTWljcm9zb2Z0IFRpbWUtU3RhbXAg
 # UENBIDIwMTACEzMAAAEeDrzlSxaiAxsAAAAAAR4wIgQgE8kssJ1f+NSwJmXXbKfn
-# HBNaUdHdUJuvBo5c8hoXb3gwDQYJKoZIhvcNAQELBQAEggEAsbcXw+BlXRsIhLEb
-# NJ4ksOoNha2wo/B45Cdz8A1Ng7HQsPEjQxFrsdEM4w/Oe3QtGdA6ndWdU+o8jqC3
-# GVv5DLRV0mVa676bMn6OIn0GvxdFLpEpa1v3UhcRe2r+NHFYByQFesZuw4oSAG+p
-# bopqbivoGfZsV2rNRzcXGkrBJ7L+GcUlCltYNSdThvmUamdRDWXzUAgHA9wwjxn9
-# ivu9hEQ0g3kF8qDWLBjMARtOozTGvnPLLvV3g34/ccKCeeRQH8Yg60H1tJ8vMoSm
-# FJsvuaRz+85dWzp0CIbs8opmubwr8xuS5ZqonbpMUFh2oj78ZIEHFzuSsA+NyoWr
-# freQpg==
+# HBNaUdHdUJuvBo5c8hoXb3gwDQYJKoZIhvcNAQELBQAEggEAeRjUdxSEpSvuT0mP
+# jHe57M/lXBod1SeLNIsoxhoJuR4azj8xYE13zkIVEJbYPVr+QpJSn6Brlsmmqvl6
+# M3jz+zCzBjEqL/13TMg7njQyMI1ic9+7ATkOYBg2Hbfjqk3wmW7PACg1qNBW10jp
+# ncIZLe2vbr6Q80Y2/FQrZLje8DRSoKtkQqVM2AA4xUNa0f/w+QBuGgy3d14f1+wG
+# uUNXt8By14yK697QlioocInR/1TiOtXyhSM+mH3rXvmTE6stFb6RItsWwxJHXqLn
+# E+xhDCP6nPvZCzrdiJLODxaD9B3Y/ey0CU6q6PxHd9ho845Z3L0xDs4kpzx5a6mK
+# l1G6lw==
 # SIG # End signature block
