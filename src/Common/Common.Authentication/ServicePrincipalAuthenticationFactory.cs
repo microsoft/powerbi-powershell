@@ -4,9 +4,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Security;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
@@ -18,38 +19,30 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         private static object tokenCacheLock = new object();
 
-        private static TokenCache Cache { get; set; }
-
-        private AuthenticationContext InitializeContext(IPowerBIEnvironment environment, IPowerBISettings settings)
-        {
-            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
-
-            if (Cache == null)
-            {
-                lock (tokenCacheLock)
-                {
-                    if (Cache == null)
-                    {
-                        Cache = new TokenCache();
-                    }
-                }
-            }
-
-            return new AuthenticationContext(environment.AzureADAuthority, Cache);
-        }
-
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            var context = InitializeContext(environment, settings);
-            AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientCredential(userName, password.SecureStringToString())).Result;
+            IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
+               .Create(environment.AzureADClientId)
+               .WithAuthority(environment.AzureADAuthority)
+               .WithClientSecret(password.SecureStringToString())
+               .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMASLDebugMessages)
+               .Build();
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            AuthenticationResult token = app.AcquireTokenForClient(scopes).ExecuteAsync().Result;
             return token.ToIAccessToken();
         }
 
         public IAccessToken Authenticate(string clientId, string thumbprint , IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             var certificate = FindCertificate(thumbprint);
-            var context = InitializeContext(environment, settings);
-            AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientAssertionCertificate(clientId, certificate)).Result;
+            IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
+               .Create(environment.AzureADClientId)
+               .WithAuthority(environment.AzureADAuthority)
+               .WithCertificate(certificate)
+               .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMASLDebugMessages)
+               .Build();
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            AuthenticationResult token = app.AcquireTokenForClient(scopes).ExecuteAsync().Result;
             return token.ToIAccessToken();
         }
 

@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-namespace AzureADWindowsAuthenticator
+namespace MsalAuthenticator
 {
     public class ParsedArguments
     {
