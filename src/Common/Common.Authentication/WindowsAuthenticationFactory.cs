@@ -7,12 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Authentication;
 using System.Text;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Abstractions.Utilities;
 
@@ -21,82 +22,68 @@ namespace Microsoft.PowerBI.Common.Authentication
     public class WindowsAuthenticationFactory : IAuthenticationUserFactory
     {
         private static bool authenticatedOnce = false;
-        private static object tokenCacheLock = new object();
-
-        private static TokenCache Cache { get; set;}
-
-        private static StringBuilder WindowsAuthProcessErrors = new StringBuilder();
 
         public bool AuthenticatedOnce { get => authenticatedOnce; }
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            string queryParamString = queryParameters.ToQueryParameterString();
-            return HandleAuthentication(environment, logger, settings, () =>
-            {
-                return InitializeCache(environment, queryParamString);
-            });
+            return HandleAuthentication(environment, logger, settings);
         }
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
-            return HandleAuthentication(environment, logger, settings, () =>
-            {
-                return InitializeCache(environment, null, userName, password);
-            });
+            return HandleAuthentication(environment, logger, settings);
         }
 
-        private IAccessToken HandleAuthentication(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, Func<TokenCache> initializeTokenCache)
+        private IAccessToken HandleAuthentication(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            if(initializeTokenCache == null)
-            {
-                throw new ArgumentNullException(nameof(initializeTokenCache), "Failed to pass initializer for token cache");
-            }
-
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
 
-            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
-            if (Cache == null)
-            {
-                lock (tokenCacheLock)
-                {
-                    if (Cache == null)
-                    {
-                        Cache = initializeTokenCache();
-                    }
-                }
-            }
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            IPublicClientApplication app = PublicClientApplicationBuilder
+                .Create(environment.AzureADClientId)
+                .WithAuthority(environment.AzureADAuthority)
+                .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
+                .Build();
+            AuthenticationResult result = null;
+            var accounts = app.GetAccountsAsync().Result;
 
-            if (!this.AuthenticatedOnce)
-            {
-                throw new AuthenticationException("Failed to authenticate once");
-            }
-
-            var context = new AuthenticationContext(environment.AzureADAuthority, Cache);
-            AuthenticationResult token = null;
             try
             {
-                token = context.AcquireTokenSilentAsync(environment.AzureADResource, environment.AzureADClientId).Result;
-            }
-            catch (AdalSilentTokenAcquisitionException)
-            {
-                // ignore and try one more time by getting a new cache and let the exception fly if it fails
-                lock (tokenCacheLock)
+                if (accounts.Any())
                 {
-                    Cache = initializeTokenCache();
+                    result = app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
                 }
-
-                context = new AuthenticationContext(environment.AzureADAuthority, Cache);
-                token = context.AcquireTokenSilentAsync(environment.AzureADResource, environment.AzureADClientId).Result;
+                else
+                {
+                    // This indicates you need to call AcquireTokenInteractive to acquire a token
+                    result = app.AcquireTokenInteractive(scopes).ExecuteAsync().Result;
+                }
+            }
+            catch (MsalException msalex)
+            {
+                throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{msalex}");
+            }
+            catch (Exception ex)
+            {
+                throw new AuthenticationException($"Error Acquiring Token Silently:{System.Environment.NewLine}{ex}");
             }
 
-            return token.ToIAccessToken();
+            if (result != null)
+            {
+                return result.ToIAccessToken();
+                // Use the token
+            }
+            else
+            {
+                throw new AuthenticationException("Failed to acquire token");
+            }
         }
-
-        private static TokenCache InitializeCache(IPowerBIEnvironment environment, string queryParams, string userName = null, SecureString password = null)
+        /*
+        private static void InitializeTokenCache(IPowerBIEnvironment environment, string queryParams, string userName = null, SecureString password = null)
         {
             using (var windowAuthProcess = new Process())
             {
@@ -109,7 +96,7 @@ namespace Microsoft.PowerBI.Common.Authentication
                     var pwBytes = Encoding.UTF8.GetBytes(password.SecureStringToString());
                     var pwBase64 = Convert.ToBase64String(pwBytes);
                     // TODO encrypt with AES or MachineKey (as long as it works with .NET Framework and .NET Core)
-                    windowAuthProcess.StartInfo.Arguments += $" -User:\"{userName}\" -PW:\"{pwBase64}\"";
+                    windowAuthProcess.StartInfo.Arguments += $" -User:\"{userName}\" -PW:\"{password}\"";
                 }
 
                 windowAuthProcess.StartInfo.UseShellExecute = false;
@@ -137,43 +124,10 @@ namespace Microsoft.PowerBI.Common.Authentication
                 return new TokenCache(tokeCacheBytes);
             }
         }
-
-        private static void WindowAuthProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            WindowsAuthProcessErrors.Append(e.Data);
-        }
-
-        private static string GetExecutingDirectory()
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var fileUri = new UriBuilder(codeBase);
-            var directory = Uri.UnescapeDataString(fileUri.Path);
-            directory = Path.GetDirectoryName(directory);
-            if (string.IsNullOrEmpty(fileUri.Host))
-            {
-                return directory;
-            }
-            else
-            {
-                // Running on a fileshare
-                directory = $"\\\\{fileUri.Host}\\" + directory.TrimStart(new[] { '\\' });
-                return directory;
-            }
-        }
-
+        */
         public void Challenge()
         {
-            if (Cache != null)
-            {
-                lock (tokenCacheLock)
-                {
-                    if (Cache != null)
-                    {
-                        authenticatedOnce = false;
-                        Cache = null;
-                    }
-                }
-            }
+            authenticatedOnce = false;
         }
     }
 }

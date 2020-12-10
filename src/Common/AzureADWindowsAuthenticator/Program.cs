@@ -4,10 +4,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace AzureADWindowsAuthenticator
 {
@@ -22,23 +23,23 @@ namespace AzureADWindowsAuthenticator
 
         private static async Task<string> GetToken(ParsedArguments parsedArgs)
         {
-            var context = new AuthenticationContext(parsedArgs.AzureADAuthorityAddress);
+            IEnumerable<string> scopes = new[] { $"{parsedArgs.AzureADResource}/.default" };
+            IPublicClientApplication app = PublicClientApplicationBuilder
+                .Create(parsedArgs.AzureADClientId)
+                .WithAuthority(parsedArgs.AzureADAuthorityAddress)
+                .Build();
             AuthenticationResult result = null;
-            if(!string.IsNullOrEmpty(parsedArgs.UserName) && !string.IsNullOrEmpty(parsedArgs.Password))
+            if (!string.IsNullOrEmpty(parsedArgs.UserName) && parsedArgs.Password != null && parsedArgs.Password.Length > 0)
             {
                 // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-with-username-and-password
-                var passwordBytes = Convert.FromBase64String(parsedArgs.Password);
-                var password = Encoding.UTF8.GetString(passwordBytes);
-                // TODO encrypt password and decode here, either AES or MachineKey (but it needs to work across .NET Framework and .NET Core)
-                result = await context.AcquireTokenAsync(parsedArgs.AzureADResource, parsedArgs.AzureADClientId, new UserPasswordCredential(parsedArgs.UserName, password));
+                result = await app.AcquireTokenByUsernamePassword(scopes, parsedArgs.UserName, parsedArgs.Password).ExecuteAsync();
             }
             else
             {
-                result = await context.AcquireTokenAsync(parsedArgs.AzureADResource, parsedArgs.AzureADClientId, new Uri(parsedArgs.AzureADRedirectAddress), new PlatformParameters(PromptBehavior.Auto), UserIdentifier.AnyUser, parsedArgs.QueryParams);
+                result = await app.AcquireTokenInteractive(scopes).ExecuteAsync();
             }
 
-            var tokenCache = context.TokenCache.Serialize();
-            return Convert.ToBase64String(tokenCache);
+            return result.AccessToken;
         }
 
         private static T ParseArguments<T>(string[] args) where T : new()

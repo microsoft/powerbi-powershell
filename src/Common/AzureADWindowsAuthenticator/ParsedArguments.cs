@@ -3,6 +3,8 @@
  * Licensed under the MIT License.
  */
 
+using System.Security;
+
 namespace AzureADWindowsAuthenticator
 {
     public class ParsedArguments
@@ -23,7 +25,7 @@ namespace AzureADWindowsAuthenticator
         public string QueryParams { get; set; }
 
         [Parameter("PW")]
-        public string Password { get; set; }
+        public SecureString Password { get; set; }
 
         [Parameter("User")]
         public string UserName { get; set; }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Authentication;
@@ -17,7 +18,7 @@ namespace Microsoft.PowerBI.Commands.Common
     public class AuthenticationFactorySelector : IAuthenticationFactory
     {
         private static IAuthenticationUserFactory UserAuthFactory;
-        private static IAuthenticationServicePrincipalFactory ServicePrincpalAuthFactory;
+        private static IAuthenticationServicePrincipalFactory ServicePrincipalAuthFactory;
         private static IAuthenticationBaseFactory BaseAuthFactory;
 
         private object authFactoryLock = new object();
@@ -50,18 +51,18 @@ namespace Microsoft.PowerBI.Commands.Common
 
         private void InitializeServicePrincpalAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
-            if (ServicePrincpalAuthFactory == null)
+            if (ServicePrincipalAuthFactory == null)
             {
                 lock (this.authFactoryLock)
                 {
-                    if(ServicePrincpalAuthFactory == null)
+                    if(ServicePrincipalAuthFactory == null)
                     {
-                        ServicePrincpalAuthFactory = new ServicePrincipalAuthenticationFactory();
+                        ServicePrincipalAuthFactory = new ServicePrincipalAuthenticationFactory();
                     }
                 }
             }
 
-            BaseAuthFactory = ServicePrincpalAuthFactory;
+            BaseAuthFactory = ServicePrincipalAuthFactory;
         }
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
@@ -96,19 +97,19 @@ namespace Microsoft.PowerBI.Commands.Common
         public void Challenge()
         {
             UserAuthFactory?.Challenge();
-            ServicePrincpalAuthFactory?.Challenge();
+            ServicePrincipalAuthFactory?.Challenge();
         }
 
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.InitializeServicePrincpalAuthenticationFactory(logger, settings);
-            return ServicePrincpalAuthFactory.Authenticate(userName, password, environment, logger, settings);
+            return ServicePrincipalAuthFactory.Authenticate(userName, password, environment, logger, settings);
         }
 
         public IAccessToken Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.InitializeServicePrincpalAuthenticationFactory(logger, settings);
-            return ServicePrincpalAuthFactory.Authenticate(clientId, thumbprint, environment, logger, settings);
+            return ServicePrincipalAuthFactory.Authenticate(clientId, thumbprint, environment, logger, settings);
         }
     }
 }

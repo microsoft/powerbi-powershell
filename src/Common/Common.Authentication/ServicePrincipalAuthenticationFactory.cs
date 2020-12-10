@@ -4,9 +4,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Security;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
@@ -16,40 +17,30 @@ namespace Microsoft.PowerBI.Common.Authentication
         private static bool authenticatedOnce = false;
         public bool AuthenticatedOnce { get => authenticatedOnce; }
 
-        private static object tokenCacheLock = new object();
-
-        private static TokenCache Cache { get; set; }
-
-        private AuthenticationContext InitializeContext(IPowerBIEnvironment environment, IPowerBISettings settings)
-        {
-            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
-
-            if (Cache == null)
-            {
-                lock (tokenCacheLock)
-                {
-                    if (Cache == null)
-                    {
-                        Cache = new TokenCache();
-                    }
-                }
-            }
-
-            return new AuthenticationContext(environment.AzureADAuthority, Cache);
-        }
-
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            var context = InitializeContext(environment, settings);
-            AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientCredential(userName, password.SecureStringToString())).Result;
+            IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
+               .Create(environment.AzureADClientId)
+               .WithAuthority(environment.AzureADAuthority)
+               .WithClientSecret(password.SecureStringToString())
+               .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
+               .Build();
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            AuthenticationResult token = app.AcquireTokenForClient(scopes).ExecuteAsync().Result;
             return token.ToIAccessToken();
         }
 
-        public IAccessToken Authenticate(string clientId, string thumbprint , IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public IAccessToken Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             var certificate = FindCertificate(thumbprint);
-            var context = InitializeContext(environment, settings);
-            AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientAssertionCertificate(clientId, certificate)).Result;
+            IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
+               .Create(environment.AzureADClientId)
+               .WithAuthority(environment.AzureADAuthority)
+               .WithCertificate(certificate)
+               .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
+               .Build();
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            AuthenticationResult token = app.AcquireTokenForClient(scopes).ExecuteAsync().Result;
             return token.ToIAccessToken();
         }
 
@@ -67,7 +58,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         private static bool TryFindCertificatesInLocation(string thumbprint, StoreLocation location, out X509Certificate2Collection certificates)
         {
-            using(var store = new X509Store(StoreName.My, location))
+            using (var store = new X509Store(StoreName.My, location))
             {
                 store.Open(OpenFlags.ReadOnly);
                 certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
@@ -78,17 +69,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public void Challenge()
         {
-            if (Cache != null)
-            {
-                lock (tokenCacheLock)
-                {
-                    if (Cache != null)
-                    {
-                        authenticatedOnce = false;
-                        Cache = null;
-                    }
-                }
-            }
+            authenticatedOnce = false;
         }
     }
 }

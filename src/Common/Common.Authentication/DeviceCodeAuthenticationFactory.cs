@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Threading.Tasks;
+using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
@@ -16,49 +18,38 @@ namespace Microsoft.PowerBI.Common.Authentication
         private static bool authenticatedOnce = false;
         public bool AuthenticatedOnce { get => authenticatedOnce; }
 
-        private static object tokenCacheLock = new object();
-
-        private static TokenCache Cache { get; set; }
-
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
-
-            if (Cache == null)
-            {
-                lock (tokenCacheLock)
-                {
-                    if (Cache == null)
-                    {
-                        Cache = new TokenCache();
-                    }
-                }
-            }
-
-            var context = new AuthenticationContext(environment.AzureADAuthority, Cache);
-            string queryParamString = queryParameters.ToQueryParameterString();
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            IPublicClientApplication app = PublicClientApplicationBuilder
+                .Create(environment.AzureADClientId)
+                .WithAuthority(environment.AzureADAuthority)
+                .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
+                .Build();
+            AuthenticationResult result = null;
+            var accounts = app.GetAccountsAsync().Result;
 
             AuthenticationResult token = null;
             if (this.AuthenticatedOnce)
             {
                 try
                 {
-                    token = context.AcquireTokenSilentAsync(environment.AzureADResource, environment.AzureADClientId).Result;
+                    result = app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
                     return token.ToIAccessToken();
                 }
-                catch (AdalSilentTokenAcquisitionException)
+                catch (MsalUiRequiredException)
                 {
                     // ignore and fall through to aquire through device code
                 }
             }
 
-            var deviceCodeResult = context.AcquireDeviceCodeAsync(environment.AzureADResource, environment.AzureADClientId).Result;
+            DeviceCodeResult deviceCodeResult = null;
+            result = app.AcquireTokenWithDeviceCode(scopes, r => { deviceCodeResult = r;  return Task.FromResult(0); }).ExecuteAsync().Result;
             logger.WriteHost("You need to sign in.");
-            logger.WriteHost(deviceCodeResult.Message + Environment.NewLine);
+            logger.WriteHost(deviceCodeResult?.Message + Environment.NewLine);
 
-            token = context.AcquireTokenByDeviceCodeAsync(deviceCodeResult).Result;
             authenticatedOnce = true;
-            return token.ToIAccessToken();
+            return result.ToIAccessToken();
         }
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
@@ -69,17 +60,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public void Challenge()
         {
-            if (Cache != null)
-            {
-                lock (tokenCacheLock)
-                {
-                    if (Cache != null)
-                    {
-                        authenticatedOnce = false;
-                        Cache = null;
-                    }
-                }
-            }
+            authenticatedOnce = false;
         }
     }
 }
