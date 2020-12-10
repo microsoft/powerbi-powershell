@@ -25,22 +25,33 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public bool AuthenticatedOnce { get => authenticatedOnce; }
 
+        private static StringBuilder WindowsAuthProcessErrors = new StringBuilder();
+
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            return HandleAuthentication(environment, logger, settings);
+            string queryParamString = queryParameters.ToQueryParameterString();
+            return HandleAuthentication(environment, logger, settings, () =>
+            {
+                return InitializeCache(environment, queryParamString);
+            });
         }
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
-            return HandleAuthentication(environment, logger, settings);
+            return HandleAuthentication(environment, logger, settings, () =>
+            {
+                return InitializeCache(environment, null, userName, password);
+            });
         }
 
-        private IAccessToken HandleAuthentication(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        private IAccessToken HandleAuthentication(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, Func<string> initializeTokenCache)
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
+
+            var init = initializeTokenCache;
 
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             IPublicClientApplication app = PublicClientApplicationBuilder
@@ -82,8 +93,13 @@ namespace Microsoft.PowerBI.Common.Authentication
                 throw new AuthenticationException("Failed to acquire token");
             }
         }
-        /*
-        private static void InitializeTokenCache(IPowerBIEnvironment environment, string queryParams, string userName = null, SecureString password = null)
+        
+        public void Challenge()
+        {
+            authenticatedOnce = false;
+        }
+
+        private static string InitializeCache(IPowerBIEnvironment environment, string queryParams, string userName = null, SecureString password = null)
         {
             using (var windowAuthProcess = new Process())
             {
@@ -91,7 +107,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
                 windowAuthProcess.StartInfo.FileName = Path.Combine(executingDirectory, "WindowsAuthenticator", "AzureADWindowsAuthenticator.exe");
                 windowAuthProcess.StartInfo.Arguments = $"-Authority:\"{environment.AzureADAuthority}\" -Resource:\"{environment.AzureADResource}\" -ID:\"{environment.AzureADClientId}\" -Redirect:\"{environment.AzureADRedirectAddress}\" -Query:\"{queryParams}\"";
-                if(userName != null && password != null)
+                if (userName != null && password != null)
                 {
                     var pwBytes = Encoding.UTF8.GetBytes(password.SecureStringToString());
                     var pwBase64 = Convert.ToBase64String(pwBytes);
@@ -116,18 +132,17 @@ namespace Microsoft.PowerBI.Common.Authentication
                 {
                     string errorMessage = WindowsAuthProcessErrors.ToString();
                     WindowsAuthProcessErrors.Clear();
-                    throw new AdalException("0", $"Failed to get ADAL token: {errorMessage}");
+                    throw new MsalException("0", $"Failed to get MSAL token: {errorMessage}");
                 }
 
                 authenticatedOnce = true;
-                var tokeCacheBytes = Convert.FromBase64String(result);
-                return new TokenCache(tokeCacheBytes);
+                return result;
             }
         }
-        */
-        public void Challenge()
+
+        private static void WindowAuthProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            authenticatedOnce = false;
+            WindowsAuthProcessErrors.Append(e.Data);
         }
     }
 }
