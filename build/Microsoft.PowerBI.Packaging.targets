@@ -65,6 +65,12 @@ Licensed under the MIT License.
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll" Condition="Exists('$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll')">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </_PackageFiles>
       
       <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
         <BuildAction>Content</BuildAction>

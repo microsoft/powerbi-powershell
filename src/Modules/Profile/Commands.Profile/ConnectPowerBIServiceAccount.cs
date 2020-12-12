@@ -129,7 +129,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 environment = tempEnvironment;
             }
 
-            this.Authenticator.Challenge(); // revoke any previous login
+            this.Authenticator.Challenge(new[] { environment }); // revoke any previous login
             IAccessToken token = null;
             PowerBIProfile profile = null;
             switch (this.ParameterSet)
@@ -137,7 +137,6 @@ namespace Microsoft.PowerBI.Commands.Profile
                 case UserParameterSet:
                     token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, new Dictionary<string, string>()
                         {
-                            { "prompt", "select_account" },
                             { "msafed", "0" }
                         }
                     );

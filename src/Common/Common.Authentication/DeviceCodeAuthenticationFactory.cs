@@ -15,9 +15,6 @@ namespace Microsoft.PowerBI.Common.Authentication
 {
     public class DeviceCodeAuthenticationFactory : IAuthenticationUserFactory
     {
-        private static bool authenticatedOnce = false;
-        public bool AuthenticatedOnce { get => authenticatedOnce; }
-
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
@@ -30,7 +27,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             var accounts = app.GetAccountsAsync().Result;
 
             AuthenticationResult token = null;
-            if (this.AuthenticatedOnce)
+            if (accounts.Any())
             {
                 try
                 {
@@ -48,7 +45,6 @@ namespace Microsoft.PowerBI.Common.Authentication
             logger.WriteHost("You need to sign in.");
             logger.WriteHost(deviceCodeResult?.Message + Environment.NewLine);
 
-            authenticatedOnce = true;
             return result.ToIAccessToken();
         }
 
@@ -58,9 +54,23 @@ namespace Microsoft.PowerBI.Common.Authentication
             throw new NotSupportedException("User and password authentication is not supported in .NET Core or with DeviceCode authentication.");
         }
 
-        public void Challenge()
+        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
         {
-            authenticatedOnce = false;
+            foreach (var environment in environments)
+            {
+                var app = PublicClientApplicationBuilder
+                    .Create(environment.AzureADClientId)
+                    .WithAuthority(environment.AzureADAuthority)
+                    .Build();
+
+                var accounts = await app.GetAccountsAsync();
+                while (accounts.Any())
+                {
+                    Console.WriteLine("Challenge:" + accounts.FirstOrDefault()?.Username);
+                    await app.RemoveAsync(accounts.First());
+                    accounts = await app.GetAccountsAsync();
+                }
+            }
         }
     }
 }

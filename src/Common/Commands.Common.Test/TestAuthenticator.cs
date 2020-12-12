@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Security;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Authentication;
 
@@ -58,9 +59,10 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             return this.Token;
         }
 
-        public void Challenge()
+        public Task Challenge(ICollection<IPowerBIEnvironment> environments)
         {
             // Nothing
+            return Task.Delay(1);
         }
     }
 }

@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
@@ -14,9 +16,6 @@ namespace Microsoft.PowerBI.Common.Authentication
 {
     public class ServicePrincipalAuthenticationFactory : IAuthenticationServicePrincipalFactory
     {
-        private static bool authenticatedOnce = false;
-        public bool AuthenticatedOnce { get => authenticatedOnce; }
-
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
@@ -67,9 +66,26 @@ namespace Microsoft.PowerBI.Common.Authentication
             return certificates.Count > 0;
         }
 
-        public void Challenge()
+        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
         {
-            authenticatedOnce = false;
+            foreach (var environment in environments)
+            {
+                var thumbprint = "TODO";
+                var certificate = FindCertificate(thumbprint);
+                IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
+                   .Create(environment.AzureADClientId)
+                   .WithAuthority(environment.AzureADAuthority)
+                   .WithCertificate(certificate)
+                   .Build();
+
+                var accounts = await app.GetAccountsAsync();
+                while (accounts.Any())
+                {
+                    Console.WriteLine("Challenge:" + accounts.FirstOrDefault()?.Username);
+                    await app.RemoveAsync(accounts.First());
+                    accounts = await app.GetAccountsAsync();
+                }
+            }
         }
     }
 }

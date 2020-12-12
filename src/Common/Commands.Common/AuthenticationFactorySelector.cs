@@ -22,8 +22,6 @@ namespace Microsoft.PowerBI.Commands.Common
         private static IAuthenticationBaseFactory BaseAuthFactory;
 
         private object authFactoryLock = new object();
-
-        public bool AuthenticatedOnce => BaseAuthFactory?.AuthenticatedOnce ?? false;
         
         private void InitializeUserAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
@@ -94,10 +92,10 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        public void Challenge()
+        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
         {
-            UserAuthFactory?.Challenge();
-            ServicePrincipalAuthFactory?.Challenge();
+            await UserAuthFactory?.Challenge(environments);
+            await ServicePrincipalAuthFactory?.Challenge(environments);
         }
 
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)

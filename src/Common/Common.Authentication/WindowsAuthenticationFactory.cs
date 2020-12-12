@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Authentication;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Abstractions.Utilities;
@@ -21,66 +22,74 @@ namespace Microsoft.PowerBI.Common.Authentication
 {
     public class WindowsAuthenticationFactory : IAuthenticationUserFactory
     {
-        private static bool authenticatedOnce = false;
-
-        public bool AuthenticatedOnce { get => authenticatedOnce; }
-
-        private static StringBuilder WindowsAuthProcessErrors = new StringBuilder();
+        private IPowerBIEnvironment environment;
+        private readonly IPowerBILogger logger;
+        private IPublicClientApplication AuthApplication;
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            string queryParamString = queryParameters.ToQueryParameterString();
-            return HandleAuthentication(environment, logger, settings, () =>
-            {
-                return InitializeCache(environment, queryParamString);
-            });
+            return HandleAuthentication(environment, logger, settings, queryParameters);
         }
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
-            return HandleAuthentication(environment, logger, settings, () =>
-            {
-                return InitializeCache(environment, null, userName, password);
-            });
+            return HandleAuthentication(environment, logger, settings, null, userName, password);
         }
 
-        private IAccessToken HandleAuthentication(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, Func<string> initializeTokenCache)
+        private IAccessToken HandleAuthentication(
+            IPowerBIEnvironment environment,
+            IPowerBILogger logger,
+            IPowerBISettings settings,
+            IDictionary<string, string> queryParameters,
+            string userName = null,
+            SecureString password = null)
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
 
-            var init = initializeTokenCache;
-
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
-            IPublicClientApplication app = PublicClientApplicationBuilder
-                .Create(environment.AzureADClientId)
-                .WithAuthority(environment.AzureADAuthority)
-                .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
-                .Build();
+            if (this.AuthApplication == null)
+            {
+                Console.WriteLine("Init auth app");
+                this.AuthApplication = PublicClientApplicationBuilder
+                    .Create(environment.AzureADClientId)
+                    .WithAuthority(environment.AzureADAuthority)
+                    .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
+                    .WithExtraQueryParameters(queryParameters)
+                    .Build();
+            }
+
             AuthenticationResult result = null;
-            var accounts = app.GetAccountsAsync().Result;
 
             try
             {
+                var accounts = this.AuthApplication.GetAccountsAsync().Result;
                 if (accounts.Any())
                 {
-                    result = app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
+                    // This indicates there's token in cache
+                    Console.WriteLine("AcquireTokenSilent: " + accounts.First().Username);
+                    result = this.AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
                 }
                 else
                 {
-                    // This indicates you need to call AcquireTokenInteractive to acquire a token
-                    result = app.AcquireTokenInteractive(scopes).ExecuteAsync().Result;
+                    if (!string.IsNullOrEmpty(userName) && password != null && password.Length > 0)
+                    {
+                        Console.WriteLine("AcquireTokenByUsernamePassword");
+                        // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-with-username-and-password
+                        result = this.AuthApplication.AcquireTokenByUsernamePassword(scopes, userName, password).ExecuteAsync().Result;
+                    }
+                    else
+                    {
+                        Console.WriteLine("AcquireTokenInteractive");
+                        result = this.AuthApplication.AcquireTokenInteractive(scopes).ExecuteAsync().Result;
+                    }
                 }
-            }
-            catch (MsalException msalex)
-            {
-                throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{msalex}");
             }
             catch (Exception ex)
             {
-                throw new AuthenticationException($"Error Acquiring Token Silently:{System.Environment.NewLine}{ex}");
+                throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{ex}");
             }
 
             if (result != null)
@@ -93,56 +102,24 @@ namespace Microsoft.PowerBI.Common.Authentication
                 throw new AuthenticationException("Failed to acquire token");
             }
         }
-        
-        public void Challenge()
-        {
-            authenticatedOnce = false;
-        }
 
-        private static string InitializeCache(IPowerBIEnvironment environment, string queryParams, string userName = null, SecureString password = null)
+        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
         {
-            using (var windowAuthProcess = new Process())
+            foreach (var environment in environments)
             {
-                var executingDirectory = DirectoryUtility.GetExecutingDirectory();
+                var app = PublicClientApplicationBuilder
+                    .Create(environment.AzureADClientId)
+                    .WithAuthority(environment.AzureADAuthority)
+                    .Build();
 
-                windowAuthProcess.StartInfo.FileName = Path.Combine(executingDirectory, "WindowsAuthenticator", "AzureADWindowsAuthenticator.exe");
-                windowAuthProcess.StartInfo.Arguments = $"-Authority:\"{environment.AzureADAuthority}\" -Resource:\"{environment.AzureADResource}\" -ID:\"{environment.AzureADClientId}\" -Redirect:\"{environment.AzureADRedirectAddress}\" -Query:\"{queryParams}\"";
-                if (userName != null && password != null)
+                var accounts = await app.GetAccountsAsync();
+                while (accounts.Any())
                 {
-                    var pwBytes = Encoding.UTF8.GetBytes(password.SecureStringToString());
-                    var pwBase64 = Convert.ToBase64String(pwBytes);
-                    // TODO encrypt with AES or MachineKey (as long as it works with .NET Framework and .NET Core)
-                    windowAuthProcess.StartInfo.Arguments += $" -User:\"{userName}\" -PW:\"{password}\"";
+                    Console.WriteLine("Challenge:" + accounts.FirstOrDefault()?.Username);
+                    await app.RemoveAsync(accounts.First());
+                    accounts = await app.GetAccountsAsync();
                 }
-
-                windowAuthProcess.StartInfo.UseShellExecute = false;
-                windowAuthProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                windowAuthProcess.StartInfo.RedirectStandardOutput = true;
-                windowAuthProcess.StartInfo.RedirectStandardError = true;
-
-                windowAuthProcess.ErrorDataReceived += WindowAuthProcess_ErrorDataReceived;
-
-                windowAuthProcess.Start();
-                windowAuthProcess.BeginErrorReadLine();
-
-                var result = windowAuthProcess.StandardOutput.ReadToEnd();
-                windowAuthProcess.WaitForExit();
-
-                if (windowAuthProcess.ExitCode != 0)
-                {
-                    string errorMessage = WindowsAuthProcessErrors.ToString();
-                    WindowsAuthProcessErrors.Clear();
-                    throw new MsalException("0", $"Failed to get MSAL token: {errorMessage}");
-                }
-
-                authenticatedOnce = true;
-                return result;
             }
-        }
-
-        private static void WindowAuthProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            WindowsAuthProcessErrors.Append(e.Data);
         }
     }
 }

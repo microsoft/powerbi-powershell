@@ -63,7 +63,7 @@
   ],
   "Settings": {
     "ForceDeviceCodeAuthentication": false,
-    "ShowADALDebugMessages": false,
+    "ShowMSALDebugMessages": false,
     "DefaultClientId": "ea0616ba-638b-4df5-95b9-636659ae5121",
     "DefaultRedirect": "urn:ietf:wg:oauth:2.0:oob"
   }
