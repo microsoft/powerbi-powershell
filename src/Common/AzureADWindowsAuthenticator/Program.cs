@@ -31,11 +31,13 @@ namespace AzureADWindowsAuthenticator
             AuthenticationResult result = null;
             if (!string.IsNullOrEmpty(parsedArgs.UserName) && parsedArgs.Password != null && parsedArgs.Password.Length > 0)
             {
+                Console.WriteLine("Init auth in AzureADWindowsAuthenticator");
                 // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-with-username-and-password
                 result = await app.AcquireTokenByUsernamePassword(scopes, parsedArgs.UserName, parsedArgs.Password).ExecuteAsync();
             }
             else
             {
+                Console.WriteLine("Init auth in AzureADWindowsAuthenticator");
                 result = await app.AcquireTokenInteractive(scopes).ExecuteAsync();
             }
 

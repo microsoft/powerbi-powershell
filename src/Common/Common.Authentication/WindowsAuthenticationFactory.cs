@@ -22,8 +22,6 @@ namespace Microsoft.PowerBI.Common.Authentication
 {
     public class WindowsAuthenticationFactory : IAuthenticationUserFactory
     {
-        private IPowerBIEnvironment environment;
-        private readonly IPowerBILogger logger;
         private IPublicClientApplication AuthApplication;
 
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
@@ -56,7 +54,7 @@ namespace Microsoft.PowerBI.Common.Authentication
                 this.AuthApplication = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
                     .WithAuthority(environment.AzureADAuthority)
-                    .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
+                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                     .WithExtraQueryParameters(queryParameters)
                     .Build();
             }
@@ -121,5 +119,6 @@ namespace Microsoft.PowerBI.Common.Authentication
                 }
             }
         }
+
     }
 }

@@ -15,23 +15,30 @@ namespace Microsoft.PowerBI.Common.Authentication
 {
     public class DeviceCodeAuthenticationFactory : IAuthenticationUserFactory
     {
+        private IPublicClientApplication AuthApplication;
+
         public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
-            IPublicClientApplication app = PublicClientApplicationBuilder
+            if (this.AuthApplication == null)
+            {
+                Console.WriteLine("Init auth app");
+                this.AuthApplication = PublicClientApplicationBuilder
                 .Create(environment.AzureADClientId)
                 .WithAuthority(environment.AzureADAuthority)
-                .WithDebugLoggingCallback(withDefaultPlatformLoggingEnabled: settings.Settings.ShowMSALDebugMessages)
+                .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                 .Build();
+            }
+
             AuthenticationResult result = null;
-            var accounts = app.GetAccountsAsync().Result;
+            var accounts = AuthApplication.GetAccountsAsync().Result;
 
             AuthenticationResult token = null;
             if (accounts.Any())
             {
                 try
                 {
-                    result = app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
+                    result = AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
                     return token.ToIAccessToken();
                 }
                 catch (MsalUiRequiredException)
@@ -41,7 +48,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             }
 
             DeviceCodeResult deviceCodeResult = null;
-            result = app.AcquireTokenWithDeviceCode(scopes, r => { deviceCodeResult = r;  return Task.FromResult(0); }).ExecuteAsync().Result;
+            result = AuthApplication.AcquireTokenWithDeviceCode(scopes, r => { deviceCodeResult = r;  return Task.FromResult(0); }).ExecuteAsync().Result;
             logger.WriteHost("You need to sign in.");
             logger.WriteHost(deviceCodeResult?.Message + Environment.NewLine);
 
