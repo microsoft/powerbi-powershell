@@ -92,6 +92,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             if (result != null)
             {
+                Console.WriteLine(result.AccessToken);
                 return result.ToIAccessToken();
                 // Use the token
             }
@@ -103,6 +104,21 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
         {
+            if (this.AuthApplication != null)
+            {
+                Console.WriteLine("this.AuthApplication is not null");
+
+                var accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
+                while (accounts.Any())
+                {
+                    Console.WriteLine("Challenge:" + accounts.First().Username);
+                    await this.AuthApplication.RemoveAsync(accounts.First());
+                    accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
+                }
+
+                this.AuthApplication = null;
+            }
+
             foreach (var environment in environments)
             {
                 var app = PublicClientApplicationBuilder
@@ -110,12 +126,12 @@ namespace Microsoft.PowerBI.Common.Authentication
                     .WithAuthority(environment.AzureADAuthority)
                     .Build();
 
-                var accounts = await app.GetAccountsAsync();
+                var accounts = (await app.GetAccountsAsync()).ToList();
                 while (accounts.Any())
                 {
-                    Console.WriteLine("Challenge:" + accounts.FirstOrDefault()?.Username);
+                    Console.WriteLine("Challenge:" + accounts.First().Username);
                     await app.RemoveAsync(accounts.First());
-                    accounts = await app.GetAccountsAsync();
+                    accounts = (await app.GetAccountsAsync()).ToList();
                 }
             }
         }
