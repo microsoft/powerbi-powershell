@@ -92,10 +92,10 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
+        public async Task Challenge()
         {
-            await UserAuthFactory?.Challenge(environments);
-            await ServicePrincipalAuthFactory?.Challenge(environments);
+            await UserAuthFactory?.Challenge();
+            await ServicePrincipalAuthFactory?.Challenge();
         }
 
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)

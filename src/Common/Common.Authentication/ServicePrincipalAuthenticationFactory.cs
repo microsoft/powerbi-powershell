@@ -22,13 +22,10 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public IAccessToken Authenticate(string clientId, SecureString clientSecret, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            Console.WriteLine($"{environment.AzureADResource}/.default");
-            Console.WriteLine(environment.AzureADAuthority);
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
  
             if (this.AuthApplicationSecret == null)
             {
-                Console.WriteLine("Init auth app");
                 this.AuthApplicationSecret = ConfidentialClientApplicationBuilder
                    .Create(environment.AzureADClientId)
                    .WithAuthority(environment.AzureADAuthority)
@@ -46,12 +43,10 @@ namespace Microsoft.PowerBI.Common.Authentication
                 if (accounts.Any())
                 {
                     // This indicates there's token in cache
-                    Console.WriteLine("AcquireTokenSilent: " + accounts.First().Username);
                     result = this.AuthApplicationSecret.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
                 }
                 else
                 {
-                    Console.WriteLine("AcquireTokenForClient");
                     result = this.AuthApplicationSecret.AcquireTokenForClient(scopes).ExecuteAsync().Result;
                 }
             }
@@ -62,7 +57,6 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             if (result != null)
             {
-                Console.WriteLine(result.AccessToken);
                 return result.ToIAccessToken();
                 // Use the token
             }
@@ -79,7 +73,6 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             if (this.AuthApplicationCert == null)
             {
-                Console.WriteLine("Init auth app");
                 this.AuthApplicationCert = ConfidentialClientApplicationBuilder
                    .Create(environment.AzureADClientId)
                    .WithAuthority(environment.AzureADAuthority)
@@ -97,12 +90,10 @@ namespace Microsoft.PowerBI.Common.Authentication
                 if (accounts.Any())
                 {
                     // This indicates there's token in cache
-                    Console.WriteLine("AcquireTokenSilent: " + accounts.First().Username);
                     result = this.AuthApplicationCert.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
                 }
                 else
                 {
-                    Console.WriteLine("AcquireTokenForClient");
                     result = this.AuthApplicationCert.AcquireTokenForClient(scopes).ExecuteAsync().Result;
                 }
             }
@@ -113,7 +104,6 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             if (result != null)
             {
-                Console.WriteLine(result.AccessToken);
                 return result.ToIAccessToken();
                 // Use the token
             }
@@ -146,16 +136,13 @@ namespace Microsoft.PowerBI.Common.Authentication
             return certificates.Count > 0;
         }
 
-        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
+        public async Task Challenge()
         {
             if (this.AuthApplicationSecret != null)
             {
-                Console.WriteLine("this.AuthApplicationSecret is not null");
-
                 var accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
                 while (accounts.Any())
                 {
-                    Console.WriteLine("Challenge:" + accounts.First().Username);
                     await this.AuthApplicationSecret.RemoveAsync(accounts.First());
                     accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
                 }
@@ -165,33 +152,14 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             if (this.AuthApplicationCert != null)
             {
-                Console.WriteLine("this.AuthApplicationCert is not null");
-
                 var accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
                 while (accounts.Any())
                 {
-                    Console.WriteLine("Challenge:" + accounts.First().Username);
                     await this.AuthApplicationSecret.RemoveAsync(accounts.First());
                     accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
                 }
 
                 this.AuthApplicationCert = null;
-            }
-
-            foreach (var environment in environments)
-            {
-                IConfidentialClientApplication app = ConfidentialClientApplicationBuilder
-                   .Create(environment.AzureADClientId)
-                   .WithAuthority(environment.AzureADAuthority)
-                   .Build();
-
-                var accounts = (await app.GetAccountsAsync()).ToList();
-                while (accounts.Any())
-                {
-                    Console.WriteLine("Challenge:" + accounts.First().Username);
-                    await app.RemoveAsync(accounts.First());
-                    accounts = (await app.GetAccountsAsync()).ToList();
-                }
             }
         }
     }

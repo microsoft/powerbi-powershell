@@ -50,7 +50,6 @@ namespace Microsoft.PowerBI.Common.Authentication
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             if (this.AuthApplication == null)
             {
-                Console.WriteLine("Init auth app");
                 this.AuthApplication = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
                     .WithAuthority(environment.AzureADAuthority)
@@ -67,20 +66,17 @@ namespace Microsoft.PowerBI.Common.Authentication
                 if (accounts.Any())
                 {
                     // This indicates there's token in cache
-                    Console.WriteLine("AcquireTokenSilent: " + accounts.First().Username);
                     result = this.AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(userName) && password != null && password.Length > 0)
                     {
-                        Console.WriteLine("AcquireTokenByUsernamePassword");
                         // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-with-username-and-password
                         result = this.AuthApplication.AcquireTokenByUsernamePassword(scopes, userName, password).ExecuteAsync().Result;
                     }
                     else
                     {
-                        Console.WriteLine("AcquireTokenInteractive");
                         result = this.AuthApplication.AcquireTokenInteractive(scopes).ExecuteAsync().Result;
                     }
                 }
@@ -92,7 +88,6 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             if (result != null)
             {
-                Console.WriteLine(result.AccessToken);
                 return result.ToIAccessToken();
                 // Use the token
             }
@@ -102,39 +97,19 @@ namespace Microsoft.PowerBI.Common.Authentication
             }
         }
 
-        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
+        public async Task Challenge()
         {
             if (this.AuthApplication != null)
             {
-                Console.WriteLine("this.AuthApplication is not null");
-
                 var accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
                 while (accounts.Any())
                 {
-                    Console.WriteLine("Challenge:" + accounts.First().Username);
                     await this.AuthApplication.RemoveAsync(accounts.First());
                     accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
                 }
 
                 this.AuthApplication = null;
             }
-
-            foreach (var environment in environments)
-            {
-                var app = PublicClientApplicationBuilder
-                    .Create(environment.AzureADClientId)
-                    .WithAuthority(environment.AzureADAuthority)
-                    .Build();
-
-                var accounts = (await app.GetAccountsAsync()).ToList();
-                while (accounts.Any())
-                {
-                    Console.WriteLine("Challenge:" + accounts.First().Username);
-                    await app.RemoveAsync(accounts.First());
-                    accounts = (await app.GetAccountsAsync()).ToList();
-                }
-            }
         }
-
     }
 }

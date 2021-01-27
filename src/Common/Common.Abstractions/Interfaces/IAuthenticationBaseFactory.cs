@@ -16,6 +16,6 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         /// <summary>
         /// Revokes any previous authentication session.
         /// </summary>
-        Task Challenge(ICollection<IPowerBIEnvironment> environments);
+        Task Challenge();
     }
 }

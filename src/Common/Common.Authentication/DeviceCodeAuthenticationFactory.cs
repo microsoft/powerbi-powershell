@@ -22,7 +22,6 @@ namespace Microsoft.PowerBI.Common.Authentication
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             if (this.AuthApplication == null)
             {
-                Console.WriteLine("Init auth app");
                 this.AuthApplication = PublicClientApplicationBuilder
                 .Create(environment.AzureADClientId)
                 .WithAuthority(environment.AzureADAuthority)
@@ -61,22 +60,18 @@ namespace Microsoft.PowerBI.Common.Authentication
             throw new NotSupportedException("User and password authentication is not supported in .NET Core or with DeviceCode authentication.");
         }
 
-        public async Task Challenge(ICollection<IPowerBIEnvironment> environments)
+        public async Task Challenge()
         {
-            foreach (var environment in environments)
+            if (this.AuthApplication != null)
             {
-                var app = PublicClientApplicationBuilder
-                    .Create(environment.AzureADClientId)
-                    .WithAuthority(environment.AzureADAuthority)
-                    .Build();
-
-                var accounts = await app.GetAccountsAsync();
+                var accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
                 while (accounts.Any())
                 {
-                    Console.WriteLine("Challenge:" + accounts.FirstOrDefault()?.Username);
-                    await app.RemoveAsync(accounts.First());
-                    accounts = await app.GetAccountsAsync();
+                    await this.AuthApplication.RemoveAsync(accounts.First());
+                    accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
                 }
+
+                this.AuthApplication = null;
             }
         }
     }

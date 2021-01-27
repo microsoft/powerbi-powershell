@@ -59,7 +59,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             return this.Token;
         }
 
-        public Task Challenge(ICollection<IPowerBIEnvironment> environments)
+        public Task Challenge()
         {
             // Nothing
             return Task.Delay(1);
