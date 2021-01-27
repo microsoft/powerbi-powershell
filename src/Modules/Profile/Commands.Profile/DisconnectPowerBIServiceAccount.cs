@@ -25,7 +25,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 this.Storage.RemoveItem("profile");
             }
 
-            this.Authenticator.Challenge(this.Settings.Environments.Values);
+            this.Authenticator.Challenge();
         }
 
         protected override bool CmdletManagesProfile { get => true; set => base.CmdletManagesProfile = value; }

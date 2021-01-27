@@ -129,7 +129,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 environment = tempEnvironment;
             }
 
-            this.Authenticator.Challenge(new[] { environment }); // revoke any previous login
+            this.Authenticator.Challenge(); // revoke any previous login
             IAccessToken token = null;
             PowerBIProfile profile = null;
             switch (this.ParameterSet)
