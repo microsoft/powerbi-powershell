@@ -12,5 +12,7 @@
     <SlnGenSolutionItem Include="ReleaseNotes.md" />
     <SlnGenSolutionItem Include=".editorconfig" />
     <SlnGenSolutionItem Include="global.json" />
+    <SlnGenSolutionItem Include="Directory.Build.props" />
+    <SlnGenSolutionItem Include="Directory.Build.targets" />
   </ItemGroup>
 </Project>

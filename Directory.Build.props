@@ -5,10 +5,10 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the MIT License.
 ***********************************************************************************************
 -->
-<Project>
-  <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <PropertyGroup>
+    <MinimumMSBuildVersion>16.8</MinimumMSBuildVersion>
     <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
     <LangVersion>latest</LangVersion>
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
