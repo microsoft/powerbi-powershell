@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Microsoft.PowerBI.Commands.Capacities.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Capacities
 online version:
@@ -75,3 +75,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+

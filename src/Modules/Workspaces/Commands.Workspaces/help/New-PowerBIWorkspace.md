@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Microsoft.PowerBI.Commands.Workspaces.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Workspaces
 online version:
@@ -59,3 +59,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+

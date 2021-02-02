@@ -11,18 +11,18 @@ Licensed under the MIT License.
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(ReferenceWindowsAuthenticator)' == 'true'">
+  <!--<ItemGroup Condition="'$(ReferenceWindowsAuthenticator)' == 'true'">
     <ProjectReference Include="$(SourceRoot)Common\AzureADWindowsAuthenticator\AzureADWindowsAuthenticator.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
-  </ItemGroup>
+  </ItemGroup>-->
   
-  <Target Name="CopyWindowsAuthenticator" AfterTargets="Build" Condition="'$(ReferenceWindowsAuthenticator)' == 'true'">
+  <!--<Target Name="CopyWindowsAuthenticator" AfterTargets="Build" Condition="'$(ReferenceWindowsAuthenticator)' == 'true'">
     <ItemGroup>
       <WindowsAuthenticatorFiles Include="$(SourceRoot)Common\AzureADWindowsAuthenticator\bin\$(Configuration)\**\*" />
     </ItemGroup>
     <Copy DestinationFolder="$(OutputPath)\WindowsAuthenticator" SourceFiles="@(WindowsAuthenticatorFiles)" />
-  </Target>
+  </Target>-->
   
 </Project>

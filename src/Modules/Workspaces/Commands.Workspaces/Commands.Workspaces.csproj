@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
+    <PackageReference Include="PowerShellStandard.Library">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>

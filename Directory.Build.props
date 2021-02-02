@@ -6,10 +6,12 @@ Licensed under the MIT License.
 ***********************************************************************************************
 -->
 <Project>
+  <Sdk Name="Microsoft.Build.CentralPackageVersions" />
   
   <PropertyGroup>
+    <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
     <LangVersion>latest</LangVersion>
-    <RepoRoot>$(MSBuildThisFileDirectory)..\</RepoRoot>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
     <RepoTargets>$(RepoRoot)build\</RepoTargets>
     <SourceRoot>$(RepoRoot)src\</SourceRoot>
     <ScriptsRoot>$(RepoRoot)scripts\</ScriptsRoot>

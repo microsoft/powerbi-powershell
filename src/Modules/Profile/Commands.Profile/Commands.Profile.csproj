@@ -33,10 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
+    <PackageReference Include="PowerShellStandard.Library">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.11 ">
+    <PackageReference Include="Microsoft.Rest.ClientRuntime">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
