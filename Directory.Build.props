@@ -18,6 +18,7 @@ Licensed under the MIT License.
     <PowerShellExe Condition="'$(PowerShellExe)' == ''">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
     <PowerShellCommonArgs>-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted</PowerShellCommonArgs>
     <LangName Condition="'$(LangName)' == ''">en-US</LangName>
+    <!-- <NoWarn>$(NoWarn);NETSDK1023</NoWarn> -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
@@ -39,10 +40,10 @@ Licensed under the MIT License.
     <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
   </PropertyGroup>
 
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true'"/>
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
 
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true'"/>
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
   
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.Packaging.targets" Condition="'$(NoPackageTarget)' != 'true'"/>
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.Packaging.targets" Condition="'$(NoPackageTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
 
 </Project>

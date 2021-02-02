@@ -29,9 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PowerShellStandard.Library">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="PowerShellStandard.Library" />
   </ItemGroup>
 
   <ItemGroup>

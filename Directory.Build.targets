@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+
+    <!-- Ensure developers are using a minimun supported version of VS -->
+  <Target Name="ValidateMinimumMsBuildVersion"
+    BeforeTargets="Restore;$(BuildDependsOn);Build;$(RebuildDependsOn);Rebuild;$(CleanDependsOn);Clean"
+    Condition=" '$(DesignTimeBuild)' != 'true' ">
+    <Error Text="Building this repository requires a minimun Visual Studio version of $(MinimumMSBuildVersion)" Condition="$(MSBuildVersion) &lt; $(MinimumMSBuildVersion)" />
+  </Target>
+</Project>

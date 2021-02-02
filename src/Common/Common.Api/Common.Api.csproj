@@ -9,6 +9,7 @@
   
   <ItemGroup>
     <PackageReference Include="Microsoft.PowerBI.Api" />
+    <PackageReference Include="PowerShellStandard.Library" />
   </ItemGroup>
   
   <ItemGroup>

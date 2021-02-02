@@ -15,10 +15,14 @@ Licensed under the MIT License.
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <PackageReference Include="platyPS">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="platyPS" PrivateAssets="all" />
+    <PackageReference Include="NETStandard.Library" />
   </ItemGroup>
+
+  <!-- Handles surpressing NETSDK1023 due to NETStandard.Library usage -->
+  <!-- <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences> 
+  </PropertyGroup>-->
 
   <PropertyGroup>
     <BeforePack>$(BeforePack);UpdatePSManifest;GeneratePSHelp;UpdateReleaseNotes</BeforePack>
@@ -35,10 +39,10 @@ Licensed under the MIT License.
       <Output TaskParameter="Filtered" ItemName="DedupResolveAssemblyReferenceResolvedFiles"/>
     </RemoveDuplicates>
 
-    <Message Text="Locating netstandard assembly" Importance="high" />
+    <!-- <Message Text="Locating netstandard assembly" Importance="high" />
     <Exec ConsoleToMSBuild="true" Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
-    </Exec>
+    </Exec> -->
     
     <ItemGroup>
       
@@ -60,18 +64,33 @@ Licensed under the MIT License.
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(NetStandardDllPath)" Condition="'$(NoDependentAssemblies)' != 'true'">
+      <!-- <_PackageFiles Include="$(NetStandardDllPath)" Condition="'$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
-      </_PackageFiles>
+      </_PackageFiles> -->
 
       <!--<_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll" Condition="Exists('$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>-->
+
+      <!-- Remove netstandard1.3 version of Microsoft.Identity.Client.dll and replace with concrete implementations - https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/PowerShell-support -->
+      <_PackageFiles Remove="**\Microsoft.Identity.Client.dll" />
       
+      <_PackageFiles Include="$(PkgMicrosoft_Identity_Client)\lib\netcoreapp2.1\*.dll" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)\Microsoft.Identity.Client\netcoreapp2.1</PackagePath>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(PkgMicrosoft_Identity_Client)\lib\net45\*.dll" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)\Microsoft.Identity.Client\net45</PackagePath>
+      </_PackageFiles>
+
       <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>

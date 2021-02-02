@@ -11,6 +11,7 @@
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.Identity.Client" Version="4.24.0" />-->
     <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />
+    <PackageReference Include="Microsoft.Identity.Client" />
     <PackageReference Include="System.Net.Http" />
   </ItemGroup>
 
