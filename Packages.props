@@ -6,7 +6,6 @@
     <PackageReference Update="MSTest.TestFramework" Version="2.1.2" />
     <PackageReference Update="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Update="PowerShellStandard.Library" Version="7.0.0-preview.1" PrivateAssets="all" />
-    <!-- <PackageReference Update="System.Management.Automation" Version="7.1.1" /> -->
     <PackageReference Update="Microsoft.PowerShell.SDK" Version="7.1.1" />
     <PackageReference Update="Microsoft.PowerShell.Commands.Diagnostics" Version="7.1.1" />
     <PackageReference Update="Microsoft.WSMan.Management" Version="7.1.1" />
@@ -19,6 +18,7 @@
     <PackageReference Update="Moq" Version="4.8.2" />
     <PackageReference Update="platyPS" Version="0.9.0" />
     <PackageReference Update="NETStandard.Library" Version="2.0.3" />
+    <PackageReference Update="SlnGen" Version="2.2.30" PrivateAssets="all"/>
   </ItemGroup>
   <!-- <ItemGroup>
     <PackageReference Update="PowerShellStandard.Library" Version="7.0.0-preview.1" />

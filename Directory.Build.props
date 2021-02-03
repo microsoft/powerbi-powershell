@@ -40,6 +40,15 @@ Licensed under the MIT License.
     <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
   </PropertyGroup>
 
+  <!-- Slngen -->
+  <PropertyGroup>
+    <SlnGenLaunchVisualStudio>true</SlnGenLaunchVisualStudio>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SlnGen" />
+  </ItemGroup>
+
   <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
 
   <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>

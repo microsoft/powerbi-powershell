@@ -1,0 +1,6 @@
+-restore
+-consoleLoggerParameters:Verbosity=Minimal;Summary;ForceNoAlign
+-maxCpuCount
+-graphBuild:true
+-isolateProjects:true
+-IgnoreProjectExtensions:.sln

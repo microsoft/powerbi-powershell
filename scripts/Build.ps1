@@ -45,8 +45,11 @@ param
     # Indicates to execute the Pack target (generate NuGet packages).
     [switch] $Pack,
 
-    # Indicates to execute the Clean target.
+    # Indicates to execute the Clean target. -Restore is added if you specify this.
     [switch] $Clean,
+
+    # Indicates to nuget restore.
+    [switch] $Restore,
 
     # Indicates to not add the Build target which is normally defaulted.
     [switch] $NoBuild,
@@ -92,6 +95,10 @@ if($MSBuildProperties.Count -gt 0) {
     }
 
     $msBuildArgs += ('/p:' + ($properties -join ';'))
+}
+
+if ($Restore -or $Clean) {
+    $msBuildArgs += '/restore'
 }
 
 if($AppVeyorLogger) {
