@@ -76,26 +76,33 @@ Licensed under the MIT License.
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>-->
 
-      <!-- Remove netstandard1.3 version of Microsoft.Identity.Client.dll and replace with concrete implementations - https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/PowerShell-support -->
+      <!-- Remove netstandard1.3 version of Microsoft.Identity.Client.dll and Microsoft.Identity.Client.Extensions.Msal.dll and replace with concrete implementations - https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/PowerShell-support -->
       <_PackageFiles Remove="**\Microsoft.Identity.Client.dll" />
+      <_PackageFiles Remove="**\Microsoft.Identity.Client.Extensions.Msal.dll" />
       
-      <_PackageFiles Include="$(PkgMicrosoft_Identity_Client)\lib\netcoreapp2.1\*.dll" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
+      <_PackageFiles Include="$(OutputPath)\MSAL\**\*.*" Condition="Exists('$(OutputPath)\MSAL')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\Microsoft.Identity.Client\netcoreapp2.1</PackagePath>
+        <PackagePath>lib\$(TargetFramework)\MSAL\%(RecursiveDir)</PackagePath>
+      </_PackageFiles>
+
+      <!-- <_PackageFiles Include="$(PkgMicrosoft_Identity_Client)\lib\netcoreapp2.1\*.dll" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)\MSAL\netcoreapp2.1</PackagePath>
       </_PackageFiles>
 
       <_PackageFiles Include="$(PkgMicrosoft_Identity_Client)\lib\net45\*.dll" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\Microsoft.Identity.Client\net45</PackagePath>
+        <PackagePath>lib\$(TargetFramework)\MSAL\net45</PackagePath>
       </_PackageFiles>
 
       <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>$(LangName)</PackagePath>
-      </_PackageFiles>
+      </_PackageFiles> -->
       
       <_PackageFiles Include="$(OutputPath)\$(PackageId).psd1">
         <BuildAction>Content</BuildAction>

@@ -18,11 +18,41 @@ Licensed under the MIT License.
     </ProjectReference>
   </ItemGroup>-->
   
-  <!--<Target Name="CopyWindowsAuthenticator" AfterTargets="Build" Condition="'$(ReferenceWindowsAuthenticator)' == 'true'">
+  <Target Name="CopyMsalIfNeeded" AfterTargets="Build" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
     <ItemGroup>
-      <WindowsAuthenticatorFiles Include="$(SourceRoot)Common\AzureADWindowsAuthenticator\bin\$(Configuration)\**\*" />
+      <MSALKnownPackageReferences Include="Microsoft.Identity.Client.Extensions.Msal" />
+      <MSALKnownPackageReferences Include="Microsoft.Identity.Client" />
     </ItemGroup>
-    <Copy DestinationFolder="$(OutputPath)\WindowsAuthenticator" SourceFiles="@(WindowsAuthenticatorFiles)" />
-  </Target>-->
+
+    <FindInList CaseSensitive="false" List="@(PackageReference)" ItemSpecToFind="%(MSALKnownPackageReferences.Identity)">
+      <Output TaskParameter="ItemFound" ItemName="FoundMSALReferences"/>
+    </FindInList>
+
+    <Message Text="Found MSAL References: @(FoundMSALReferences)" Condition="'@(FoundMSALReferences)' != ''" Importance="High" />
+
+    <!-- <ItemGroup>
+      <WindowsAuthenticatorFiles Include="$(SourceRoot)Common\AzureADWindowsAuthenticator\bin\$(Configuration)\**\*" />
+    </ItemGroup> -->
+    <!-- <Copy DestinationFolder="$(OutputPath)\WindowsAuthenticator" SourceFiles="@(WindowsAuthenticatorFiles)" /> -->
+    <ItemGroup>
+      <MSALItemsToCopy Include="$(PkgMicrosoft_Identity_Client)\lib\netcoreapp2.1\*.dll">
+        <Destination>$(OutputPath)\MSAL\netcoreapp2.1</Destination>
+      </MSALItemsToCopy>
+
+      <MSALItemsToCopy Include="$(PkgMicrosoft_Identity_Client)\lib\net45\*.dll">
+        <Destination>$(OutputPath)\MSAL\net45</Destination>
+      </MSALItemsToCopy>
+
+      <MSALItemsToCopy Include="$(PkgMicrosoft_Identity_Client_Extensions_Msal)\lib\netcoreapp2.1\*.dll">
+        <Destination>$(OutputPath)\MSAL\netcoreapp2.1</Destination>
+      </MSALItemsToCopy>
+
+      <MSALItemsToCopy Include="$(PkgMicrosoft_Identity_Client_Extensions_Msal)\lib\net45\*.dll">
+        <Destination>$(OutputPath)\MSAL\net45</Destination>
+      </MSALItemsToCopy>
+    </ItemGroup>
+
+    <Copy Condition="'@(FoundMSALReferences)' != '' AND '%(MSALItemsToCopy.Destination)' != ''" DestinationFolder="@(MSALItemsToCopy -> '%(Destination)')" SourceFiles="@(MSALItemsToCopy)" />
+  </Target>
   
 </Project>
