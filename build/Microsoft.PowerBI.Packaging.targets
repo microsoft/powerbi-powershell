@@ -11,18 +11,12 @@ Licensed under the MIT License.
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IncludeContentInPack>false</IncludeContentInPack>
-    <PackageOutputPath>$(RepoRoot)\PkgOut</PackageOutputPath>
+    <PackageOutputPath>$(RepoRoot)PkgOut</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
     <PackageReference Include="platyPS" PrivateAssets="all" />
-    <PackageReference Include="NETStandard.Library" />
   </ItemGroup>
-
-  <!-- Handles surpressing NETSDK1023 due to NETStandard.Library usage -->
-  <!-- <PropertyGroup Condition="'$(IsPackable)' == 'true'">
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences> 
-  </PropertyGroup>-->
 
   <PropertyGroup>
     <BeforePack>$(BeforePack);UpdatePSManifest;GeneratePSHelp;UpdateReleaseNotes</BeforePack>
@@ -32,25 +26,23 @@ Licensed under the MIT License.
   <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles" Condition="'$(IsPackable)' == 'true'">
 
     <ItemGroup>
-      <FilteredResolveAssemblyReferenceResolvedFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="%(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'netstandard' AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'mscorlib' AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'" />
+      <FilteredResolveAssemblyReferenceResolvedFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="%(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'netstandard' 
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'mscorlib' 
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client'
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Extensions.Msal'" />
     </ItemGroup>
 
     <RemoveDuplicates Inputs="@(FilteredResolveAssemblyReferenceResolvedFiles)">
       <Output TaskParameter="Filtered" ItemName="DedupResolveAssemblyReferenceResolvedFiles"/>
     </RemoveDuplicates>
 
-    <!-- <Message Text="Locating netstandard assembly" Importance="high" />
+    <Message Text="Locating netstandard assembly" Importance="high" />
     <Exec ConsoleToMSBuild="true" Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
-    </Exec> -->
+    </Exec> 
     
     <ItemGroup>
-      
-      <!--<_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\**\*.*" Condition="Exists('$(OutputPath)\WindowsAuthenticator')">
-        <BuildAction>Content</BuildAction>
-        <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\WindowsAuthenticator</PackagePath>
-      </_PackageFiles>-->
       
       <_PackageFiles Include="$(OutputPath)\settings.json" Condition="Exists('$(OutputPath)\settings.json') AND '$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
@@ -64,21 +56,11 @@ Licensed under the MIT License.
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
 
-      <!-- <_PackageFiles Include="$(NetStandardDllPath)" Condition="'$(NoDependentAssemblies)' != 'true'">
+      <_PackageFiles Include="$(NetStandardDllPath)" Condition="'$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
-      </_PackageFiles> -->
-
-      <!--<_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll" Condition="Exists('$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll')">
-        <BuildAction>Content</BuildAction>
-        <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)</PackagePath>
-      </_PackageFiles>-->
-
-      <!-- Remove netstandard1.3 version of Microsoft.Identity.Client.dll and Microsoft.Identity.Client.Extensions.Msal.dll and replace with concrete implementations - https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/PowerShell-support -->
-      <_PackageFiles Remove="**\Microsoft.Identity.Client.dll" />
-      <_PackageFiles Remove="**\Microsoft.Identity.Client.Extensions.Msal.dll" />
+      </_PackageFiles>
       
       <_PackageFiles Include="$(OutputPath)\MSAL\**\*.*" Condition="Exists('$(OutputPath)\MSAL')">
         <BuildAction>Content</BuildAction>
@@ -86,23 +68,11 @@ Licensed under the MIT License.
         <PackagePath>lib\$(TargetFramework)\MSAL\%(RecursiveDir)</PackagePath>
       </_PackageFiles>
 
-      <!-- <_PackageFiles Include="$(PkgMicrosoft_Identity_Client)\lib\netcoreapp2.1\*.dll" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
-        <BuildAction>Content</BuildAction>
-        <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\MSAL\netcoreapp2.1</PackagePath>
-      </_PackageFiles>
-
-      <_PackageFiles Include="$(PkgMicrosoft_Identity_Client)\lib\net45\*.dll" Condition="'$(PkgMicrosoft_Identity_Client)' != ''">
-        <BuildAction>Content</BuildAction>
-        <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\MSAL\net45</PackagePath>
-      </_PackageFiles>
-
       <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>$(LangName)</PackagePath>
-      </_PackageFiles> -->
+      </_PackageFiles>
       
       <_PackageFiles Include="$(OutputPath)\$(PackageId).psd1">
         <BuildAction>Content</BuildAction>

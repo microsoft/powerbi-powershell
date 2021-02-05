@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <!-- Only pulled in by slngen -->
-    <SlnGenSolutionItem Include="build\**\*.*" />
+    <SlnGenSolutionItem Include="build\**\*.targets" />
     <SlnGenSolutionItem Include="scripts\**\*.*" />
     <SlnGenSolutionItem Include="NuGet.config" />
     <SlnGenSolutionItem Include="ReleaseNotes.md" />
@@ -19,5 +19,6 @@
     <SlnGenSolutionItem Include="global.json" />
     <SlnGenSolutionItem Include="Directory.Build.props" />
     <SlnGenSolutionItem Include="Directory.Build.targets" />
+    <SlnGenSolutionItem Include="Packages.props" />
   </ItemGroup>
 </Project>

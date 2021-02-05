@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Runtime.Loader" />
     <PackageReference Include="System.Runtime.Serialization.Json" />
     <PackageReference Include="PowerShellStandard.Library" />
   </ItemGroup>

@@ -3,29 +3,28 @@
   <PropertyGroup>
     <AssemblyName>Microsoft.PowerBI.Commands.Data</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Data</RootNamespace>
-    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
-<PropertyGroup>
+  <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>MicrosoftPowerBIMgmt.Data</PackageId>
     <Description>Microsoft Power BI PowerShell - Dataset and Datasource cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Datasources;Datasets</PackageTags>
-</PropertyGroup>
-<ItemGroup>
-  <None Remove="Microsoft.PowerBI.Commands.Data.format.ps1xml" />
-  <None Remove="MicrosoftPowerBIMgmt.Data.psd1" />
-</ItemGroup>
-<ItemGroup>
-  <Content Include="Microsoft.PowerBI.Commands.Data.format.ps1xml">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="MicrosoftPowerBIMgmt.Data.psd1">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-</ItemGroup>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Microsoft.PowerBI.Commands.Data.format.ps1xml" />
+    <None Remove="MicrosoftPowerBIMgmt.Data.psd1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Microsoft.PowerBI.Commands.Data.format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MicrosoftPowerBIMgmt.Data.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="PowerShellStandard.Library" />

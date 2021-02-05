@@ -8,4 +8,10 @@
     Condition=" '$(DesignTimeBuild)' != 'true' ">
     <Error Text="Building this repository requires a minimun Visual Studio version of $(MinimumMSBuildVersion)" Condition="$(MSBuildVersion) &lt; $(MinimumMSBuildVersion)" />
   </Target>
+
+  <Target Name="ValidatePowerShellExeExists"
+    BeforeTargets="Restore;$(BuildDependsOn);Build;$(RebuildDependsOn);Rebuild;$(CleanDependsOn);Clean"
+    Condition=" '$(DesignTimeBuild)' != 'true' ">
+    <Error Text="This repository requires either Windows PowerShell or PowerShell Core 7 to be installed (default location) to execute builds" Condition="!Exists('$(PowerShellExe)')" />
+  </Target>
 </Project>

@@ -27,7 +27,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""name"": ""Public"",
       ""authority"": ""https://login.windows-ppe.net/common/oauth2/authorize"",
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
-      ""redirect"": ""urn:ietf:wg:oauth:2.0:oob"",
+      ""redirect"": ""http://localhost"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
       ""globalService"": ""https://api.powerbi.com""
     },
@@ -35,7 +35,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""name"": ""NotValid"",
       ""authority"": ""https://login.windows-ppe.net/common/oauth2/authorize"",
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
-      ""redirect"": ""urn:ietf:wg:oauth:2.0:oob"",
+      ""redirect"": ""http://localhost"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
       ""globalService"": ""https://api.powerbi.com""
     }

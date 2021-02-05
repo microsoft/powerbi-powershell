@@ -16,9 +16,9 @@ Licensed under the MIT License.
     <SourceRoot>$(RepoRoot)src\</SourceRoot>
     <ScriptsRoot>$(RepoRoot)scripts\</ScriptsRoot>
     <PowerShellExe Condition="'$(PowerShellExe)' == ''">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+    <PowerShellExe Condition="!Exists('$(PowerShellExe)')">%ProgramFiles%\PowerShell\7\pwsh.exe</PowerShellExe>
     <PowerShellCommonArgs>-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted</PowerShellCommonArgs>
     <LangName Condition="'$(LangName)' == ''">en-US</LangName>
-    <!-- <NoWarn>$(NoWarn);NETSDK1023</NoWarn> -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
@@ -38,6 +38,10 @@ Licensed under the MIT License.
     <PackageLicenseUrl>https://github.com/Microsoft/powerbi-powershell/blob/master/LICENSE</PackageLicenseUrl>
     <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);*.binlog</DefaultItemExcludes>
   </PropertyGroup>
 
   <!-- Slngen -->

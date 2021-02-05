@@ -5,7 +5,6 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>Microsoft.PowerBI.Commands.Data.Test</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Data.Test</RootNamespace>
-    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
   </PropertyGroup>
   
   <ItemGroup>

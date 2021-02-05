@@ -20,27 +20,19 @@ namespace Microsoft.PowerBI.Commands.Common
         private static IAuthenticationUserFactory UserAuthFactory;
         private static IAuthenticationServicePrincipalFactory ServicePrincipalAuthFactory;
         private static IAuthenticationBaseFactory BaseAuthFactory;
-
-        private object authFactoryLock = new object();
         
         private void InitializeUserAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
             if (UserAuthFactory == null)
             {
-                lock (this.authFactoryLock)
+                bool forceDeviceAuth = settings.Settings.ForceDeviceCodeAuthentication;
+                if (!forceDeviceAuth && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    if (UserAuthFactory == null)
-                    {
-                        bool forceDeviceAuth = settings.Settings.ForceDeviceCodeAuthentication;
-                        if (!forceDeviceAuth && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                        {
-                            UserAuthFactory = new WindowsAuthenticationFactory();
-                        }
-                        else
-                        {
-                            UserAuthFactory = new DeviceCodeAuthenticationFactory();
-                        }
-                    }
+                    UserAuthFactory = new WindowsAuthenticationFactory();
+                }
+                else
+                {
+                    UserAuthFactory = new DeviceCodeAuthenticationFactory();
                 }
             }
 
@@ -51,12 +43,9 @@ namespace Microsoft.PowerBI.Commands.Common
         {
             if (ServicePrincipalAuthFactory == null)
             {
-                lock (this.authFactoryLock)
+                if(ServicePrincipalAuthFactory == null)
                 {
-                    if(ServicePrincipalAuthFactory == null)
-                    {
-                        ServicePrincipalAuthFactory = new ServicePrincipalAuthenticationFactory();
-                    }
+                    ServicePrincipalAuthFactory = new ServicePrincipalAuthenticationFactory();
                 }
             }
 
@@ -94,8 +83,15 @@ namespace Microsoft.PowerBI.Commands.Common
 
         public async Task Challenge()
         {
-            await UserAuthFactory?.Challenge();
-            await ServicePrincipalAuthFactory?.Challenge();
+            if (UserAuthFactory != null)
+            {
+                await UserAuthFactory.Challenge();
+            }
+
+            if (ServicePrincipalAuthFactory != null)
+            {
+                await ServicePrincipalAuthFactory.Challenge();
+            }
         }
 
         public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)

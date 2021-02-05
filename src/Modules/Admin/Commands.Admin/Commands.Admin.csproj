@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.PowerBI.Commands.Admin</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Admin</RootNamespace>
-    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
