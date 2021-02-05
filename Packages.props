@@ -17,8 +17,6 @@
     <PackageReference Update="System.Runtime.Serialization.Json" Version="4.3.0" />
     <PackageReference Update="Moq" Version="4.8.2" />
     <PackageReference Update="platyPS" Version="0.9.0" />
-    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
     <PackageReference Update="SlnGen" Version="2.2.30" PrivateAssets="all"/>
-    <PackageReference Update="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 </Project>

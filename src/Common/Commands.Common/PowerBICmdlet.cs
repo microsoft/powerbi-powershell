@@ -43,6 +43,8 @@ namespace Microsoft.PowerBI.Commands.Common
             AppDomain.CurrentDomain.AssemblyResolve += RedirectAssemblyLoad;
         }
 
+        protected static readonly bool IsNetFramework = RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework");
+
         private static Assembly RedirectAssemblyLoad(object sender, ResolveEventArgs args)
         {
             /*
@@ -64,7 +66,7 @@ namespace Microsoft.PowerBI.Commands.Common
             string assemblyFilePath;
             if (requestedAssembly.Name == "Microsoft.Identity.Client" || requestedAssembly.Name == "Microsoft.Identity.Client.Extensions.Msal")
             {
-                var libType = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "net45" : "netcoreapp2.1";
+                var libType = IsNetFramework ? "net45" : "netcoreapp2.1";
                 assemblyFilePath = Path.Combine(executingDirectory, "MSAL", libType, requestedAssembly.Name + ".dll");
             }
             else

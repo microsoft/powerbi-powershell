@@ -12,6 +12,6 @@
   <Target Name="ValidatePowerShellExeExists"
     BeforeTargets="Restore;$(BuildDependsOn);Build;$(RebuildDependsOn);Rebuild;$(CleanDependsOn);Clean"
     Condition=" '$(DesignTimeBuild)' != 'true' ">
-    <Error Text="This repository requires either Windows PowerShell or PowerShell Core 7 to be installed (default location) to execute builds" Condition="!Exists('$(PowerShellExe)')" />
+    <Error Text="This repository requires either Windows PowerShell or PowerShell Core 7 to be installed (default location) to execute builds: $(PowerShellExe)" Condition="!Exists('$(PowerShellExe)')" />
   </Target>
 </Project>
