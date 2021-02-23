@@ -31,10 +31,10 @@ namespace Microsoft.PowerBI.Commands.Common
         [DataMember(Name = "authority", IsRequired = false)]
         public string Authority { get; set; }
 
-        [DataMember(Name = "clientId", IsRequired = true)]
+        [DataMember(Name = "clientId", IsRequired = false)]
         public string ClientId { get; set; }
 
-        [DataMember(Name = "redirect", IsRequired = true)]
+        [DataMember(Name = "redirect", IsRequired = false)]
         public string Redirect { get; set; }
 
         [DataMember(Name = "resource", IsRequired = false)]

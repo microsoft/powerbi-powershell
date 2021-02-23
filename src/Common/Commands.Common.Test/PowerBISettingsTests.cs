@@ -27,7 +27,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""name"": ""Public"",
       ""authority"": ""https://login.windows-ppe.net/common/oauth2/authorize"",
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
-      ""redirect"": ""urn:ietf:wg:oauth:2.0:oob"",
+      ""redirect"": ""https://login.microsoftonline.com/common/oauth2/nativeclient"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
       ""globalService"": ""https://api.powerbi.com""
     },
@@ -35,7 +35,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""name"": ""NotValid"",
       ""authority"": ""https://login.windows-ppe.net/common/oauth2/authorize"",
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
-      ""redirect"": ""urn:ietf:wg:oauth:2.0:oob"",
+      ""redirect"": ""https://login.microsoftonline.com/common/oauth2/nativeclient"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
       ""globalService"": ""https://api.powerbi.com""
     }
@@ -103,18 +103,6 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             var publicEnvironment = settings.Environments[PowerBIEnvironmentType.Public];
             Assert.AreEqual(PowerBIEnvironmentType.Public, publicEnvironment.Name);
             AssertValidCloudEnvironment("GlobalCloud", publicEnvironment, cloudEnvironments);
-
-            var germanyEnvironment = settings.Environments[PowerBIEnvironmentType.Germany];
-            Assert.AreEqual(PowerBIEnvironmentType.Germany, germanyEnvironment.Name);
-            AssertValidCloudEnvironment("GermanyCloud", germanyEnvironment, cloudEnvironments);
-
-            var usGovEnvironment = settings.Environments[PowerBIEnvironmentType.USGov];
-            Assert.AreEqual(PowerBIEnvironmentType.USGov, usGovEnvironment.Name);
-            AssertValidCloudEnvironment("USGovCloud", usGovEnvironment, cloudEnvironments);
-
-            var chinaEnvironment = settings.Environments[PowerBIEnvironmentType.China];
-            Assert.AreEqual(PowerBIEnvironmentType.China, chinaEnvironment.Name);
-            AssertValidCloudEnvironment("ChinaCloud", chinaEnvironment, cloudEnvironments);
         }
 
         private static void AssertValidCloudEnvironment(string cloudName, IPowerBIEnvironment environment, GSEnvironments cloudEnvironments)
@@ -131,7 +119,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         private static void AssertValidEnvironmentSharedProperties(IPowerBIEnvironment environment)
         {
             Assert.AreEqual("ea0616ba-638b-4df5-95b9-636659ae5121", environment.AzureADClientId);
-            Assert.AreEqual("urn:ietf:wg:oauth:2.0:oob", environment.AzureADRedirectAddress);
+            Assert.AreEqual("https://login.microsoftonline.com/common/oauth2/nativeclient", environment.AzureADRedirectAddress);
         }
     }
 }
