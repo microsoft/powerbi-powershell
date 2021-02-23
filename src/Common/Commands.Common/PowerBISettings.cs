@@ -69,24 +69,34 @@ namespace Microsoft.PowerBI.Commands.Common
                                 }
 
                                 var backendService = cloudEnvironment.Services.First(s => s.Name.Equals("powerbi-backend", StringComparison.OrdinalIgnoreCase));
+                                var redirectApp = cloudEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
                                 return new PowerBIEnvironment()
                                 {
                                     Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e.Name),
                                     AzureADAuthority = cloudEnvironment.Services.First(s => s.Name.Equals("aad", StringComparison.OrdinalIgnoreCase)).Endpoint,
-                                    AzureADClientId = e.ClientId,
-                                    AzureADRedirectAddress = e.Redirect,
+                                    AzureADClientId = redirectApp.AppId,
+                                    AzureADRedirectAddress = redirectApp.RedirectUri,
                                     AzureADResource = backendService.ResourceId,
                                     GlobalServiceEndpoint = backendService.Endpoint
                                 };
                             }
                             else
                             {
+                                // Debug environments
+                                string cloudName = "GlobalCloud";
+                                var cloudEnvironment = cloudEnvironments.Environments.FirstOrDefault(c => c.CloudName.Equals(cloudName, StringComparison.OrdinalIgnoreCase));
+                                if (cloudEnvironment == null)
+                                {
+                                    throw new NotSupportedException($"Unable to find cloud name: {cloudName}");
+                                }
+
+                                var redirectApp = cloudEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
                                 return new PowerBIEnvironment()
                                 {
                                     Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e.Name),
                                     AzureADAuthority = e.Authority,
-                                    AzureADClientId = e.ClientId,
-                                    AzureADRedirectAddress = e.Redirect,
+                                    AzureADClientId = redirectApp.AppId,
+                                    AzureADRedirectAddress = redirectApp.RedirectUri,
                                     AzureADResource = e.Resource,
                                     GlobalServiceEndpoint = e.GlobalService
                                 };
