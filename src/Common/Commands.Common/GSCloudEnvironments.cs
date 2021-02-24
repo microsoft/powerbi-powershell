@@ -42,6 +42,12 @@ namespace Microsoft.PowerBI.Commands.Common
 
         [DataMember(Name = "allowedDomains")]
         public IEnumerable<string> AllowedDomains { get; set; }
+
+        [DataMember(Name = "appId")]
+        public string AppId { get; set; }
+
+        [DataMember(Name = "redirectUri")]
+        public string RedirectUri { get; set; }
     }
 
     [DataContract]

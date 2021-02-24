@@ -94,12 +94,13 @@ namespace Microsoft.PowerBI.Commands.Profile
                 foreach (GSEnvironment customEnvironment in customCloudEnvironments.Environments)
                 {
                     var backendService = customEnvironment.Services.First(s => s.Name.Equals("powerbi-backend", StringComparison.OrdinalIgnoreCase));
+                    var redirectApp = customEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
                     var env = new PowerBIEnvironment()
                     {
                         Name = PowerBIEnvironmentType.Custom,
                         AzureADAuthority = customEnvironment.Services.First(s => s.Name.Equals("aad", StringComparison.OrdinalIgnoreCase)).Endpoint,
-                        AzureADClientId = this.Settings.Settings.DefaultClientId,
-                        AzureADRedirectAddress = this.Settings.Settings.DefaultRedirect,
+                        AzureADClientId = redirectApp.AppId,
+                        AzureADRedirectAddress = redirectApp.RedirectUri,
                         AzureADResource = backendService.ResourceId,
                         GlobalServiceEndpoint = backendService.Endpoint
                     };
