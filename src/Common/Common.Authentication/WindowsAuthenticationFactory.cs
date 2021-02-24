@@ -50,12 +50,18 @@ namespace Microsoft.PowerBI.Common.Authentication
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             if (this.AuthApplication == null)
             {
-                this.AuthApplication = PublicClientApplicationBuilder
+                var authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
                     .WithAuthority(environment.AzureADAuthority)
                     .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
-                    .WithExtraQueryParameters(queryParameters)
-                    .Build();
+                    .WithExtraQueryParameters(queryParameters);
+                    
+                if (!PublicClientHelper.IsNetFramework)
+                {
+                    authApplicationBuilder.WithRedirectUri("http://localhost");
+                }
+
+                this.AuthApplication = authApplicationBuilder.Build();
             }
 
             AuthenticationResult result = null;

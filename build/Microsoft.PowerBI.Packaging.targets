@@ -11,13 +11,11 @@ Licensed under the MIT License.
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IncludeContentInPack>false</IncludeContentInPack>
-    <PackageOutputPath>$(RepoRoot)\PkgOut</PackageOutputPath>
+    <PackageOutputPath>$(RepoRoot)PkgOut</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
-    <PackageReference Include="platyPS" Version="0.9.0">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="platyPS" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -28,7 +26,11 @@ Licensed under the MIT License.
   <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles" Condition="'$(IsPackable)' == 'true'">
 
     <ItemGroup>
-      <FilteredResolveAssemblyReferenceResolvedFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="%(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'netstandard' AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'mscorlib' AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'" />
+      <FilteredResolveAssemblyReferenceResolvedFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="%(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'netstandard' 
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'mscorlib' 
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client'
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Extensions.Msal'" />
     </ItemGroup>
 
     <RemoveDuplicates Inputs="@(FilteredResolveAssemblyReferenceResolvedFiles)">
@@ -38,15 +40,9 @@ Licensed under the MIT License.
     <Message Text="Locating netstandard assembly" Importance="high" />
     <Exec ConsoleToMSBuild="true" Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
-    </Exec>
+    </Exec> 
     
     <ItemGroup>
-      
-      <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\**\*.*" Condition="Exists('$(OutputPath)\WindowsAuthenticator')">
-        <BuildAction>Content</BuildAction>
-        <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\WindowsAuthenticator</PackagePath>
-      </_PackageFiles>
       
       <_PackageFiles Include="$(OutputPath)\settings.json" Condition="Exists('$(OutputPath)\settings.json') AND '$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
@@ -65,13 +61,13 @@ Licensed under the MIT License.
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
-
-      <_PackageFiles Include="$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll" Condition="Exists('$(OutputPath)\WindowsAuthenticator\Microsoft.Identity.Client.dll')">
+      
+      <_PackageFiles Include="$(OutputPath)\MSAL\**\*.*" Condition="Exists('$(OutputPath)\MSAL')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)</PackagePath>
+        <PackagePath>lib\$(TargetFramework)\MSAL\%(RecursiveDir)</PackagePath>
       </_PackageFiles>
-      
+
       <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>

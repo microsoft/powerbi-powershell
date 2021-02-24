@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Microsoft.PowerBI.Commands.Profile.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Profile
 online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/resolve-powerbierror?view=powerbi-ps
@@ -87,3 +87,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+

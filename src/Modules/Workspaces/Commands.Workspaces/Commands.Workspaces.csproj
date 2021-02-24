@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.PowerBI.Commands.Workspaces</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Workspaces</RootNamespace>
-    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
@@ -19,6 +18,7 @@
     <None Remove="Microsoft.PowerBI.Commands.Workspaces.format.ps1xml" />
     <None Remove="MicrosoftPowerBIMgmt.Workspaces.psd1" />
   </ItemGroup>
+  
   <ItemGroup>
     <Content Include="Microsoft.PowerBI.Commands.Workspaces.format.ps1xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -29,9 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PowerShellStandard.Library" Version="3.0.0-preview-01">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="PowerShellStandard.Library" />
   </ItemGroup>
 
   <ItemGroup>
