@@ -39,7 +39,6 @@
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.11 ">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Management.Automation" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
