@@ -37,3 +37,7 @@ $msbuildArgs = @(
 )
 
 & $msbuildPath $msbuildArgs
+
+if ($LastExitCode -ne 0) {
+    throw "Failed to restore nuget packages: $LastExitCode"
+}
