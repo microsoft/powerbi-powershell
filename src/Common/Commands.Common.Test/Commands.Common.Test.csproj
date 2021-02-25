@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Management.Automation" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Commands.Common\Commands.Common.csproj" />
     <ProjectReference Include="..\Common.Client\Common.Client.csproj" />
   </ItemGroup>
