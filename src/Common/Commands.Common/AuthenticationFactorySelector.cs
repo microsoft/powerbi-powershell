@@ -52,30 +52,30 @@ namespace Microsoft.PowerBI.Commands.Common
             BaseAuthFactory = ServicePrincipalAuthFactory;
         }
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             this.InitializeUserAuthenticationFactory(logger, settings);
-            return UserAuthFactory.Authenticate(environment, logger, settings, queryParameters);
+            return await UserAuthFactory.Authenticate(environment, logger, settings, queryParameters);
         }
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
             this.InitializeUserAuthenticationFactory(logger, settings);
-            return UserAuthFactory.Authenticate(environment, logger, settings, userName, password);
+            return await UserAuthFactory.Authenticate(environment, logger, settings, userName, password);
         }
 
-        public IAccessToken Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public async Task<IAccessToken> Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             switch (profile.LoginType)
             {
                 case PowerBIProfileType.User:
-                    return this.Authenticate(profile.Environment, logger, settings, queryParameters);
+                    return await this.Authenticate(profile.Environment, logger, settings, queryParameters);
                 case PowerBIProfileType.UserAndPassword:
-                    return this.Authenticate(profile.Environment, logger, settings, profile.UserName, profile.Password);
+                    return await this.Authenticate(profile.Environment, logger, settings, profile.UserName, profile.Password);
                 case PowerBIProfileType.ServicePrincipal:
-                    return this.Authenticate(profile.UserName, profile.Password, profile.Environment, logger, settings);
+                    return await this.Authenticate(profile.UserName, profile.Password, profile.Environment, logger, settings);
                 case PowerBIProfileType.Certificate:
-                    return this.Authenticate(profile.UserName, profile.Thumbprint, profile.Environment, logger, settings);
+                    return await this.Authenticate(profile.UserName, profile.Thumbprint, profile.Environment, logger, settings);
                 default:
                     throw new NotSupportedException();
             }
@@ -94,16 +94,16 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public async Task<IAccessToken> Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.InitializeServicePrincpalAuthenticationFactory(logger, settings);
-            return ServicePrincipalAuthFactory.Authenticate(userName, password, environment, logger, settings);
+            return await ServicePrincipalAuthFactory.Authenticate(userName, password, environment, logger, settings);
         }
 
-        public IAccessToken Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public async Task<IAccessToken> Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.InitializeServicePrincpalAuthenticationFactory(logger, settings);
-            return ServicePrincipalAuthFactory.Authenticate(clientId, thumbprint, environment, logger, settings);
+            return await ServicePrincipalAuthFactory.Authenticate(clientId, thumbprint, environment, logger, settings);
         }
     }
 }

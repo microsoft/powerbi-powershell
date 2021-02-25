@@ -140,19 +140,19 @@ namespace Microsoft.PowerBI.Commands.Profile
                         {
                             { "msafed", "0" }
                         }
-                    );
+                    ).Result;
                     profile = new PowerBIProfile(environment, token);
                     break;
                 case UserAndCredentialPasswordParameterSet:
-                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password);
+                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token, servicePrincipal: false);
                     break;
                 case ServicePrincipalCertificateParameterSet:
-                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings);
+                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.ApplicationId, this.CertificateThumbprint, token);
                     break;
                 case ServicePrincipalParameterSet:
-                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings);
+                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 default:

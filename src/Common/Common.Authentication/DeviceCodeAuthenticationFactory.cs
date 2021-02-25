@@ -17,7 +17,7 @@ namespace Microsoft.PowerBI.Common.Authentication
     {
         private IPublicClientApplication AuthApplication;
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             if (this.AuthApplication == null)
@@ -30,14 +30,14 @@ namespace Microsoft.PowerBI.Common.Authentication
             }
 
             AuthenticationResult result = null;
-            var accounts = AuthApplication.GetAccountsAsync().Result;
+            var accounts = await AuthApplication.GetAccountsAsync();
 
             AuthenticationResult token = null;
             if (accounts.Any())
             {
                 try
                 {
-                    result = AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
+                    result = await AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
                     return token.ToIAccessToken();
                 }
                 catch (MsalUiRequiredException)
@@ -47,15 +47,14 @@ namespace Microsoft.PowerBI.Common.Authentication
             }
 
             DeviceCodeResult deviceCodeResult = null;
-            result = AuthApplication.AcquireTokenWithDeviceCode(scopes, r => { deviceCodeResult = r;  return Task.FromResult(0); }).ExecuteAsync().Result;
-            logger.WriteHost("You need to sign in.");
-            logger.WriteHost(deviceCodeResult?.Message + Environment.NewLine);
+            result = await AuthApplication.AcquireTokenWithDeviceCode(scopes, r => { Console.WriteLine(r.Message);  return Task.FromResult(0); }).ExecuteAsync();
 
             return result.ToIAccessToken();
         }
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
+            await Task.Delay(0);
             // Not supported in .NET Core or DeviceCodeAuthentication - https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/issues/482
             throw new NotSupportedException("User and password authentication is not supported in .NET Core or with DeviceCode authentication.");
         }

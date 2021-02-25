@@ -45,7 +45,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             // Arrange
             var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
             var testAuthenticator = initFactory.Authenticator;
-            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
+            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null).Result;
             var testHeaderName = "TestExample";
             var testHeaderValue = "Example";
             using (var client = new HttpClient())
@@ -76,7 +76,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             // Arrange
             var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
             var testAuthenticator = initFactory.Authenticator;
-            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
+            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null).Result;
             using (var client = new HttpClient())
             {
                 var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory)
@@ -98,7 +98,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             // Arrange
             var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
             var testAuthenticator = initFactory.Authenticator;
-            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
+            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null).Result;
             using (var client = new HttpClient())
             {
                 var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory);
@@ -117,7 +117,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             // Arrange
             var initFactory = new TestPowerBICmdletNoClientInitFactory(true);
             var testAuthenticator = initFactory.Authenticator;
-            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null);
+            var accessToken = testAuthenticator.Authenticate(profile: null, logger: null, settings: null, queryParameters: null).Result;
             using (var client = new HttpClient())
             {
                 var mock = new MockInvokePowerBIRestMethodCmdlet(initFactory)

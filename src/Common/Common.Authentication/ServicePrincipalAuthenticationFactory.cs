@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Common.Authentication
         private IConfidentialClientApplication AuthApplicationSecret;
         private IConfidentialClientApplication AuthApplicationCert;
 
-        public IAccessToken Authenticate(string clientId, SecureString clientSecret, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public async Task<IAccessToken> Authenticate(string clientId, SecureString clientSecret, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
  
@@ -39,15 +39,15 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             try
             {
-                var accounts = this.AuthApplicationSecret.GetAccountsAsync().Result;
+                var accounts = await this.AuthApplicationSecret.GetAccountsAsync();
                 if (accounts.Any())
                 {
                     // This indicates there's token in cache
-                    result = this.AuthApplicationSecret.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
+                    result = await this.AuthApplicationSecret.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
                 }
                 else
                 {
-                    result = this.AuthApplicationSecret.AcquireTokenForClient(scopes).ExecuteAsync().Result;
+                    result = await this.AuthApplicationSecret.AcquireTokenForClient(scopes).ExecuteAsync();
                 }
             }
             catch (Exception ex)
@@ -66,7 +66,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             }
         }
 
-        public IAccessToken Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public async Task<IAccessToken> Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             var certificate = FindCertificate(thumbprint);
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
@@ -86,15 +86,15 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             try
             {
-                var accounts = this.AuthApplicationCert.GetAccountsAsync().Result;
+                var accounts = await this.AuthApplicationCert.GetAccountsAsync();
                 if (accounts.Any())
                 {
                     // This indicates there's token in cache
-                    result = this.AuthApplicationCert.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
+                    result = await this.AuthApplicationCert.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
                 }
                 else
                 {
-                    result = this.AuthApplicationCert.AcquireTokenForClient(scopes).ExecuteAsync().Result;
+                    result = await this.AuthApplicationCert.AcquireTokenForClient(scopes).ExecuteAsync();
                 }
             }
             catch (Exception ex)

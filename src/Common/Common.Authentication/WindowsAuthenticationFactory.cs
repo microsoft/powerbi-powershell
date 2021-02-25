@@ -24,17 +24,17 @@ namespace Microsoft.PowerBI.Common.Authentication
     {
         private IPublicClientApplication AuthApplication;
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            return HandleAuthentication(environment, logger, settings, queryParameters);
+            return await HandleAuthentication(environment, logger, settings, queryParameters);
         }
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
-            return HandleAuthentication(environment, logger, settings, null, userName, password);
+            return await HandleAuthentication(environment, logger, settings, null, userName, password);
         }
 
-        private IAccessToken HandleAuthentication(
+        private async Task<IAccessToken> HandleAuthentication(
             IPowerBIEnvironment environment,
             IPowerBILogger logger,
             IPowerBISettings settings,
@@ -68,22 +68,22 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             try
             {
-                var accounts = this.AuthApplication.GetAccountsAsync().Result;
+                var accounts = await this.AuthApplication.GetAccountsAsync();
                 if (accounts.Any())
                 {
                     // This indicates there's token in cache
-                    result = this.AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync().Result;
+                    result = await this.AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(userName) && password != null && password.Length > 0)
                     {
                         // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-with-username-and-password
-                        result = this.AuthApplication.AcquireTokenByUsernamePassword(scopes, userName, password).ExecuteAsync().Result;
+                        result = await this.AuthApplication.AcquireTokenByUsernamePassword(scopes, userName, password).ExecuteAsync();
                     }
                     else
                     {
-                        result = this.AuthApplication.AcquireTokenInteractive(scopes).ExecuteAsync().Result;
+                        result = await this.AuthApplication.AcquireTokenInteractive(scopes).ExecuteAsync();
                     }
                 }
             }

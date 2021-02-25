@@ -121,7 +121,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         {
             // https://msdn.microsoft.com/en-us/library/mt243842.aspx
             // https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
+            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings).Result;
             using (var client = new HttpClient())
             {
                 this.PopulateClient(token, client);
