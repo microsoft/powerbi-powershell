@@ -25,7 +25,7 @@ Before you run this command, make sure you log in using Connect-PowerBIServiceAc
 
 ### Example 1
 ```
-PS C:\> Get-PowerBICapacity -Scope Organization -Show EncryptionKey
+PS C:\> Get-PowerBICapacity -Scope Organization -ShowEncryptionKey
 ```
 
 ## PARAMETERS
