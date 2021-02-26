@@ -31,23 +31,21 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             AuthenticationResult result = null;
             var accounts = await AuthApplication.GetAccountsAsync();
-
-            AuthenticationResult token = null;
             if (accounts.Any())
             {
                 try
                 {
                     result = await AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
-                    return token.ToIAccessToken();
+                    return result.ToIAccessToken();
                 }
-                catch (MsalUiRequiredException)
+                catch (MsalUiRequiredException e)
                 {
                     // ignore and fall through to aquire through device code
                 }
             }
 
             DeviceCodeResult deviceCodeResult = null;
-            result = await AuthApplication.AcquireTokenWithDeviceCode(scopes, r => { Console.WriteLine(r.Message);  return Task.FromResult(0); }).ExecuteAsync();
+            result = await AuthApplication.AcquireTokenWithDeviceCode(scopes, r => { Console.WriteLine(r.Message); deviceCodeResult = r; return Task.FromResult(0); }).ExecuteAsync();
 
             return result.ToIAccessToken();
         }
