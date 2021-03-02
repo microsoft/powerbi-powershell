@@ -104,7 +104,9 @@
             # IconUri = ''
 
             # ReleaseNotes of this module
-            # ReleaseNotes = ''
+            # ReleaseNotes = 
+
+			Prerelease = 'prerelease'
 
         } # End of PSData hashtable
 

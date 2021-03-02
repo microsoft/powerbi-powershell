@@ -1,4 +1,4 @@
 Updates to existing cmdlets:
-- Update configuration for auth
+- Update auth dependency from ADAL to MSAL
 
-Please update to this or newer version to avoid possible login issue.
+Prerelease version
