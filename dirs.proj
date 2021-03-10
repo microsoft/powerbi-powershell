@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.Build.Traversal">
+
+  <PropertyGroup>
+    <SlnGenFolders>true</SlnGenFolders>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Build all projects recursively under the "src" folder -->
+    <ProjectReference Include="src\**\*.*proj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Only pulled in by slngen -->
+    <SlnGenSolutionItem Include="build\**\*.targets" />
+    <SlnGenSolutionItem Include="scripts\**\*.*" />
+    <SlnGenSolutionItem Include="NuGet.config" />
+    <SlnGenSolutionItem Include="ReleaseNotes.md" />
+    <SlnGenSolutionItem Include=".editorconfig" />
+    <SlnGenSolutionItem Include="global.json" />
+    <SlnGenSolutionItem Include="Directory.Build.props" />
+    <SlnGenSolutionItem Include="Directory.Build.targets" />
+    <SlnGenSolutionItem Include="Packages.props" />
+  </ItemGroup>
+</Project>
