@@ -90,9 +90,12 @@ Open PowerShell prompt and run (in repository root directory):
 # You can call cmdlets after this point such as Connect-PowerBIServiceAccount, their modules get auto-imported
 ```
 
-#### Visual Studio 2019
+#### Visual Studio 2019/2017
 
-1. Open [src/PowerBIPowerShell.sln](src/PowerBIPowerShell.sln).
+1. Open PowerShell prompt and run (in repository root directory):
+
+```powershell
+.\scripts\LaunchVS.ps1.
 2. Press `F6` or click `Build` menu and select `Build Solution`.
 
 Binary output will be under each project's `bin\$(Configuration)\$(TargetFramework)` directory (TargetFramework is typically `netstandard2.0` unless its a test project then it's `netcoreapp2.0`)
