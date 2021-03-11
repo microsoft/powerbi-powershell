@@ -90,7 +90,7 @@ Open PowerShell prompt and run (in repository root directory):
 # You can call cmdlets after this point such as Connect-PowerBIServiceAccount, their modules get auto-imported
 ```
 
-#### Visual Studio 2019/2017
+#### Visual Studio 2019
 
 1. Open PowerShell prompt and run (in repository root directory):
 
@@ -229,7 +229,7 @@ cd .\src
 dotnet sln add "$root\src\Modules\$moduleName\Commands.$moduleName\Commands.$moduleName.csproj"
 dotnet sln add "$root\src\Modules\$moduleName\Commands.$moduleName.Test\Commands.$moduleName.Test.csproj"
 
-ii .\PowerBIPowerShell.sln
+ii .\dirs.sln
 ```
 10. Visual Studio should open for you, add a new class to your module project.
 11. Make the class public and extend PowerBICmdlet (`Ctrl+.` to add using statement and implement)
