@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.PowerBI.Commands.Data.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Data
 online version:
@@ -85,4 +85,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-

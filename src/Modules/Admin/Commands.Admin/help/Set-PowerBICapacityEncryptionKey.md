@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.PowerBI.Commands.Admin.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Admin
 online version:
@@ -118,4 +118,3 @@ Microsoft.PowerBI.Common.Api.Capacities.Capacity
 ## NOTES
 
 ## RELATED LINKS
-

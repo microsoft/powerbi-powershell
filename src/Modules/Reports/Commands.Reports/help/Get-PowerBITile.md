@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.PowerBI.Commands.Reports.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Reports
 online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.reports/get-powerbitile?view=powerbi-ps
@@ -151,4 +151,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-

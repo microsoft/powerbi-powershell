@@ -30,7 +30,7 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         public override void ExecuteCmdlet()
         {
-            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings).Result;
+            var token = this.Authenticator.Authenticate(this.Profile, this.Logger, this.Settings);
             if (this.AsString.IsPresent)
             {
                 this.Logger.WriteObject(token.AuthorizationHeader);

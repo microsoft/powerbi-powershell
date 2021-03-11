@@ -1,4 +1,4 @@
-﻿---
+---
 Module Name: MicrosoftPowerBIMgmt.Data
 Module Guid: c0e2ecd2-c21d-4126-9fd7-485856f0f7e8
 Download Help Link: https://go.microsoft.com/fwlink/?linkid=2002111&clcid=0x409
@@ -52,5 +52,4 @@ Updates the properties for the specified Power BI dataset.
 
 ### [Set-PowerBITable](Set-PowerBITable.md)
 Updates the metadata and schema for the specified Power BI table.
-
 

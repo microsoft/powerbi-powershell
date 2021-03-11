@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.PowerBI.Commands.Reports</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Reports</RootNamespace>
+    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
@@ -13,11 +14,9 @@
     <Description>Microsoft Power BI PowerShell - Report cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Reports</PackageTags>
   </PropertyGroup>
-  
   <ItemGroup>
     <None Remove="MicrosoftPowerBIMgmt.Reports.psd1" />
   </ItemGroup>
-  
   <ItemGroup>
     <Content Include="MicrosoftPowerBIMgmt.Reports.psd1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -25,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PowerShellStandard.Library" />
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

@@ -23,6 +23,11 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         string AuthorizationHeader { get; set; }
 
         /// <summary>
+        /// Secure token service authority.
+        /// </summary>
+        string Authority { get; set; }
+
+        /// <summary>
         /// Token expiration offset.
         /// </summary>
         DateTimeOffset ExpiresOn { get; set; }
@@ -31,6 +36,11 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         /// Tenant ID of the user.
         /// </summary>
         string TenantId { get; set; }
+
+        /// <summary>
+        /// Type of access token.
+        /// </summary>
+        string AccessTokenType { get; set; }
 
         /// <summary>
         /// Displayable name of the user.

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Security;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
 {
@@ -22,7 +21,7 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         /// <param name="logger">The IPowerBILogger to log any messages for the user or telemetry.</param>
         /// <param name="settings">The IPowerBISettings to contain the settings to instruct the authentication to change its default behavior.</param>
         /// <returns>An IAccessToken of an authenticated user.</returns>
-        Task<IAccessToken> Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings);
+        IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings);
 
         /// <summary>
         /// Authenticates a service principal with clientId (appId) and certificate (with private key).
@@ -33,6 +32,6 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         /// <param name="logger">The IPowerBILogger to log any messages for the user or telemetry.</param>
         /// <param name="settings">The IPowerBISettings to contain the settings to instruct the authentication to change its default behavior.</param>
         /// <returns>An IAccessToken of an authenticated user.</returns>
-        Task<IAccessToken> Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings);
+        IAccessToken Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings);
     }
 }

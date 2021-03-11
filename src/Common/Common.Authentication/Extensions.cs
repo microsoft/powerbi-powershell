@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
-using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
@@ -50,9 +51,11 @@ namespace Microsoft.PowerBI.Common.Authentication
             return new PowerBIAccessToken()
             {
                 AccessToken = result.AccessToken,
+                AccessTokenType = result.AccessTokenType,
+                Authority = result.Authority,
                 ExpiresOn = result.ExpiresOn,
                 TenantId = result.TenantId,
-                UserName = result.Account?.Username,
+                UserName = result.UserInfo?.DisplayableId,
                 AuthorizationHeader = result.CreateAuthorizationHeader()
             };
         }

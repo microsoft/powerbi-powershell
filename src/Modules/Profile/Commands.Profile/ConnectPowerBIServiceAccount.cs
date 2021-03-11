@@ -138,21 +138,22 @@ namespace Microsoft.PowerBI.Commands.Profile
                 case UserParameterSet:
                     token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, new Dictionary<string, string>()
                         {
+                            { "prompt", "select_account" },
                             { "msafed", "0" }
                         }
-                    ).Result;
+                    );
                     profile = new PowerBIProfile(environment, token);
                     break;
                 case UserAndCredentialPasswordParameterSet:
-                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password).Result;
+                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password);
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token, servicePrincipal: false);
                     break;
                 case ServicePrincipalCertificateParameterSet:
-                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings).Result;
+                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings);
                     profile = new PowerBIProfile(environment, this.ApplicationId, this.CertificateThumbprint, token);
                     break;
                 case ServicePrincipalParameterSet:
-                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings).Result;
+                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings);
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 default:
