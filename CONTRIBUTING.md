@@ -92,7 +92,10 @@ Open PowerShell prompt and run (in repository root directory):
 
 #### Visual Studio 2019
 
-1. Open [src/PowerBIPowerShell.sln](src/PowerBIPowerShell.sln).
+1. Open PowerShell prompt and run (in repository root directory):
+
+```powershell
+.\scripts\LaunchVS.ps1.
 2. Press `F6` or click `Build` menu and select `Build Solution`.
 
 Binary output will be under each project's `bin\$(Configuration)\$(TargetFramework)` directory (TargetFramework is typically `netstandard2.0` unless its a test project then it's `netcoreapp2.0`)
@@ -226,7 +229,7 @@ cd .\src
 dotnet sln add "$root\src\Modules\$moduleName\Commands.$moduleName\Commands.$moduleName.csproj"
 dotnet sln add "$root\src\Modules\$moduleName\Commands.$moduleName.Test\Commands.$moduleName.Test.csproj"
 
-ii .\PowerBIPowerShell.sln
+ii .\dirs.sln
 ```
 10. Visual Studio should open for you, add a new class to your module project.
 11. Make the class public and extend PowerBICmdlet (`Ctrl+.` to add using statement and implement)
