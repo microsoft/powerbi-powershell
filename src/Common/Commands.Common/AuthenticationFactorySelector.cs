@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Authentication;
@@ -18,21 +17,31 @@ namespace Microsoft.PowerBI.Commands.Common
     public class AuthenticationFactorySelector : IAuthenticationFactory
     {
         private static IAuthenticationUserFactory UserAuthFactory;
-        private static IAuthenticationServicePrincipalFactory ServicePrincipalAuthFactory;
+        private static IAuthenticationServicePrincipalFactory ServicePrincpalAuthFactory;
         private static IAuthenticationBaseFactory BaseAuthFactory;
+
+        private object authFactoryLock = new object();
+
+        public bool AuthenticatedOnce => BaseAuthFactory?.AuthenticatedOnce ?? false;
         
         private void InitializeUserAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
             if (UserAuthFactory == null)
             {
-                bool forceDeviceAuth = settings.Settings.ForceDeviceCodeAuthentication;
-                if (!forceDeviceAuth && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                lock (this.authFactoryLock)
                 {
-                    UserAuthFactory = new WindowsAuthenticationFactory();
-                }
-                else
-                {
-                    UserAuthFactory = new DeviceCodeAuthenticationFactory();
+                    if (UserAuthFactory == null)
+                    {
+                        bool forceDeviceAuth = settings.Settings.ForceDeviceCodeAuthentication;
+                        if (!forceDeviceAuth && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                        {
+                            UserAuthFactory = new WindowsAuthenticationFactory();
+                        }
+                        else
+                        {
+                            UserAuthFactory = new DeviceCodeAuthenticationFactory();
+                        }
+                    }
                 }
             }
 
@@ -41,69 +50,65 @@ namespace Microsoft.PowerBI.Commands.Common
 
         private void InitializeServicePrincpalAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
-            if (ServicePrincipalAuthFactory == null)
+            if (ServicePrincpalAuthFactory == null)
             {
-                if(ServicePrincipalAuthFactory == null)
+                lock (this.authFactoryLock)
                 {
-                    ServicePrincipalAuthFactory = new ServicePrincipalAuthenticationFactory();
+                    if(ServicePrincpalAuthFactory == null)
+                    {
+                        ServicePrincpalAuthFactory = new ServicePrincipalAuthenticationFactory();
+                    }
                 }
             }
 
-            BaseAuthFactory = ServicePrincipalAuthFactory;
+            BaseAuthFactory = ServicePrincpalAuthFactory;
         }
 
-        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             this.InitializeUserAuthenticationFactory(logger, settings);
-            return await UserAuthFactory.Authenticate(environment, logger, settings, queryParameters);
+            return UserAuthFactory.Authenticate(environment, logger, settings, queryParameters);
         }
 
-        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
             this.InitializeUserAuthenticationFactory(logger, settings);
-            return await UserAuthFactory.Authenticate(environment, logger, settings, userName, password);
+            return UserAuthFactory.Authenticate(environment, logger, settings, userName, password);
         }
 
-        public async Task<IAccessToken> Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public IAccessToken Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
             switch (profile.LoginType)
             {
                 case PowerBIProfileType.User:
-                    return await this.Authenticate(profile.Environment, logger, settings, queryParameters);
+                    return this.Authenticate(profile.Environment, logger, settings, queryParameters);
                 case PowerBIProfileType.UserAndPassword:
-                    return await this.Authenticate(profile.Environment, logger, settings, profile.UserName, profile.Password);
+                    return this.Authenticate(profile.Environment, logger, settings, profile.UserName, profile.Password);
                 case PowerBIProfileType.ServicePrincipal:
-                    return await this.Authenticate(profile.UserName, profile.Password, profile.Environment, logger, settings);
+                    return this.Authenticate(profile.UserName, profile.Password, profile.Environment, logger, settings);
                 case PowerBIProfileType.Certificate:
-                    return await this.Authenticate(profile.UserName, profile.Thumbprint, profile.Environment, logger, settings);
+                    return this.Authenticate(profile.UserName, profile.Thumbprint, profile.Environment, logger, settings);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public async Task Challenge()
+        public void Challenge()
         {
-            if (UserAuthFactory != null)
-            {
-                await UserAuthFactory.Challenge();
-            }
-
-            if (ServicePrincipalAuthFactory != null)
-            {
-                await ServicePrincipalAuthFactory.Challenge();
-            }
+            UserAuthFactory?.Challenge();
+            ServicePrincpalAuthFactory?.Challenge();
         }
 
-        public async Task<IAccessToken> Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.InitializeServicePrincpalAuthenticationFactory(logger, settings);
-            return await ServicePrincipalAuthFactory.Authenticate(userName, password, environment, logger, settings);
+            return ServicePrincpalAuthFactory.Authenticate(userName, password, environment, logger, settings);
         }
 
-        public async Task<IAccessToken> Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public IAccessToken Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             this.InitializeServicePrincpalAuthenticationFactory(logger, settings);
-            return await ServicePrincipalAuthFactory.Authenticate(clientId, thumbprint, environment, logger, settings);
+            return ServicePrincpalAuthFactory.Authenticate(clientId, thumbprint, environment, logger, settings);
         }
     }
 }

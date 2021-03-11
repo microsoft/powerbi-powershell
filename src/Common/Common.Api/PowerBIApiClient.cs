@@ -59,7 +59,7 @@ namespace Microsoft.PowerBI.Common.Api
 
         private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings)
         {
-            var token = authenticator.Authenticate(profile, logger, settings).Result;
+            var token = authenticator.Authenticate(profile, logger, settings);
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
             {
                 return new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken));
@@ -72,7 +72,7 @@ namespace Microsoft.PowerBI.Common.Api
 
         private static IPowerBIClient CreateClient(IAuthenticationFactory authenticator, IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, HttpClientHandler httpClientHandler)
         {
-            var token = authenticator.Authenticate(profile, logger, settings).Result;
+            var token = authenticator.Authenticate(profile, logger, settings);
             if (Uri.TryCreate(profile.Environment.GlobalServiceEndpoint, UriKind.Absolute, out Uri baseUri))
             {
                 return new PowerBIClient(baseUri, new TokenCredentials(token.AccessToken), httpClientHandler);

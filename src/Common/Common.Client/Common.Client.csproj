@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PowerShellStandard.Library" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Commands.Common\Commands.Common.csproj" />
     <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
     <ProjectReference Include="..\Common.Api\Common.Api.csproj" />

@@ -13,7 +13,7 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
     public interface IPowerBIProfile
     {
         /// <summary>
-        /// PowerBI environment to authenticate and cmmunicate against.
+        /// PowerBI environment to authenticate and connumicate against.
         /// </summary>
         IPowerBIEnvironment Environment { get; }
 
@@ -23,7 +23,7 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         string TenantId { get; }
 
         /// <summary>
-        /// Displayable name of user\principal authenticated against.
+        /// Displayable name of user\prinicpal authenticated against.
         /// </summary>
         string UserName { get; }
 

@@ -8,8 +8,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.PowerBI.Api" />
-    <PackageReference Include="PowerShellStandard.Library" />
+    <PackageReference Include="Microsoft.PowerBI.Api" Version="2.14.0" />
   </ItemGroup>
   
   <ItemGroup>

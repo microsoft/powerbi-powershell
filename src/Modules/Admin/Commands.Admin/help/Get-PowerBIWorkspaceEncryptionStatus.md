@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.PowerBI.Commands.Admin.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Admin
 online version:
@@ -124,4 +124,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-
