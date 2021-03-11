@@ -5,15 +5,18 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the MIT License.
 ***********************************************************************************************
 -->
-<Project>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <PropertyGroup>
+    <MinimumMSBuildVersion>16.8</MinimumMSBuildVersion>
+    <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
     <LangVersion>latest</LangVersion>
-    <RepoRoot>$(MSBuildThisFileDirectory)..\</RepoRoot>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
     <RepoTargets>$(RepoRoot)build\</RepoTargets>
     <SourceRoot>$(RepoRoot)src\</SourceRoot>
     <ScriptsRoot>$(RepoRoot)scripts\</ScriptsRoot>
-    <PowerShellExe Condition="'$(PowerShellExe)' == ''">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+    <PowerShellExe Condition="'$(PowerShellExe)' == ''">$(WINDIR)\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+    <PowerShellExe Condition="!Exists('$(PowerShellExe)')">$(ProgramFiles)\PowerShell\7\pwsh.exe</PowerShellExe>
     <PowerShellCommonArgs>-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted</PowerShellCommonArgs>
     <LangName Condition="'$(LangName)' == ''">en-US</LangName>
   </PropertyGroup>
@@ -37,10 +40,23 @@ Licensed under the MIT License.
     <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
   </PropertyGroup>
 
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true'"/>
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);*.binlog</DefaultItemExcludes>
+  </PropertyGroup>
 
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true'"/>
+  <!-- Slngen -->
+  <PropertyGroup>
+    <SlnGenLaunchVisualStudio>true</SlnGenLaunchVisualStudio>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SlnGen" />
+  </ItemGroup>
+
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
+
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
   
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.Packaging.targets" Condition="'$(NoPackageTarget)' != 'true'"/>
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.Packaging.targets" Condition="'$(NoPackageTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
 
 </Project>

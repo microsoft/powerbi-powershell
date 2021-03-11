@@ -1,4 +1,4 @@
----
+﻿---
 Module Name: MicrosoftPowerBIMgmt.Profile
 Module Guid: 53a44a15-6234-40b1-9797-b8142e57fac1
 Download Help Link: https://go.microsoft.com/fwlink/?linkid=2002111&clcid=0x409
@@ -25,4 +25,5 @@ Executes a REST call to the Power BI service, with the specified URL and body.
 
 ### [Resolve-PowerBIError](Resolve-PowerBIError.md)
 Shows detailed error information produced from MicrosoftPowerBIMgmt.* cmdlets.
+
 

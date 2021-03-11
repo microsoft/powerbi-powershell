@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -42,15 +43,37 @@ namespace Microsoft.PowerBI.Commands.Common
             AppDomain.CurrentDomain.AssemblyResolve += RedirectAssemblyLoad;
         }
 
+        protected static readonly bool IsNetFramework = RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework");
+
         private static Assembly RedirectAssemblyLoad(object sender, ResolveEventArgs args)
         {
             /*
-             * Using an assembly resolver mainly to load System.Net.Http due to a bug introduced in .NET Framework and later fixed but causes assembly version mismatch.
-             * Assembly resolver was the clear choice as the System.Net.Http package only fixed the issue in PowerShell Core but would fail when running from PowerShell for Windows.
-             */
+            * Situations Assembly Resolver is used:
+            * 
+            * The assembly resolver is used to load System.Net.Http due to a bug introduced in .NET Framework and later fixed but causes assembly version mismatch.
+            * Assembly resolver was the clear choice as the System.Net.Http package only fixed the issue in PowerShell Core but would fail when running from PowerShell for Windows.
+            * 
+            * It is used to load MSAL assemblies as the netstandard2.0 (or in MSAL case, netstandard1.3) will throw PlatformNotSupported when used.
+            * Both net45 and netcoreapp2.1 are packaged up and placed in an MSAL directory under the module.
+            * 
+            * Finally it is used to fix mismatches with Newtonsoft.Json.
+            * In this situation, it's a best effort because if a very old version of Newtonsoft.Json is loaded and it's contract is incompatible with used in codebase, then we will run into type mismatch errors which we can't handle.
+            */
             var requestedAssembly = new AssemblyName(args.Name);
             string executingDirectory = GetExecutingDirectory();
-            string assemblyFilePath = Path.Combine(executingDirectory, requestedAssembly.Name + ".dll");
+
+            // Handle MSAL assemblies
+            string assemblyFilePath;
+            if (requestedAssembly.Name == "Microsoft.Identity.Client" || requestedAssembly.Name == "Microsoft.Identity.Client.Extensions.Msal")
+            {
+                var libType = IsNetFramework ? "net45" : "netcoreapp2.1";
+                assemblyFilePath = Path.Combine(executingDirectory, "MSAL", libType, requestedAssembly.Name + ".dll");
+            }
+            else
+            {
+                assemblyFilePath = Path.Combine(executingDirectory, requestedAssembly.Name + ".dll");
+            }
+
             if (File.Exists(assemblyFilePath))
             {
                 try

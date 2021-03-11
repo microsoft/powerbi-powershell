@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Microsoft.PowerBI.Commands.Data.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Data
 online version:
@@ -152,3 +152,4 @@ Microsoft.PowerBI.Common.Api.Workspaces.Workspace
 ## NOTES
 
 ## RELATED LINKS
+

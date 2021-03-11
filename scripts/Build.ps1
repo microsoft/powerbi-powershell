@@ -19,9 +19,9 @@
 [CmdletBinding()]
 param
 (
-    # Path to solution file. Defaults to <script dir>\src\PowerBIPowerShell.sln.
+    # Path to solution file. Defaults to <script dir>\..\dirs.proj.
     [ValidateNotNullOrEmpty()]
-    [string] $Solution = "$PSScriptRoot\..\src\PowerBIPowerShell.sln",
+    [string] $Solution = "$PSScriptRoot\..\dirs.proj",
 
     # MSBuild targets to execute. Default is the Build target unless -NoBuild is specified.
     [ValidateNotNull()]
@@ -45,8 +45,11 @@ param
     # Indicates to execute the Pack target (generate NuGet packages).
     [switch] $Pack,
 
-    # Indicates to execute the Clean target.
+    # Indicates to execute the Clean target. -Restore is added if you specify this.
     [switch] $Clean,
+
+    # Indicates to nuget restore.
+    [switch] $Restore,
 
     # Indicates to not add the Build target which is normally defaulted.
     [switch] $NoBuild,
@@ -58,34 +61,7 @@ param
     [switch] $NoParallel
 )
 
-function Get-VSBuildFolder
-{
-    [OutputType([string])]
-    param
-    (
-        [switch] $Prerelease
-    )
-
-    # https://github.com/Microsoft/vswhere
-    $vsWhereExe = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-    if(!(Test-Path -Path $vsWhereExe)) {
-        throw "Unable to find vswhere, confirm Visual Studio is installed: $vsWhereExe"
-    }
-
-    $vsWhereArgs = @('-latest', '-requires', 'Microsoft.Component.MSBuild', '-find', 'MSBuild\**\Bin\MSBuild.exe')
-    if($Prerelease) {
-        $vsWhereArgs += '-prerelease'
-    }
-
-    # https://github.com/microsoft/vswhere/wiki/Find-MSBuild#powershell
-    $msbuildPath = & $vsWhereExe $vsWhereArgs | select-object -first 1
-    if(!(Test-Path -Path $msbuildPath)) {
-        throw "Unable to find MSBuild: $msbuildPath"
-    }
-
-    return $msbuildPath
-}
-
+Import-Module $PSScriptRoot\FindVS.psm1
 $msbuildPath = Get-VSBuildFolder -Prerelease:$VSPreview
 
 if(!$NoBuild) {
@@ -119,6 +95,10 @@ if($MSBuildProperties.Count -gt 0) {
     }
 
     $msBuildArgs += ('/p:' + ($properties -join ';'))
+}
+
+if ($Restore -or $Clean) {
+    $msBuildArgs += '/restore'
 }
 
 if($AppVeyorLogger) {

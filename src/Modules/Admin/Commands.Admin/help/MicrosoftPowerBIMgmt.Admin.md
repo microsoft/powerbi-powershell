@@ -1,4 +1,4 @@
----
+﻿---
 Module Name: MicrosoftPowerBIMgmt.Admin
 Module Guid: bbf8be8e-0dcd-4cd8-b868-63e96371a47f
 Download Help Link: {{Please enter FwLink manually}}
@@ -28,4 +28,5 @@ Updates the encryption key for the Power BI capacity.
 
 ### [Switch-PowerBIEncryptionKey](Switch-PowerBIEncryptionKey.md)
 Switch the encryption key for Power BI workspaces assigned to a capacity.
+
 
