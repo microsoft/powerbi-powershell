@@ -14,16 +14,23 @@ Licensed under the MIT License.
     <PackageOutputPath>$(RepoRoot)\PkgOut</PackageOutputPath>
   </PropertyGroup>
 
+  <!--
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
     <PackageReference Include="platyPS" Version="0.9.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  -->
 
+  <!--
   <PropertyGroup>
     <BeforePack>$(BeforePack);UpdatePSManifest;GeneratePSHelp;UpdateReleaseNotes</BeforePack>
   </PropertyGroup>
+  -->
 
+  <PropertyGroup>
+    <BeforePack>$(BeforePack);UpdatePSManifest;UpdateReleaseNotes</BeforePack>
+  </PropertyGroup>
   
   <Target Name="AddMoreProjectFiles" AfterTargets="_GetPackageFiles" Condition="'$(IsPackable)' == 'true'">
 
@@ -119,8 +126,9 @@ Licensed under the MIT License.
     <!-- Ensures if packaging previously ran and updated the manifest it is reset for GenerateHelp.ps1 -GenerateMarkdown -->
     <Copy DestinationFolder="$(OutputPath)" SourceFiles="@(PSDFileInProject)" />
     
+    <!--
     <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -Language &apos;$(LangName)&apos; -GenerateMarkdown -DependentAssemblies &apos;@(_ResolveAssemblyReferenceResolvedFiles)&apos;} &quot;" />
-
+    -->
   </Target>
 
   
@@ -130,12 +138,13 @@ Licensed under the MIT License.
 
   </Target>
   
-  
+  <!--
   <Target Name="GeneratePSHelp" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true' AND '$(NoHelpGen)' != 'true'">
     
     <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GenerateHelp.ps1&apos; -PathToPlatyPS &apos;$(PlatyPSPath)&apos; -ProjectRoot &apos;$(MSBuildProjectDirectory)&apos; -OutputPath &apos;$(OutputPath)&apos; -GenerateExternalHelp -Language &apos;$(LangName)&apos;} &quot;" />
     
   </Target>
+  -->
 
   <Target Name="UpdateReleaseNotes" Condition="Exists('$(RepoRoot)ReleaseNotes.md')">
     
