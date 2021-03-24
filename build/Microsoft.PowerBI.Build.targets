@@ -10,36 +10,19 @@ Licensed under the MIT License.
   <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(Configuration)' == 'Debug' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(ReferenceWindowsAuthenticator)' == 'true'">
+    <ProjectReference Include="$(SourceRoot)Common\AzureADWindowsAuthenticator\AzureADWindowsAuthenticator.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
   
-  <Target Name="CopyMsalIfNeeded" AfterTargets="Build" DependsOnTargets="ResolvePackageAssets;ResolveAssemblyReferences">
+  <Target Name="CopyWindowsAuthenticator" AfterTargets="Build" Condition="'$(ReferenceWindowsAuthenticator)' == 'true'">
     <ItemGroup>
-      <MSALKnownPackageReferences Include="Microsoft.Identity.Client.Extensions.Msal" />
-      <MSALKnownPackageReferences Include="Microsoft.Identity.Client" />
+      <WindowsAuthenticatorFiles Include="$(SourceRoot)Common\AzureADWindowsAuthenticator\bin\$(Configuration)\**\*" />
     </ItemGroup>
-
-    <FindInList CaseSensitive="false" List="@(PackageDependencies)" ItemSpecToFind="%(MSALKnownPackageReferences.Identity)">
-      <Output TaskParameter="ItemFound" ItemName="FoundMSALReferences"/>
-    </FindInList>
-
-    <Message Text="Found MSAL References: @(FoundMSALReferences)" Condition="'@(FoundMSALReferences)' != ''" Importance="High" />
-
-    <!-- If the project directly referenced MSAL packages, we could have used Include="$(PkgMicrosoft_Identity_Client)\lib\netcoreapp2.1\*.dll" but in situation of an indirect reference this wouldn't be available -->
-    <ItemGroup Condition="'@(FoundMSALReferences)' != ''">
-      <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client.Extensions.Msal'" />
-      <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client'" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'@(MsalPackageDefinitions)' != ''">
-      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\netcoreapp2.1\*.dll">
-        <Destination>$(OutputPath)\MSAL\netcoreapp2.1</Destination>
-      </MSALItemsToCopy>
-
-      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\net45\*.dll">
-        <Destination>$(OutputPath)\MSAL\net45</Destination>
-      </MSALItemsToCopy>
-    </ItemGroup>
-
-    <Copy Condition="'@(FoundMSALReferences)' != ''" DestinationFiles="@(MSALItemsToCopy -> '%(Destination)\%(Filename)%(Extension)')" SourceFiles="@(MSALItemsToCopy)" />
+    <Copy DestinationFolder="$(OutputPath)\WindowsAuthenticator" SourceFiles="@(WindowsAuthenticatorFiles)" />
   </Target>
   
 </Project>

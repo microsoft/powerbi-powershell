@@ -3,8 +3,9 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
 {
@@ -14,8 +15,13 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
     public interface IAuthenticationBaseFactory
     {
         /// <summary>
+        /// Indicates the factory has been used once to authenticate; otherwise it is the first use of the factory.
+        /// </summary>
+        bool AuthenticatedOnce { get; }
+
+        /// <summary>
         /// Revokes any previous authentication session.
         /// </summary>
-        Task Challenge();
+        void Challenge();
     }
 }

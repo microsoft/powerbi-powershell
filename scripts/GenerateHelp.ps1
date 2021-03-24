@@ -137,16 +137,6 @@ if($GenerateMarkdown) {
 
     Write-Output "Finished generating Markdown files"
     Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
-
-    Write-Output "Updating http to https in Markdown files"
-    $mdFiles = Get-ChildItem -Path $helpFolder -Filter *.md
-    $mdFiles | ForEach-Object {
-        $mdContent = Get-Content -Path $_.FullName -Raw
-        $mdContent = $mdContent -replace 'http://', 'https://'
-        $mdContent | Out-File -FilePath $_.FullName -Encoding utf8 -Force
-    }
-
-    Write-Output "Finished updating http:// to https:// in Markdown files"
 }
 
 if($GenerateExternalHelp) {

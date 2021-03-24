@@ -15,28 +15,15 @@
 [CmdletBinding()]
 param
 (
-    # Path to solution file. Defaults to <script dir>\..\dirs.proj.
+    # Path to solution file. Defaults to <script dir>\src\PowerBIPowerShell.sln.
     [ValidateNotNullOrEmpty()]
-    [string] $Solution = "$PSScriptRoot\..\dirs.proj",
-
-    # Indicates to use Visual Studio Preview instead of released versions. Preview build must be installed in order to use.
-    [switch] $VSPreview
+    [string] $Solution = "$PSScriptRoot\..\src\PowerBIPowerShell.sln"
 )
 
-Import-Module $PSScriptRoot\FindVS.psm1
-$msbuildPath = Get-VSBuildFolder -Prerelease:$VSPreview
-
+$nugetExe = Get-Command 'nuget.exe' -ErrorAction Stop
 $Solution = (Resolve-Path -Path $Solution -ErrorAction Stop).ProviderPath
 
-$msbuildArgs = @(
-    '-restore',
-    '-m',
-    '-t:Restore',
-    '-graph:true',
-    $Solution
-)
-
-& $msbuildPath $msbuildArgs
+& $nugetExe restore $Solution
 
 if ($LastExitCode -ne 0) {
     throw "Failed to restore nuget packages: $LastExitCode"

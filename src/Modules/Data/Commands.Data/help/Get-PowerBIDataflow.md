@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.PowerBI.Commands.Data.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Data
 online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.data/get-powerbidataflow?view=powerbi-ps
@@ -232,4 +232,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
-

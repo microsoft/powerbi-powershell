@@ -1,4 +1,0 @@
--restore
--consoleLoggerParameters:Verbosity=Minimal;Summary;ForceNoAlign
--maxCpuCount
--IgnoreProjectExtensions:.sln
