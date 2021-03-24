@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Microsoft.PowerBI.Commands.Workspaces.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Workspaces
 online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.workspaces/get-powerbiworkspacemigrationstatus?view=powerbi-ps
@@ -78,3 +78,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+

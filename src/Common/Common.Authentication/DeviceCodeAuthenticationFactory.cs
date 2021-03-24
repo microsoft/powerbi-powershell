@@ -5,80 +5,70 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Threading.Tasks;
+using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
     public class DeviceCodeAuthenticationFactory : IAuthenticationUserFactory
     {
-        private static bool authenticatedOnce = false;
-        public bool AuthenticatedOnce { get => authenticatedOnce; }
+        private IPublicClientApplication AuthApplication;
 
-        private static object tokenCacheLock = new object();
-
-        private static TokenCache Cache { get; set; }
-
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
-
-            if (Cache == null)
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            if (this.AuthApplication == null)
             {
-                lock (tokenCacheLock)
-                {
-                    if (Cache == null)
-                    {
-                        Cache = new TokenCache();
-                    }
-                }
+                this.AuthApplication = PublicClientApplicationBuilder
+                .Create(environment.AzureADClientId)
+                .WithAuthority(environment.AzureADAuthority)
+                .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
+                .Build();
             }
 
-            var context = new AuthenticationContext(environment.AzureADAuthority, Cache);
-            string queryParamString = queryParameters.ToQueryParameterString();
-
-            AuthenticationResult token = null;
-            if (this.AuthenticatedOnce)
+            AuthenticationResult result = null;
+            var accounts = await AuthApplication.GetAccountsAsync();
+            if (accounts.Any())
             {
                 try
                 {
-                    token = context.AcquireTokenSilentAsync(environment.AzureADResource, environment.AzureADClientId).Result;
-                    return token.ToIAccessToken();
+                    result = await AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
+                    return result.ToIAccessToken();
                 }
-                catch (AdalSilentTokenAcquisitionException)
+                catch (MsalUiRequiredException e)
                 {
                     // ignore and fall through to aquire through device code
                 }
             }
 
-            var deviceCodeResult = context.AcquireDeviceCodeAsync(environment.AzureADResource, environment.AzureADClientId).Result;
-            logger.WriteHost("You need to sign in.");
-            logger.WriteHost(deviceCodeResult.Message + Environment.NewLine);
+            DeviceCodeResult deviceCodeResult = null;
+            result = await AuthApplication.AcquireTokenWithDeviceCode(scopes, r => { Console.WriteLine(r.Message); deviceCodeResult = r; return Task.FromResult(0); }).ExecuteAsync();
 
-            token = context.AcquireTokenByDeviceCodeAsync(deviceCodeResult).Result;
-            authenticatedOnce = true;
-            return token.ToIAccessToken();
+            return result.ToIAccessToken();
         }
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
+            await Task.Delay(0);
             // Not supported in .NET Core or DeviceCodeAuthentication - https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/issues/482
             throw new NotSupportedException("User and password authentication is not supported in .NET Core or with DeviceCode authentication.");
         }
 
-        public void Challenge()
+        public async Task Challenge()
         {
-            if (Cache != null)
+            if (this.AuthApplication != null)
             {
-                lock (tokenCacheLock)
+                var accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
+                while (accounts.Any())
                 {
-                    if (Cache != null)
-                    {
-                        authenticatedOnce = false;
-                        Cache = null;
-                    }
+                    await this.AuthApplication.RemoveAsync(accounts.First());
+                    accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
                 }
+
+                this.AuthApplication = null;
             }
         }
     }
