@@ -7,6 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.PowerBI.Api.V2.Models;
+using Report = Microsoft.PowerBI.Common.Api.Reports.Report;
+using Dashboard = Microsoft.PowerBI.Common.Api.Reports.Dashboard;
+using Dataset = Microsoft.PowerBI.Common.Api.Datasets.Dataset;
+using Dataflow = Microsoft.PowerBI.Common.Api.Dataflows.Dataflow;
+using Workbook = Microsoft.PowerBI.Common.Api.Workbooks.Workbook;
 
 namespace Microsoft.PowerBI.Common.Api.Workspaces
 {
@@ -43,6 +48,16 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
 
         public IEnumerable<WorkspaceUser> Users { get; set; }
 
+        public IEnumerable<Report> Reports { get; set; }
+
+        public IEnumerable<Dashboard> Dashboards { get; set; }
+
+        public IEnumerable<Dataset> Datasets { get; set; }
+
+        public IEnumerable<Dataflow> Dataflows { get; set; }
+
+        public IEnumerable<Workbook> Workbooks { get; set; }
+
         public static implicit operator Workspace(Group group)
         {
             return new Workspace
@@ -55,7 +70,12 @@ namespace Microsoft.PowerBI.Common.Api.Workspaces
                 Description = group.Description,
                 Type = group.Type,
                 State = group.State,
-                Users = group.Users?.Select(x => (WorkspaceUser)x)
+                Users = group.Users?.Select(x => (WorkspaceUser)x),
+                Reports = group.Reports?.Select(x => (Report)x),
+                Dashboards = group.Dashboards?.Select(x => (Dashboard)x),
+                Datasets = group.Datasets?.Select(x => (Dataset)x),
+                Dataflows = group.Dataflows?.Select(x => (Dataflow)x),
+                Workbooks = group.Workbooks?.Select(x => (Workbook)x),
             };
         }
 

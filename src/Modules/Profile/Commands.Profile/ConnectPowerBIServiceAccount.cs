@@ -5,7 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
+using System.Net.Http;
+using System.Runtime.Serialization.Json;
+using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -33,6 +37,9 @@ namespace Microsoft.PowerBI.Commands.Profile
         [Parameter(Mandatory = false)]
         public PowerBIEnvironmentType Environment { get; set; } = PowerBIEnvironmentType.Public;
 
+        [Parameter(Mandatory = false)]
+        public string CustomEnvironment { get; set; }
+
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = true)]
         [Parameter(ParameterSetName = UserAndCredentialPasswordParameterSet, Mandatory = true)]
         public PSCredential Credential { get; set; }
@@ -51,7 +58,17 @@ namespace Microsoft.PowerBI.Commands.Profile
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
         public string Tenant { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public string DiscoveryUrl { get; set; }
         #endregion
+
+        /// <summary>
+        /// Custom environment settings to pick from.
+        /// </summary>
+        private IDictionary<string, IPowerBIEnvironment> CustomEnvironments { get; set; }
+
+        private GSEnvironments CustomServiceEnvironments { get; set; }
 
         #region Constructors
         public ConnectPowerBIServiceAccount() : base() { }
@@ -61,7 +78,50 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         public override void ExecuteCmdlet()
         {
-            var environment = this.Settings.Environments[this.Environment];
+            IPowerBIEnvironment environment = null;
+
+            // Populate custom environments from discovery url if it is present
+            // otherwise get environment from existing settings
+            if (!string.IsNullOrEmpty(this.DiscoveryUrl))
+            {
+                if (string.IsNullOrEmpty(this.CustomEnvironment))
+                {
+                    throw new Exception($"{nameof(this.CustomEnvironment)} is required when using a discovery url");
+                }
+
+                CustomEnvironments = new Dictionary<string, IPowerBIEnvironment>();
+                var customCloudEnvironments = GetServiceConfig(this.DiscoveryUrl).Result;
+                foreach (GSEnvironment customEnvironment in customCloudEnvironments.Environments)
+                {
+                    var backendService = customEnvironment.Services.First(s => s.Name.Equals("powerbi-backend", StringComparison.OrdinalIgnoreCase));
+                    var redirectApp = customEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
+                    var env = new PowerBIEnvironment()
+                    {
+                        Name = PowerBIEnvironmentType.Custom,
+                        AzureADAuthority = customEnvironment.Services.First(s => s.Name.Equals("aad", StringComparison.OrdinalIgnoreCase)).Endpoint,
+                        AzureADClientId = redirectApp.AppId,
+                        AzureADRedirectAddress = redirectApp.RedirectUri,
+                        AzureADResource = backendService.ResourceId,
+                        GlobalServiceEndpoint = backendService.Endpoint
+                    };
+
+                    this.CustomEnvironments.Add(customEnvironment.CloudName, env);
+                }
+
+                if (!this.CustomEnvironments.ContainsKey(this.CustomEnvironment))
+                {
+                    this.Logger.ThrowTerminatingError($"Discovery URL {this.DiscoveryUrl} did not return environment {this.CustomEnvironment}");
+                }
+                environment = this.CustomEnvironments[this.CustomEnvironment];
+            }
+            else
+            {
+                if (this.Settings.Environments == null)
+                {
+                    this.Logger.ThrowTerminatingError("Failed to populate environments in settings");
+                }
+                environment = this.Settings.Environments[this.Environment];
+            }
             if(!string.IsNullOrEmpty(this.Tenant))
             {
                 var tempEnvironment = (PowerBIEnvironment) environment;
@@ -103,6 +163,20 @@ namespace Microsoft.PowerBI.Commands.Profile
             this.Storage.SetItem("profile", profile);
             this.Logger.WriteObject(profile);
         }
+
+        private async Task<GSEnvironments> GetServiceConfig(string discoveryUrl)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                var response = await client.PostAsync(discoveryUrl, null);
+                var serializer = new DataContractJsonSerializer(typeof(GSEnvironments));
+
+                this.CustomServiceEnvironments = serializer.ReadObject(await response.Content.ReadAsStreamAsync()) as GSEnvironments;
+            }
+
+            return this.CustomServiceEnvironments;
+        } 
 
         protected override bool CmdletManagesProfile { get => true; set => base.CmdletManagesProfile = value; }
     }

@@ -38,3 +38,6 @@ Creates a new empty Power BI dashboard.
 ### [New-PowerBIReport](New-PowerBIReport.md)
 Creates a Power BI report.
 
+### [Remove-PowerBIReport](Remove-PowerBIReport.md)
+Deletes a Power BI report.
+

@@ -10,5 +10,9 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         bool ForceDeviceCodeAuthentication { get; }
 
         bool ShowADALDebugMessages { get; }
+
+        string DefaultClientId { get; }
+
+        string DefaultRedirect { get; }
     }
 }

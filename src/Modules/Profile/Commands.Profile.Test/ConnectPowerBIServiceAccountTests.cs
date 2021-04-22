@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+using System;
 using System.Management.Automation;
 using System.Security;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -23,6 +24,44 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             {
                 // Arrange
                 ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsTrue(results.Count == 1);
+                Assert.IsTrue(results[0].BaseObject is PowerBIProfile);
+                var profile = results[0].BaseObject as PowerBIProfile;
+                Assert.IsNotNull(profile.Environment);
+                Assert.IsNotNull(profile.UserName);
+                Assert.IsNotNull(profile.TenantId);
+
+                // Arrange
+                ps.Commands.Clear();
+                ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
+
+                // Act
+                results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.AreEqual(0, results.Count);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void ConnectPowerBIServiceWithDiscoveryUrl()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.DiscoveryUrl), "https://api.powerbi.com/powerbi/globalservice/v201606/environments/discover?client=powerbi-msolap");
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.CustomEnvironment), "GlobalCloud");
 
                 // Act
                 var results = ps.Invoke();
@@ -72,6 +111,24 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             Assert.IsNotNull(profile);
             Assert.IsTrue(profile.Environment.AzureADAuthority.Contains(testTenantName));
             initFactory.AssertExpectedUnitTestResults(new[] { profile });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void ConnectPowerBIServiceAccountDiscoveryUrl_NullCustomEnvironment()
+        {
+            // Arrange
+            var initFactory = new TestPowerBICmdletNoClientInitFactory(false);
+            var cmdlet = new ConnectPowerBIServiceAccount(initFactory)
+            {
+                DiscoveryUrl = "https://api.powerbi.com/powerbi/globalservice/v201606/environments/discover?client=powerbi-msolap"
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            //Assert
+            Assert.Fail("Custom environment was not provided");
         }
     }
 }

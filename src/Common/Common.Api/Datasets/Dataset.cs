@@ -29,6 +29,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
         public bool IsOnPremGatewayRequired { get; set; }
         public DatasetStorageMode? TargetStorageMode { get; set; }
         public DatasetStorage ActualStorage { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string ContentProviderType { get; set; }
 
         public static implicit operator Dataset(PowerBI.Api.V2.Models.Dataset dataset)
         {
@@ -54,6 +56,8 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 IsOnPremGatewayRequired = dataset.IsOnPremGatewayRequired.GetValueOrDefault(),
                 TargetStorageMode = EnumTypeConverter.ConvertTo<DatasetStorageMode, PowerBI.Api.V2.Models.DatasetStorageMode>(dataset.TargetStorageMode),
                 ActualStorage = dataset.ActualStorage,
+                CreatedDate = dataset.CreatedDate,
+                ContentProviderType = dataset.ContentProviderType
             };
         }
 

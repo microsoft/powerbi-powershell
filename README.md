@@ -103,6 +103,22 @@ Add a user to a given workspace:
 Add-PowerBIWorkspaceUser -Scope Organization -Id 3244f1c1-01cf-457f-9383-6035e4950fdc -UserEmailAddress john@contoso.com -AccessRight Admin
 ```
 
+### Add new service principal to workspace
+
+Add a service principal to a given workspace:
+
+```powershell
+Add-PowerBIWorkspaceUser -WorkspaceId 3244f1c1-01cf-457f-9383-6035e4950fdc -Identifier "09934a8f-5066-44b2-91a6-f4987c76ae9e" -AccessRight Contributor -PrincipalType App
+```
+
+### Add new group to workspace
+
+Add a group to a given workspace:
+
+```powershell
+Add-PowerBIWorkspaceUser -WorkspaceId 3244f1c1-01cf-457f-9383-6035e4950fdc -Identifier "ddc3ecc2-e17e-4353-9b42-964b55500e0f" -AccessRight Contributor -PrincipalType Group
+```
+
 ### Remove a user from a given workspace
 
 Remove user's permissions from a given workspace:
@@ -279,7 +295,7 @@ This information can be useful for opening support tickets for Power BI.
 
 If you find any bugs or would like to see certain functionality implemented for the PowerShell Cmdlets for Power BI, please file an issue [here](https://github.com/Microsoft/powerbi-powershell/issues). If the issue is an error returned from the cmdlets, add detail from `Resolve-PowerBIError` to the issue.
 
-If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [Power BI Community](http://community.powerbi.com/) or the official [Power BI Support](https://powerbi.microsoft.com/en-us/support/) site.
+If your issue is broader than just the PowerShell cmdlets, please submit your feedback to the [Power BI Community](https://community.powerbi.com/) or the official [Power BI Support](https://powerbi.microsoft.com/en-us/support/) site.
 
 We track our roadmap of planned features in [ROADMAP.md](ROADMAP.md).
 

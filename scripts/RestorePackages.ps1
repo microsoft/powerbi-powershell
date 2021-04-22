@@ -24,3 +24,7 @@ $nugetExe = Get-Command 'nuget.exe' -ErrorAction Stop
 $Solution = (Resolve-Path -Path $Solution -ErrorAction Stop).ProviderPath
 
 & $nugetExe restore $Solution
+
+if ($LastExitCode -ne 0) {
+    throw "Failed to restore nuget packages: $LastExitCode"
+}

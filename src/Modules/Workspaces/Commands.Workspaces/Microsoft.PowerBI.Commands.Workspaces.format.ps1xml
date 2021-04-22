@@ -62,6 +62,41 @@
                 <Label>Users</Label>
                 <ScriptBlock>$_.Users | Out-String</ScriptBlock>
               </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Reports -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>Reports</Label>
+                <ScriptBlock>$_.Reports | Out-String</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Dashboards -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>Dashboards</Label>
+                <ScriptBlock>$_.Dashboards | Out-String</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Datasets -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>Datasets</Label>
+                <ScriptBlock>$_.Datasets | Out-String</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Dataflows -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>Dataflows</Label>
+                <ScriptBlock>$_.Dataflows | Out-String</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.Workbooks -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>Workbooks</Label>
+                <ScriptBlock>$_.Workbooks | Out-String</ScriptBlock>
+              </ListItem>
             </ListItems>
           </ListEntry>
         </ListEntries>
