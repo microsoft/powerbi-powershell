@@ -52,7 +52,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             {
                 var authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
-                    .WithAuthority(environment.AzureADAuthority)
+                    .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
                     .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                     .WithExtraQueryParameters(queryParameters);
                     
