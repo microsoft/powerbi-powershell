@@ -26,7 +26,7 @@ namespace Microsoft.PowerBI.Commands.Common
 
         private static GSEnvironments GlobalServiceEnvironments { get; set; }
 
-        public PowerBISettings(string settingsFilePath = null)
+        public PowerBISettings(string settingsFilePath = null, PowerBIEnvironmentType targetEnvironmentType = PowerBIEnvironmentType.Public, bool refreshGlobalServiceConfig = false)
         {
             if (string.IsNullOrEmpty(settingsFilePath))
             {
@@ -50,8 +50,11 @@ namespace Microsoft.PowerBI.Commands.Common
             }
 
             this.Settings = configuration.Settings;
+            var targetEnvironment = configuration.Environments
+                    .FirstOrDefault(e => Enum.TryParse(e.Name, out PowerBIEnvironmentType result) && result == targetEnvironmentType);
+            var globalServiceEndpoint = (targetEnvironment != null && targetEnvironment.GlobalService != null) ? targetEnvironment.GlobalService : "https://api.powerbi.com";
 
-            var cloudEnvironments = GetGlobalServiceConfig().Result;
+            var cloudEnvironments = GetGlobalServiceConfig(globalServiceEndpoint, enforceRefresh: refreshGlobalServiceConfig).Result;
             if (cloudEnvironments != null)
             {
                 // Ignore non-valid environments
@@ -69,7 +72,7 @@ namespace Microsoft.PowerBI.Commands.Common
                                 }
 
                                 var backendService = cloudEnvironment.Services.First(s => s.Name.Equals("powerbi-backend", StringComparison.OrdinalIgnoreCase));
-                                var redirectApp = cloudEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
+                                var redirectApp = cloudEnvironment.Clients.First(s => s.Name.Equals(e.RedirectApp, StringComparison.OrdinalIgnoreCase));
                                 return new PowerBIEnvironment()
                                 {
                                     Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e.Name),
@@ -90,7 +93,7 @@ namespace Microsoft.PowerBI.Commands.Common
                                     throw new NotSupportedException($"Unable to find cloud name: {cloudName}");
                                 }
 
-                                var redirectApp = cloudEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
+                                var redirectApp = cloudEnvironment.Clients.First(s => s.Name.Equals(e.RedirectApp, StringComparison.OrdinalIgnoreCase));
                                 return new PowerBIEnvironment()
                                 {
                                     Name = (PowerBIEnvironmentType)Enum.Parse(typeof(PowerBIEnvironmentType), e.Name),
@@ -107,9 +110,9 @@ namespace Microsoft.PowerBI.Commands.Common
             }
         }
 
-        public async Task<GSEnvironments> GetGlobalServiceConfig(string clientName = "powerbi-msolap")
+        public async Task<GSEnvironments> GetGlobalServiceConfig(string endpoint = "https://api.powerbi.com", string clientName = "powerbi-msolap", bool enforceRefresh = false)
         {
-            if (GlobalServiceEnvironments == null)
+            if (GlobalServiceEnvironments == null || enforceRefresh)
             {
                 var defaultProtocol = ServicePointManager.SecurityProtocol;
                 try
@@ -118,7 +121,7 @@ namespace Microsoft.PowerBI.Commands.Common
                     using (var client = new HttpClient())
                     {
                         client.DefaultRequestHeaders.Accept.Clear();
-                        var response = await client.PostAsync("https://api.powerbi.com/powerbi/globalservice/v201606/environments/discover?client=" + clientName, null);
+                        var response = await client.PostAsync(endpoint + "/powerbi/globalservice/v201606/environments/discover?client=" + clientName, null);
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
                             var serializer = new DataContractJsonSerializer(typeof(GSEnvironments));
