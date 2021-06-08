@@ -15,7 +15,7 @@ Log in to the Power BI service.
 ### User (Default)
 ```
 Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
- [-DiscoveryUrl <String>] [<CommonParameters>]
+ [-Tenant <String>] [-DiscoveryUrl <String>] [<CommonParameters>]
 ```
 
 ### ServicePrincipal
@@ -28,7 +28,7 @@ Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEn
 ### UserAndCredential
 ```
 Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
- -Credential <PSCredential> [-DiscoveryUrl <String>] [<CommonParameters>]
+ -Credential <PSCredential> [-Tenant <String>] [-DiscoveryUrl <String>] [<CommonParameters>]
 ```
 
 ### ServicePrincipalCertificate
@@ -159,7 +159,7 @@ Cloud environment to connect against. Default is Public.
 Type: PowerBIEnvironmentType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Public, Germany, USGov, China, USGovHigh, USGovMil, OneBox, EDog, DXT
+Accepted values: Public, Germany, USGov, China, USGovHigh, USGovMil, Custom, OneBox, EDog, DXT
 
 Required: False
 Position: Named
@@ -188,7 +188,7 @@ Tenant name or tenant ID containing the service principal account. If not specif
 
 ```yaml
 Type: String
-Parameter Sets: ServicePrincipal, ServicePrincipalCertificate
+Parameter Sets: (All)
 Aliases: TenantId
 
 Required: False

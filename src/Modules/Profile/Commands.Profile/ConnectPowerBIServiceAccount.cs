@@ -55,8 +55,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public SwitchParameter ServicePrincipal { get; set; }
 
         [Alias("TenantId")]
-        [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
-        [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
+        [Parameter(Mandatory = false)]
         public string Tenant { get; set; }
 
         [Parameter(Mandatory = false)]
@@ -125,6 +124,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
                 environment = settings.Environments[this.Environment];
             }
+
             if(!string.IsNullOrEmpty(this.Tenant))
             {
                 var tempEnvironment = (PowerBIEnvironment) environment;
