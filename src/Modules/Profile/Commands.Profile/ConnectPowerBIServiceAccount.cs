@@ -89,18 +89,20 @@ namespace Microsoft.PowerBI.Commands.Profile
                     throw new Exception($"{nameof(this.CustomEnvironment)} is required when using a discovery url");
                 }
 
+                var settings = new PowerBISettings();
+
                 CustomEnvironments = new Dictionary<string, IPowerBIEnvironment>();
                 var customCloudEnvironments = GetServiceConfig(this.DiscoveryUrl).Result;
                 foreach (GSEnvironment customEnvironment in customCloudEnvironments.Environments)
                 {
                     var backendService = customEnvironment.Services.First(s => s.Name.Equals("powerbi-backend", StringComparison.OrdinalIgnoreCase));
-                    var redirectApp = customEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
+                    var redirectApp = settings.Environments[PowerBIEnvironmentType.Public];
                     var env = new PowerBIEnvironment()
                     {
                         Name = PowerBIEnvironmentType.Custom,
                         AzureADAuthority = customEnvironment.Services.First(s => s.Name.Equals("aad", StringComparison.OrdinalIgnoreCase)).Endpoint,
-                        AzureADClientId = redirectApp.AppId,
-                        AzureADRedirectAddress = redirectApp.RedirectUri,
+                        AzureADClientId = redirectApp.AzureADClientId,
+                        AzureADRedirectAddress = redirectApp.AzureADRedirectAddress,
                         AzureADResource = backendService.ResourceId,
                         GlobalServiceEndpoint = backendService.Endpoint
                     };
@@ -116,11 +118,12 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
             else
             {
-                if (this.Settings.Environments == null)
+                var settings = new PowerBISettings(targetEnvironmentType: this.Environment, refreshGlobalServiceConfig: true);
+                if (settings.Environments == null)
                 {
                     this.Logger.ThrowTerminatingError("Failed to populate environments in settings");
                 }
-                environment = this.Settings.Environments[this.Environment];
+                environment = settings.Environments[this.Environment];
             }
             if(!string.IsNullOrEmpty(this.Tenant))
             {

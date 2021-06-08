@@ -42,6 +42,9 @@ namespace Microsoft.PowerBI.Commands.Common
 
         [DataMember(Name = "globalService", IsRequired = false)]
         public string GlobalService { get; set; }
+
+        [DataMember(Name = "redirectApp", IsRequired = false)]
+        public string RedirectApp { get; set; }
     }
 
     [DataContract]
