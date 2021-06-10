@@ -1,4 +1,4 @@
----
+﻿---
 external help file: Microsoft.PowerBI.Commands.Profile.dll-Help.xml
 Module Name: MicrosoftPowerBIMgmt.Profile
 online version: https://docs.microsoft.com/en-us/powershell/module/microsoftpowerbimgmt.profile/connect-powerbiserviceaccount?view=powerbi-ps
@@ -159,7 +159,7 @@ Cloud environment to connect against. Default is Public.
 Type: PowerBIEnvironmentType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Public, Germany, USGov, China, USGovHigh, USGovMil, OneBox, EDog, DXT
+Accepted values: Public, Germany, USGov, China, USGovHigh, USGovMil, Custom
 
 Required: False
 Position: Named

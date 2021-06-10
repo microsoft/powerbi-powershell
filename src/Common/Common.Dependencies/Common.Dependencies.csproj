@@ -9,8 +9,7 @@
 
   <ItemGroup>
     <!-- Newtonsoft.Json is included to ensure each module loads a newer version than what's required by the Power BI SDK -->
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2">
-    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
 </Project>

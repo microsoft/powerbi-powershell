@@ -1,21 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>Microsoft.PowerBI.Commands.Reports.Test</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Reports.Test</RootNamespace>
-    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Diagnostics" Version="7.1.1" />
-    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.1.1" />
-    <PackageReference Include="Microsoft.WSMan.Management" Version="7.1.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
-    <PackageReference Include="PowerShellStandard.Library" Version="7.0.0-preview.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.PowerShell.Commands.Diagnostics" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" />
+    <PackageReference Include="Microsoft.WSMan.Management" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="PowerShellStandard.Library" />
   </ItemGroup>
 
   <ItemGroup>
