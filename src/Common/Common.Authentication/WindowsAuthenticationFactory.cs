@@ -47,19 +47,21 @@ namespace Microsoft.PowerBI.Common.Authentication
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
 
-            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            IEnumerable<string> scopes = Constants.ApiScopes.Select(s => $"{environment.AzureADResource}/{s}" );
             if (this.AuthApplication == null)
             {
                 var authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
-                    .WithAuthority(environment.AzureADAuthority)
+                    .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
                     .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                     .WithExtraQueryParameters(queryParameters);
-                    
+                
+                /*
                 if (!PublicClientHelper.IsNetFramework)
                 {
                     authApplicationBuilder.WithRedirectUri("http://localhost");
                 }
+                */
 
                 this.AuthApplication = authApplicationBuilder.Build();
             }

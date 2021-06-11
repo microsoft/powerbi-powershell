@@ -19,12 +19,12 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            IEnumerable<string> scopes = Constants.ApiScopes.Select(s => $"{environment.AzureADResource}/{s}");
             if (this.AuthApplication == null)
             {
                 this.AuthApplication = PublicClientApplicationBuilder
                 .Create(environment.AzureADClientId)
-                .WithAuthority(environment.AzureADAuthority)
+                .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
                 .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                 .Build();
             }

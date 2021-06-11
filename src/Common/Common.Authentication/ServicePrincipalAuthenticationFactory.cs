@@ -28,7 +28,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             {
                 this.AuthApplicationSecret = ConfidentialClientApplicationBuilder
                    .Create(environment.AzureADClientId)
-                   .WithAuthority(environment.AzureADAuthority)
+                   .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
                    .WithClientId(clientId)
                    .WithClientSecret(clientSecret.SecureStringToString())
                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
@@ -69,7 +69,7 @@ namespace Microsoft.PowerBI.Common.Authentication
         public async Task<IAccessToken> Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             var certificate = FindCertificate(thumbprint);
-            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            IEnumerable<string> scopes = Constants.ApiScopes.Select(s => $"{environment.AzureADResource}/{s}");
 
             if (this.AuthApplicationCert == null)
             {
