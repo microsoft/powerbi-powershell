@@ -31,6 +31,7 @@ namespace Microsoft.PowerBI.Common.Authentication
                    .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
                    .WithClientId(clientId)
                    .WithClientSecret(clientSecret.SecureStringToString())
+                   .WithRedirectUri(environment.AzureADRedirectAddress)
                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                    .Build();
             }

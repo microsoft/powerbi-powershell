@@ -15,12 +15,12 @@ namespace Microsoft.PowerBI.Common.Authentication
 {
     public static class Constants
     {
-        public static readonly List<string> ApiScopes => new List<string>
+        public static List<string> ApiScopes => new List<string>
         {
             "Dashboard.Read.All",
             "Dashboard.ReadWrite.All",
-            "Dataset.Read.All",
-            "Dataset.ReadWrite.All",
+            /*"Dataset.Read.All",
+            //"Dataset.ReadWrite.All",
             "Report.Read.All",
             "Report.ReadWrite.All",
             "Tenant.Read.All",
@@ -40,7 +40,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             "Pipeline.Deploy",
             "Pipeline.Read.All",
             "Pipeline.ReadWrite.All",
-            "UserState.ReadWrite.All",
+            "UserState.ReadWrite.All",*/
         };
     }
 }

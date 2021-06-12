@@ -1,11 +1,11 @@
 {
   "sdk": {
-    "version": "5.0.101"
+    "version": "5.0.301"
   },
   "msbuild-sdks": {
-    "Microsoft.Build.Traversal": "3.0.2",
+    "Microsoft.Build.Traversal": "3.0.23",
     "Microsoft.Build.CentralPackageVersions": "2.0.79",
-    "Microsoft.Build.NoTargets": "2.0.1",
-    "Microsoft.Build.Artifacts": "2.0.35"
+    "Microsoft.Build.NoTargets": "3.0.4",
+    "Microsoft.Build.Artifacts": "2.2.0"
   }
 }

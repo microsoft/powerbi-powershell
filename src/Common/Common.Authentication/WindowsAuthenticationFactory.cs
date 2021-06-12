@@ -52,9 +52,10 @@ namespace Microsoft.PowerBI.Common.Authentication
             {
                 var authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
-                    .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
+                    .WithAuthority(environment.AzureADAuthority)
                     .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
-                    .WithExtraQueryParameters(queryParameters);
+                    .WithExtraQueryParameters(queryParameters)
+                    .WithRedirectUri(environment.AzureADRedirectAddress);
                 
                 /*
                 if (!PublicClientHelper.IsNetFramework)
