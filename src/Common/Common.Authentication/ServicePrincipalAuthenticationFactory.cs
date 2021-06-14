@@ -23,12 +23,12 @@ namespace Microsoft.PowerBI.Common.Authentication
         public async Task<IAccessToken> Authenticate(string clientId, SecureString clientSecret, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
- 
+
             if (this.AuthApplicationSecret == null)
             {
                 this.AuthApplicationSecret = ConfidentialClientApplicationBuilder
                    .Create(environment.AzureADClientId)
-                   .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
+                   .WithAuthority(environment.AzureADAuthority)
                    .WithClientId(clientId)
                    .WithClientSecret(clientSecret.SecureStringToString())
                    .WithRedirectUri(environment.AzureADRedirectAddress)
