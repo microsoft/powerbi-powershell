@@ -89,18 +89,20 @@ namespace Microsoft.PowerBI.Commands.Profile
                     throw new Exception($"{nameof(this.CustomEnvironment)} is required when using a discovery url");
                 }
 
+                var settings = new PowerBISettings();
+
                 CustomEnvironments = new Dictionary<string, IPowerBIEnvironment>();
                 var customCloudEnvironments = GetServiceConfig(this.DiscoveryUrl).Result;
                 foreach (GSEnvironment customEnvironment in customCloudEnvironments.Environments)
                 {
                     var backendService = customEnvironment.Services.First(s => s.Name.Equals("powerbi-backend", StringComparison.OrdinalIgnoreCase));
-                    var redirectApp = customEnvironment.Clients.First(s => s.Name.Equals("powerbi-gateway", StringComparison.OrdinalIgnoreCase));
+                    var redirectApp = settings.Environments[PowerBIEnvironmentType.Public];
                     var env = new PowerBIEnvironment()
                     {
                         Name = PowerBIEnvironmentType.Custom,
                         AzureADAuthority = customEnvironment.Services.First(s => s.Name.Equals("aad", StringComparison.OrdinalIgnoreCase)).Endpoint,
-                        AzureADClientId = redirectApp.AppId,
-                        AzureADRedirectAddress = redirectApp.RedirectUri,
+                        AzureADClientId = redirectApp.AzureADClientId,
+                        AzureADRedirectAddress = redirectApp.AzureADRedirectAddress,
                         AzureADResource = backendService.ResourceId,
                         GlobalServiceEndpoint = backendService.Endpoint
                     };
@@ -116,17 +118,26 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
             else
             {
-                if (this.Settings.Environments == null)
+                var settings = new PowerBISettings(targetEnvironmentType: this.Environment, refreshGlobalServiceConfig: true);
+                if (settings.Environments == null)
                 {
                     this.Logger.ThrowTerminatingError("Failed to populate environments in settings");
                 }
-                environment = this.Settings.Environments[this.Environment];
+                environment = settings.Environments[this.Environment];
             }
+
             if(!string.IsNullOrEmpty(this.Tenant))
             {
                 var tempEnvironment = (PowerBIEnvironment) environment;
                 tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", $"/{this.Tenant}");
                 this.Logger.WriteVerbose($"Updated Azure AD authority with -Tenant specified, new value: {tempEnvironment.AzureADAuthority}");
+                environment = tempEnvironment;
+            }
+            else
+            {
+                var tempEnvironment = (PowerBIEnvironment)environment;
+                tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", "/organizations");
+                this.Logger.WriteVerbose($"Updated Azure AD authority with /organizations endpoint, new value: {tempEnvironment.AzureADAuthority}");
                 environment = tempEnvironment;
             }
 
@@ -138,22 +149,21 @@ namespace Microsoft.PowerBI.Commands.Profile
                 case UserParameterSet:
                     token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, new Dictionary<string, string>()
                         {
-                            { "prompt", "select_account" },
                             { "msafed", "0" }
                         }
-                    );
+                    ).Result;
                     profile = new PowerBIProfile(environment, token);
                     break;
                 case UserAndCredentialPasswordParameterSet:
-                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password);
+                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token, servicePrincipal: false);
                     break;
                 case ServicePrincipalCertificateParameterSet:
-                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings);
+                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.ApplicationId, this.CertificateThumbprint, token);
                     break;
                 case ServicePrincipalParameterSet:
-                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings);
+                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 default:

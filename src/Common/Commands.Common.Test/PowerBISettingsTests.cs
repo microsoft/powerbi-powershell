@@ -29,7 +29,8 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
       ""redirect"": ""https://login.microsoftonline.com/common/oauth2/nativeclient"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
-      ""globalService"": ""https://api.powerbi.com""
+      ""globalService"": ""https://api.powerbi.com"",
+      ""redirectApp"": ""powerbi-powershell""
     },
 {
       ""name"": ""NotValid"",
@@ -37,7 +38,8 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
       ""redirect"": ""https://login.microsoftonline.com/common/oauth2/nativeclient"",
       ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
-      ""globalService"": ""https://api.powerbi.com""
+      ""globalService"": ""https://api.powerbi.com"",
+      ""redirectApp"": ""powerbi-powershell""
     }
   ],
   ""Settings"": {
@@ -118,7 +120,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
 
         private static void AssertValidEnvironmentSharedProperties(IPowerBIEnvironment environment)
         {
-            Assert.AreEqual("ea0616ba-638b-4df5-95b9-636659ae5121", environment.AzureADClientId);
+            Assert.AreEqual("23d8f6bd-1eb0-4cc2-a08c-7bf525c67bcd", environment.AzureADClientId);
             Assert.AreEqual("https://login.microsoftonline.com/common/oauth2/nativeclient", environment.AzureADRedirectAddress);
         }
     }
