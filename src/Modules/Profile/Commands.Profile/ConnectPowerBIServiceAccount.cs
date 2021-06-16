@@ -125,11 +125,19 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
                 environment = settings.Environments[this.Environment];
             }
+
             if(!string.IsNullOrEmpty(this.Tenant))
             {
                 var tempEnvironment = (PowerBIEnvironment) environment;
                 tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", $"/{this.Tenant}");
                 this.Logger.WriteVerbose($"Updated Azure AD authority with -Tenant specified, new value: {tempEnvironment.AzureADAuthority}");
+                environment = tempEnvironment;
+            }
+            else
+            {
+                var tempEnvironment = (PowerBIEnvironment)environment;
+                tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", "/organizations");
+                this.Logger.WriteVerbose($"Updated Azure AD authority with /organizations endpoint, new value: {tempEnvironment.AzureADAuthority}");
                 environment = tempEnvironment;
             }
 

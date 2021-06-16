@@ -47,52 +47,40 @@ namespace Microsoft.PowerBI.Common.Authentication
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
 
-            IEnumerable<string> scopes = Constants.ApiScopes.Select(s => $"{environment.AzureADResource}/{s}" );
-            if (this.AuthApplication == null)
-            {
-                var authApplicationBuilder = PublicClientApplicationBuilder
-                    .Create(environment.AzureADClientId)
-                    .WithAuthority(environment.AzureADAuthority)
-                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
-                    .WithExtraQueryParameters(queryParameters)
-                    .WithRedirectUri(environment.AzureADRedirectAddress);
-                
-                /*
-                if (!PublicClientHelper.IsNetFramework)
-                {
-                    authApplicationBuilder.WithRedirectUri("http://localhost");
-                }
-                */
-
-                this.AuthApplication = authApplicationBuilder.Build();
-            }
-
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
+            BuildAuthApplication(environment, queryParameters, logger);
             AuthenticationResult result = null;
 
             try
             {
                 var accounts = await this.AuthApplication.GetAccountsAsync();
-                if (accounts.Any())
+                if (accounts != null && accounts.Any())
                 {
                     // This indicates there's token in cache
-                    result = await this.AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
+                    result = await this.AuthApplication.AcquireTokenSilent(scopes, accounts.First()).ExecuteAsync();
                 }
                 else
                 {
+                    // auth application is auto cleared when there's no account
+                    BuildAuthApplication(environment, queryParameters, logger);
                     if (!string.IsNullOrEmpty(userName) && password != null && password.Length > 0)
                     {
-                        // https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/wiki/Acquiring-tokens-with-username-and-password
                         result = await this.AuthApplication.AcquireTokenByUsernamePassword(scopes, userName, password).ExecuteAsync();
                     }
                     else
                     {
+                        if (!PublicClientHelper.IsNetFramework)
+                        {
+                            throw new AuthenticationException("Interactive signin with MSAL is not available in current version with your set up. Please use '-Credential (Get-Credential)' instead.");
+                        }
+
                         result = await this.AuthApplication.AcquireTokenInteractive(scopes).ExecuteAsync();
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{ex}");
+                throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{ex.Message}");
             }
 
             if (result != null)
@@ -111,13 +99,36 @@ namespace Microsoft.PowerBI.Common.Authentication
             if (this.AuthApplication != null)
             {
                 var accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
-                while (accounts.Any())
+                while (accounts != null && accounts.Any())
                 {
                     await this.AuthApplication.RemoveAsync(accounts.First());
                     accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
                 }
 
                 this.AuthApplication = null;
+            }
+        }
+
+        private void BuildAuthApplication(IPowerBIEnvironment environment, IDictionary<string, string> queryParameters, IPowerBILogger logger)
+        {
+            // auth application is auto cleared when there's no account
+            if (this.AuthApplication == null)
+            {
+                var authApplicationBuilder = PublicClientApplicationBuilder
+                    .Create(environment.AzureADClientId)
+                    .WithAuthority(environment.AzureADAuthority)
+                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
+                    .WithExtraQueryParameters(queryParameters)
+                    .WithRedirectUri(environment.AzureADRedirectAddress);
+
+                /*
+                if (!PublicClientHelper.IsNetFramework)
+                {
+                    authApplicationBuilder.WithRedirectUri("http://localhost");
+                }
+                */
+
+                this.AuthApplication = authApplicationBuilder.Build();
             }
         }
     }

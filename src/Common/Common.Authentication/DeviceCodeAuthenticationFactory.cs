@@ -19,7 +19,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            IEnumerable<string> scopes = Constants.ApiScopes.Select(s => $"{environment.AzureADResource}/{s}");
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             if (this.AuthApplication == null)
             {
                 this.AuthApplication = PublicClientApplicationBuilder
@@ -32,7 +32,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
             AuthenticationResult result = null;
             var accounts = await AuthApplication.GetAccountsAsync();
-            if (accounts.Any())
+            if (accounts != null && accounts.Any())
             {
                 try
                 {
@@ -63,7 +63,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             if (this.AuthApplication != null)
             {
                 var accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
-                while (accounts.Any())
+                while (accounts != null && accounts.Any())
                 {
                     await this.AuthApplication.RemoveAsync(accounts.First());
                     accounts = (await this.AuthApplication.GetAccountsAsync()).ToList();
