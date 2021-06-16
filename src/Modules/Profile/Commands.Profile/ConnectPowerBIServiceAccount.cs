@@ -125,11 +125,19 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
                 environment = settings.Environments[this.Environment];
             }
+
             if(!string.IsNullOrEmpty(this.Tenant))
             {
                 var tempEnvironment = (PowerBIEnvironment) environment;
                 tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", $"/{this.Tenant}");
                 this.Logger.WriteVerbose($"Updated Azure AD authority with -Tenant specified, new value: {tempEnvironment.AzureADAuthority}");
+                environment = tempEnvironment;
+            }
+            else
+            {
+                var tempEnvironment = (PowerBIEnvironment)environment;
+                tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", "/organizations");
+                this.Logger.WriteVerbose($"Updated Azure AD authority with /organizations endpoint, new value: {tempEnvironment.AzureADAuthority}");
                 environment = tempEnvironment;
             }
 
@@ -141,22 +149,21 @@ namespace Microsoft.PowerBI.Commands.Profile
                 case UserParameterSet:
                     token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, new Dictionary<string, string>()
                         {
-                            { "prompt", "select_account" },
                             { "msafed", "0" }
                         }
-                    );
+                    ).Result;
                     profile = new PowerBIProfile(environment, token);
                     break;
                 case UserAndCredentialPasswordParameterSet:
-                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password);
+                    token = this.Authenticator.Authenticate(environment, this.Logger, this.Settings, this.Credential.UserName, this.Credential.Password).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token, servicePrincipal: false);
                     break;
                 case ServicePrincipalCertificateParameterSet:
-                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings);
+                    token = this.Authenticator.Authenticate(this.ApplicationId, this.CertificateThumbprint, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.ApplicationId, this.CertificateThumbprint, token);
                     break;
                 case ServicePrincipalParameterSet:
-                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings);
+                    token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 default:

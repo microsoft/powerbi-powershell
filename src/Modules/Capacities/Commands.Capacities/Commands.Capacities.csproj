@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.PowerBI.Commands.Capacities</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Capacities</RootNamespace>
-    <ReferenceWindowsAuthenticator>true</ReferenceWindowsAuthenticator>
   </PropertyGroup>
 
   <!-- NuGet Package Properties -->
@@ -29,9 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PowerShellStandard.Library" Version="5.1.0">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="PowerShellStandard.Library" />
   </ItemGroup>
 
   <ItemGroup>

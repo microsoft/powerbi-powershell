@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Security;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Authentication;
 
@@ -33,34 +34,35 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             };
         }
 
-        public IAccessToken Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public Task<IAccessToken> Authenticate(IPowerBIProfile profile, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            return this.Token;
+            return Task.FromResult(this.Token);
         }
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
+        public Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
         {
-            return this.Token;
+            return Task.FromResult(this.Token);
         }
 
-        public IAccessToken Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
+        public Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, string userName, SecureString password)
         {
-            return this.Token;
+            return Task.FromResult(this.Token);
         }
 
-        public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public Task<IAccessToken> Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            return this.Token;
+            return Task.FromResult(this.Token);
         }
 
-        public IAccessToken Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public Task<IAccessToken> Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            return this.Token;
+            return Task.FromResult(this.Token);
         }
 
-        public void Challenge()
+        public Task Challenge()
         {
             // Nothing
+            return Task.Delay(1);
         }
     }
 }

@@ -4,53 +4,95 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security;
+using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Threading.Tasks;
+using Microsoft.Identity.Client;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
     public class ServicePrincipalAuthenticationFactory : IAuthenticationServicePrincipalFactory
     {
-        private static bool authenticatedOnce = false;
-        public bool AuthenticatedOnce { get => authenticatedOnce; }
+        private IConfidentialClientApplication AuthApplicationSecret;
+        private IConfidentialClientApplication AuthApplicationCert;
 
-        private static object tokenCacheLock = new object();
-
-        private static TokenCache Cache { get; set; }
-
-        private AuthenticationContext InitializeContext(IPowerBIEnvironment environment, IPowerBISettings settings)
+        public async Task<IAccessToken> Authenticate(string clientId, SecureString clientSecret, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            LoggerCallbackHandler.UseDefaultLogging = settings.Settings.ShowADALDebugMessages;
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
 
-            if (Cache == null)
+            BuildAuthApplicationSecret(environment, clientId, clientSecret, logger);
+            AuthenticationResult result = null;
+
+            try
             {
-                lock (tokenCacheLock)
+                var accounts = await this.AuthApplicationSecret.GetAccountsAsync();
+                if (accounts != null && accounts.Any())
                 {
-                    if (Cache == null)
-                    {
-                        Cache = new TokenCache();
-                    }
+                    // This indicates there's token in cache
+                    result = await this.AuthApplicationSecret.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
+                }
+                else
+                {
+                    BuildAuthApplicationSecret(environment, clientId, clientSecret, logger);
+                    result = await this.AuthApplicationSecret.AcquireTokenForClient(scopes).ExecuteAsync();
                 }
             }
+            catch (Exception ex)
+            {
+                throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{ex}");
+            }
 
-            return new AuthenticationContext(environment.AzureADAuthority, Cache);
+            if (result != null)
+            {
+                return result.ToIAccessToken();
+                // Use the token
+            }
+            else
+            {
+                throw new AuthenticationException("Failed to acquire token");
+            }
         }
 
-        public IAccessToken Authenticate(string userName, SecureString password, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
+        public async Task<IAccessToken> Authenticate(string clientId, string thumbprint, IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
         {
-            var context = InitializeContext(environment, settings);
-            AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientCredential(userName, password.SecureStringToString())).Result;
-            return token.ToIAccessToken();
-        }
+            var certificate = FindCertificate(thumbprint); 
+            IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
 
-        public IAccessToken Authenticate(string clientId, string thumbprint , IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings)
-        {
-            var certificate = FindCertificate(thumbprint);
-            var context = InitializeContext(environment, settings);
-            AuthenticationResult token = context.AcquireTokenAsync(environment.AzureADResource, new ClientAssertionCertificate(clientId, certificate)).Result;
-            return token.ToIAccessToken();
+            BuildAuthApplicationCert(environment, clientId, certificate, logger);
+            AuthenticationResult result = null;
+
+            try
+            {
+                var accounts = await this.AuthApplicationCert.GetAccountsAsync();
+                if (accounts != null && accounts.Any())
+                {
+                    // This indicates there's token in cache
+                    result = await this.AuthApplicationCert.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
+                }
+                else
+                {
+                    BuildAuthApplicationCert(environment, clientId, certificate, logger);
+                    result = await this.AuthApplicationCert.AcquireTokenForClient(scopes).ExecuteAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{ex}");
+            }
+
+            if (result != null)
+            {
+                return result.ToIAccessToken();
+                // Use the token
+            }
+            else
+            {
+                throw new AuthenticationException("Failed to acquire token");
+            }
         }
 
         private static X509Certificate2 FindCertificate(string thumbprint)
@@ -67,7 +109,7 @@ namespace Microsoft.PowerBI.Common.Authentication
 
         private static bool TryFindCertificatesInLocation(string thumbprint, StoreLocation location, out X509Certificate2Collection certificates)
         {
-            using(var store = new X509Store(StoreName.My, location))
+            using (var store = new X509Store(StoreName.My, location))
             {
                 store.Open(OpenFlags.ReadOnly);
                 certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
@@ -76,18 +118,59 @@ namespace Microsoft.PowerBI.Common.Authentication
             return certificates.Count > 0;
         }
 
-        public void Challenge()
+        public async Task Challenge()
         {
-            if (Cache != null)
+            if (this.AuthApplicationSecret != null)
             {
-                lock (tokenCacheLock)
+                var accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
+                while (accounts != null && accounts.Any())
                 {
-                    if (Cache != null)
-                    {
-                        authenticatedOnce = false;
-                        Cache = null;
-                    }
+                    await this.AuthApplicationSecret.RemoveAsync(accounts.First());
+                    accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
                 }
+
+                this.AuthApplicationSecret = null;
+            }
+
+            if (this.AuthApplicationCert != null)
+            {
+                var accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
+                while (accounts.Any())
+                {
+                    await this.AuthApplicationSecret.RemoveAsync(accounts.First());
+                    accounts = (await this.AuthApplicationSecret.GetAccountsAsync()).ToList();
+                }
+
+                this.AuthApplicationCert = null;
+            }
+        }
+
+        private void BuildAuthApplicationSecret(IPowerBIEnvironment environment, string clientId, SecureString clientSecret, IPowerBILogger logger)
+        {
+            if (this.AuthApplicationSecret == null)
+            {
+                this.AuthApplicationSecret = ConfidentialClientApplicationBuilder
+                   .Create(environment.AzureADClientId)
+                   .WithAuthority(environment.AzureADAuthority)
+                   .WithClientId(clientId)
+                   .WithClientSecret(clientSecret.SecureStringToString())
+                   .WithRedirectUri(environment.AzureADRedirectAddress)
+                   .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
+                   .Build();
+            }
+        }
+
+        private void BuildAuthApplicationCert(IPowerBIEnvironment environment, string clientId, X509Certificate2 certificate, IPowerBILogger logger)
+        {
+            if (this.AuthApplicationCert == null)
+            {
+                this.AuthApplicationCert = ConfidentialClientApplicationBuilder
+                   .Create(environment.AzureADClientId)
+                   .WithAuthority(environment.AzureADAuthority)
+                   .WithClientId(clientId)
+                   .WithCertificate(certificate)
+                   .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
+                   .Build();
             }
         }
     }

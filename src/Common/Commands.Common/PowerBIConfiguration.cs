@@ -53,8 +53,8 @@ namespace Microsoft.PowerBI.Commands.Common
         [DataMember(Name = "ForceDeviceCodeAuthentication", IsRequired = false)]
         public bool ForceDeviceCodeAuthentication { get; set; }
 
-        [DataMember(Name = "ShowADALDebugMessages", IsRequired = false)]
-        public bool ShowADALDebugMessages { get; set; }
+        [DataMember(Name = "ShowMSALDebugMessages", IsRequired = false)]
+        public bool ShowMSALDebugMessages { get; set; }
 
         [DataMember(Name = "DefaultClientId", IsRequired = false)]
         public string DefaultClientId { get; set; }

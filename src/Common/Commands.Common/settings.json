@@ -54,6 +54,6 @@
   ],
   "Settings": {
     "ForceDeviceCodeAuthentication": false,
-    "ShowADALDebugMessages": false
+    "ShowMSALDebugMessages": false
   }
 }
