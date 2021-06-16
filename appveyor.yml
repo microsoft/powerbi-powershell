@@ -5,7 +5,7 @@ version: '1.0.{build}'
 
 dotnet_csproj:
   patch: true
-  file: '**\*.csproj;**\*.props'
+  file: 'Directory.Build.props'
   version: '{version}'
   package_version: '{version}'
   assembly_version: '{version}'

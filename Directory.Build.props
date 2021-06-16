@@ -27,11 +27,12 @@ Licensed under the MIT License.
     <Copyright>Copyright (c) Microsoft Corporation. All rights reserved.</Copyright>
     
     <!-- Versioning -->
-    <Version>1.0.0</Version>
-    <AssemblyVersion>$(Version)</AssemblyVersion>
-    <PackageVersion>$(Version)</PackageVersion>
-    <FileVersion>$(Version)</FileVersion>
-    <InformationalVersion>$(Version)</InformationalVersion>
+	<!-- Empty 'Version' is required for Appveyor -->
+    <Version />
+    <AssemblyVersion />
+    <PackageVersion />
+    <FileVersion />
+    <InformationalVersion />
     
     <!-- Packaging -->
     <Authors>Microsoft Corporation</Authors>
