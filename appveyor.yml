@@ -12,7 +12,7 @@ assembly_info:
 
 dotnet_csproj:
   patch: true
-  file: 'src\Directory.Build.props'
+  file: 'Directory.Build.props'
   version: '{version}'
   package_version: '{version}'
   assembly_version: '{version}'
