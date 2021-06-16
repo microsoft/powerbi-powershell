@@ -11,7 +11,7 @@ Licensed under the MIT License.
     <MinimumMSBuildVersion>16.8</MinimumMSBuildVersion>
     <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
     <LangVersion>latest</LangVersion>
-    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    <RepoRoot>$(MSBuildThisFileDirectory)..\</RepoRoot>
     <RepoTargets>$(RepoRoot)build\</RepoTargets>
     <SourceRoot>$(RepoRoot)src\</SourceRoot>
     <ScriptsRoot>$(RepoRoot)scripts\</ScriptsRoot>
