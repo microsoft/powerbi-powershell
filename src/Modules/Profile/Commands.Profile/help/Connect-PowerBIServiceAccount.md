@@ -159,7 +159,7 @@ Cloud environment to connect against. Default is Public.
 Type: PowerBIEnvironmentType
 Parameter Sets: (All)
 Aliases:
-Accepted values: Public, Germany, USGov, China, USGovHigh, USGovMil, Custom
+Accepted values: Public, Germany, USGov, China, USGovHigh, USGovMil
 
 Required: False
 Position: Named
