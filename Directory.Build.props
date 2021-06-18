@@ -5,10 +5,10 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the MIT License.
 ***********************************************************************************************
 -->
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
   
   <PropertyGroup>
-    <MinimumMSBuildVersion>16.8</MinimumMSBuildVersion>
+    <MinimumMSBuildVersion>16.10</MinimumMSBuildVersion>
     <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
     <LangVersion>latest</LangVersion>
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
