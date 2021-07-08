@@ -69,11 +69,6 @@ namespace Microsoft.PowerBI.Common.Authentication
                     }
                     else
                     {
-                        if (!PublicClientHelper.IsNetFramework)
-                        {
-                            throw new AuthenticationException("Interactive signin with MSAL is not available in current version with your set up. Please use '-Credential (Get-Credential)' instead.");
-                        }
-
                         result = await this.AuthApplication.AcquireTokenInteractive(scopes).ExecuteAsync();
                     }
                 }
@@ -121,12 +116,10 @@ namespace Microsoft.PowerBI.Common.Authentication
                     .WithExtraQueryParameters(queryParameters)
                     .WithRedirectUri(environment.AzureADRedirectAddress);
 
-                /*
                 if (!PublicClientHelper.IsNetFramework)
                 {
                     authApplicationBuilder.WithRedirectUri("http://localhost");
                 }
-                */
 
                 this.AuthApplication = authApplicationBuilder.Build();
             }
