@@ -1,2 +1,1 @@
-Updated to MSAL from ADAL.
-Solved incompatible issue with PowerShell Core.
+Enable interactive login for PowerShell Core.
