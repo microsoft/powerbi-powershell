@@ -39,7 +39,7 @@ namespace Microsoft.PowerBI.Common.Authentication
                     result = await AuthApplication.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
                     return result.ToIAccessToken();
                 }
-                catch (MsalUiRequiredException e)
+                catch (MsalUiRequiredException)
                 {
                     // ignore and fall through to aquire through device code
                 }
