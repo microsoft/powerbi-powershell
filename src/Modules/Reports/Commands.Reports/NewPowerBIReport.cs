@@ -71,7 +71,7 @@ namespace Microsoft.PowerBI.Commands.Reports
             if (this.Name == null)
             {
                 var report = new System.IO.FileInfo(this.ResolveFilePath(this.Path, true));
-                this.Name = report.Name.Replace(".pbix", "");
+                this.Name = report.Name;
             }
 
             using (var client = this.CreateClient())

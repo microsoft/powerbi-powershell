@@ -70,6 +70,29 @@ namespace Commands.Reports.Test
         }
 
         [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndNewReportWorkspaceWithoutName()
+        {
+            using (var ps = PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+                var workspace = WorkspacesTestUtilities.GetFirstWorkspace(ps, PowerBIUserScope.Individual);
+
+                ps.AddCommand(Cmdlet)
+                    .AddParameter(nameof(NewPowerBIReport.Path), "./testreport.pbix")
+                    .AddParameter(nameof(NewPowerBIReport.WorkspaceId), workspace.Id.ToString());
+
+                // Act
+                var reportId = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+            }
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(CmdletInvocationException))]
         public void EndToEndNewReportsWithoutLogin()
         {
