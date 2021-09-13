@@ -34,22 +34,22 @@
     {
       "name": "USGov",
       "cloudName": "USGovCloud",
-      "redirectApp": "powerbi-gateway"
+      "redirectApp": "powerbi-powershell"
     },
     {
       "name": "USGovHigh",
       "cloudName": "USGovDoDL4Cloud",
-      "redirectApp": "powerbi-gateway"
+      "redirectApp": "powerbi-powershell"
     },
     {
       "name": "USGovMil",
       "cloudName": "USGovDoDL5Cloud",
-      "redirectApp": "powerbi-gateway"
+      "redirectApp": "powerbi-powershell"
     },
     {
       "name": "China",
       "cloudName": "ChinaCloud",
-      "redirectApp": "powerbi-gateway"
+      "redirectApp": "powerbi-powershell"
     }
   ],
   "Settings": {
