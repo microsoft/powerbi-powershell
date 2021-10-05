@@ -166,6 +166,15 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 throw new ImportException(importId, reportName, import.ImportState);
             }
 
+            // If the import has more than one report
+            if (import.Reports.Count() > 1)
+            {
+                foreach (var report in import.Reports)
+                {
+                    if (report.Name == reportName)
+                        return report;
+                }
+            }
             return import.Reports.Single();
         }
 
@@ -203,6 +212,15 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 throw new ImportException(importId, reportName, import.ImportState);
             }
 
+            // If the import has more than one report
+            if (import.Reports.Count() > 1)
+            {
+                foreach (var report in import.Reports)
+                {
+                    if (report.Name == reportName)
+                        return report;
+                }
+            }
             return import.Reports.Single();
         }
 
