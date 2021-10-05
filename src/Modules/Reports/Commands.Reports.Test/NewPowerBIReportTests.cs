@@ -23,6 +23,9 @@ namespace Commands.Reports.Test
     public class NewPowerBIReportTests
     {
         private static CmdletInfo Cmdlet => new CmdletInfo($"{NewPowerBIReport.CmdletVerb}-{NewPowerBIReport.CmdletName}", typeof(NewPowerBIReport));
+        private static CmdletInfo CopyCmdlet => new CmdletInfo($"{CopyPowerBIReport.CmdletVerb}-{CopyPowerBIReport.CmdletName}", typeof(CopyPowerBIReport));
+        private static CmdletInfo NewWSCmdlet => new CmdletInfo($"{NewPowerBIWorkspace.CmdletVerb}-{NewPowerBIWorkspace.CmdletName}", typeof(NewPowerBIWorkspace));
+
 
         [TestMethod]
         [TestCategory("Interactive")]
