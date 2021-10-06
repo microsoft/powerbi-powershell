@@ -167,15 +167,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             }
 
             // If the import has more than one report
-            if (import.Reports.Count() > 1)
-            {
-                foreach (var report in import.Reports)
-                {
-                    if (report.Name == reportName)
-                        return report;
-                }
-            }
-            return import.Reports.Single();
+            return import.Reports.Where(r => r.Name == reportName).LastOrDefault();
         }
 
         public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout)
@@ -213,15 +205,7 @@ namespace Microsoft.PowerBI.Common.Api.Reports
             }
 
             // If the import has more than one report
-            if (import.Reports.Count() > 1)
-            {
-                foreach (var report in import.Reports)
-                {
-                    if (report.Name == reportName)
-                        return report;
-                }
-            }
-            return import.Reports.Single();
+            return import.Reports.Where(r => r.Name == reportName).LastOrDefault();
         }
 
          public Report CopyReport(string reportName, string sourceWorkspaceId, string sourceReportId, string targetWorkspaceId, string targetDatasetId)
