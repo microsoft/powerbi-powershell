@@ -1,1 +1,1 @@
-Enable interactive login for PowerShell Core.
+Bug fixes
