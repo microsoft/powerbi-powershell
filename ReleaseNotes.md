@@ -1,1 +1,1 @@
-Enable interactive login for PowerShell Core.
+New-PowerBIReport : Fix when multiplease reports are returned from API
