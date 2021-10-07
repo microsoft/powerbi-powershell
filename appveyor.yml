@@ -1,18 +1,11 @@
 image: Visual Studio 2019
 
 # Versioning
-version: '1.0.{build}'
-
-assembly_info:
-  patch: true
-  file: 'src\Common\AzureADWindowsAuthenticator\Properties\AssemblyInfo.cs'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+version: '1.2.{build}'
 
 dotnet_csproj:
   patch: true
-  file: 'src\Directory.Build.props'
+  file: 'Directory.Build.props'
   version: '{version}'
   package_version: '{version}'
   assembly_version: '{version}'
