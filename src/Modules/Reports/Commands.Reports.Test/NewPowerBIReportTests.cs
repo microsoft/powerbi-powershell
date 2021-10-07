@@ -10,6 +10,7 @@ using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
 using Microsoft.PowerBI.Commands.Reports;
+using Microsoft.PowerBI.Commands.Workspaces;
 using Microsoft.PowerBI.Commands.Workspaces.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Api;
@@ -23,6 +24,9 @@ namespace Commands.Reports.Test
     public class NewPowerBIReportTests
     {
         private static CmdletInfo Cmdlet => new CmdletInfo($"{NewPowerBIReport.CmdletVerb}-{NewPowerBIReport.CmdletName}", typeof(NewPowerBIReport));
+        private static CmdletInfo CopyCmdlet => new CmdletInfo($"{CopyPowerBIReport.CmdletVerb}-{CopyPowerBIReport.CmdletName}", typeof(CopyPowerBIReport));
+        private static CmdletInfo NewWSCmdlet => new CmdletInfo($"{NewPowerBIWorkspace.CmdletVerb}-{NewPowerBIWorkspace.CmdletName}", typeof(NewPowerBIWorkspace));
+
 
         [TestMethod]
         [TestCategory("Interactive")]
@@ -89,6 +93,81 @@ namespace Commands.Reports.Test
 
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void EndToEndNewReportWorkspaceWithMultipleReports()
+        {
+            Guid expectedReportId;
+            string workSpaceId;
+            using (var ps = PowerShell.Create())
+            {
+                // Arrange
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public);
+
+                // Create New Workspace
+                var parameters = new Dictionary<string, object>()
+                {
+                    { nameof(NewPowerBIWorkspace.Name), "Test Workspace" + Guid.NewGuid().ToString()},
+                };
+                ps.AddCommand(NewWSCmdlet).AddParameters(parameters);
+                var results = ps.Invoke();
+                Dictionary<string, object> serializedObject = null;
+                foreach (var r in results)
+                {
+                    serializedObject = r.Properties.ToDictionary(k => k.Name, v => v.Value);
+                }
+                workSpaceId = serializedObject["Id"].ToString();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                ps.Commands.Clear();
+
+                // Create New Report
+                ps.AddCommand(Cmdlet)
+                    .AddParameter(nameof(NewPowerBIReport.Path), "./testreport.pbix")
+                    .AddParameter(nameof(NewPowerBIReport.Name), "Test")
+                    .AddParameter(nameof(NewPowerBIReport.WorkspaceId), workSpaceId);
+
+                var reports = ps.Invoke();
+                foreach (var r in reports)
+                {
+                    serializedObject = r.Properties.ToDictionary(k => k.Name, v => v.Value);
+                }
+                expectedReportId = (Guid)serializedObject["Id"];
+                TestUtilities.AssertNoCmdletErrors(ps);
+                ps.Commands.Clear();
+
+                // Copy Report
+                ps.AddCommand(CopyCmdlet)
+                    .AddParameter(nameof(CopyPowerBIReport.Name), "Copied Report: " + Guid.NewGuid().ToString())
+                    .AddParameter(nameof(CopyPowerBIReport.Id), expectedReportId)
+                    .AddParameter(nameof(CopyPowerBIReport.WorkspaceId), workSpaceId);
+
+                var report = ps.Invoke();
+                TestUtilities.AssertNoCmdletErrors(ps);
+                ps.Commands.Clear();
+
+                // update Report (Dataset)
+                ps.AddCommand(Cmdlet)
+                    .AddParameter(nameof(NewPowerBIReport.Path), "./testreport.pbix")
+                    .AddParameter(nameof(NewPowerBIReport.Name), "Test")
+                    .AddParameter(nameof(NewPowerBIReport.WorkspaceId), workSpaceId)
+                    .AddParameter(nameof(NewPowerBIReport.ConflictAction), ImportConflictHandlerModeEnum.CreateOrOverwrite);
+
+                // Act
+                reports = ps.Invoke();
+
+                foreach (var r in reports)
+                {
+                    serializedObject = r.Properties.ToDictionary(k => k.Name, v => v.Value);
+                }
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.AreEqual(expectedReportId, (Guid)serializedObject["Id"]);
             }
         }
 

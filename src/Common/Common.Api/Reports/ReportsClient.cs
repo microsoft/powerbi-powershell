@@ -166,7 +166,8 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 throw new ImportException(importId, reportName, import.ImportState);
             }
 
-            return import.Reports.Single();
+            // If the import has more than one report
+            return import.Reports.Where(r => r.Name == reportName).LastOrDefault();
         }
 
         public Report PostReportForWorkspace(Guid workspaceId, string reportName, string filePath, ImportConflictHandlerModeEnum nameConflict, int timeout)
@@ -203,7 +204,8 @@ namespace Microsoft.PowerBI.Common.Api.Reports
                 throw new ImportException(importId, reportName, import.ImportState);
             }
 
-            return import.Reports.Single();
+            // If the import has more than one report
+            return import.Reports.Where(r => r.Name == reportName).LastOrDefault();
         }
 
          public Report CopyReport(string reportName, string sourceWorkspaceId, string sourceReportId, string targetWorkspaceId, string targetDatasetId)
