@@ -153,7 +153,7 @@ namespace Commands.Reports.Test
                 // update Report (Dataset)
                 ps.AddCommand(Cmdlet)
                     .AddParameter(nameof(NewPowerBIReport.Path), "./testreport.pbix")
-                    .AddParameter(nameof(NewPowerBIReport.Name), "Test")
+                    .AddParameter(nameof(NewPowerBIReport.Name), "Test2.pbix")
                     .AddParameter(nameof(NewPowerBIReport.WorkspaceId), workSpaceId)
                     .AddParameter(nameof(NewPowerBIReport.ConflictAction), ImportConflictHandlerModeEnum.CreateOrOverwrite);
 
@@ -167,7 +167,8 @@ namespace Commands.Reports.Test
 
                 // Assert
                 TestUtilities.AssertNoCmdletErrors(ps);
-                Assert.AreEqual(expectedReportId, (Guid)serializedObject["Id"]);
+                Assert.AreNotEqual(expectedReportId, (Guid)serializedObject["Id"]);
+                Assert.AreEqual("Test2", serializedObject["Name"]);
             }
         }
 
