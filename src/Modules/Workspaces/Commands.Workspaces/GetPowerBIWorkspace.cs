@@ -24,6 +24,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         private const string IdParameterSetName = "Id";
         private const string NameParameterSetName = "Name";
+        private const string TypeParameterSetName = "Type";
         private const string ListParameterSetName = "List";
 
         // Since internally, users are null rather than an empty list on workspaces v1 (groups), we don't need to filter on type for the time being
@@ -43,6 +44,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
 
         [Parameter(Mandatory = true, ParameterSetName = NameParameterSetName)]
         public string Name { get; set; }
+
+        [Parameter(Mandatory = false, ParameterSetName = ListParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = AllParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = IdParameterSetName)]
+        [Parameter(Mandatory = false, ParameterSetName = NameParameterSetName)]
+        public string Type { get; set; }
 
         [Parameter(Mandatory = false)]
         public PowerBIUserScope Scope { get; set; } = PowerBIUserScope.Individual;
@@ -156,6 +163,12 @@ namespace Microsoft.PowerBI.Commands.Workspaces
             if (this.ParameterSet.Equals(NameParameterSetName))
             {
                 this.Filter = $"tolower(name) eq '{this.Name.ToLower()}'";
+            }
+
+            if (!string.IsNullOrEmpty(this.Type))
+            {
+                var typeFilter = $"type eq '{this.Type}'";
+                this.Filter = string.IsNullOrEmpty(this.Filter) ? typeFilter : $"({this.Filter}) and ({typeFilter})";
             }
 
             if (!string.IsNullOrEmpty(this.User) && this.Scope == PowerBIUserScope.Organization)
