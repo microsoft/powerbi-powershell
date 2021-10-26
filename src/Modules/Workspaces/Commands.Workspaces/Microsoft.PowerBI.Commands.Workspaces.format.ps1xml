@@ -107,32 +107,33 @@
       <ViewSelectedBy>
         <TypeName>Microsoft.PowerBI.Common.Api.Workspaces.WorkspaceUser</TypeName>
       </ViewSelectedBy>
-      <TableControl>
-        <TableHeaders>
-          <TableColumnHeader>
-            <Label>AccessRight</Label>
-            <Width>12</Width>
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-          <TableColumnHeader>
-            <Label>UserPrincipalName</Label>
-            <Width>50</Width>
-            <Alignment>Left</Alignment>
-          </TableColumnHeader>
-        </TableHeaders>
-        <TableRowEntries>
-          <TableRowEntry>
-            <TableColumnItems>
-              <TableColumnItem>
-                <PropertyName>AccessRight</PropertyName>
-              </TableColumnItem>
-              <TableColumnItem>
-                <PropertyName>UserPrincipalName</PropertyName>
-              </TableColumnItem>
-            </TableColumnItems>
-          </TableRowEntry>
-        </TableRowEntries>
-      </TableControl>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>AccessRight</Label>
+                <ScriptBlock>$_.AccessRight</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <ItemSelectionCondition>
+                  <ScriptBlock>$_.UserPrincipalName -ne $null</ScriptBlock>
+                </ItemSelectionCondition>
+                <Label>UserPrincipalName</Label>
+                <ScriptBlock>$_.UserPrincipalName</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>Identifier</Label>
+                <ScriptBlock>$_.Identifier</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>PrincipalType</Label>
+                <ScriptBlock>$_.PrincipalType</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
     </View>
   </ViewDefinitions>
 </Configuration>

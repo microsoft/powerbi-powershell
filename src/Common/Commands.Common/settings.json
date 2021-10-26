@@ -27,11 +27,6 @@
       "redirectApp": "powerbi-powershell"
     },
     {
-      "name": "Germany",
-      "cloudName": "GermanyCloud",
-      "redirectApp": "powerbi-gateway"
-    },
-    {
       "name": "USGov",
       "cloudName": "USGovCloud",
       "redirectApp": "powerbi-powershell"
