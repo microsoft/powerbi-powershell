@@ -60,6 +60,23 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
             }
         }
 
+        public object DeleteDataset(Guid datasetId, Guid? workspaceId = default)
+        {
+            if (workspaceId.HasValue && workspaceId.Value != default)
+            {
+                return this.Client.Datasets.DeleteDatasetByIdInGroup(groupId: workspaceId.Value.ToString(), datasetKey: datasetId.ToString());
+            }
+            else
+            {
+                return this.Client.Datasets.DeleteDatasetById(datasetKey: datasetId.ToString());
+            }
+        }
+
+        public object DeleteDataset(Guid datasetId)
+        {
+            return this.Client.Datasets.DeleteDatasetById(datasetKey: datasetId.ToString());
+        }
+
         public IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default)
         {
             var result = workspaceId.HasValue && workspaceId.Value != default ?

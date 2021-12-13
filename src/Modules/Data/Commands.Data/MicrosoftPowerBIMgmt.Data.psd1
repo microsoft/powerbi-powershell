@@ -71,7 +71,7 @@ FormatsToProcess = @('Microsoft.PowerBI.Commands.Data.format.ps1xml')
 FunctionsToExport = '*'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = 'Add-PowerBIDataset','Set-PowerBITable','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset','Get-PowerBIDatasource','Get-PowerBITable','Add-PowerBIRow','Remove-PowerBIRow','Set-PowerBIDataset', 'Get-PowerBIDataflow','Export-PowerBIDataflow','Get-PowerBIDataflowDatasource'
+CmdletsToExport = 'Add-PowerBIDataset','Set-PowerBITable','New-PowerBIDataset','New-PowerBITable','New-PowerBIColumn','Get-PowerBIDataset','Get-PowerBIDatasource','Get-PowerBITable','Add-PowerBIRow','Remove-PowerBIRow','Set-PowerBIDataset','Remove-PowerBIDataset', 'Get-PowerBIDataflow','Export-PowerBIDataflow','Get-PowerBIDataflowDatasource'
 
 # Variables to export from this module
 VariablesToExport = '*'
