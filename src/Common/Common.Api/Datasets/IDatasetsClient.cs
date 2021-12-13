@@ -22,6 +22,9 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
 
         void PatchDataset(Guid datasetId, PatchDatasetRequest patchDatasetRequest, Guid? workspaceId = default);
 
+        object DeleteDataset(Guid datasetId);
+        object DeleteDataset(Guid datasetId, Guid? workspaceId = default);
+
         IEnumerable<Datasource> GetDatasources(Guid datasetId, Guid? workspaceId = default);
         IEnumerable<Datasource> GetDatasourcesAsAdmin(Guid datasetId);
 
