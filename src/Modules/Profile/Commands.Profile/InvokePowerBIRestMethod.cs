@@ -15,7 +15,8 @@ using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Abstractions.Utilities;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.PowerBI.Commands.Profile
 {
@@ -186,8 +187,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 this.Logger.WriteVerbose($"Request Uri: {response.RequestMessage.RequestUri}");
                 this.Logger.WriteVerbose($"Status Code: {response.StatusCode} ({(int)response.StatusCode})");
 
-                response.EnsureSuccessStatusCode();
-
+                
                 // Need to stream results back before HttpClient is disposed
                 var result = new HttpResult()
                 {
@@ -197,6 +197,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 if (string.IsNullOrEmpty(this.OutFile))
                 {
                     result.Content = await response.Content.ReadAsStringAsync();
+                    this.Logger.WriteVerbose($"Inner Message: {result.Content}");
                 }
                 else
                 {
@@ -205,6 +206,12 @@ namespace Microsoft.PowerBI.Commands.Profile
                     await stream.CopyToAsync(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     result.ContentStream = memoryStream;
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    JObject json = JObject.Parse(result.Content);
+                    throw new Exception(json["error"].ToString());
                 }
 
                 return result;
