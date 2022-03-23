@@ -109,6 +109,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             // auth application is auto cleared when there's no account
             if (this.AuthApplication == null)
             {
+                logger.WriteObject("AAD Authority: " + environment.AzureADAuthority);
                 var authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
                     .WithAuthority(environment.AzureADAuthority)

@@ -55,6 +55,8 @@ namespace Microsoft.PowerBI.Commands.Profile
         public SwitchParameter ServicePrincipal { get; set; }
 
         [Alias("TenantId")]
+        [Parameter(ParameterSetName = UserParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = UserAndCredentialPasswordParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
         public string Tenant { get; set; }
@@ -78,6 +80,8 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         public override void ExecuteCmdlet()
         {
+            Logger.WriteObject("Runtime framework: " + RuntimeInformation.FrameworkDescription);
+
             IPowerBIEnvironment environment = null;
 
             // Populate custom environments from discovery url if it is present
