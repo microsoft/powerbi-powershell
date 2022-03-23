@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.PowerBI.Commands.Profile
 {
