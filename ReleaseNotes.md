@@ -1,2 +1,1 @@
-update output of Get-PowerBIWorkspace for users to inlclude identifier and principaltype
-Support -Type <WorkspaceType> parameter for Get-PowerBIWorkspace
+Update Microsoft.Identity.Client version to 4.27.0
