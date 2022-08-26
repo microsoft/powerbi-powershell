@@ -37,7 +37,7 @@ Get-PowerBIWorkspace [-Scope <PowerBIUserScope>] [-Filter <String>] [-User <Stri
 
 ## DESCRIPTION
 Retrieves a list of Power BI workspaces that match the specified search criteria and scope.
-By default (without -First parameter) it shows the first 100 workspaces assigned to the user. Use -First and -Skip to fetch more workspaces or use -All to return all workspaces.
+By default (without -First parameter) it shows the first 100 workspaces assigned to the user. Use -First and -Skip to fetch more workspaces or use -All to return all workspaces. The -First parameter can be used to return at most 5000 workspaces.
 Before you run this command, make sure you log in using Connect-PowerBIServiceAccount. 
 
 ## EXAMPLES
