@@ -53,6 +53,7 @@ namespace Microsoft.PowerBI.Common.Api.Datasets
                 DefaultMode = ConvertDefaultMode(dataset.DefaultMode),
                 IsRefreshable = dataset.IsRefreshable.GetValueOrDefault(),
                 IsEffectiveIdentityRequired = dataset.IsEffectiveIdentityRequired.GetValueOrDefault(),
+                IsEffectiveIdentityRolesRequired = dataset.IsEffectiveIdentityRolesRequired.GetValueOrDefault(),
                 IsOnPremGatewayRequired = dataset.IsOnPremGatewayRequired.GetValueOrDefault(),
                 TargetStorageMode = EnumTypeConverter.ConvertTo<DatasetStorageMode, PowerBI.Api.V2.Models.DatasetStorageMode>(dataset.TargetStorageMode),
                 ActualStorage = dataset.ActualStorage,
