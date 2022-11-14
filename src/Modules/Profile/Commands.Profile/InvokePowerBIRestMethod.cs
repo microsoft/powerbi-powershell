@@ -196,16 +196,19 @@ namespace Microsoft.PowerBI.Commands.Profile
                 catch (Exception exception) 
                 {
                     // Log the error to console if content exists in the response
+                    var errorBody = exception.Message;
                     if (responseContent.Length > 0)
                     {
                         JObject json = JObject.Parse(responseContent);
 
                         if (json["error"] != null) {
-                            this.Logger.WriteError("Encountered errors when invoking the command: " + json["error"].ToString());
+                            var errorString = json["error"].ToString();
+                            this.Logger.WriteError("Encountered errors when invoking the command: " + errorString);
+                            errorBody = json["error"].ToString();
                         }
                     }
 
-                    throw new HttpRequestException(exception.ToString());
+                    throw new HttpRequestException(errorBody, exception);
                 }
                 
                 // Need to stream results back before HttpClient is disposed
