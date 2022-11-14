@@ -202,9 +202,9 @@ namespace Microsoft.PowerBI.Commands.Profile
                         JObject json = JObject.Parse(responseContent);
 
                         if (json["error"] != null) {
-                            var errorString = json["error"].ToString();
-                            this.Logger.WriteError("Encountered errors when invoking the command: " + errorString);
-                            errorBody = json["error"].ToString();
+                            var error = json["error"].ToString();
+                            this.Logger.WriteError("Encountered errors when invoking the command: " + error);
+                            errorBody = error;
                         }
                     }
 
