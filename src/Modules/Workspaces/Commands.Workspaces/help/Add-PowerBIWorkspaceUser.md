@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PowerBIWorkspaceUser
 
 ## SYNOPSIS
-Gives permissions to a specified user to access a Power BI workspace.
+Gives permissions to a specified user to access a Power BI workspace. Organization scope only allows requests with user principle.
 
 ## SYNTAX
 
