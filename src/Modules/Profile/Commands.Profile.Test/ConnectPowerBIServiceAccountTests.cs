@@ -54,6 +54,53 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void ConnectPowerBIServiceAccountServiceWithTenantId_UserParameterSet()
+        {
+            PowerBIEnvironmentType? environment = null;
+            string tenant = null;
+
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                if (environment == null)
+                {
+#if DEBUG
+                    environment = PowerBIEnvironmentType.OneBox;
+                    // onebox tenant for computeCdsa
+                    tenant = "039db662-19f0-4ca7-869a-3238540f1dd0";
+#else
+                    environment = PowerBIEnvironmentType.Public;
+#endif
+                }
+
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo)
+                    .AddParameter(nameof(ConnectPowerBIServiceAccount.Environment), environment)
+                    .AddParameter(nameof(ConnectPowerBIServiceAccount.Tenant), tenant);
+
+                var results = ps.Invoke();
+
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Count == 1);
+                Assert.IsTrue(results[0].BaseObject is PowerBIProfile);
+                var profile = results[0].BaseObject as PowerBIProfile;
+                Assert.IsNotNull(profile.Environment);
+                Assert.IsNotNull(profile.UserName);
+                if (tenant != null)
+                {
+                    Assert.AreEqual(tenant, profile.TenantId);
+                }
+
+                // Disconnect
+                ps.Commands.Clear();
+                ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
+                ps.Invoke();
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
         public void ConnectPowerBIServiceWithDiscoveryUrl()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

@@ -57,6 +57,8 @@ namespace Microsoft.PowerBI.Commands.Profile
         [Alias("TenantId")]
         [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = UserAndCredentialPasswordParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = UserParameterSet, Mandatory = false)]
         public string Tenant { get; set; }
 
         [Parameter(Mandatory = false)]
