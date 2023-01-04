@@ -114,6 +114,38 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         }
 
         [TestMethod]
+        [TestCategory("Interactive")]
+        [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        public void ConnectPowerBIServiceAccountServiceWithTenantId_UserParameterSet()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                var environment = PowerBIEnvironmentType.OneBox;
+                var tenant = "039db662-19f0-4ca7-869a-3238540f1dd0";
+
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo)
+                    .AddParameter(nameof(ConnectPowerBIServiceAccount.Environment), environment)
+                    .AddParameter(nameof(ConnectPowerBIServiceAccount.Tenant), tenant);
+
+                // Act
+                var results = ps.Invoke();
+
+                // Assert
+                TestUtilities.AssertNoCmdletErrors(ps);
+                Assert.IsTrue(results.Count == 1);
+                Assert.IsTrue(results[0].BaseObject is PowerBIProfile);
+                var profile = results[0].BaseObject as PowerBIProfile;
+                Assert.AreEqual(tenant, profile.TenantId);
+
+                // Disconnect
+                ps.Commands.Clear();
+                ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
+                ps.Invoke();
+            }
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void ConnectPowerBIServiceAccountDiscoveryUrl_NullCustomEnvironment()
         {
