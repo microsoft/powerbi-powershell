@@ -100,6 +100,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 var environment = PowerBIEnvironmentType.OneBox;
                 var tenant = "039db662-19f0-4ca7-869a-3238540f1dd0"; // Onebox tenant for ComputeCdsa
 
+#if DEBUG
                 ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo)
                     .AddParameter(nameof(ConnectPowerBIServiceAccount.Environment), environment)
                     .AddParameter(nameof(ConnectPowerBIServiceAccount.Tenant), tenant);
@@ -118,6 +119,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 ps.Commands.Clear();
                 ps.AddCommand(ProfileTestUtilities.DisconnectPowerBIServiceAccountCmdletInfo);
                 ps.Invoke();
+#endif
             }
         }
 
