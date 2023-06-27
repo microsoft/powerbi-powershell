@@ -67,6 +67,12 @@ If the `-Scope` parameter doesn't exist on the cmdlet, the entity doesn't suppor
 Connect-PowerBIServiceAccount   # or use aliases: Login-PowerBIServiceAccount, Login-PowerBI
 ```
 
+Use the `Environment` parameter if you need other than Public, which is default. Options are Germany, USGov, China, USGovHigh, USGovMil.
+
+```powershell
+Connect-PowerBIServiceAccount -Environment China
+```
+
 ### Get workspaces
 
 Get workspaces for the user. By default (i.e. without `-First` parameter) it shows the first 100 workspaces assigned to the user:
