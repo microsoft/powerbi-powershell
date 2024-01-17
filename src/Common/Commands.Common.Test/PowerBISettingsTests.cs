@@ -59,9 +59,9 @@ namespace Microsoft.PowerBI.Commands.Common.Test
 
             var testDir = Directory.GetCurrentDirectory();
 
-            File.WriteAllText(Path.Combine(testDir, "testSettings.json"), testJson);
+            File.WriteAllText(Path.Combine(testDir, "sampleTestSettings.json"), testJson);
 
-            var settings = new PowerBISettings(Path.Combine(testDir, "testSettings.json"));
+            var settings = new PowerBISettings(Path.Combine(testDir, "sampleTestSettings.json"));
             Assert.IsNotNull(settings.Environments);
             Assert.IsNotNull(settings.Settings);
             Assert.IsTrue(settings.Environments.Count == 2);
