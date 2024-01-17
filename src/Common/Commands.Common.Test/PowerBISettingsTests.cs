@@ -32,8 +32,17 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""globalService"": ""https://api.powerbi.com"",
       ""redirectApp"": ""powerbi-powershell""
     },
-{
+    {
       ""name"": ""NotValid"",
+      ""authority"": ""https://login.windows-ppe.net/common/oauth2/authorize"",
+      ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
+      ""redirect"": ""https://login.microsoftonline.com/common/oauth2/nativeclient"",
+      ""resource"": ""https://analysis.windows-int.net/powerbi/api"",
+      ""globalService"": ""https://api.powerbi.com"",
+      ""redirectApp"": ""powerbi-powershell""
+    },
+    {
+      ""name"": ""Daily"",
       ""authority"": ""https://login.windows-ppe.net/common/oauth2/authorize"",
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
       ""redirect"": ""https://login.microsoftonline.com/common/oauth2/nativeclient"",
@@ -55,7 +64,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             var settings = new PowerBISettings(Path.Combine(testDir, "testSettings.json"));
             Assert.IsNotNull(settings.Environments);
             Assert.IsNotNull(settings.Settings);
-            Assert.IsTrue(settings.Environments.Count == 1);
+            Assert.IsTrue(settings.Environments.Count == 2);
             Assert.AreEqual(true, settings.Settings.ForceDeviceCodeAuthentication);
         }
 

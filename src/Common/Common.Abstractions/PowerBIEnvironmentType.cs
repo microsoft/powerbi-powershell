@@ -11,6 +11,7 @@ namespace Microsoft.PowerBI.Common.Abstractions
         OneBox = 100,
         EDog = 101,
         DXT = 102,
+        Daily = 103,
 #endif
         Public = 0,
         Germany = 1,
