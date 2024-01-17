@@ -98,6 +98,13 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             AssertValidEnvironmentSharedProperties(dxtEnvironment);
             Assert.AreEqual("https://analysis.windows.net/powerbi/api", dxtEnvironment.AzureADResource);
             Assert.AreEqual("https://wabi-staging-us-east-redirect.analysis.windows.net", dxtEnvironment.GlobalServiceEndpoint);
+
+            var dailyEnvironment = settings.Environments[PowerBIEnvironmentType.Daily];
+            Assert.AreEqual(PowerBIEnvironmentType.Daily, dailyEnvironment.Name);
+            Assert.AreEqual("https://login.microsoftonline.com/common/oauth2/authorize", dailyEnvironment.AzureADAuthority);
+            AssertValidEnvironmentSharedProperties(dailyEnvironment);
+            Assert.AreEqual("https://analysis.windows.net/powerbi/api", dailyEnvironment.AzureADResource);
+            Assert.AreEqual("https://wabi-daily-us-east2-redirect.analysis.windows.net", dailyEnvironment.GlobalServiceEndpoint);
 #endif
         }
 

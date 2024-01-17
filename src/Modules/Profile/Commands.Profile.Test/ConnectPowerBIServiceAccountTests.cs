@@ -65,7 +65,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
                 if (environment == null)
                 {
 #if DEBUG
-                    environment = PowerBIEnvironmentType.Daily;
+                    environment = PowerBIEnvironmentType.OneBox;
                     // onebox tenant for computeCdsa
                     tenant = "039db662-19f0-4ca7-869a-3238540f1dd0";
 #else
