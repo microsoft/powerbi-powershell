@@ -32,7 +32,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
       ""globalService"": ""https://api.powerbi.com"",
       ""redirectApp"": ""powerbi-powershell""
     },
-{
+    {
       ""name"": ""NotValid"",
       ""authority"": ""https://login.windows-ppe.net/common/oauth2/authorize"",
       ""clientId"": ""ea0616ba-638b-4df5-95b9-636659ae5121"",
@@ -50,9 +50,9 @@ namespace Microsoft.PowerBI.Commands.Common.Test
 
             var testDir = Directory.GetCurrentDirectory();
 
-            File.WriteAllText(Path.Combine(testDir, "testSettings.json"), testJson);
+            File.WriteAllText(Path.Combine(testDir, "sampleTestSettings.json"), testJson);
 
-            var settings = new PowerBISettings(Path.Combine(testDir, "testSettings.json"));
+            var settings = new PowerBISettings(Path.Combine(testDir, "sampleTestSettings.json"));
             Assert.IsNotNull(settings.Environments);
             Assert.IsNotNull(settings.Settings);
             Assert.IsTrue(settings.Environments.Count == 1);
@@ -89,6 +89,13 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             AssertValidEnvironmentSharedProperties(dxtEnvironment);
             Assert.AreEqual("https://analysis.windows.net/powerbi/api", dxtEnvironment.AzureADResource);
             Assert.AreEqual("https://wabi-staging-us-east-redirect.analysis.windows.net", dxtEnvironment.GlobalServiceEndpoint);
+
+            var dailyEnvironment = settings.Environments[PowerBIEnvironmentType.Daily];
+            Assert.AreEqual(PowerBIEnvironmentType.Daily, dailyEnvironment.Name);
+            Assert.AreEqual("https://login.microsoftonline.com/common/oauth2/authorize", dailyEnvironment.AzureADAuthority);
+            AssertValidEnvironmentSharedProperties(dailyEnvironment);
+            Assert.AreEqual("https://analysis.windows.net/powerbi/api", dailyEnvironment.AzureADResource);
+            Assert.AreEqual("https://wabi-daily-us-east2-redirect.analysis.windows.net", dailyEnvironment.GlobalServiceEndpoint);
 #endif
         }
 

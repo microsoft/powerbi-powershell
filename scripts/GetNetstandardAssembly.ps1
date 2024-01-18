@@ -23,7 +23,7 @@ param
 	
 	# The installed .NET SDK must have the same major and minor number and a lower build\patch number.
 	[ValidateNotNullOrEmpty()]
-	[string] $MajorMinorSDKVersionCheck = '2.1.899'
+	[string] $MajorMinorSDKVersionCheck = '3.1.427'
 )
 
 # .NET CORE 2.0 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.0

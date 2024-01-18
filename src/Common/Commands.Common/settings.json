@@ -1,51 +1,58 @@
 {
   "Environments": [
-    {
-      "name": "OneBox",
-      "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
-      "resource": "https://analysis.windows-int.net/powerbi/api",
-      "globalService": "https://onebox-redirect.analysis.windows-int.net",
-      "redirectApp": "powerbi-powershell"
-    },
-    {
-      "name": "EDog",
-      "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
-      "resource": "https://analysis.windows-int.net/powerbi/api",
-      "globalService": "https://biazure-int-edog-redirect.analysis-df.windows.net",
-      "redirectApp": "powerbi-powershell"
-    },
-    {
-      "name": "DXT",
-      "authority": "https://login.microsoftonline.com/common/oauth2/authorize",
-      "resource": "https://analysis.windows.net/powerbi/api",
-      "globalService": "https://wabi-staging-us-east-redirect.analysis.windows.net",
-      "redirectApp": "powerbi-powershell"
-    },
-    {
-      "name": "Public",
-      "cloudName": "GlobalCloud",
-      "redirectApp": "powerbi-powershell"
-    },
-    {
-      "name": "USGov",
-      "cloudName": "USGovCloud",
-      "redirectApp": "powerbi-powershell"
-    },
-    {
-      "name": "USGovHigh",
-      "cloudName": "USGovDoDL4Cloud",
-      "redirectApp": "powerbi-powershell"
-    },
-    {
-      "name": "USGovMil",
-      "cloudName": "USGovDoDL5Cloud",
-      "redirectApp": "powerbi-powershell"
-    },
-    {
-      "name": "China",
-      "cloudName": "ChinaCloud",
-      "redirectApp": "powerbi-powershell"
-    }
+      {
+        "name": "OneBox",
+        "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
+        "resource": "https://analysis.windows-int.net/powerbi/api",
+        "globalService": "https://onebox-redirect.analysis.windows-int.net",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "EDog",
+        "authority": "https://login.windows-ppe.net/common/oauth2/authorize",
+        "resource": "https://analysis.windows-int.net/powerbi/api",
+        "globalService": "https://biazure-int-edog-redirect.analysis-df.windows.net",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "DXT",
+        "authority": "https://login.microsoftonline.com/common/oauth2/authorize",
+        "resource": "https://analysis.windows.net/powerbi/api",
+        "globalService": "https://wabi-staging-us-east-redirect.analysis.windows.net",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "Daily",
+        "authority": "https://login.microsoftonline.com/common/oauth2/authorize",
+        "resource": "https://analysis.windows.net/powerbi/api",
+        "globalService": "https://wabi-daily-us-east2-redirect.analysis.windows.net",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "Public",
+        "cloudName": "GlobalCloud",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "USGov",
+        "cloudName": "USGovCloud",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "USGovHigh",
+        "cloudName": "USGovDoDL4Cloud",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "USGovMil",
+        "cloudName": "USGovDoDL5Cloud",
+        "redirectApp": "powerbi-powershell"
+      },
+      {
+        "name": "China",
+        "cloudName": "ChinaCloud",
+        "redirectApp": "powerbi-powershell"
+      }
   ],
   "Settings": {
     "ForceDeviceCodeAuthentication": false,
