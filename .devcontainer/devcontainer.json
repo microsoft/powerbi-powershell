@@ -1,0 +1,46 @@
+{
+    "name": "powerbi-powershell in Codespaces",
+    "image": "mcr.microsoft.com/dotnet/sdk:8.0",
+    "features": {
+        // "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {
+            "version": "2"
+        },
+        "ghcr.io/devcontainers/features/powershell:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        // "ghcr.io/devcontainers/features/dotnet:2": {
+        //     "version": "none",
+        //     "dotnetRuntimeVersions": "7.0",
+        //     "aspNetCoreRuntimeVersions": "7.0"
+        // }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "GitHub.vscode-github-actions",
+                "ms-dotnettools.vscode-dotnet-runtime",
+                "ms-dotnettools.csdevkit",
+                "ms-dotnetools.csharp",
+                "ms-vscode.powershell",
+                "ms-dotnettools.vscodeintellicode-csharp",
+                "esbenp.prettier-vscode",
+                "github.github-vscode-theme",
+                "github.vscode-pull-request-github",
+                "github.vscode-codeql"
+            ]
+        }
+    },
+    "postCreateCommand": "dotnet restore dirs.proj",
+    "hostRequirements": {
+        "memory": "8gb",
+        "cpus": 4
+    },
+    "remoteEnv": {
+        "DOTNET_MULTILEVEL_LOOKUP": "0",
+        "TARGET": "net8.0"
+    }
+}
