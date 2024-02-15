@@ -6,7 +6,7 @@ Licensed under the MIT License.
 ***********************************************************************************************
 -->
 <Project>
-  
+
   <PropertyGroup>
     <MinimumMSBuildVersion>16.10</MinimumMSBuildVersion>
     <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
