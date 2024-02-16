@@ -2,7 +2,7 @@
     "name": "powerbi-powershell in Codespaces",
     "image": "mcr.microsoft.com/dotnet/sdk:8.0",
     "features": {
-        // "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
         "ghcr.io/devcontainers/features/github-cli:1": {
             "version": "2"
         },
@@ -10,11 +10,11 @@
             "version": "latest"
         },
         "ghcr.io/devcontainers/features/common-utils:2": {},
-        // "ghcr.io/devcontainers/features/dotnet:2": {
-        //     "version": "none",
-        //     "dotnetRuntimeVersions": "7.0",
-        //     "aspNetCoreRuntimeVersions": "7.0"
-        // }
+        "ghcr.io/devcontainers/features/dotnet:2": {
+            "version": "none",
+            "dotnetRuntimeVersions": "7.0",
+            "aspNetCoreRuntimeVersions": "7.0"
+        }
     },
     "customizations": {
         "vscode": {
