@@ -55,6 +55,24 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "Build (Release) via dotnet",
+            "command": "dotnet",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": [
+                "build",
+                "-c",
+                "Release",
+                "${workspaceFolder}/dirs.proj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "Build via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\Build.ps1'",
@@ -101,7 +119,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Pack via dotnet",
+            "label": "Pack (release build) via dotnet",
             "command": "dotnet",
             "type": "process",
             "args": [
