@@ -1,3 +1,5 @@
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
@@ -10,6 +12,19 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Disable StrongName
+        shell: pwsh
+        run: |
+          scripts/DisableStrongName.ps1
+      - name: Setup .NET 8.x
+        uses: actions/setup-dotnet@v3
+        with:
+          # Semantic version range syntax or exact version of a dotnet version
+          dotnet-version: '8.x'
+      # - name: Install dependencies
+      #   run: dotnet restore dirs.proj
+      # - name: Build
+      #   run: dotnet build dirs.proj
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: List files in the repository

@@ -25,5 +25,6 @@
     <PackageVersion Include="Moq" Version="4.8.2" />
     <PackageVersion Include="platyPS" Version="0.9.0" />
     <PackageVersion Include="SlnGen" Version="2.2.30" />
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.133" />
   </ItemGroup>
 </Project>

@@ -27,13 +27,6 @@ Licensed under the MIT License.
     <Company>Microsoft Corporation</Company>
     <Copyright>Copyright (c) Microsoft Corporation. All rights reserved.</Copyright>
     
-    <!-- Versioning -->
-    <Version Condition="'$(Version)' == ''">1.2.0</Version>
-    <AssemblyVersion>$(Version)</AssemblyVersion>
-    <PackageVersion>$(Version)</PackageVersion>
-    <FileVersion>$(Version)</FileVersion>
-    <InformationalVersion>$(Version)</InformationalVersion>
-    
     <!-- Packaging -->
     <Authors>Microsoft Corporation</Authors>
     <PackageLicenseUrl>https://github.com/Microsoft/powerbi-powershell/blob/master/LICENSE</PackageLicenseUrl>
@@ -49,15 +42,16 @@ Licensed under the MIT License.
   <PropertyGroup>
     <SlnGenLaunchVisualStudio>true</SlnGenLaunchVisualStudio>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="SlnGen" />
   </ItemGroup>
 
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
+  <!-- Versioning -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
+  </ItemGroup>
 
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
-  
-  <Import Project="$(RepoTargets)Microsoft.PowerBI.Packaging.targets" Condition="'$(NoPackageTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'"/>
-
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'" />
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'" />
+  <Import Project="$(RepoTargets)Microsoft.PowerBI.Packaging.targets" Condition="'$(NoPackageTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'" />
 </Project>
