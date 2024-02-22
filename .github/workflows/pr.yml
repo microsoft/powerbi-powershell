@@ -47,7 +47,7 @@ jobs:
         run: dotnet build --no-restore dirs.proj
       
       - name: Test
-        run: dotnet test --no-build --verbosity normal --logger trx --results-directory "TestResults" dirs.proj
+        run: dotnet test --no-build --no-restore --filter "TestCategory!=Interactive" --verbosity normal --logger trx --results-directory "TestResults" dirs.proj
       
       - name: Publish Test Results
         uses: actions/upload-artifact@v4
