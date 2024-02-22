@@ -4,7 +4,12 @@ name: PR Build
 run-name: Executing Build for ${{ github.actor }} on ${{ github.repository }} for branch ${{ github.ref }}
 on:
   pull_request:
-    branches: [ $default-branch ]
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - master
 jobs:
   Build:
     runs-on: [self-hosted, 1ES.Pool=powerbi-powershell-pool]
