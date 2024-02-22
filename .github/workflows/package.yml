@@ -12,13 +12,18 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need for history to be able to determine version number
+      
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x' # SDK Version to use.
           source-url: https://nuget.pkg.github.com/microsoft/powerbi-powershell/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      
       - name: Create the package
         run: dotnet pack --configuration Release dirs.proj
+      
       - name: Publish the package to GPR
         run: dotnet nuget push PkgOut/*.nupkg
