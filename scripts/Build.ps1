@@ -33,7 +33,7 @@ param
 
     # Build Configuration. Default is to use the MSBuild project defaults which is likely Debug.
     [ValidateSet($null, 'Debug', 'Release')]
-    [string[]] $Configuration = @(),
+    [string] $Configuration,
 
     # Indicates to include the binary logger which can be used with the MSBuild Structured Log Viewer.
     [Alias('BL')]
@@ -62,8 +62,55 @@ param
 )
 
 if ($IsLinux -or $IsMacOS) {
-    Write-Error "This script is not supported on Linux or macOS. Use dotnet build instead." -ErrorAction Continue
-    exit 1
+    $fullSolutionPath = (Resolve-Path -Path $Solution -ErrorAction Stop).ProviderPath
+
+    # https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build
+    $dotnetArgs = @()
+    if ($Pack -or $NoBuild) {
+        $dotnetArgs += 'pack'
+    }
+    else {
+        $dotnetArgs += 'build'
+    }
+
+    if ($Configuration) {
+        $dotnetArgs += '-c'
+        $dotnetArgs += $Configuration
+    }
+
+    if($BinaryLogger) {
+        $msBuildArgs += '-bl'
+    }
+
+    if ($NoBuild) {
+        $dotnetArgs += '--no-build'
+    }
+
+    if (!$Restore) {
+        $dotnetArgs += '--no-restore'
+    }
+
+    if ($Clean) {
+        #$dotnetArgs += '--no-incremental'
+        Write-Host "Calling: dotnet clean $fullSolutionPath" -ForegroundColor Magenta
+        & dotnet clean $fullSolutionPath
+    }
+
+    if($MSBuildProperties -and ($MSBuildProperties.Count -gt 0)) {
+        foreach($property in $MSBuildProperties.GetEnumerator()) {
+            $dotnetArgs += "--property:$($property.Key)=$(($property.Value -join ','))"
+        }
+    }
+    
+    $dotnetArgs += $fullSolutionPath
+    
+    Write-Host "Calling: dotnet $($dotnetArgs -join ' ')" -ForegroundColor Magenta
+    & dotnet $dotnetArgs
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
+
+    return
 }
 
 Import-Module $PSScriptRoot\FindVS.psm1
@@ -89,7 +136,7 @@ if($MSBuildTargets.Count -gt 0) {
     $msBuildArgs += ('/t:' + ($MSBuildTargets -join ','))
 }
 
-if($Configuration.Count -gt 0) {
+if($Configuration) {
     $MSBuildProperties['Configuration'] = $Configuration
 }
 
