@@ -75,13 +75,10 @@ if(!$LoadOnly) {
 
 if($env:PSModulePath -split ';' -inotcontains $PackageDir) {
     Write-Verbose "Adding '$PackageDir' to PSModulePath environment variable..."
-    $speraterChar = ';'
-    if ($IsLinux -or $IsMacOS) {
-        $speraterChar = ':'
-    }
+    $pathSeperator = [System.IO.Path]::PathSeparator 
 
-    $env:PSModulePath = $env:PSModulePath.TrimEnd($speraterChar)
-    $env:PSModulePath += "$($speraterChar)$PackageDir"
+    $env:PSModulePath = $env:PSModulePath.TrimEnd($pathSeperator)
+    $env:PSModulePath += "$($pathSeperator)$PackageDir"
 }
 
 Write-Output "[Done] Updated PSModulePath with '$PackageDir', you can now invoke cmdlets (causes module auto-loading)"
