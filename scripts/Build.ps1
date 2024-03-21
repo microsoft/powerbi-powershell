@@ -61,6 +61,11 @@ param
     [switch] $NoParallel
 )
 
+if ($IsLinux -or $IsMacOS) {
+    Write-Error "This script is not supported on Linux or macOS. Use dotnet build instead." -ErrorAction Continue
+    exit 1
+}
+
 Import-Module $PSScriptRoot\FindVS.psm1
 $msbuildPath = Get-VSBuildFolder -Prerelease:$VSPreview
 
