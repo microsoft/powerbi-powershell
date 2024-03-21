@@ -82,8 +82,13 @@ $ReleaseNotes
 
 if($updatePsdFile) {
     Write-Output "Updating module file: $ModulePath"
-    $utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($false)
-    [System.IO.File]::WriteAllText($ModulePath, $psdFileContent, $utf8NoBomEncoding)
+    if ($IsWindows) {
+        $utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($false)
+        [System.IO.File]::WriteAllText($ModulePath, $psdFileContent, $utf8NoBomEncoding)
+    }
+    else {
+        Set-Content -Path $ModulePath -Value $psdFileContent -Encoding UTF8 -Force
+    }
 }
 else {
     Write-Warning "No updates made to module file: $ModulePath"
