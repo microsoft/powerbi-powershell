@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+        "ms-vscode.powershell",
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.vscodeintellicode-csharp",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "MS-CST-E.vscode-devskim",
+        "ms-sarifvscode.sarif-viewer",
+        "esbenp.prettier-vscode",
+        "github.codespaces",
+        "github.github-vscode-theme",
+        "github.vscode-pull-request-github",
+        "github.vscode-github-actions",
+        "github.vscode-codeql"
+    ]
+}

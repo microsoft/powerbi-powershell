@@ -136,7 +136,7 @@ Licensed under the MIT License.
   
   <Target Name="UpdatePSManifest" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
 
-    <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)UpdatePSModuleManifest.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -TargetFramework &apos;$(TargetFramework)&apos; -Version &apos;$(PackageVersion)&apos; -ReleaseNotes &apos;$(RepoRoot)ReleaseNotes.md&apos;} &quot;" />
+    <Exec Command="&quot;$(PowerShellExe)&quot; $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)UpdatePSModuleManifest.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -TargetFramework &apos;$(TargetFramework)&apos; -Version &apos;$(PackageVersion)&apos; -ReleaseNotes &apos;$(RepoRoot)ReleaseNotes.md&apos;} &quot;" />
 
   </Target>
   

@@ -9,6 +9,10 @@ param
     [switch] $VSPreview
 )
 
+if ($IsLinux -or $IsMacOS) {
+    throw "This script is not supported on Linux or macOS. Use dotnet CLI instead."
+}
+
 Import-Module $PSScriptRoot\FindVS.psm1
 $msbuildPath = Get-VSBuildFolder -Prerelease:$VSPreview
 

@@ -42,7 +42,17 @@ Write-Host "DirectoryName: $DirectoryName"
 
 # Build
 if(!$NoBuild) {
-    & "$PSScriptRoot\Build.ps1"
+    if ($IsWindows) {
+        & "$PSScriptRoot\Build.ps1"
+    }
+    else {
+        Write-Host "Calling: dotnet build --property:GenerateFullPaths=true" -ForegroundColor Magenta
+        & dotnet build --property:GenerateFullPaths=true
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Failed to build" -ErrorAction Continue
+            exit 1
+        }
+    }
 }
 
 # Locate test assembly
@@ -53,4 +63,15 @@ if(!$csProj) {
 
 # Run tests
 Write-Host "Set breakpoint in test method '$TestName', and use .NET Core Attach to debug test (using process ID)" -ForegroundColor Magenta
-& "$PSScriptRoot\Test.ps1" -VSTestHostDebug -TestName $TestName -TestProject $csProj.BaseName -Filter '' # Set filter to empty string to allow interactive tests to be debugged
+
+if ($IsWindows) {
+    & "$PSScriptRoot\Test.ps1" -VSTestHostDebug -TestName $TestName -TestProject $csProj.BaseName -Filter '' # Set filter to empty string to allow interactive tests to be debugged
+}
+else {
+    Write-Host "Calling: dotnet test --filter 'FullyQualifiedName~$TestName' --verbosity normal --logger trx --results-directory '$PSScriptRoot/../TestResults' $($csProj.FullName)" -ForegroundColor Magenta
+    & dotnet test --no-build --no-restore --filter "FullyQualifiedName~$TestName" --verbosity normal --logger trx --results-directory "$PSScriptRoot/../TestResults" $csProj.FullName
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to test" -ErrorAction Continue
+        exit 1
+    }
+}

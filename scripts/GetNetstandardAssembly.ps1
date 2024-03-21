@@ -19,18 +19,18 @@ param
 (
 	# Path to SDK install directory
     [ValidateNotNullOrEmpty()]
-    [string] $SdkInstallDir = 'C:\Program Files\dotnet\sdk\',
+    [string] $SdkInstallDir = ($IsLinux) ? '/usr/share/dotnet/sdk' : 'C:\Program Files\dotnet\sdk\',
 	
 	# The installed .NET SDK must have the same major and minor number and a lower build\patch number.
 	[ValidateNotNullOrEmpty()]
-	[string] $MajorMinorSDKVersionCheck = '3.1.427'
+	[string] $MajorMinorSDKVersionCheck = '8.0.202'
 )
 
 # .NET CORE 2.0 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.0
 # .NET CORE 2.1 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.1
 
 $versionCheck = [version]$MajorMinorSDKVersionCheck
-$sdkVersions = Get-ChildItem $SdkInstallDir -Directory | Where-Object Name -Match '\d+\.\d+\.\d+$' | ForEach-Object { 
+$sdkVersions = Get-ChildItem -Path $SdkInstallDir -Directory | Where-Object Name -Match '\d+\.\d+\.\d+$' | ForEach-Object { 
     $version = [version]$_.BaseName
     $_ | Add-Member -Name SDKVersion -MemberType NoteProperty -Value $version
     $_ 

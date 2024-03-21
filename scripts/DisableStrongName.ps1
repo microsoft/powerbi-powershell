@@ -30,6 +30,10 @@ param
     [switch] $EnableStrongName
 )
 
+if ($IsLinux -or $IsMacOS) {
+    throw "This script is meant to be run on Windows only"
+}
+
 <#
 # Purpose: This script is meant for disabling strong name validation.
 # When building with Configuration=Release, the binaries are built with DelaySigned=true which causes strong name validation to take effect when loading.

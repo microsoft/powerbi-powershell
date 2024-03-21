@@ -6,6 +6,10 @@ function Get-VSBuildFolder
         [switch] $Prerelease
     )
 
+    if ($IsLinux -or $IsMacOS) {
+        throw "This script is not supported on Linux or macOS. Use dotnet CLI instead."
+    }
+
     # https://github.com/Microsoft/vswhere
     $vsWhereExe = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
     if(!(Test-Path -Path $vsWhereExe)) {

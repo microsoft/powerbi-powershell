@@ -1,10 +1,11 @@
 {
     // https://code.visualstudio.com/docs/editor/variables-reference
+    // Example: https://github.com/PowerShell/vscode-powershell/blob/main/examples/.vscode/tasks.json
     "version": "2.0.0",
     "windows": {
         "options": {
             "shell": {
-                "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
                 "args": [
                     "-NoProfile",
                     "-ExecutionPolicy",
@@ -38,12 +39,46 @@
     },
     "tasks": [
         {
-            "label": "Build",
+            "label": "Build via dotnet",
+            "command": "dotnet",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": [
+                "build",
+                "${workspaceFolder}/dirs.proj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build (Release) via dotnet",
+            "command": "dotnet",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": [
+                "build",
+                "-c",
+                "Release",
+                "${workspaceFolder}/dirs.proj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\Build.ps1'",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": "$msCompile"
         },
@@ -60,25 +95,49 @@
         //             }
         // },
         {
-            "label": "Clean",
+            "label": "Clean via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\Build.ps1' -Clean -NoBuild",
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Pack",
+            "label": "Clean via dotnet",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/dirs.proj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Pack via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\Build.ps1' -Pack -Clean",
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Restore",
+            "label": "Pack (release build) via dotnet",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "pack",
+                "${workspaceFolder}/dirs.proj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Restore via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\RestorePackages.ps1'",
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Test",
+            "label": "Test via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\Test.ps1'",
             "group": "test",
@@ -89,7 +148,7 @@
             }
         },
         {
-            "label": "PrepManualTesting",
+            "label": "PrepManualTesting via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\PrepManualTesting.ps1' -Build -Force",
             "problemMatcher": "$msCompile",
@@ -102,7 +161,7 @@
             }
         },
         {
-            "label": "DebugTest",
+            "label": "DebugTest via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\DebugTest.ps1' -TestName '${selectedText}' -DirectoryName '${fileDirname}'",
             "problemMatcher": "$msCompile",
@@ -116,7 +175,7 @@
             }
         },
         {
-            "label": "DebugTest (No Build)",
+            "label": "DebugTest (No Build) via Shell",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\DebugTest.ps1' -TestName '${selectedText}' -DirectoryName '${fileDirname}' -NoBuild",
             "problemMatcher": "$msCompile",
