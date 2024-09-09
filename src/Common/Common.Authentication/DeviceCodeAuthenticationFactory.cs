@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Microsoft.Identity.Client;
+using Microsoft.Identity.Client.Broker;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
@@ -26,7 +27,7 @@ namespace Microsoft.PowerBI.Common.Authentication
                 .Create(environment.AzureADClientId)
                 .WithAuthority(environment.AzureADAuthority)
                 .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
-                .WithRedirectUri(environment.AzureADRedirectAddress)
+                .WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows))
                 .Build();
             }
 

@@ -64,7 +64,7 @@ namespace Microsoft.PowerBI.Commands.Common
 
             // Handle MSAL assemblies
             string assemblyFilePath;
-            if (requestedAssembly.Name == "Microsoft.Identity.Client" || requestedAssembly.Name == "Microsoft.Identity.Client.Extensions.Msal")
+            if (requestedAssembly.Name == "Microsoft.Identity.Client" || requestedAssembly.Name == "Microsoft.Identity.Client.Extensions.Msal" || requestedAssembly.Name == "Microsoft.Identity.Client.Broker")
             {
                 var libType = IsNetFramework ? "net45" : "netcoreapp2.1";
                 assemblyFilePath = Path.Combine(executingDirectory, "MSAL", libType, requestedAssembly.Name + ".dll");
