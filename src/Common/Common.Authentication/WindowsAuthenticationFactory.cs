@@ -15,6 +15,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Identity.Client;
+using Microsoft.Identity.Client.Broker;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Abstractions.Utilities;
 
@@ -73,6 +74,10 @@ namespace Microsoft.PowerBI.Common.Authentication
                     }
                 }
             }
+            catch (MsalUiRequiredException)
+            {
+                result = await this.AuthApplication.AcquireTokenInteractive(scopes).ExecuteAsync();
+            }
             catch (Exception ex)
             {
                 throw new AuthenticationException($"Error Acquiring Token:{System.Environment.NewLine}{ex.Message}");
@@ -114,7 +119,8 @@ namespace Microsoft.PowerBI.Common.Authentication
                     .WithAuthority(environment.AzureADAuthority)
                     .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                     .WithExtraQueryParameters(queryParameters)
-                    .WithRedirectUri(environment.AzureADRedirectAddress);
+                    .WithRedirectUri(environment.AzureADRedirectAddress)
+                    .WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows));
 
                 if (!PublicClientHelper.IsNetFramework)
                 {

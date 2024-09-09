@@ -18,6 +18,7 @@
     <PackageReference Update="PowerShellStandard.Library" PrivateAssets="all" />
     <PackageReference Update="Microsoft.Identity.Client.Extensions.Msal" GeneratePathProperty="true" />
     <PackageReference Update="Microsoft.Identity.Client" GeneratePathProperty="true" />
+    <PackageReference Update="Microsoft.Identity.Client.Broker" GeneratePathProperty="true" />
     <PackageReference Update="SlnGen" PrivateAssets="all"/>
   </ItemGroup>
 </Project>
