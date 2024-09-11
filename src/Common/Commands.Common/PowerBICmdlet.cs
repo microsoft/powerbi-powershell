@@ -63,16 +63,7 @@ namespace Microsoft.PowerBI.Commands.Common
             string executingDirectory = GetExecutingDirectory();
 
             // Handle MSAL assemblies
-            string assemblyFilePath;
-            if (requestedAssembly.Name == "Microsoft.Identity.Client" || requestedAssembly.Name == "Microsoft.Identity.Client.Extensions.Msal" || requestedAssembly.Name == "Microsoft.Identity.Client.Broker")
-            {
-                var libType = IsNetFramework ? "net45" : "netcoreapp2.1";
-                assemblyFilePath = Path.Combine(executingDirectory, "MSAL", libType, requestedAssembly.Name + ".dll");
-            }
-            else
-            {
-                assemblyFilePath = Path.Combine(executingDirectory, requestedAssembly.Name + ".dll");
-            }
+            string assemblyFilePath = Path.Combine(executingDirectory, requestedAssembly.Name + ".dll");
 
             if (File.Exists(assemblyFilePath))
             {
