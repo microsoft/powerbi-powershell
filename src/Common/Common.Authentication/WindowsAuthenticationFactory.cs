@@ -23,6 +23,38 @@ namespace Microsoft.PowerBI.Common.Authentication
 {
     public class WindowsAuthenticationFactory : IAuthenticationUserFactory
     {
+        private enum GetAncestorFlags
+        {
+            GetParent = 1,
+            GetRoot = 2,
+            /// <summary>
+            /// Retrieves the owned root window by walking the chain of parent and owner windows returned by GetParent.
+            /// </summary>
+            GetRootOwner = 3
+        }
+
+        /// <summary>
+        /// Retrieves the handle to the ancestor of the specified window.
+        /// </summary>
+        /// <param name="hwnd">A handle to the window whose ancestor is to be retrieved.
+        /// If this parameter is the desktop window, the function returns NULL. </param>
+        /// <param name="flags">The ancestor to be retrieved.</param>
+        /// <returns>The return value is the handle to the ancestor window.</returns>
+        [DllImport("user32.dll", ExactSpelling = true)]
+        static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags flags);
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        // window handle
+        private IntPtr GetConsoleOrTerminalWindow()
+        {
+            IntPtr consoleHandle = GetConsoleWindow();
+            IntPtr handle = GetAncestor(consoleHandle, GetAncestorFlags.GetRootOwner);
+
+            return handle;
+        }
+
         private IPublicClientApplication AuthApplication;
 
         public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
@@ -122,7 +154,8 @@ namespace Microsoft.PowerBI.Common.Authentication
                     .WithAuthority(environment.AzureADAuthority)
                     .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                     .WithExtraQueryParameters(queryParameters)
-                    .WithBroker(options);
+                    .WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows))
+                    .WithParentActivityOrWindow(GetConsoleOrTerminalWindow);
 
                 if (!PublicClientHelper.IsNetFramework)
                 {
