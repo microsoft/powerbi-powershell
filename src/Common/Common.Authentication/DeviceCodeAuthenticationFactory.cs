@@ -56,9 +56,6 @@ namespace Microsoft.PowerBI.Common.Authentication
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             if (this.AuthApplication == null)
             {
-                BrokerOptions options = new BrokerOptions(BrokerOptions.OperatingSystems.Windows);
-                options.Title = "My Awesome Application";
-
                 this.AuthApplication = PublicClientApplicationBuilder
                 .Create(environment.AzureADClientId)
                 .WithAuthority(environment.AzureADAuthority)

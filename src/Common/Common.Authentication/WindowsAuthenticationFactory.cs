@@ -146,9 +146,6 @@ namespace Microsoft.PowerBI.Common.Authentication
             // auth application is auto cleared when there's no account
             if (this.AuthApplication == null)
             {
-                BrokerOptions options = new BrokerOptions(BrokerOptions.OperatingSystems.Windows);
-                options.Title = "My Awesome Application";
-
                 var authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
                     .WithAuthority(environment.AzureADAuthority)

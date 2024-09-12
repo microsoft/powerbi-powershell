@@ -38,7 +38,7 @@ Licensed under the MIT License.
             AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'
             AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client'
             AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Extensions.Msal'
-			AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Broker'" />
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Broker'" />
     </ItemGroup>
 
     <RemoveDuplicates Inputs="@(FilteredResolveAssemblyReferenceResolvedFiles)">
