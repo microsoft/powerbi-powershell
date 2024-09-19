@@ -51,10 +51,17 @@ namespace Microsoft.PowerBI.Common.Authentication
         // This is your window handle!
         private IntPtr GetConsoleOrTerminalWindow()
         {
-            IntPtr consoleHandle = GetConsoleWindow();
-            IntPtr handle = GetAncestor(consoleHandle, GetAncestorFlags.GetRootOwner);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                IntPtr consoleHandle = GetConsoleWindow();
+                IntPtr handle = GetAncestor(consoleHandle, GetAncestorFlags.GetRootOwner);
 
-            return handle;
+                return handle;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("This method is only supported on Windows.");
+            }
         }
 
         public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
@@ -146,13 +153,27 @@ namespace Microsoft.PowerBI.Common.Authentication
             // auth application is auto cleared when there's no account
             if (this.AuthApplication == null)
             {
-                var authApplicationBuilder = PublicClientApplicationBuilder
+                PublicClientApplicationBuilder authApplicationBuilder = null;
+                // WAM only supported with Windows
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
                     .WithAuthority(environment.AzureADAuthority)
                     .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
                     .WithExtraQueryParameters(queryParameters)
                     .WithParentActivityOrWindow(GetConsoleOrTerminalWindow)
                     .WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows));
+                }
+                else
+                {
+                    authApplicationBuilder = PublicClientApplicationBuilder
+                    .Create(environment.AzureADClientId)
+                    .WithAuthority(environment.AzureADAuthority)
+                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
+                    .WithExtraQueryParameters(queryParameters)
+                    .WithRedirectUri(environment.AzureADRedirectAddress);
+                }
 
                 if (!PublicClientHelper.IsNetFramework)
                 {
