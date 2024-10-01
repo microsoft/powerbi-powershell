@@ -27,7 +27,7 @@ param
 
 
 $sdkVersions = Get-ChildItem -Path $SdkInstallDir -Directory | Where-Object Name -Match '\d+\.\d+\.\d+$' | ForEach-Object { 
-    $version = [version]$_.BaseName
+    $version = [version]($_.BaseName.Split('-') | Select-Object -First 1)  # Remove any pre-release tags
     $_ | Add-Member -Name SDKVersion -MemberType NoteProperty -Value $version
     $_ 
 }
