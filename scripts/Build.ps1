@@ -36,7 +36,7 @@ param
     [string] $Configuration,
 
     # Indicates to include the binary logger which can be used with the MSBuild Structured Log Viewer.
-    [Alias('BL')]
+    [Alias('BinLog', 'BL')]
     [switch] $BinaryLogger,
 
     # Indicates to use Visual Studio Preview instead of released versions. Preview build must be installed in order to use.
@@ -84,21 +84,21 @@ function InvokeMSBuild {
     }
 
     if (!$NoBuild) {
-        $MSBuildTargets += 'Build'
+        $MSBuildTargets += @('Build')
     }
 
     if ($Pack) {
-        $MSBuildTargets += 'Pack'
+        $MSBuildTargets += @('Pack')
     }
 
     if ($Clean) {
-        $MSBuildTargets += 'Clean'
+        $MSBuildTargets += @('Clean')
     }
 
     $MSBuildTargets = $MSBuildTargets | Select-Object -Unique
 
     $resolvedSolutionFile = (Resolve-Path -Path $Solution -ErrorAction Stop).ProviderPath
-    $msBuildArgs = @("`"$resolvedSolutionFile`"")
+    $msBuildArgs = @("$resolvedSolutionFile")
     if ($MSBuildTargets.Count -gt 0) {
         $msBuildArgs += ('/t:' + ($MSBuildTargets -join ','))
     }
@@ -134,6 +134,8 @@ function InvokeMSBuild {
     }
 
     Write-Host "Executing: & $msbuildPath $($msBuildArgs -join ' ')" -ForegroundColor Magenta
+    $msBuildArgs | Out-Host
+
     & $msbuildPath $msBuildArgs
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE

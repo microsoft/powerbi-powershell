@@ -8,11 +8,12 @@
     <Error Text="Building this repository requires a minimun Visual Studio version of $(MinimumMSBuildVersion)" Condition="$(MSBuildVersion) &lt; $(MinimumMSBuildVersion)" />
   </Target>
 
-  <Target Name="ValidatePowerShellExeExists"
+  <!-- Outdated check because we default for PWSH in PATH as a fallback -->
+  <!-- <Target Name="ValidatePowerShellExeExists"
     BeforeTargets="Restore;$(BuildDependsOn);Build;$(RebuildDependsOn);Rebuild;$(CleanDependsOn);Clean"
     Condition=" '$(DesignTimeBuild)' != 'true' ">
     <Error Text="This repository requires either Windows PowerShell or PowerShell Core 7 to be installed (default location) to execute builds: $(PowerShellExe)" Condition="!Exists('$(PowerShellExe)')" />
-  </Target>
+  </Target> -->
 
   <ItemGroup>
     <PackageReference Update="PowerShellStandard.Library" PrivateAssets="all" />
