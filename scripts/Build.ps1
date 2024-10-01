@@ -133,7 +133,7 @@ function InvokeMSBuild {
         $msBuildArgs += '/m'
     }
 
-    Write-Verbose "Executing: & $msbuildPath $($msBuildArgs -join ' ')"
+    Write-Host "Executing: & $msbuildPath $($msBuildArgs -join ' ')" -ForegroundColor Magenta
     & $msbuildPath $msBuildArgs
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE
@@ -188,7 +188,7 @@ function InvokeDotNetBuild {
     
     $dotnetArgs += $fullSolutionPath
     
-    Write-Verbose "Calling: dotnet $($dotnetArgs -join ' ')" -ForegroundColor Magenta
+    Write-Host "Calling: dotnet $($dotnetArgs -join ' ')" -ForegroundColor Magenta
     & dotnet $dotnetArgs
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE
