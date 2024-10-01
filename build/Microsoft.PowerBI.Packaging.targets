@@ -45,7 +45,7 @@ Licensed under the MIT License.
     </RemoveDuplicates>
 
     <Message Text="Locating netstandard assembly" Importance="high" />
-    <Exec ConsoleToMSBuild="true" Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp; &apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
+    <Exec ConsoleToMSBuild="true" Command="&quot;$(PowerShellExe)&quot; $(PowerShellCommonArgs) -Command &quot;&amp; { &amp; &apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
     </Exec> 
     
