@@ -22,23 +22,32 @@ param
     [string] $SdkInstallDir = ($IsLinux) ? '/usr/share/dotnet/sdk' : 'C:\Program Files\dotnet\sdk\',
 	
 	# The installed .NET SDK must have the same major and minor number and a lower build\patch number.
-	[ValidateNotNullOrEmpty()]
-	[string] $MajorMinorSDKVersionCheck = '8.0.202'
+	[string] $MajorMinorSDKVersionCheck = '8.0.900'
 )
 
-# .NET CORE 2.0 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.0
-# .NET CORE 2.1 Downloads - https://www.microsoft.com/net/download/dotnet-core/2.1
 
-$versionCheck = [version]$MajorMinorSDKVersionCheck
 $sdkVersions = Get-ChildItem -Path $SdkInstallDir -Directory | Where-Object Name -Match '\d+\.\d+\.\d+$' | ForEach-Object { 
     $version = [version]$_.BaseName
     $_ | Add-Member -Name SDKVersion -MemberType NoteProperty -Value $version
     $_ 
 }
-$sdkDir = $sdkVersions | Where-Object { $_.SDKVersion.Major -eq $versionCheck.Major -and $_.SDKVersion.Minor -eq $versionCheck.Minor -and $_.SDKVersion.Build -lt $versionCheck.Build } | Sort-Object SDKVersion -Descending | Select-Object -First 1
+
+if ($MajorMinorSDKVersionCheck) {
+    Write-Verbose "Checking for SDK version less than: $MajorMinorSDKVersionCheck"
+    $versionCheck = [version]$MajorMinorSDKVersionCheck
+    $sdkDir = $sdkVersions | Where-Object { $_.SDKVersion.Major -eq $versionCheck.Major -and $_.SDKVersion.Minor -eq $versionCheck.Minor -and $_.SDKVersion.Build -lt $versionCheck.Build } | Sort-Object SDKVersion -Descending | Select-Object -First 1
+    
+    if(!$sdkDir) {
+        throw "Unable to find SDK version (less than $MajorMinorSDKVersionCheck) under: $SdkInstallDir`nVersions available: $(($sdkVersions | % { $_.BaseName }) -join ', ' )"
+    }
+}
+else {
+    Write-Verbose "Checking for latest SDK version"
+    $sdkDir = $sdkVersions | Sort-Object SDKVersion -Descending | Select-Object -First 1
+}
 
 if(!$sdkDir) {
-	throw "Unable to find SDK version (less than $MajorMinorSDKVersionCheck) under: $SdkInstallDir`nVersions available: $(($sdkVersions | % { $_.BaseName }) -join ', ' )"
+	throw "Unable to find SDK version under: $SdkInstallDir"
 }
 
 Write-Verbose "Using SDK: $($sdkDir.FullName)"

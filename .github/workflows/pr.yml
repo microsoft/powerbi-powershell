@@ -30,7 +30,8 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           # Semantic version range syntax or exact version of a dotnet version
-          dotnet-version: '8.x'
+          #dotnet-version: '8.x'
+          global-json-file: 'global.json'
       
       - uses: actions/cache@v3
         with:
