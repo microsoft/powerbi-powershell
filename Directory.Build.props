@@ -16,8 +16,9 @@ Licensed under the MIT License.
     <SourceRoot>$(RepoRoot)src\</SourceRoot>
     <ScriptsRoot>$(RepoRoot)scripts\</ScriptsRoot>
     <PowerShellExe Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(PowerShellExe)' == ''">/opt/microsoft/powershell/7/pwsh</PowerShellExe>
+    <PowerShellExe Condition="$([MSBuild]::IsOSPlatform('Linux')) AND !Exists('$(PowerShellExe)')">/usr/share/powershell/pwsh</PowerShellExe>
     <PowerShellExe Condition="$([MSBuild]::IsOSPlatform('Windows')) AND '$(PowerShellExe)' == ''">$(ProgramFiles)\PowerShell\7\pwsh.exe</PowerShellExe>
-    <PowerShellExe Condition="$([MSBuild]::IsOSPlatform('Windows')) AND !Exists('$(PowerShellExe)')">$(WINDIR)\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+    <PowerShellExe Condition="!Exists('$(PowerShellExe)')">pwsh</PowerShellExe> <!-- Default to pwsh in PATH -->
     <PowerShellCommonArgs>-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted</PowerShellCommonArgs>
     <LangName Condition="'$(LangName)' == ''">en-US</LangName>
   </PropertyGroup>

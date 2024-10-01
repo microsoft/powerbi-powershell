@@ -30,7 +30,8 @@
                 "esbenp.prettier-vscode",
                 "github.github-vscode-theme",
                 "github.vscode-pull-request-github",
-                "github.vscode-codeql"
+                "github.vscode-codeql",
+                "ms-cst-e.vscode-devskim"
             ]
         }
     },
