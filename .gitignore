@@ -292,3 +292,6 @@ __pycache__/
 
 # Package Build Output
 PkgOut/
+
+# Mono\VSCode development
+.mono/

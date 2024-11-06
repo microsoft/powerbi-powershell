@@ -35,9 +35,7 @@ Licensed under the MIT License.
     <ItemGroup>
       <FilteredResolveAssemblyReferenceResolvedFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="%(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'netstandard' 
             AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'mscorlib' 
-            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'
-            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client'
-            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Extensions.Msal'" />
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'" />
     </ItemGroup>
 
     <RemoveDuplicates Inputs="@(FilteredResolveAssemblyReferenceResolvedFiles)">
@@ -45,7 +43,7 @@ Licensed under the MIT License.
     </RemoveDuplicates>
 
     <Message Text="Locating netstandard assembly" Importance="high" />
-    <Exec ConsoleToMSBuild="true" Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
+    <Exec ConsoleToMSBuild="true" Command="&quot;$(PowerShellExe)&quot; $(PowerShellCommonArgs) -Command &quot;&amp; { &amp; &apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
     </Exec> 
     
@@ -136,7 +134,7 @@ Licensed under the MIT License.
   
   <Target Name="UpdatePSManifest" DependsOnTargets="GetPSModuleSettings" Condition="'$(IsPackable)' == 'true'">
 
-    <Exec Command="$(PowerShellExe) $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)UpdatePSModuleManifest.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -TargetFramework &apos;$(TargetFramework)&apos; -Version &apos;$(PackageVersion)&apos; -ReleaseNotes &apos;$(RepoRoot)ReleaseNotes.md&apos;} &quot;" />
+    <Exec Command="&quot;$(PowerShellExe)&quot; $(PowerShellCommonArgs) -Command &quot;&amp; { &amp;&apos;$(ScriptsRoot)UpdatePSModuleManifest.ps1&apos; -ModulePath &apos;%(PSDFile.FullPath)&apos; -TargetFramework &apos;$(TargetFramework)&apos; -Version &apos;$(PackageVersion)&apos; -ReleaseNotes &apos;$(RepoRoot)ReleaseNotes.md&apos;} &quot;" />
 
   </Target>
   

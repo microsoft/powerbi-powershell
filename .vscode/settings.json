@@ -4,6 +4,8 @@
         "**/.vs/": true,
         "**/bin/": true,
         "**/obj/": true,
-        "TestResult/": true
+        "TestResult/": true,
+        ".mono/": true,
+        "powerbi-powershell.sln": true
     }
 }

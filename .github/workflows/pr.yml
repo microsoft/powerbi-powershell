@@ -1,0 +1,58 @@
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: PR Build
+run-name: Executing Build for ${{ github.actor }} on ${{ github.repository }} for branch ${{ github.ref }}
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - master
+
+jobs:
+  Build:
+    runs-on: [self-hosted, 1ES.Pool=powerbi-powershell-pool]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need for history to be able to determine version number
+      
+      - name: Disable StrongName
+        shell: pwsh
+        run: |
+          scripts/DisableStrongName.ps1
+      
+      - name: Setup .NET 8.x
+        uses: actions/setup-dotnet@v3
+        with:
+          # Semantic version range syntax or exact version of a dotnet version
+          #dotnet-version: '8.x'
+          global-json-file: 'global.json'
+      
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.*proj','**/*.props','**/*.targets','**/*.cs') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      
+      - name: Restore dependencies
+        run: dotnet restore dirs.proj
+      
+      - name: Build
+        run: dotnet build --no-restore dirs.proj --property:GenerateFullPaths=true --verbosity normal
+      
+      - name: Test
+        run: dotnet test --no-build --no-restore --filter "TestCategory!=Interactive" --verbosity normal --logger trx --results-directory "TestResults" dirs.proj
+      
+      - name: Publish Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults
+        if: ${{ always() }}

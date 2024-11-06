@@ -1,23 +1,38 @@
 # Contribute Code to PowerShell Cmdlets for Power BI
 
+> [!IMPORTANT]
+> Before releasing, it's important to test on both Windows and Linux\MacOS.
+> You can code either in Windows or GitHub Codspaces (or Dev Container on Windows), but it's recommended you test in the reverse environment.
+
 ## Developer Environment Requirements
 
-* [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
+### GitHub Codespaces or Dev Container
+
+Launch this code inside [GitHub Codespace](https://codespaces.new/microsoft/powerbi-powershell).
+
+If you want to develop locally with a Dev Container, install this [VS Code extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), follow steps to enable WSL (if not already enabled), when you launch VS Code it will ask if you want to open in Dev Container - click Yes to launch.
+
+The [devcontainer.json](.devcontainer/devcontainer.json) defines the image.
+
+For build and testing, `dotnet` [CLI tool](https://learn.microsoft.com/en-us/dotnet/core/tools/) is used instead of `msbuild` that is the default for Windows environments.
+
+### Windows OS
+
+* [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)
 * [.NET Core SDK](https://www.microsoft.com/net/learn/get-started/windows)
-    * Version driven by [global.json](src/Common/Commands.Common/global.json)
-    * Cmdlets are designed to use .NET Core 2.0 SDK with .NET Standard 2.0
+    * Version driven by [global.json](src/global.json)
+    * Cmdlets are designed to use .NET Core 8.0 SDK with .NET Standard 2.0
 * [Visual Studio Code](https://code.visualstudio.com/download)
     * Experimental and optional, still need Visual Studio installed
     * Install the following extensions:
         * [C#](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp): `code --install-extension ms-vscode.csharp`
         * [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell): `code --install-extension ms-vscode.PowerShell`
 
-
-> If you plan to build with Configuration=Release which Delay Signs the build output, call `.\scripts\DisableStrongName.ps1`.
+> If you plan to build with Configuration=Release which Delay Signs the build output, call `.\scripts\DisableStrongName.ps1` or just `DisableStrongName` if you called `init.ps1`.
 > Add the -Enable switch parameter to re-enable strong name verification once developing.
 
 ### Optional requirements (for testing)
-* [PowerShell Core (6.0.0)](https://github.com/powershell/powershell)
+* [PowerShell Core (7.0.0)](https://github.com/powershell/powershell)
 * Windows PowerShell v3 and up with .NET 4.7.1 or above
 
 ## Coding Style

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Sdk Name="Microsoft.Build.CentralPackageVersions" />
 
     <!-- Ensure developers are using a minimun supported version of VS -->
   <Target Name="ValidateMinimumMsBuildVersion"
@@ -9,9 +8,18 @@
     <Error Text="Building this repository requires a minimun Visual Studio version of $(MinimumMSBuildVersion)" Condition="$(MSBuildVersion) &lt; $(MinimumMSBuildVersion)" />
   </Target>
 
-  <Target Name="ValidatePowerShellExeExists"
+  <!-- Outdated check because we default for PWSH in PATH as a fallback -->
+  <!-- <Target Name="ValidatePowerShellExeExists"
     BeforeTargets="Restore;$(BuildDependsOn);Build;$(RebuildDependsOn);Rebuild;$(CleanDependsOn);Clean"
     Condition=" '$(DesignTimeBuild)' != 'true' ">
     <Error Text="This repository requires either Windows PowerShell or PowerShell Core 7 to be installed (default location) to execute builds: $(PowerShellExe)" Condition="!Exists('$(PowerShellExe)')" />
-  </Target>
+  </Target> -->
+
+  <ItemGroup>
+    <PackageReference Update="PowerShellStandard.Library" PrivateAssets="all" />
+    <PackageReference Update="Microsoft.Identity.Client.Extensions.Msal" GeneratePathProperty="true" />
+    <PackageReference Update="Microsoft.Identity.Client" GeneratePathProperty="true" />
+    <PackageReference Update="Microsoft.Identity.Client.Broker" GeneratePathProperty="true" />
+    <PackageReference Update="SlnGen" PrivateAssets="all"/>
+  </ItemGroup>
 </Project>
