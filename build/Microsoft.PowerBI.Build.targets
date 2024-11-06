@@ -33,8 +33,8 @@ Licensed under the MIT License.
 
     <ItemGroup Condition="'@(MsalPackageDefinitions)' != ''">
       <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\netstandard2.0\*.dll">
-		<Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
-	  </MSALItemsToCopy>
+        <Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
+      </MSALItemsToCopy>
     </ItemGroup>
 
     <Copy Condition="'@(FoundMSALReferences)' != ''" DestinationFiles="@(MSALItemsToCopy -> '%(Destination)\%(Filename)%(Extension)')" SourceFiles="@(MSALItemsToCopy)" />
