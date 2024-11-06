@@ -6,15 +6,56 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
 using Microsoft.Identity.Client;
+using Microsoft.Identity.Client.Broker;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
     public class DeviceCodeAuthenticationFactory : IAuthenticationUserFactory
     {
+        private enum GetAncestorFlags
+        {
+            GetParent = 1,
+            GetRoot = 2,
+            /// <summary>
+            /// Retrieves the owned root window by walking the chain of parent and owner windows returned by GetParent.
+            /// </summary>
+            GetRootOwner = 3
+        }
+
+        /// <summary>
+        /// Retrieves the handle to the ancestor of the specified window.
+        /// </summary>
+        /// <param name="hwnd">A handle to the window whose ancestor is to be retrieved.
+        /// If this parameter is the desktop window, the function returns NULL. </param>
+        /// <param name="flags">The ancestor to be retrieved.</param>
+        /// <returns>The return value is the handle to the ancestor window.</returns>
+        [DllImport("user32.dll", ExactSpelling = true)]
+        static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags flags);
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        // window handle
+        private IntPtr GetConsoleOrTerminalWindow()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                IntPtr consoleHandle = GetConsoleWindow();
+                IntPtr handle = GetAncestor(consoleHandle, GetAncestorFlags.GetRootOwner);
+
+                return handle;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("This method is only supported on Windows.");
+            }
+        }
+
         private IPublicClientApplication AuthApplication;
 
         public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
@@ -22,12 +63,26 @@ namespace Microsoft.PowerBI.Common.Authentication
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
             if (this.AuthApplication == null)
             {
-                this.AuthApplication = PublicClientApplicationBuilder
-                .Create(environment.AzureADClientId)
-                .WithAuthority(environment.AzureADAuthority)
-                .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
-                .WithRedirectUri(environment.AzureADRedirectAddress)
-                .Build();
+                // WAM is only supported on Windows
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    this.AuthApplication = PublicClientApplicationBuilder
+                    .Create(environment.AzureADClientId)
+                    .WithAuthority(environment.AzureADAuthority)
+                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
+                    .WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows))
+                    .WithParentActivityOrWindow(GetConsoleOrTerminalWindow)
+                    .Build();
+                }
+                else
+                {
+                    this.AuthApplication = PublicClientApplicationBuilder
+                    .Create(environment.AzureADClientId)
+                    .WithAuthority(environment.AzureADAuthority)
+                    .WithLogging((level, message, containsPii) => LoggingUtils.LogMsal(level, message, containsPii, logger))
+                    .WithRedirectUri(environment.AzureADRedirectAddress)
+                    .Build();
+                }
             }
 
             AuthenticationResult result = null;
