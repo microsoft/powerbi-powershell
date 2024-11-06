@@ -32,13 +32,9 @@ Licensed under the MIT License.
     </ItemGroup>
 
     <ItemGroup Condition="'@(MsalPackageDefinitions)' != ''">
-      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\netcoreapp2.1\*.dll">
-        <Destination>$(OutputPath)\MSAL\netcoreapp2.1</Destination>
-      </MSALItemsToCopy>
-
-      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\net45\*.dll">
-        <Destination>$(OutputPath)\MSAL\net45</Destination>
-      </MSALItemsToCopy>
+      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\netstandard2.0\*.dll">
+		<Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
+	  </MSALItemsToCopy>
     </ItemGroup>
 
     <Copy Condition="'@(FoundMSALReferences)' != ''" DestinationFiles="@(MSALItemsToCopy -> '%(Destination)\%(Filename)%(Extension)')" SourceFiles="@(MSALItemsToCopy)" />

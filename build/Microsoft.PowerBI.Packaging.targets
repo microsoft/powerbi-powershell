@@ -35,10 +35,7 @@ Licensed under the MIT License.
     <ItemGroup>
       <FilteredResolveAssemblyReferenceResolvedFiles Include="@(_ResolveAssemblyReferenceResolvedFiles)" Condition="%(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'netstandard' 
             AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'mscorlib' 
-            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'
-            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client'
-            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Extensions.Msal'
-            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.Identity.Client.Broker'" />
+            AND %(_ResolveAssemblyReferenceResolvedFiles.Filename) != 'Microsoft.CSharp'" />
     </ItemGroup>
 
     <RemoveDuplicates Inputs="@(FilteredResolveAssemblyReferenceResolvedFiles)">
