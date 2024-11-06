@@ -23,6 +23,10 @@ function Get-VSBuildFolder
 
     # https://github.com/microsoft/vswhere/wiki/Find-MSBuild#powershell
     $msbuildPath = & $vsWhereExe $vsWhereArgs | select-object -first 1
+    if ((!$msbuildPath) -or ($LASTEXITCODE -ne 0)) {
+        throw "Unable to find MSBuild using vswhere"
+    }
+
     if(!(Test-Path -Path $msbuildPath)) {
         throw "Unable to find MSBuild: $msbuildPath"
     }
