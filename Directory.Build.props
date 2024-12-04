@@ -35,6 +35,13 @@ Licensed under the MIT License.
     <RepositoryUrl>https://github.com/Microsoft/powerbi-powershell</RepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(BuildConfiguration)==release">
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>true</DelaySign>
+    <KeyFile>$(MSBuildThisFileDirectory)build\codesign\35MSSharedLib1024.snk</KeyFile>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build\codesign\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
   <PropertyGroup>
     <DefaultItemExcludes>$(DefaultItemExcludes);*.binlog</DefaultItemExcludes>
   </PropertyGroup>
