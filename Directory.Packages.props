@@ -21,6 +21,7 @@
     <PackageVersion Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.64.0" />
     <PackageVersion Include="Microsoft.Identity.Client" Version="4.64.0" />
     <PackageVersion Include="Microsoft.Identity.Client.Broker" Version="4.64.0" />
+    <PackageVersion Include="Microsoft.Identity.Client.NativeInterop" Version="0.16.2" />
     <PackageVersion Include="Microsoft.PowerBI.Api" Version="2.14.0" />
     <PackageVersion Include="System.Runtime.Serialization.Json" Version="4.3.0" />
     <PackageVersion Include="Moq" Version="4.8.2" />

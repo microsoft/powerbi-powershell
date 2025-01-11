@@ -11,11 +11,12 @@
     <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" />
     <PackageReference Include="Microsoft.Identity.Client" />
     <PackageReference Include="Microsoft.Identity.Client.Broker" />
+    <PackageReference Include="Microsoft.Identity.Client.NativeInterop" />
     <PackageReference Include="System.Net.Http" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
   </ItemGroup>
-
+	
 </Project>

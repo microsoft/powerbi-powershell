@@ -20,6 +20,16 @@
     <PackageReference Update="Microsoft.Identity.Client.Extensions.Msal" GeneratePathProperty="true" />
     <PackageReference Update="Microsoft.Identity.Client" GeneratePathProperty="true" />
     <PackageReference Update="Microsoft.Identity.Client.Broker" GeneratePathProperty="true" />
+    <PackageReference Update="Microsoft.Identity.Client.NativeInterop" GeneratePathProperty="true" />
     <PackageReference Update="SlnGen" PrivateAssets="all"/>
   </ItemGroup>
+
+  <!-- Copy the msalruntime.dll -->	
+  <Target Name="CopyNativeRuntimeFiles" AfterTargets="Restore;$(BuildDependsOn);Build;$(RebuildDependsOn);Rebuild;$(CleanDependsOn);Clean">
+	  <ItemGroup>
+      <RuntimeFiles Include="$(PkgMicrosoft_Identity_Client_NativeInterop)\runtimes\**\" />
+    </ItemGroup>
+	  
+    <Copy SourceFiles="@(RuntimeFiles)" DestinationFolder="$(OutputPath)\runtimes\%(RecursiveDir)" />
+  </Target>
 </Project>

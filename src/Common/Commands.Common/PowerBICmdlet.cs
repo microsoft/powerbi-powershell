@@ -64,7 +64,10 @@ namespace Microsoft.PowerBI.Commands.Common
 
             // Handle MSAL assemblies
             string assemblyFilePath;
-            if (requestedAssembly.Name == "Microsoft.Identity.Client" || requestedAssembly.Name == "Microsoft.Identity.Client.Extensions.Msal" || requestedAssembly.Name == "Microsoft.Identity.Client.Broker")
+            if (requestedAssembly.Name == "Microsoft.Identity.Client" 
+                || requestedAssembly.Name == "Microsoft.Identity.Client.Extensions.Msal" 
+                || requestedAssembly.Name == "Microsoft.Identity.Client.Broker"
+                || requestedAssembly.Name == "Microsoft.Identity.Client.NativeInterop")
             {
                 var libType = "netstandard2.0";
                 assemblyFilePath = Path.Combine(executingDirectory, "MSAL", libType, requestedAssembly.Name + ".dll");

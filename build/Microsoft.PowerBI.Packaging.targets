@@ -45,9 +45,9 @@ Licensed under the MIT License.
     <Message Text="Locating netstandard assembly" Importance="high" />
     <Exec ConsoleToMSBuild="true" Command="&quot;$(PowerShellExe)&quot; $(PowerShellCommonArgs) -Command &quot;&amp; { &amp; &apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
-    </Exec> 
-    
-    <ItemGroup>
+    </Exec>
+
+	  <ItemGroup>
       
       <_PackageFiles Include="$(OutputPath)\settings.json" Condition="Exists('$(OutputPath)\settings.json') AND '$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>
@@ -62,6 +62,12 @@ Licensed under the MIT License.
       </_PackageFiles>
 
       <_PackageFiles Include="$(NetStandardDllPath)" Condition="'$(NoDependentAssemblies)' != 'true'">
+        <BuildAction>Content</BuildAction>
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(SourceRoot)\Common\Common.Authentication\bin\Debug\netstandard2.0\runtimes\*.dll">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
