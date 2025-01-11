@@ -26,5 +26,5 @@
     <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
     <ProjectReference Include="..\Common.Authentication\Common.Authentication.csproj" />
   </ItemGroup>
-	
+
 </Project>

@@ -18,4 +18,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Common.Abstractions\Common.Abstractions.csproj" />
   </ItemGroup>
+
 </Project>
