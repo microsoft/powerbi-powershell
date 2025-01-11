@@ -47,7 +47,7 @@ Licensed under the MIT License.
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
     </Exec>
 
-	  <ItemGroup>
+    <ItemGroup>
       
       <_PackageFiles Include="$(OutputPath)\settings.json" Condition="Exists('$(OutputPath)\settings.json') AND '$(NoDependentAssemblies)' != 'true'">
         <BuildAction>Content</BuildAction>

@@ -17,7 +17,7 @@ Licensed under the MIT License.
       <MSALKnownPackageReferences Include="Microsoft.Identity.Client" />
       <MSALKnownPackageReferences Include="Microsoft.Identity.Client.Broker" />
       <MSALKnownPackageReferences Include="Microsoft.Identity.Client.NativeInterop" />
-	</ItemGroup>
+    </ItemGroup>
 
     <FindInList CaseSensitive="false" List="@(PackageDependencies)" ItemSpecToFind="%(MSALKnownPackageReferences.Identity)">
       <Output TaskParameter="ItemFound" ItemName="FoundMSALReferences"/>
@@ -31,7 +31,7 @@ Licensed under the MIT License.
       <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client'" />
       <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client.Broker'" />
       <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client.NativeInterop'" />
-	</ItemGroup>
+    </ItemGroup>
 
     <ItemGroup Condition="'@(MsalPackageDefinitions)' != ''">
       <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\netstandard2.0\*.dll">

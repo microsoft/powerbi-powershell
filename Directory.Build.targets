@@ -26,7 +26,7 @@
 
   <!-- Copy the msalruntime.dll -->	
   <Target Name="CopyNativeRuntimeFiles" AfterTargets="Restore;$(BuildDependsOn);Build;$(RebuildDependsOn);Rebuild;$(CleanDependsOn);Clean">
-	  <ItemGroup>
+    <ItemGroup>
       <RuntimeFiles Include="$(PkgMicrosoft_Identity_Client_NativeInterop)\runtimes\**\" />
     </ItemGroup>
 	  
