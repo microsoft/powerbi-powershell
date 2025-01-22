@@ -67,16 +67,10 @@ Licensed under the MIT License.
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(SourceRoot)\Common\Common.Authentication\bin\Debug\netstandard2.0\runtimes\*.dll">
+      <_PackageFiles Include="$(OutputPath)\MSAL\netstandard2.0\*.*" Condition="Exists('$(OutputPath)\MSAL')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
-      </_PackageFiles>
-      
-      <_PackageFiles Include="$(OutputPath)\MSAL\**\*.*" Condition="Exists('$(OutputPath)\MSAL')">
-        <BuildAction>Content</BuildAction>
-        <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\MSAL\%(RecursiveDir)</PackagePath>
       </_PackageFiles>
 
       <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
