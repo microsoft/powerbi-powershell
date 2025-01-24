@@ -67,7 +67,7 @@ Licensed under the MIT License.
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\MSAL\netstandard2.0\*.*" Condition="Exists('$(OutputPath)\MSAL')">
+      <_PackageFiles Include="$(OutputPath)\MSAL\netstandard2.0\*.*" Condition="Exists('$(OutputPath)\MSAL\netstandard2.0')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
