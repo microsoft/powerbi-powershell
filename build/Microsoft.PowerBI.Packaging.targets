@@ -45,8 +45,8 @@ Licensed under the MIT License.
     <Message Text="Locating netstandard assembly" Importance="high" />
     <Exec ConsoleToMSBuild="true" Command="&quot;$(PowerShellExe)&quot; $(PowerShellCommonArgs) -Command &quot;&amp; { &amp; &apos;$(ScriptsRoot)GetNetstandardAssembly.ps1&apos; } &quot;">
       <Output TaskParameter="ConsoleOutput" PropertyName="NetStandardDllPath" />
-    </Exec> 
-    
+    </Exec>
+
     <ItemGroup>
       
       <_PackageFiles Include="$(OutputPath)\settings.json" Condition="Exists('$(OutputPath)\settings.json') AND '$(NoDependentAssemblies)' != 'true'">
@@ -66,11 +66,11 @@ Licensed under the MIT License.
         <Pack>true</Pack>
         <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
-      
-      <_PackageFiles Include="$(OutputPath)\MSAL\**\*.*" Condition="Exists('$(OutputPath)\MSAL')">
+
+      <_PackageFiles Include="$(OutputPath)\MSAL\netstandard2.0\*.*" Condition="Exists('$(OutputPath)\MSAL\netstandard2.0')">
         <BuildAction>Content</BuildAction>
         <Pack>true</Pack>
-        <PackagePath>lib\$(TargetFramework)\MSAL\%(RecursiveDir)</PackagePath>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
       </_PackageFiles>
 
       <_PackageFiles Include="$(OutputPath)\$(LangName)\**\*.*" Condition="'$(NoHelpGen)' != 'true'">
