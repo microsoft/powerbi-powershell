@@ -34,9 +34,6 @@ Licensed under the MIT License.
     </ItemGroup>
 
     <ItemGroup Condition="'@(MsalPackageDefinitions)' != ''">
-      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\netstandard2.0\*.dll">
-        <Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
-      </MSALItemsToCopy>
       <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\runtimes\win-arm64\native\*.dll">
         <Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
       </MSALItemsToCopy>
