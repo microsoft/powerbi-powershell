@@ -17,7 +17,7 @@ Licensed under the MIT License.
     <PropertyGroup Condition="'$(ForceSign)' == 'true' OR ('$(MSBuildProjectExtension)' == '.csproj' AND '$(Configuration)' == 'Release')">
         <SignAssembly>true</SignAssembly>
         <DelaySign>true</DelaySign>
-        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)MSSharedLibKey.snk</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
     <!-- Test Projects, don't sign -->

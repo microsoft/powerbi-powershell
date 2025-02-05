@@ -29,7 +29,10 @@ param
 
     # MSBuild properties to execute build with. Default is @{'GenerateFullPaths'='true'}.
     [ValidateNotNull()]
-    [Hashtable] $MSBuildProperties = @{'GenerateFullPaths' = 'true' },
+    [Hashtable] $MSBuildProperties = @{        
+        'GenerateFullPaths' = 'true' 
+        'EmitLegacyAssetsFileItems' = 'true'
+    },
 
     # Build Configuration. Default is to use the MSBuild project defaults which is likely Debug.
     [ValidateSet($null, 'Debug', 'Release')]

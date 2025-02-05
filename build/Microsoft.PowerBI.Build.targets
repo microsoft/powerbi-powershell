@@ -16,6 +16,7 @@ Licensed under the MIT License.
       <MSALKnownPackageReferences Include="Microsoft.Identity.Client.Extensions.Msal" />
       <MSALKnownPackageReferences Include="Microsoft.Identity.Client" />
       <MSALKnownPackageReferences Include="Microsoft.Identity.Client.Broker" />
+      <MSALKnownPackageReferences Include="Microsoft.Identity.Client.NativeInterop" />
     </ItemGroup>
 
     <FindInList CaseSensitive="false" List="@(PackageDependencies)" ItemSpecToFind="%(MSALKnownPackageReferences.Identity)">
@@ -29,10 +30,17 @@ Licensed under the MIT License.
       <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client.Extensions.Msal'" />
       <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client'" />
       <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client.Broker'" />
+      <MsalPackageDefinitions Include="@(PackageDefinitions)" Condition="'%(Name)' == 'Microsoft.Identity.Client.NativeInterop'" />
     </ItemGroup>
 
     <ItemGroup Condition="'@(MsalPackageDefinitions)' != ''">
-      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\lib\netstandard2.0\*.dll">
+      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\runtimes\win-arm64\native\*.dll">
+        <Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
+      </MSALItemsToCopy>
+      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\runtimes\win-x64\native\*.dll">
+        <Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
+      </MSALItemsToCopy>
+      <MSALItemsToCopy Include="%(MsalPackageDefinitions.ResolvedPath)\runtimes\win-x86\native\*.dll">
         <Destination>$(OutputPath)\MSAL\netstandard2.0</Destination>
       </MSALItemsToCopy>
     </ItemGroup>
