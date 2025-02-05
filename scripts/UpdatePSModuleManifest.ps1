@@ -32,6 +32,7 @@ param
     [string] $ReleaseNotes
 )
 
+$cleanVersion = $Version -replace '-.*$', ''
 Write-Output "Running $($MyInvocation.MyCommand.Name)"
 $psdFileContent = Get-Content -Path $ModulePath -Raw -ErrorAction Stop
 $updatePsdFile = $false
@@ -52,10 +53,10 @@ else {
 
 # Update ModuleVersion
 $matchRegex = "(?<Front>ModuleVersion = ')(?<ModVersion>.+)(?<Back>')"
-$replaceMatch = '${Front}' + $Version + '${Back}'
+$replaceMatch = '${Front}' + $cleanVersion + '${Back}'
 
-if(($psdFileContent -match $matchRegex) -and ($Matches['ModVersion'] -ne $Version)) {
-    Write-Output "Updating ModuleVersion to: $Version"
+if(($psdFileContent -match $matchRegex) -and ($Matches['ModVersion'] -ne $cleanVersion)) {
+    Write-Output "Updating ModuleVersion to: $cleanVersion"
     $psdFileContent = $psdFileContent -replace $matchRegex, $replaceMatch
     $updatePsdFile = $true
 }
