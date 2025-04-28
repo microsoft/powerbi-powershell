@@ -4,7 +4,7 @@
   <!-- Enable Central Package Management (CPS) - https://learn.microsoft.com/en-us/nuget/consume-packages/Central-Package-Management -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled> 
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled> 
   </PropertyGroup>
   
   <ItemGroup>
