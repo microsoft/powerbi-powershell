@@ -4,7 +4,7 @@
   <!-- Enable Central Package Management (CPS) - https://learn.microsoft.com/en-us/nuget/consume-packages/Central-Package-Management -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <!-- <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled> -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled> 
   </PropertyGroup>
   
   <ItemGroup>
@@ -28,5 +28,6 @@
     <PackageVersion Include="platyPS" Version="0.9.0" />
     <PackageVersion Include="SlnGen" Version="2.2.30" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.133" />
+    <PackageVersion Include="System.IO.Packaging" Version="9.0.4" />
   </ItemGroup>
 </Project>
