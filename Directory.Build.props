@@ -60,7 +60,7 @@ Licensed under the MIT License.
 
   <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(IsTestProject)' == 'true'">
     <!-- Code Coverage for Test projects -->
-    <PackageReference Include="coverlet.msbuild" Version="6.0.4" />
+    <PackageReference Include="coverlet.msbuild" />
   </ItemGroup>
 
   <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'" />
