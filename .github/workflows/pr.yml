@@ -48,7 +48,7 @@ jobs:
         run: dotnet build --no-restore dirs.proj --property:GenerateFullPaths=true --verbosity normal
       
       - name: Test
-        run: dotnet test --no-build --no-restore --filter "TestCategory!=Interactive" --verbosity normal --logger trx --results-directory "TestResults" dirs.proj
+        run: dotnet test --no-build --no-restore --collect "Code Coverage" -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura --filter "TestCategory!=Interactive" --verbosity normal --logger trx --results-directory "TestResults" dirs.proj
       
       - name: Publish Test Results
         uses: actions/upload-artifact@v4
@@ -56,3 +56,23 @@ jobs:
           name: TestResults
           path: TestResults
         if: ${{ always() }}
+
+      - name: Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: TestResults/**/coverage.cobertura.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '50 80'
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md

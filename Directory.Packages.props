@@ -29,5 +29,6 @@
     <PackageVersion Include="SlnGen" Version="2.2.30" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.133" />
     <PackageVersion Include="System.IO.Packaging" Version="9.0.4" />
+    <PackageVersion Include="coverlet.msbuild " Version="6.0.4" />
   </ItemGroup>
 </Project>
