@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
@@ -27,6 +28,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetPowerBIDataflowDatasourceOrganizationScope()
         {
             /*
@@ -44,7 +46,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 ps.Commands.Clear();
 
-                if(!existingDataflows.Any())
+                if (!existingDataflows.Any())
                 {
                     Assert.Inconclusive("No dataflows returned. Verify you have dataflows under your logged in user.");
                 }
@@ -119,6 +121,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndPipingDataflowIntoGetPowerBIDataflowDatasourceOrganizationScope()
         {
             /*

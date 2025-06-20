@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -25,6 +26,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndRemovePowerBIWorkspaceUserOrganizationScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
@@ -56,6 +58,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndRemovePowerBIWorkspaceUserIndividualScope()
         {
             // TODO: Note that unlike the admin APIs, this API will throw an error when attempting to remove a user that does not have access to the workspace
@@ -71,7 +74,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(RemovePowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
-                    { nameof(RemovePowerBIWorkspaceUser.Id), workspace.Id }, 
+                    { nameof(RemovePowerBIWorkspaceUser.Id), workspace.Id },
                     { nameof(RemovePowerBIWorkspaceUser.UserPrincipalName), emailAddress},
                 };
                 ps.AddCommand(Cmdlet).AddParameters(parameters);

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Commands.Profile.Test;
@@ -24,6 +25,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetPowerBIDataflowOrganizationScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using System.Security;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -18,6 +19,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndInteractiveLogin()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
@@ -54,6 +56,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void ConnectPowerBIServiceAccountServiceWithTenantId_UserParameterSet()
         {
             PowerBIEnvironmentType? environment = null;
@@ -101,6 +104,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void ConnectPowerBIServiceWithDiscoveryUrl()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

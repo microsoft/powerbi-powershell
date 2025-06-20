@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -31,6 +32,7 @@ namespace Commands.Reports.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndNewReportIndividualScope()
         {
             using (var ps = PowerShell.Create())
@@ -52,6 +54,7 @@ namespace Commands.Reports.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndNewReportWorkspace()
         {
             using (var ps = PowerShell.Create())
@@ -76,6 +79,7 @@ namespace Commands.Reports.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndNewReportWorkspaceWithoutName()
         {
             using (var ps = PowerShell.Create())
@@ -99,6 +103,7 @@ namespace Commands.Reports.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndNewReportWorkspaceWithMultipleReports()
         {
             Guid expectedReportId;

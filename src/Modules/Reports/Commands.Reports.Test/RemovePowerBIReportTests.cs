@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -22,18 +23,19 @@ namespace Commands.Reports.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndRemovePowerBIReport()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
-                ProfileTestUtilities.ConnectToPowerBI(ps,PowerBIEnvironmentType.Public); // If login is needed
+                ProfileTestUtilities.ConnectToPowerBI(ps, PowerBIEnvironmentType.Public); // If login is needed
                 ps.AddCommand(new CmdletInfo($"{RemovePowerBIReport.CmdletVerb}-{RemovePowerBIReport.CmdletName}", typeof(RemovePowerBIReport)));
                 ps.AddParameter("Id", "fce8abb5-192b-4be2-b75e-b43bb93d8943");
                 ps.AddParameter("WorkspaceId", "kjsdfjs;sf");
                 var result = ps.Invoke();
 
                 // Add asserts to verify
-                
+
                 TestUtilities.AssertNoCmdletErrors(ps);
             }
         }

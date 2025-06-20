@@ -14,6 +14,7 @@ using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.PowerBI.Commands.Data.Test
 {
@@ -26,6 +27,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetPowerBITable_DatasetIdParameterSetName()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
@@ -39,7 +41,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 ps.AddCommand(GetPowerBITableCmdletInfo)
                     .AddParameter(nameof(GetPowerBITable.DatasetId), datasetId)
                     .AddParameter(nameof(GetPowerBITable.Name), "Product");
-                
+
                 // Act
                 var results = ps.Invoke();
 
@@ -56,6 +58,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetPowerBITable_DatasetParameterSetName()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

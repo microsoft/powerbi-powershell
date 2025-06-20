@@ -4,6 +4,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -22,10 +23,11 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         private static CmdletInfo RemovePowerBIRowCmdletInfo => new CmdletInfo($"{RemovePowerBIRow.CmdletVerb}-{RemovePowerBIRow.CmdletName}", typeof(RemovePowerBIRow));
         private static CmdletInfo GetPowerBITableCmdletInfo => new CmdletInfo($"{GetPowerBITable.CmdletVerb}-{GetPowerBITable.CmdletName}", typeof(GetPowerBITable));
         private static CmdletInfo GetPowerBIDatasetCmdletInfo => new CmdletInfo($"{GetPowerBIDataset.CmdletVerb}-{GetPowerBIDataset.CmdletName}", typeof(GetPowerBIDataset));
-   
+
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndRemovePowerBIRows()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

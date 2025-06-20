@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -25,6 +26,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndNewPowerBIWorkspaceTest()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

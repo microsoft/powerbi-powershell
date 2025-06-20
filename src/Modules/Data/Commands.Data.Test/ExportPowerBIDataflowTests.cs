@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
@@ -29,6 +30,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndExportPowerBIDataflowOrganizationScope_ByDataflowId()
         {
             /*
@@ -82,6 +84,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndExportPowerBIDataflowOrganizationScope_ByDataflow()
         {
             /*

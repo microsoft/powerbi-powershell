@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -23,10 +24,11 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         private static CmdletInfo AddPowerBIRowCmdletInfo => new CmdletInfo($"{AddPowerBIRow.CmdletVerb}-{AddPowerBIRow.CmdletName}", typeof(AddPowerBIRow));
         private static CmdletInfo GetPowerBITableCmdletInfo => new CmdletInfo($"{GetPowerBITable.CmdletVerb}-{GetPowerBITable.CmdletName}", typeof(GetPowerBITable));
         private static CmdletInfo GetPowerBIDatasetCmdletInfo => new CmdletInfo($"{GetPowerBIDataset.CmdletVerb}-{GetPowerBIDataset.CmdletName}", typeof(GetPowerBIDataset));
-   
+
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndAddPowerBIRows()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
@@ -45,7 +47,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 var table = tableResults.First().BaseObject as Table;
 
                 var row1 = new PSObject();
-                row1.Members.Add(new PSNoteProperty("Col1","Data1"));
+                row1.Members.Add(new PSNoteProperty("Col1", "Data1"));
                 row1.Members.Add(new PSNoteProperty("Col2", true));
                 var row2 = new PSObject();
                 row2.Members.Add(new PSNoteProperty("Col1", "Data2"));
@@ -71,6 +73,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndAddPowerBIRowsFromCSV()
         {
             var csvPath = @"path_to_csv_file";
@@ -89,7 +92,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
                 var table = tableResults.First().BaseObject as Table;
 
-                ps.AddCommand("Import-CSV").AddParameter("Path",csvPath);
+                ps.AddCommand("Import-CSV").AddParameter("Path", csvPath);
                 var rows = ps.Invoke();
                 ps.Commands.Clear();
                 ps.AddCommand(AddPowerBIRowCmdletInfo)
@@ -110,8 +113,9 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndAddPowerBIRowsFromArray()
-        {           
+        {
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange

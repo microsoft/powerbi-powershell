@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using System.Text;
 using Microsoft.PowerBI.Commands.Common;
@@ -19,6 +20,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void LogoutNoLoginTest()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

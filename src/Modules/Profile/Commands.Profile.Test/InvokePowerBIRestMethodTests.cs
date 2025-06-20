@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using System.Net.Http;
@@ -23,6 +24,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndInvokePowerBIRestMethodWithOutFile()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

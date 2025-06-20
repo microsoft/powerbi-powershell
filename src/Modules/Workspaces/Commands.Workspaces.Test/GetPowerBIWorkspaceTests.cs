@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Api.V2.Models;
@@ -24,6 +25,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesOrganizationScope()
         {
             /*
@@ -52,6 +54,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesAllAndOrganizationScope()
         {
             /*
@@ -86,6 +89,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesAllAndIndividualScope()
         {
             /*
@@ -120,6 +124,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesAllAndOrganizationScopeAndUser()
         {
             /*
@@ -160,6 +165,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesAllAndOrganizationScopeAndIncludeAll()
         {
             /*
@@ -200,6 +206,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesIndividualScope()
         {
             /*
@@ -228,6 +235,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesOrganizationScopeAndFirst()
         {
             /*
@@ -262,6 +270,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesIndividualScopeAndFirst()
         {
             /*
@@ -296,6 +305,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesOrganizationScopeAndFilter()
         {
             /*
@@ -341,6 +351,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesIndividualScopeAndFilter()
         {
             /*
@@ -386,6 +397,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesOrganizationScopeAndUser()
         {
             /*
@@ -431,6 +443,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetWorkspacesOrganizationScopeAndDeleted()
         {
             /*
