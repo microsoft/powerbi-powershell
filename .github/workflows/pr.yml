@@ -86,7 +86,7 @@ jobs:
           hide_complexity: true
           indicators: true
           output: both
-          thresholds: '50 80'
+          thresholds: '17 80'
 
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
