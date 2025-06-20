@@ -57,6 +57,24 @@ jobs:
           path: TestResults
         if: ${{ always() }}
 
+      - name: Upload Code Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: CodeCoverage
+          path: TestResults/**/coverage.cobertura.xml
+        if: ${{ always() }}
+
+  Publish-Code-Coverage:
+    runs-on: ubuntu-latest
+    needs: Build
+    if: ${{ always() && needs.Build.result == 'success' }}
+    steps:
+      - name: Download Code Coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: CodeCoverage
+          path: TestResults
+
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
