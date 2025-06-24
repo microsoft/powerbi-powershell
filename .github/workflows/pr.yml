@@ -67,6 +67,8 @@ jobs:
   Publish-Code-Coverage:
     runs-on: ubuntu-latest
     needs: Build
+    permissions: 
+      pull-requests: write
     if: ${{ always() && needs.Build.result == 'success' }}
     steps:
       - name: Download Code Coverage
