@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -15,6 +16,7 @@ using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
+    [ExcludeFromCodeCoverage]
     public class DeviceCodeAuthenticationFactory : IAuthenticationUserFactory
     {
         private enum GetAncestorFlags

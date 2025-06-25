@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -23,10 +24,11 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         private static CmdletInfo SetPowerBITestCmdletInfo => new CmdletInfo($"{SetPowerBITable.CmdletVerb}-{SetPowerBITable.CmdletName}", typeof(SetPowerBITable));
         private static CmdletInfo GetPowerBITableCmdletInfo => new CmdletInfo($"{GetPowerBITable.CmdletVerb}-{GetPowerBITable.CmdletName}", typeof(GetPowerBITable));
         private static CmdletInfo GetPowerBIDatasetCmdletInfo => new CmdletInfo($"{GetPowerBIDataset.CmdletVerb}-{GetPowerBIDataset.CmdletName}", typeof(GetPowerBIDataset));
-   
+
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndSetPowerBIDataset()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())

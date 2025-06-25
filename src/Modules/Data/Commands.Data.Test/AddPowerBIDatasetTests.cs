@@ -14,6 +14,7 @@ using Microsoft.PowerBI.Common.Api.Datasets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.PowerBI.Commands.Data.Test
 {
@@ -28,6 +29,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndAddPowerBIDataset()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
@@ -51,7 +53,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
 
                 ps.AddCommand(AddPowerBIDatasetCmdletInfo)
                     .AddParameter(nameof(AddPowerBIDataset.Dataset), dataset.First().BaseObject as Dataset);
-                
+
                 // Act
                 var result = ps.Invoke();
 

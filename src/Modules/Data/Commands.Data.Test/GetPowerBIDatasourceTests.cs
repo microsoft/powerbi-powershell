@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
@@ -27,6 +28,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndGetPowerBIDatasourceIndividualScope()
         {
             /*
@@ -43,7 +45,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
                 TestUtilities.AssertNoCmdletErrors(ps);
                 ps.Commands.Clear();
 
-                if(!existingDatasets.Any())
+                if (!existingDatasets.Any())
                 {
                     Assert.Inconclusive("No datasets returned. Verify you have datasets under your logged in user.");
                 }
@@ -111,6 +113,7 @@ namespace Microsoft.PowerBI.Commands.Data.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndPipingDatasetIntoGetPowerBIDatasourceIndividualScope()
         {
             /*

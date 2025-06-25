@@ -52,6 +52,17 @@ Licensed under the MIT License.
     <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
   </ItemGroup>
 
+  <!-- Test Project -->
+  <PropertyGroup>
+    <!-- Define a property to check if the project name ends with 'Test' -->
+    <IsTestProject Condition="'$(MSBuildProjectName.EndsWith(`.Test`))'">true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' AND '$(IsTestProject)' == 'true'">
+    <!-- Code Coverage for Test projects -->
+    <PackageReference Include="coverlet.msbuild" />
+  </ItemGroup>
+
   <Import Project="$(RepoTargets)Microsoft.PowerBI.CodeSign.targets" Condition="'$(NoSignTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'" />
   <Import Project="$(RepoTargets)Microsoft.PowerBI.Build.targets" Condition="'$(NoBuildTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'" />
   <Import Project="$(RepoTargets)Microsoft.PowerBI.Packaging.targets" Condition="'$(NoPackageTarget)' != 'true' AND '$(MSBuildProjectFile)' != 'dirs.proj'" />

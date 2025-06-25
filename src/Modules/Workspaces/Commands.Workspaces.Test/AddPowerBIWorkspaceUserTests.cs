@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Management.Automation;
 using Microsoft.PowerBI.Commands.Common.Test;
@@ -25,6 +26,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndAddPowerBIWorkspaceUserOrganizationScope()
         {
             using (var ps = System.Management.Automation.PowerShell.Create())
@@ -59,6 +61,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndAddPowerBIWorkspaceUserIndividualScope()
         {
             // TODO: Note that unlike the admin APIs, this API will throw an error when attempting to add a user that already has access to the workspace
@@ -74,7 +77,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
                 var parameters = new Dictionary<string, object>()
                 {
                     { nameof(AddPowerBIWorkspaceUser.Scope), PowerBIUserScope.Individual },
-                    { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id }, 
+                    { nameof(AddPowerBIWorkspaceUser.Id), workspace.Id },
                     { nameof(AddPowerBIWorkspaceUser.UserPrincipalName), emailAddress },
                     { nameof(AddPowerBIWorkspaceUser.AccessRight), WorkspaceUserAccessRight.Admin }
                 };
@@ -93,6 +96,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
         [TestMethod]
         [TestCategory("Interactive")]
         [TestCategory("SkipWhenLiveUnitTesting")] // Ignore for Live Unit Testing
+        [ExcludeFromCodeCoverage]
         public void EndToEndAddPowerBIWorkspaceUser_ExplicitPrincipalType()
         {
             // Set this to the identifier of the object (App, Group, or User) you want to add to the workspace.
@@ -119,7 +123,7 @@ namespace Microsoft.PowerBI.Commands.Workspaces.Test
 
                 var parameters = new Dictionary<string, object>()
                 {
-                    { nameof(AddPowerBIWorkspaceUser.Id), workspaceId }, 
+                    { nameof(AddPowerBIWorkspaceUser.Id), workspaceId },
                     { nameof(AddPowerBIWorkspaceUser.PrincipalType), PrincipalType },
                     { nameof(AddPowerBIWorkspaceUser.Identifier), ObjectId },
                     { nameof(AddPowerBIWorkspaceUser.AccessRight), WorkspaceUserAccessRight.Contributor }

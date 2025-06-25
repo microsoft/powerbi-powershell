@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,6 +22,7 @@ using Microsoft.PowerBI.Common.Abstractions.Utilities;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
+    [ExcludeFromCodeCoverage]
     public class WindowsAuthenticationFactory : IAuthenticationUserFactory
     {
         private enum GetAncestorFlags
@@ -59,7 +61,7 @@ namespace Microsoft.PowerBI.Common.Authentication
             else
             {
                 throw new PlatformNotSupportedException("This method is only supported on Windows.");
-            }   
+            }
         }
 
         private IPublicClientApplication AuthApplication;
