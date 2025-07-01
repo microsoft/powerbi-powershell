@@ -25,7 +25,7 @@ For build and testing, `dotnet` [CLI tool](https://learn.microsoft.com/en-us/dot
 * [Visual Studio Code](https://code.visualstudio.com/download)
     * Experimental and optional, still need Visual Studio installed
     * Install the following extensions:
-        * [C#](https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp): `code --install-extension ms-vscode.csharp`
+        * [C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp): `code --install-extension ms-dotnettools.csharp`
         * [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell): `code --install-extension ms-vscode.PowerShell`
 
 > If you plan to build with Configuration=Release which Delay Signs the build output, call `.\scripts\DisableStrongName.ps1` or just `DisableStrongName` if you called `init.ps1`.
