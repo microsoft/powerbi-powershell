@@ -34,7 +34,11 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         [TestMethod]
         public void TestWriteWarningAddsMessage()
         {
-            var logger = new PowerBILoggerMock();
+            var logger = new PowerBILoggerMock()
+              {
+                Cmdlet = new NonPowerBICmdlet()
+            };
+            
             string warning = "This is a warning!";
             logger.WriteWarning(warning);
 
