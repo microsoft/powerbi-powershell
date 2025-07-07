@@ -77,10 +77,22 @@ jobs:
           name: CodeCoverage
           path: TestResults
 
+      - name: Merge Cobertura Files
+        run: |
+          npm install -g merge-cobertura
+          files=$(find TestResults -type f -name "coverage.cobertura.xml")
+          merge_cmd="merge-cobertura -o TestResults/merged-coverage.xml"
+          i=1
+          for f in $files; do
+            merge_cmd="$merge_cmd package$i=$f"
+            i=$((i+1))
+          done
+          eval $merge_cmd
+
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: TestResults/**/coverage.cobertura.xml
+          filename: TestResults/merged-coverage.xml
           badge: true
           fail_below_min: true
           format: markdown
