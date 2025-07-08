@@ -26,7 +26,7 @@ jobs:
         run: |
           scripts/DisableStrongName.ps1
       
-      - name: Setup .NET 8.x
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           # Semantic version range syntax or exact version of a dotnet version
@@ -71,16 +71,41 @@ jobs:
       pull-requests: write
     if: ${{ always() && needs.Build.result == 'success' }}
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # Don't need full history for this job
+
       - name: Download Code Coverage
         uses: actions/download-artifact@v4
         with:
           name: CodeCoverage
           path: TestResults
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+          dotnet-quality: 'ga'
+
+      - name: ReportGenerator
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.4.8
+        with:
+          reports: TestResults/**/coverage.cobertura.xml
+          targetdir: CodeCoverageReport
+          sourcedirs: src
+          reporttypes: HtmlInline;MarkdownSummaryGithub;Cobertura
+      
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CodeCoverageReport # Artifact name        
+          path: CodeCoverageReport # Directory containing files to upload
+
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: TestResults/**/coverage.cobertura.xml
+          filename: CodeCoverageReport/Cobertura.xml
           badge: true
           fail_below_min: true
           format: markdown
@@ -88,7 +113,7 @@ jobs:
           hide_complexity: true
           indicators: true
           output: both
-          thresholds: '17 80'
+          thresholds: '25 80'
 
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
@@ -96,3 +121,7 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
+
+      - name: Publish coverage in build summary # Only applicable if 'MarkdownSummaryGithub' or one of the other Markdown report types is generated
+        run: cat CodeCoverageReport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY # Adjust path and filename if necessary
+        shell: bash
