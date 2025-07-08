@@ -26,7 +26,7 @@ jobs:
         run: |
           scripts/DisableStrongName.ps1
       
-      - name: Setup .NET 8.x
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           # Semantic version range syntax or exact version of a dotnet version
@@ -77,10 +77,23 @@ jobs:
           name: CodeCoverage
           path: TestResults
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          global-json-file: 'global.json'
+
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Merge Coverage Reports
+        # https://github.com/danielpalme/ReportGenerator
+        run: |
+          reportgenerator "-reports:TestResults/*/coverage.cobertura.xml" "-targetdir:TestResults" -reporttypes:Cobertura
+
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: TestResults/**/coverage.cobertura.xml
+          filename: TestResults/Corbertura.xml
           badge: true
           fail_below_min: true
           format: markdown
