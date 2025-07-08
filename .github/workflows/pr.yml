@@ -80,7 +80,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          global-json-file: 'global.json'
+          dotnet-version: '8.0.x'
 
       - name: Install ReportGenerator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
