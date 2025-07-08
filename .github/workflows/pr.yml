@@ -71,6 +71,11 @@ jobs:
       pull-requests: write
     if: ${{ always() && needs.Build.result == 'success' }}
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # Don't need full history for this job
+
       - name: Download Code Coverage
         uses: actions/download-artifact@v4
         with:
@@ -88,6 +93,7 @@ jobs:
         with:
           reports: TestResults/**/coverage.cobertura.xml
           targetdir: CodeCoverageReport
+          sourcedirs: src
           reporttypes: HtmlInline;MarkdownSummaryGithub;Cobertura
       
       - name: Upload coverage report artifact
@@ -99,7 +105,7 @@ jobs:
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: CodeCoverageReport/Corbertura.xml
+          filename: CodeCoverageReport/Cobertura.xml
           badge: true
           fail_below_min: true
           format: markdown
