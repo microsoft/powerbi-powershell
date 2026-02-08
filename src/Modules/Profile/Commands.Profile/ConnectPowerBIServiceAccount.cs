@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
+using Microsoft.PowerBI.Common.Authentication;
 
 namespace Microsoft.PowerBI.Commands.Profile
 {
@@ -31,6 +32,9 @@ namespace Microsoft.PowerBI.Commands.Profile
         public const string ServicePrincipalParameterSet = "ServicePrincipal";
         public const string ServicePrincipalCertificateParameterSet = "ServicePrincipalCertificate";
         public const string UserAndCredentialPasswordParameterSet = "UserAndCredential";
+
+        // TODO provide correct configuration for other than Token parameters
+        public const string BringYourOwnTokenParameterSet = "BringYourOwnToken";
         #endregion
 
         #region Parameters
@@ -63,6 +67,11 @@ namespace Microsoft.PowerBI.Commands.Profile
 
         [Parameter(Mandatory = false)]
         public string DiscoveryUrl { get; set; }
+
+        // TODO make proper configuration
+        // to exclude usage of a token with different auth methods
+        [Parameter(ParameterSetName = BringYourOwnTokenParameterSet, Mandatory = true)]
+        public string Token { get; set; }
         #endregion
 
         /// <summary>
@@ -167,6 +176,12 @@ namespace Microsoft.PowerBI.Commands.Profile
                 case ServicePrincipalParameterSet:
                     token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
+                    break;
+                case BringYourOwnTokenParameterSet:
+                    // TODO helper method to convert jwt token to PowerBIAccessToken and validate
+                    // TODO validate Token?
+                    // TODO what values are required apart from token?
+                    profile = new PowerBIProfile(environment, new PowerBIAccessToken { AccessToken = this.Token, });
                     break;
                 default:
                     throw new NotImplementedException($"Parameter set {this.ParameterSet} was not implemented");
