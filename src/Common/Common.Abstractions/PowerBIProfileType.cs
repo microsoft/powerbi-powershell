@@ -13,6 +13,7 @@ namespace Microsoft.PowerBI.Common.Abstractions
         User = 0,
         ServicePrincipal = 1,
         Certificate = 2,
-        UserAndPassword = 3
+        UserAndPassword = 3,
+        BringYourOwnToken = 4,
     }
 }

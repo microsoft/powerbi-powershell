@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Authentication;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Microsoft.PowerBI.Commands.Common
 {
@@ -20,7 +21,7 @@ namespace Microsoft.PowerBI.Commands.Common
         private static IAuthenticationUserFactory UserAuthFactory;
         private static IAuthenticationServicePrincipalFactory ServicePrincipalAuthFactory;
         private static IAuthenticationBaseFactory BaseAuthFactory;
-        
+
         private void InitializeUserAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
             if (UserAuthFactory == null)
@@ -76,6 +77,12 @@ namespace Microsoft.PowerBI.Commands.Common
                     return await this.Authenticate(profile.UserName, profile.Password, profile.Environment, logger, settings);
                 case PowerBIProfileType.Certificate:
                     return await this.Authenticate(profile.UserName, profile.Thumbprint, profile.Environment, logger, settings);
+                case PowerBIProfileType.BringYourOwnToken:
+                    // TODO use JsonWebToken to populate fields of PowerBIAccessToken
+                    var token = new JsonWebToken(profile.AccessToken);
+                    return new PowerBIAccessToken {
+                        AccessToken = profile.AccessToken,
+                    };
                 default:
                     throw new NotSupportedException();
             }

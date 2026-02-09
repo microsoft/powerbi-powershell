@@ -18,8 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Runtime.Serialization.Json" />
     <PackageReference Include="PowerShellStandard.Library" />
+    <PackageReference Include="System.Runtime.Serialization.Json" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
   </ItemGroup>
 
   <ItemGroup>
