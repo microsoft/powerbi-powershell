@@ -34,8 +34,6 @@ namespace Microsoft.PowerBI.Commands.Profile
         public const string ServicePrincipalParameterSet = "ServicePrincipal";
         public const string ServicePrincipalCertificateParameterSet = "ServicePrincipalCertificate";
         public const string UserAndCredentialPasswordParameterSet = "UserAndCredential";
-        // TODO provide correct configuration for other than Token parameters
-        // TODO test various combinations of arguments
         public const string BringYourOwnTokenParameterSet = "BringYourOwnToken";
         #endregion
 
@@ -71,8 +69,6 @@ namespace Microsoft.PowerBI.Commands.Profile
         [Parameter(Mandatory = false)]
         public string DiscoveryUrl { get; set; }
 
-        // TODO make proper configuration
-        // to exclude usage of a token with different auth methods
         [Parameter(ParameterSetName = BringYourOwnTokenParameterSet, Mandatory = true)]
         public string Token { get; set; }
         #endregion
@@ -198,8 +194,8 @@ namespace Microsoft.PowerBI.Commands.Profile
 
                     if (!result.IsValid)
                     {
-                        this.Logger.WriteVerbose("TODO provide correct error message");
-
+                        // TODO can there be a case when result is not valid
+                        // and there is no exception?
                         if (result.Exception != null)
                         {
                             throw result.Exception;
