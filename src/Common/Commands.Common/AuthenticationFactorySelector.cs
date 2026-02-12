@@ -78,11 +78,7 @@ namespace Microsoft.PowerBI.Commands.Common
                 case PowerBIProfileType.Certificate:
                     return await this.Authenticate(profile.UserName, profile.Thumbprint, profile.Environment, logger, settings);
                 case PowerBIProfileType.BringYourOwnToken:
-                    // TODO use JsonWebToken to populate fields of PowerBIAccessToken
-                    var token = new JsonWebToken(profile.AccessToken);
-                    return new PowerBIAccessToken {
-                        AccessToken = profile.AccessToken,
-                    };
+                    return new PowerBIAccessToken { AccessToken = profile.AccessToken, };
                 default:
                     throw new NotSupportedException();
             }

@@ -136,9 +136,9 @@ namespace Microsoft.PowerBI.Commands.Profile
                 environment = settings.Environments[this.Environment];
             }
 
-            if(!string.IsNullOrEmpty(this.Tenant))
+            if (!string.IsNullOrEmpty(this.Tenant))
             {
-                var tempEnvironment = (PowerBIEnvironment) environment;
+                var tempEnvironment = (PowerBIEnvironment)environment;
                 tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", $"/{this.Tenant}");
                 this.Logger.WriteVerbose($"Updated Azure AD authority with -Tenant specified, new value: {tempEnvironment.AzureADAuthority}");
                 environment = tempEnvironment;
@@ -177,31 +177,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
                 case BringYourOwnTokenParameterSet:
-                    // TODO pull out as a method and UT it.
-                    // TODO what should be actually validated?
-                    var handler = new JsonWebTokenHandler();
-                    var validationParams = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        SignatureValidator = (token, parameters) => new JsonWebToken(token),
-                    };
-
-                    var result = handler.ValidateTokenAsync(this.Token, validationParams)
-                        .GetAwaiter()
-                        .GetResult();
-
-                    if (!result.IsValid)
-                    {
-                        // TODO can there be a case when result is not valid
-                        // and there is no exception?
-                        if (result.Exception != null)
-                        {
-                            throw result.Exception;
-                        }
-                    }
-
+                    ValidateJwtToken(this.Token);
                     profile = new PowerBIProfile(environment, this.Token);
                     break;
                 default:
@@ -210,6 +186,35 @@ namespace Microsoft.PowerBI.Commands.Profile
 
             this.Storage.SetItem("profile", profile);
             this.Logger.WriteObject(profile);
+        }
+
+        private void ValidateJwtToken(string token)
+        {
+            var handler = new JsonWebTokenHandler();
+
+            var validationParams = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                SignatureValidator = (token, parameters) => new JsonWebToken(token),
+            };
+
+            var result = handler.ValidateTokenAsync(token, validationParams)
+                .GetAwaiter()
+                .GetResult();
+
+            if (!result.IsValid)
+            {
+                if (result.Exception != null)
+                {
+                    throw result.Exception;
+                }
+                else
+                {
+                    this.Logger.WriteError("Token validation failed");
+                }
+            }
         }
 
         private async Task<GSEnvironments> GetServiceConfig(string discoveryUrl)
