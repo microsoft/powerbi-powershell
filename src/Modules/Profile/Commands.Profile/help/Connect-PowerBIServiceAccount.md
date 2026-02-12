@@ -38,6 +38,12 @@ Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEn
  [-DiscoveryUrl <String>] [<CommonParameters>]
 ```
 
+### BringYourOwnToken
+```
+Connect-PowerBIServiceAccount [-Token <String>] [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
+[-Tenant <String>] [-DiscoveryUrl <String>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Log in to Power BI service with either a user or service principal account (application key or certificate).
 For user accounts, an Azure Active Directory (AAD) First-Party application is leveraged for authentication.
@@ -71,8 +77,16 @@ Logs in using a service principal against the Public cloud, a prompt will displa
 PS C:\> Connect-PowerBIServiceAccount -ServicePrincipal -CertificateThumbprint 38DA4BED389A014E69A6E6D8AE56761E85F0DFA4 -ApplicationId b5fde143-722c-4e8d-8113-5b33a9291468
 ```
 
-Logs in using a service principal with an installed certificate to the Public cloud. 
+Logs in using a service principal with an installed certificate to the Public cloud.
 The certificate must be installed in either CurrentUser or LocalMachine certificate store (LocalMachine requires administrator access) with a private key installed.
+
+
+Use provided _Token_ for authentication during api calls.
+
+### Example 5
+```powershell
+PS C:\> Connect-PowerBIServiceAccount -Token eyJhbGciOiJIUzI1NiJ9.eyJ0ZXN0X2NsYWltIjp0cnVlLCJpc3MiOiJ1cm46ZXhhbXBsZTppc3N1ZXIiLCJhdWQiOiJ1cm46ZXhhbXBsZTphdWRpZW5jZSIsImV4cCI6MjcxNzQ0Njc4NSwiaWF0IjoxNzcwNzE4Nzg1fQ.nOXgwieIpeFB9Svxxt6Z4_RkWVWSiVJcxbBzlPTaQJQ
+```
 
 ## PARAMETERS
 
@@ -138,7 +152,7 @@ Accept wildcard characters: False
 ```
 
 ### -DiscoveryUrl
-The discovery url to get the backend services info from. Custom environment must also be supplied. 
+The discovery url to get the backend services info from. Custom environment must also be supplied.
 
 ```yaml
 Type: String
@@ -192,6 +206,21 @@ Parameter Sets: ServicePrincipal, ServicePrincipalCertificate
 Aliases: TenantId
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Jwt token that will be attached as authentication header for API calls.
+
+```yaml
+Type: String
+Parameter Sets: BringYourOwnToken
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
