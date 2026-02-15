@@ -145,13 +145,15 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         public void ConnectPowerBIServiceAccountServiceWithTenantId_PrincipalParameterSet()
         {
             // Arrange
+            using var secureString = new SecureString();
+
             var initFactory = new TestPowerBICmdletNoClientInitFactory(false);
             var testTenantName = "test.microsoftonline.com";
             var cmdlet = new ConnectPowerBIServiceAccount(initFactory)
             {
                 Tenant = testTenantName,
                 ServicePrincipal = true,
-                Credential = new PSCredential("appId", new SecureString()),
+                Credential = new PSCredential("appId", secureString),
                 ParameterSet = "ServicePrincipal"
             };
 
@@ -283,12 +285,13 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         [TestMethod]
         public void ConnectPowerBIServiceAccount_BringYourOwnTokenParameterSet_Token_with_Credential_Throws()
         {
+            using (var secureString = new SecureString())
             using (var ps = System.Management.Automation.PowerShell.Create())
             {
                 // Arrange
                 ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
                 ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Token), "dummytoken");
-                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Credential), new PSCredential("password", new SecureString()));
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Credential), new PSCredential("password", secureString));
 
                 // Act & Assert
                 Assert.ThrowsException<ParameterBindingException>(ps.Invoke);

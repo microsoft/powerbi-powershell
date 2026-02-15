@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
 using Microsoft.PowerBI.Common.Authentication;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Microsoft.PowerBI.Commands.Common
 {

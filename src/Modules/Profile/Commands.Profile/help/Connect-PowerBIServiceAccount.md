@@ -81,11 +81,11 @@ Logs in using a service principal with an installed certificate to the Public cl
 The certificate must be installed in either CurrentUser or LocalMachine certificate store (LocalMachine requires administrator access) with a private key installed.
 
 
-Use provided _Token_ for authentication during api calls.
+Use the provided _Token_ (a raw OAuth 2.0 access token/JWT value, without the `Bearer ` prefix) for authentication when calling the Power BI REST API. Treat this token as a secret and do not paste it into logs, scripts, or command-line history.
 
 ### Example 5
 ```powershell
-PS C:\> Connect-PowerBIServiceAccount -Token eyJhbGciOiJIUzI1NiJ9.eyJ0ZXN0X2NsYWltIjp0cnVlLCJpc3MiOiJ1cm46ZXhhbXBsZTppc3N1ZXIiLCJhdWQiOiJ1cm46ZXhhbXBsZTphdWRpZW5jZSIsImV4cCI6MjcxNzQ0Njc4NSwiaWF0IjoxNzcwNzE4Nzg1fQ.nOXgwieIpeFB9Svxxt6Z4_RkWVWSiVJcxbBzlPTaQJQ
+PS C:\> Connect-PowerBIServiceAccount -Token eyJhbGciOiJIUzI1NiJ9.fake_payload_and_signature_redacted_for_example
 ```
 
 ## PARAMETERS
@@ -213,7 +213,7 @@ Accept wildcard characters: False
 ```
 
 ### -Token
-Jwt token that will be attached as authentication header for API calls.
+JWT access token to use for authentication; pass only the token value, which will be sent as the `Authorization: Bearer <token>` header for API calls.
 
 ```yaml
 Type: String

@@ -15,7 +15,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Common.Authentication;
 
 namespace Microsoft.PowerBI.Commands.Profile
 {
@@ -197,7 +196,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
-                SignatureValidator = (token, parameters) => new JsonWebToken(token),
+                SignatureValidator = (rawToken, parameters) => new JsonWebToken(rawToken),
             };
 
             var result = handler.ValidateTokenAsync(token, validationParams)
@@ -212,7 +211,7 @@ namespace Microsoft.PowerBI.Commands.Profile
                 }
                 else
                 {
-                    this.Logger.WriteError("Token validation failed");
+                    throw new SecurityTokenValidationException("Token validation failed");
                 }
             }
         }
