@@ -38,6 +38,12 @@ Connect-PowerBIServiceAccount [-Environment <PowerBIEnvironmentType>] [-CustomEn
  [-DiscoveryUrl <String>] [<CommonParameters>]
 ```
 
+### BringYourOwnToken
+```
+Connect-PowerBIServiceAccount [-Token <String>] [-Environment <PowerBIEnvironmentType>] [-CustomEnvironment <String>]
+[-Tenant <String>] [-DiscoveryUrl <String>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Log in to Power BI service with either a user or service principal account (application key or certificate).
 For user accounts, an Azure Active Directory (AAD) First-Party application is leveraged for authentication.
@@ -71,8 +77,16 @@ Logs in using a service principal against the Public cloud, a prompt will displa
 PS C:\> Connect-PowerBIServiceAccount -ServicePrincipal -CertificateThumbprint 38DA4BED389A014E69A6E6D8AE56761E85F0DFA4 -ApplicationId b5fde143-722c-4e8d-8113-5b33a9291468
 ```
 
-Logs in using a service principal with an installed certificate to the Public cloud. 
+Logs in using a service principal with an installed certificate to the Public cloud.
 The certificate must be installed in either CurrentUser or LocalMachine certificate store (LocalMachine requires administrator access) with a private key installed.
+
+
+Use the provided _Token_ (a raw OAuth 2.0 access token/JWT value, without the `Bearer ` prefix) for authentication when calling the Power BI REST API. Treat this token as a secret and do not paste it into logs, scripts, or command-line history.
+
+### Example 5
+```powershell
+PS C:\> Connect-PowerBIServiceAccount -Token eyJhbGciOiJIUzI1NiJ9.fake_payload_and_signature_redacted_for_example
+```
 
 ## PARAMETERS
 
@@ -138,7 +152,7 @@ Accept wildcard characters: False
 ```
 
 ### -DiscoveryUrl
-The discovery url to get the backend services info from. Custom environment must also be supplied. 
+The discovery url to get the backend services info from. Custom environment must also be supplied.
 
 ```yaml
 Type: String
@@ -192,6 +206,21 @@ Parameter Sets: ServicePrincipal, ServicePrincipalCertificate
 Aliases: TenantId
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+JWT access token to use for authentication; pass only the token value, which will be sent as the `Authorization: Bearer <token>` header for API calls.
+
+```yaml
+Type: String
+Parameter Sets: BringYourOwnToken
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

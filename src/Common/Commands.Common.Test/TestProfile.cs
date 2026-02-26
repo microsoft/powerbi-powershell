@@ -33,5 +33,7 @@ namespace Microsoft.PowerBI.Commands.Common.Test
         public string Thumbprint { get; set; }
 
         public PowerBIProfileType LoginType { get; set; } = PowerBIProfileType.User;
+
+        public string AccessToken { get; set; }
     }
 }

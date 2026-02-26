@@ -20,7 +20,7 @@ namespace Microsoft.PowerBI.Commands.Common
         private static IAuthenticationUserFactory UserAuthFactory;
         private static IAuthenticationServicePrincipalFactory ServicePrincipalAuthFactory;
         private static IAuthenticationBaseFactory BaseAuthFactory;
-        
+
         private void InitializeUserAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
             if (UserAuthFactory == null)
@@ -76,6 +76,8 @@ namespace Microsoft.PowerBI.Commands.Common
                     return await this.Authenticate(profile.UserName, profile.Password, profile.Environment, logger, settings);
                 case PowerBIProfileType.Certificate:
                     return await this.Authenticate(profile.UserName, profile.Thumbprint, profile.Environment, logger, settings);
+                case PowerBIProfileType.BringYourOwnToken:
+                    return new PowerBIAccessToken { AccessToken = profile.AccessToken, };
                 default:
                     throw new NotSupportedException();
             }

@@ -41,5 +41,10 @@ namespace Microsoft.PowerBI.Common.Abstractions.Interfaces
         /// Type of login used to create profile.
         /// </summary>
         PowerBIProfileType LoginType { get; }
+
+        /// <summary>
+        /// Access token that was brought by user.
+        /// </summary>
+        string AccessToken { get; }
     }
 }
