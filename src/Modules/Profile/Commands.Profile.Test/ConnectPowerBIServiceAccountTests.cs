@@ -236,7 +236,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             var cmdlet = new ConnectPowerBIServiceAccount(factory)
             {
                 Token = dummyToken,
-                Environment =  PowerBIEnvironmentType.Daily,
+                Environment = PowerBIEnvironmentType.Public,
                 ParameterSet = ConnectPowerBIServiceAccount.BringYourOwnTokenParameterSet,
             };
 
@@ -247,7 +247,7 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
             var profile = factory.GetProfileFromStorage();
             Assert.IsNotNull(profile);
             Assert.AreEqual(dummyToken, profile.AccessToken);
-            Assert.AreEqual(PowerBIEnvironmentType.Daily, profile.Environment.Name);
+            Assert.AreEqual(PowerBIEnvironmentType.Public, profile.Environment.Name);
             Assert.AreEqual(PowerBIProfileType.BringYourOwnToken, profile.LoginType);
             factory.AssertExpectedUnitTestResults([profile]);
         }
