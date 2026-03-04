@@ -10,6 +10,8 @@ using System.Management.Automation;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.PowerBI.Commands.Common;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -31,6 +33,7 @@ namespace Microsoft.PowerBI.Commands.Profile
         public const string ServicePrincipalParameterSet = "ServicePrincipal";
         public const string ServicePrincipalCertificateParameterSet = "ServicePrincipalCertificate";
         public const string UserAndCredentialPasswordParameterSet = "UserAndCredential";
+        public const string BringYourOwnTokenParameterSet = "BringYourOwnToken";
         #endregion
 
         #region Parameters
@@ -55,14 +58,18 @@ namespace Microsoft.PowerBI.Commands.Profile
         public SwitchParameter ServicePrincipal { get; set; }
 
         [Alias("TenantId")]
-        [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
-        [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
-        [Parameter(ParameterSetName = UserAndCredentialPasswordParameterSet, Mandatory = false)]
         [Parameter(ParameterSetName = UserParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = ServicePrincipalParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = BringYourOwnTokenParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = UserAndCredentialPasswordParameterSet, Mandatory = false)]
+        [Parameter(ParameterSetName = ServicePrincipalCertificateParameterSet, Mandatory = false)]
         public string Tenant { get; set; }
 
         [Parameter(Mandatory = false)]
         public string DiscoveryUrl { get; set; }
+
+        [Parameter(ParameterSetName = BringYourOwnTokenParameterSet, Mandatory = true)]
+        public string Token { get; set; }
         #endregion
 
         /// <summary>
@@ -128,9 +135,9 @@ namespace Microsoft.PowerBI.Commands.Profile
                 environment = settings.Environments[this.Environment];
             }
 
-            if(!string.IsNullOrEmpty(this.Tenant))
+            if (!string.IsNullOrEmpty(this.Tenant))
             {
-                var tempEnvironment = (PowerBIEnvironment) environment;
+                var tempEnvironment = (PowerBIEnvironment)environment;
                 tempEnvironment.AzureADAuthority = tempEnvironment.AzureADAuthority.ToLowerInvariant().Replace("/common", $"/{this.Tenant}");
                 this.Logger.WriteVerbose($"Updated Azure AD authority with -Tenant specified, new value: {tempEnvironment.AzureADAuthority}");
                 environment = tempEnvironment;
@@ -168,12 +175,45 @@ namespace Microsoft.PowerBI.Commands.Profile
                     token = this.Authenticator.Authenticate(this.Credential.UserName, this.Credential.Password, environment, this.Logger, this.Settings).Result;
                     profile = new PowerBIProfile(environment, this.Credential.UserName, this.Credential.Password, token);
                     break;
+                case BringYourOwnTokenParameterSet:
+                    ValidateJwtToken(this.Token);
+                    profile = new PowerBIProfile(environment, this.Token);
+                    break;
                 default:
                     throw new NotImplementedException($"Parameter set {this.ParameterSet} was not implemented");
             }
 
             this.Storage.SetItem("profile", profile);
             this.Logger.WriteObject(profile);
+        }
+
+        private void ValidateJwtToken(string token)
+        {
+            var handler = new JsonWebTokenHandler();
+
+            var validationParams = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                SignatureValidator = (rawToken, parameters) => new JsonWebToken(rawToken),
+            };
+
+            var result = handler.ValidateTokenAsync(token, validationParams)
+                .GetAwaiter()
+                .GetResult();
+
+            if (!result.IsValid)
+            {
+                if (result.Exception != null)
+                {
+                    throw result.Exception;
+                }
+                else
+                {
+                    throw new SecurityTokenValidationException("Token validation failed");
+                }
+            }
         }
 
         private async Task<GSEnvironments> GetServiceConfig(string discoveryUrl)
@@ -188,7 +228,7 @@ namespace Microsoft.PowerBI.Commands.Profile
             }
 
             return this.CustomServiceEnvironments;
-        } 
+        }
 
         protected override bool CmdletManagesProfile { get => true; set => base.CmdletManagesProfile = value; }
     }

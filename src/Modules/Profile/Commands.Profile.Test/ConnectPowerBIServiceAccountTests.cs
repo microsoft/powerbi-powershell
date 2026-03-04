@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using System.Security;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.PowerBI.Commands.Common.Test;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -144,13 +145,15 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
         public void ConnectPowerBIServiceAccountServiceWithTenantId_PrincipalParameterSet()
         {
             // Arrange
+            using var secureString = new SecureString();
+
             var initFactory = new TestPowerBICmdletNoClientInitFactory(false);
             var testTenantName = "test.microsoftonline.com";
             var cmdlet = new ConnectPowerBIServiceAccount(initFactory)
             {
                 Tenant = testTenantName,
                 ServicePrincipal = true,
-                Credential = new PSCredential("appId", new SecureString()),
+                Credential = new PSCredential("appId", secureString),
                 ParameterSet = "ServicePrincipal"
             };
 
@@ -180,6 +183,134 @@ namespace Microsoft.PowerBI.Commands.Profile.Test
 
             //Assert
             Assert.Fail("Custom environment was not provided");
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccount_Illegal_Token_Format_Throws()
+        {
+            // Arrange
+            var factory = new TestPowerBICmdletNoClientInitFactory(setProfile: false);
+
+            var cmdlet = new ConnectPowerBIServiceAccount(factory)
+            {
+                Token = "thisjwtissowrong",
+                ParameterSet = ConnectPowerBIServiceAccount.BringYourOwnTokenParameterSet,
+            };
+
+            // Act & Assert
+            Assert.ThrowsException<SecurityTokenMalformedException>(cmdlet.InvokePowerBICmdlet);
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccount_Expired_Token_Throws()
+        {
+            // Arrange
+            var factory = new TestPowerBICmdletNoClientInitFactory(setProfile: false);
+
+            var cmdlet = new ConnectPowerBIServiceAccount(factory)
+            {
+                // this is a dummy generated expired token
+                Token = "eyJhbGciOiJIUzI1NiJ9.eyJ0ZXN0X2NsYWltIjp0cnVlLC"
+                    + "Jpc3MiOiJ1cm46ZXhhbXBsZTppc3N1ZXIiLCJhdWQiOiJ1cm46Z"
+                    + "XhhbXBsZTphdWRpZW5jZSIsImV4cCI6MTc3MDcxNzUxNCwiaWF0I"
+                    + "joxNzcwNzE3NDU0fQ.8aM6WbtJkp8mOpWKsmFngPFIMdzGIQje1ZhKpHH_UVE",
+
+                ParameterSet = ConnectPowerBIServiceAccount.BringYourOwnTokenParameterSet,
+            };
+
+            // Act & Assert
+            Assert.ThrowsException<SecurityTokenExpiredException>(cmdlet.InvokePowerBICmdlet);
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccount_Valid_Token_Success()
+        {
+            // Arrange
+            // dummy generated token that will expire in 30 years (from 10022026)
+            var dummyToken = "eyJhbGciOiJIUzI1NiJ9.eyJ0ZXN0X2NsYWltIjp0cnVlLCJpc3MiOiJ1cm46ZXhhbXBsZT"
+                     + "ppc3N1ZXIiLCJhdWQiOiJ1cm46ZXhhbXBsZTphdWRpZW5jZSIsImV4cCI6MjcxN"
+                     + "zQ0Njc4NSwiaWF0IjoxNzcwNzE4Nzg1fQ.nOXgwieIpeFB9Svxxt6Z4_RkWVWSiVJcxbBzlPTaQJQ";
+
+            var factory = new TestPowerBICmdletNoClientInitFactory(setProfile: false);
+
+            var cmdlet = new ConnectPowerBIServiceAccount(factory)
+            {
+                Token = dummyToken,
+                Environment = PowerBIEnvironmentType.Public,
+                ParameterSet = ConnectPowerBIServiceAccount.BringYourOwnTokenParameterSet,
+            };
+
+            // Act
+            cmdlet.InvokePowerBICmdlet();
+
+            // Assert
+            var profile = factory.GetProfileFromStorage();
+            Assert.IsNotNull(profile);
+            Assert.AreEqual(dummyToken, profile.AccessToken);
+            Assert.AreEqual(PowerBIEnvironmentType.Public, profile.Environment.Name);
+            Assert.AreEqual(PowerBIProfileType.BringYourOwnToken, profile.LoginType);
+            factory.AssertExpectedUnitTestResults([profile]);
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccount_BringYourOwnTokenParameterSet_Token_with_CertificateThumbPrint_Throws()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Token), "dummytoken");
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.CertificateThumbprint), "dummycreds");
+
+                // Act & Assert
+                Assert.ThrowsException<ParameterBindingException>(ps.Invoke);
+            }
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccount_BringYourOwnTokenParameterSet_Token_with_ApplicationId_Throws()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Token), "dummytoken");
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.ApplicationId), "applicationId");
+
+                // Act & Assert
+                Assert.ThrowsException<ParameterBindingException>(ps.Invoke);
+            }
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccount_BringYourOwnTokenParameterSet_Token_with_Credential_Throws()
+        {
+            using (var secureString = new SecureString())
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Token), "dummytoken");
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Credential), new PSCredential("password", secureString));
+
+                // Act & Assert
+                Assert.ThrowsException<ParameterBindingException>(ps.Invoke);
+            }
+        }
+
+        [TestMethod]
+        public void ConnectPowerBIServiceAccount_BringYourOwnTokenParameterSet_Token_with_ServicePrincipal_Throws()
+        {
+            using (var ps = System.Management.Automation.PowerShell.Create())
+            {
+                // Arrange
+                ps.AddCommand(ProfileTestUtilities.ConnectPowerBIServiceAccountCmdletInfo);
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.Token), "dummytoken");
+                ps.AddParameter(nameof(ConnectPowerBIServiceAccount.ServicePrincipal), new SwitchParameter());
+
+                // Act & Assert
+                Assert.ThrowsException<ParameterBindingException>(ps.Invoke);
+            }
         }
     }
 }

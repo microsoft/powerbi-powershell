@@ -5,7 +5,7 @@
     <AssemblyName>Microsoft.PowerBI.Commands.Profile</AssemblyName>
     <RootNamespace>Microsoft.PowerBI.Commands.Profile</RootNamespace>
   </PropertyGroup>
-  
+
   <!-- NuGet Package Properties -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
@@ -13,13 +13,13 @@
     <Description>Microsoft Power BI PowerShell - Profile credential management cmdlets for Microsoft Power BI</Description>
     <PackageTags>PowerBI;Profile;Authentication;Environment</PackageTags>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Remove="Microsoft.PowerBI.Commands.Profile.format.ps1xml" />
     <None Remove="Microsoft.PowerBI.Commands.Profile.types.ps1xml" />
     <None Remove="MicrosoftPowerBIMgmt.Profile.psd1" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="Microsoft.PowerBI.Commands.Profile.format.ps1xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -35,6 +35,9 @@
   <ItemGroup>
     <PackageReference Include="PowerShellStandard.Library" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>

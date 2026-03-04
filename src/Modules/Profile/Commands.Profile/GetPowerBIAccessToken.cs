@@ -41,7 +41,6 @@ namespace Microsoft.PowerBI.Commands.Profile
                     { "Authorization", token.AuthorizationHeader }
                 });
             }
-            
         }
     }
 }
