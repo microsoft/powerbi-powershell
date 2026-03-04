@@ -31,6 +31,22 @@ namespace Microsoft.PowerBI.Commands.Common.Test
             Assert.IsNull(logger.GetPowerBICmdlet);
         }
 
+
+        [TestMethod]
+        public void TestWriteWarningAddsMessage()
+        {
+            var logger = new PowerBILoggerMock()
+              {
+                Cmdlet = new NonPowerBICmdlet()
+            };
+            
+            string warning = "This is a warning!";
+            logger.WriteWarning(warning);
+
+            Assert.AreEqual(1, logger.WarningMessages.Count);
+            Assert.AreEqual(warning, logger.WarningMessages[0]);
+        }
+        
         [TestMethod]
         public void TestMainThreadDetection()
         {
