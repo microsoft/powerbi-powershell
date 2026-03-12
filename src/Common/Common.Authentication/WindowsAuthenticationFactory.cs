@@ -5,20 +5,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Client.Broker;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
-using Microsoft.PowerBI.Common.Abstractions.Utilities;
 
 namespace Microsoft.PowerBI.Common.Authentication
 {
@@ -89,8 +84,10 @@ namespace Microsoft.PowerBI.Common.Authentication
                 throw new NotSupportedException("Authenticator only works on Windows");
             }
 
+            var passwordBasedAuth = !string.IsNullOrEmpty(userName) && password != null && password.Length > 0;
+
             IEnumerable<string> scopes = new[] { $"{environment.AzureADResource}/.default" };
-            BuildAuthApplication(environment, queryParameters, logger);
+            BuildAuthApplication(environment, queryParameters, logger, passwordBasedAuth);
             AuthenticationResult result = null;
 
             try
@@ -104,10 +101,12 @@ namespace Microsoft.PowerBI.Common.Authentication
                 else
                 {
                     // auth application is auto cleared when there's no account
-                    BuildAuthApplication(environment, queryParameters, logger);
-                    if (!string.IsNullOrEmpty(userName) && password != null && password.Length > 0)
+                    BuildAuthApplication(environment, queryParameters, logger, passwordBasedAuth);
+                    if (passwordBasedAuth)
                     {
-                        result = await this.AuthApplication.AcquireTokenByUsernamePassword(scopes, userName, password).ExecuteAsync();
+                        var passwordString = password.SecureStringToString();
+                        result = await this.AuthApplication.AcquireTokenByUsernamePassword(scopes, userName, passwordString)
+                            .ExecuteAsync();
                     }
                     else
                     {
@@ -150,14 +149,14 @@ namespace Microsoft.PowerBI.Common.Authentication
             }
         }
 
-        private void BuildAuthApplication(IPowerBIEnvironment environment, IDictionary<string, string> queryParameters, IPowerBILogger logger)
+        private void BuildAuthApplication(IPowerBIEnvironment environment, IDictionary<string, string> queryParameters, IPowerBILogger logger, bool passwordBasedAuth = false)
         {
             // auth application is auto cleared when there's no account
             if (this.AuthApplication == null)
             {
                 PublicClientApplicationBuilder authApplicationBuilder = null;
-                // WAM is only supported on Windows
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                // WAM is only supported on Windows; don't use WAM on passwordBasedAuth
+                if (!passwordBasedAuth && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     authApplicationBuilder = PublicClientApplicationBuilder
                     .Create(environment.AzureADClientId)
