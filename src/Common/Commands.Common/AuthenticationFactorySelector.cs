@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.PowerBI.Common.Abstractions;
 using Microsoft.PowerBI.Common.Abstractions.Interfaces;
@@ -19,7 +18,6 @@ namespace Microsoft.PowerBI.Commands.Common
     {
         private static IAuthenticationUserFactory UserAuthFactory;
         private static IAuthenticationServicePrincipalFactory ServicePrincipalAuthFactory;
-        private static IAuthenticationBaseFactory BaseAuthFactory;
 
         private void InitializeUserAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
         {
@@ -35,8 +33,6 @@ namespace Microsoft.PowerBI.Commands.Common
                     UserAuthFactory = new DeviceCodeAuthenticationFactory();
                 }
             }
-
-            BaseAuthFactory = UserAuthFactory;
         }
 
         private void InitializeServicePrincpalAuthenticationFactory(IPowerBILogger logger, IPowerBISettings settings)
@@ -48,8 +44,6 @@ namespace Microsoft.PowerBI.Commands.Common
                     ServicePrincipalAuthFactory = new ServicePrincipalAuthenticationFactory();
                 }
             }
-
-            BaseAuthFactory = ServicePrincipalAuthFactory;
         }
 
         public async Task<IAccessToken> Authenticate(IPowerBIEnvironment environment, IPowerBILogger logger, IPowerBISettings settings, IDictionary<string, string> queryParameters = null)
