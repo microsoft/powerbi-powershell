@@ -176,11 +176,6 @@ namespace Microsoft.PowerBI.Common.Authentication
                     .WithRedirectUri(environment.AzureADRedirectAddress);
                 }
 
-                if (!PublicClientHelper.IsNetFramework)
-                {
-                    authApplicationBuilder.WithRedirectUri("http://localhost");
-                }
-
                 this.AuthApplication = authApplicationBuilder.Build();
             }
         }
