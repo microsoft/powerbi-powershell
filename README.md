@@ -6,6 +6,8 @@ For questions or issues using the modules, please log an issue and we will respo
 
 ## PowerShell modules
 
+> Important: To improve authentication security, we are updating the sign-in configuration used by the Microsoft Power BI PowerShell module. As a result, older versions of the module will no longer be able to authenticate, and existing signed-in sessions may stop working. To avoid disruption, update to MicrosoftPowerBIMgmt version 1.3.84 or later and then sign in again using Connect-PowerBIServiceAccount.
+
 Below is a table of the various Power BI PowerShell modules found in this repository.
 
 | Description | Module Name | PowerShell Gallery link |
