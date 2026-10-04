@@ -32,5 +32,7 @@
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.94" />
     <PackageVersion Include="System.IO.Packaging" Version="9.0.4" />
     <PackageVersion Include="coverlet.msbuild " Version="6.0.4" />
+    <!-- pinning to 8.0.4 due to CVE's in 8.0.0 version that comes with Microsoft.PowerShell.SDK 7.4.1  -->
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.4" />
   </ItemGroup>
 </Project>
