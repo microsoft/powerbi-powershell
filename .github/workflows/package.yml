@@ -11,11 +11,11 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0 # Need for history to be able to determine version number
       
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@55ec9447dda3d1cf6bd587150f3262f30ee10815 # v3.4.2
         with:
           #dotnet-version: '8.0.x' # SDK Version to use.
           global-json-file: 'global.json'
